@@ -1,0 +1,34 @@
+;;Núcleos Barcelona Ruta;
+;Tipo Sector;Barcelona RutaE;Barcelona RutaW
+LECBBAS;Ruta;X;
+LECBBKE;Ruta;X;
+LECBCBM;Ruta;X;
+LECBCCC;Ruta;X;X
+LECBCCL;Ruta;X;X
+LECBCCU;Ruta;X;X
+LECBCVN;Ruta;X;X
+LECBMLS;Ruta;X;
+LECBMMI;Ruta;X;
+LECBMNI;Ruta;X;
+LECBMNL;Ruta;X;
+LECBMNU;Ruta;X;
+LECBMUS;Ruta;X;
+LECBMVI;Ruta;X;
+LECBMVS;Ruta;X;
+LECBVMN;Ruta;X;
+LECBVMS;Ruta;X;
+LECBVNI;Ruta;X;X
+LECBVVI;Ruta;X;
+LECBVVS;Ruta;X;
+LECBBKW;Ruta;;X
+LECBLGL;Ruta;;X
+LECBLGU;Ruta;;X
+LECBLLI;Ruta;;X
+LECBLVL;Ruta;;X
+LECBLVS;Ruta;;X
+LECBLVU;Ruta;;X
+LECBP1I;Ruta;X;X
+LECBP1L;Ruta;X;X
+LECBP1U;Ruta;X;X
+LECBPP2;Ruta;X;X
+LECBPPI;Ruta;X;X

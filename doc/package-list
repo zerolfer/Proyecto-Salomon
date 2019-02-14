@@ -1,0 +1,16 @@
+InicializarPoblacion
+Main
+algorithms.simulatedAnnealing
+algorithms.simulatedAnnealing.moves
+estructurasDatos
+estructurasDatos.Auxiliares
+estructurasDatos.DominioDelProblema
+fitnessFunction
+herramientas.lecturaSoluciones
+herramientas.parseoEntrada
+herramientas.pruebasVarias
+patrones
+pruebasCasos
+rwFiles
+temperaturaInicial
+trazas

@@ -1,0 +1,38 @@
+0.17 - Sysos con informacion objetivos
+0.18 - Version del segundo articulo + arreglos funciones fitness
+0.19 - Introduccion de nuevos casos de prueba
+0.21 - Mejora de la escritura de trazas
+0.23 - Funcion objetivo 3b
+0.24 - Modificacion movimiento entorno: Ya comprovaba que el turno que acepta el trabajo esta en descanso, ahora tambien comprueba que todos los sectores del turno pertenezcan al mismo nucleo (+ tiempo pero menos infactibilidad)
+0.24 - Se añade parametrizacion de los objetivos y subobjetivos. (Objeto PesosObjetivos)
+0.25 - Arregladas las restricciones de tiempoMinimoEnPosicion , VentanaTrabajo2h30min y porcentajesDescansos
+0.26 - Se ha añadido un nuevo movimiento (Cruce+movIntervalosMultiplo3)
+0.27 - Movimiento3 modificado en funcion de la longitud del descanso
+0.28 - Arreglo de R7. (el descanso tenia minimo 15, son 30) 
+0.29 - Opcion de dar pesos distintos a las restricciones.
+0.30 - Se agrega el movimiento8, igual que el mov4 pero al comprobar que no mezcle sectores de distintos nucleos, intenta tambien que no los coja un trabajador inadecuado, ademas retrasa el cruce hasta que se alcanza el numero requerido de controladores.
+0.31 - Introduccion de nuevos casos
+0.32 - Arreglo pequeño bug en escritura de soluciones en excel
+0.33 - Cambio en la restriccion 12: Maximos sectores en un unico turno de trabajo: 3.
+0.34 - Arreglado error restricciones ventana trabajo 2h, descanso 30m.
+0.35 - Añadido nueva opcion para comprobar 3 restricciones con Regex (Pattern[115..117]).
+1.01 - Introduccion algoritmo de busqueda BusquedaTabu -- HAY QUE PULIR
+1.02 - Hibridacion de SA con heuristica (ReparacionSoluciones) -- HAY QUE PULIR
+1.03 - Pruebas comprobacion restricciones paralelo.
+1.04 - Nuevo movimiento de hibridacion (RepararSolucionesDeInializacion) y arreglos.
+1.05 - Comparacion tiempos restricciones regex y codigo (paquete pruebaVelRegex).
+1.06 - Actualizacion restricciones Regex por restricciones en codigo (mayor velocidad).
+1.07 - Comparacion tiempos secuencial paralelizacion.
+1.08 - Revisar normalizacion penalizacion por restricciones. (Realizar pruebas movimiento hibridacion)
+1.09 - Proceso de incorporar VNS + Casos30 al 33
+1.10 - VNS incorporado y testeado.
+1.11 - Organizacion distintos algoritmos y mains.
+1.12 - Incorporacion VNS pablo en "algorithms.vnsPablo".
+1.13 - Integracion del VNS de pablo.
+1.14 - Modificaciones VNS-pablo (aun se queda en bucle) + paralelizacion entornos VNS
+1.15 - Creacion main principal
+1.16 - Incorporación de codigo en las clases de simulatedAnnealing y MainPruebas para la realizacion de pruebas con diferentes temperaturas. (Trazas des-activadas)
+1.17 - La immpresion por pantalla ha sido reducida, todo el contenido eliminado es escrito en un fichero a parte.
+1.18 - Se han modificado los parametros de descenso de la temperatura y las condiciones de parada.
+1.19 - Se ha actualizado el contenido de entrada para el centro de control de Barcelona (el antiguo se conserva en Barcelona-old).
+
