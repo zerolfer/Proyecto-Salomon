@@ -9,7 +9,6 @@ import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.DominioDelProblema.Nucleo;
 import estructurasDatos.DominioDelProblema.Sector;
 import patrones.*;
-import rwFiles.Escritura;
 /**
  * Clase utilizada para la inicializacion de un conjunto de soluciones iniciales.
  * @author Tino

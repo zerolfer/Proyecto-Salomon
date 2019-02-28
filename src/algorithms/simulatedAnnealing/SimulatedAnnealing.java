@@ -1,9 +1,7 @@
 package algorithms.simulatedAnnealing;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
-import java.util.Date;
 
 import Main.MainPruebas;
 import algorithms.simulatedAnnealing.moves.DeciderMove;
@@ -14,9 +12,7 @@ import fitnessFunction.DeciderFitnessFunction;
 import fitnessFunction.Fitness;
 import patrones.Patrones;
 import patrones.Restricciones;
-import rwFiles.Escritura;
-import trazas.Traza;
-import trazas.Trazas;
+
 
 
 /**
