@@ -3,18 +3,12 @@ package Main;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-
-import org.apache.commons.math3.distribution.LevyDistribution;
-
 import InicializarPoblacion.InicializarPoblacion;
 import algorithms.simulatedAnnealing.SimulatedAnnealing;
 import estructurasDatos.*;
 import estructurasDatos.DominioDelProblema.Entrada;
 import fitnessFunction.DeciderFitnessFunction;
 import patrones.*;
-import pruebasCasos.DeciderCase;
-import rwFiles.Escritura;
 
 /**
  * Main
