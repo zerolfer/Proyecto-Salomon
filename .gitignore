@@ -180,7 +180,6 @@ fabric.properties
 .mtj.tmp/
 
 # Package Files #
-*.jar
 *.war
 *.nar
 *.ear
@@ -192,3 +191,5 @@ fabric.properties
 hs_err_pid*
 
 # End of https://www.gitignore.io/api/git,java,eclipse,intellij
+*.iml
+*.xml
