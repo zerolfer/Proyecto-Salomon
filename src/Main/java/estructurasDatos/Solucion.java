@@ -1,69 +1,72 @@
 package estructurasDatos;
 
-import java.util.ArrayList;
-
 import estructurasDatos.DominioDelProblema.Controlador;
+
+import java.util.ArrayList;
 
 /**
  * Objeto Solucion, este objeto contiene toda la informacion necesaria para la representacion de una solucion del problema.
- * @author Tino
  *
+ * @author Tino
  */
-public class Solucion implements Cloneable{
-	/**
-	 * Lista de los controladores utilizados para la resolucion del problema.
-	 */
-	private ArrayList<Controlador> controladores = new ArrayList<Controlador>();
-	/**
-	 * Lista con todos los turnos que cubren los controladores pertenecientes a la lista "controladores".
-	 */
-	private ArrayList<String> turnos= new ArrayList<String>();
-	/**
-	 * Si la solucion se ha sido creada con el algoritmo de inicializacion propuesto, guarda la longitud de los descansos de la solucion inicial.
-	 * En caso contrario este valor permanece a cero.
-	 */
-	private int longdescansos = 0;
-	/**
-	 * Constructor
-	 * @param turnos Lista de turnos que componen la solucion.
-	 * @param controladores Lista de controladores asignados a los turnos.
-	 * @param longdescansos Longitud de los descansos asocioados a la solucion inicial (parametro de control).
-	 */
-	public Solucion(ArrayList<String> turnos, ArrayList<Controlador> controladores, int longdescansos){
-		this.controladores = controladores;
-		this.turnos = turnos;
-		this.longdescansos = longdescansos;
-	}
-	/**
-	 * Metodo usado para la copia de una solucion.
-	 */
-	public Object clone() {
-        Solucion sol = new Solucion(this.turnos,this.controladores,this.longdescansos);
+public class Solucion implements Cloneable {
+    /**
+     * Lista de los controladores utilizados para la resolucion del problema.
+     */
+    private ArrayList<Controlador> controladores = new ArrayList<>();
+    /**
+     * Lista con todos los turnos que cubren los controladores pertenecientes a la lista "controladores".
+     */
+    private ArrayList<String> turnos = new ArrayList<>();
+    /**
+     * Si la solucion se ha sido creada con el algoritmo de inicializacion propuesto, guarda la longitud de los descansos de la solucion inicial.
+     * En caso contrario este valor permanece a cero.
+     */
+    private int longdescansos = 0;
+
+    /**
+     * Constructor
+     *
+     * @param turnos        Lista de turnos que componen la solucion.
+     * @param controladores Lista de controladores asignados a los turnos.
+     * @param longdescansos Longitud de los descansos asocioados a la solucion inicial (parametro de control).
+     */
+    public Solucion(ArrayList<String> turnos, ArrayList<Controlador> controladores, int longdescansos) {
+        this.controladores = controladores;
+        this.turnos = turnos;
+        this.longdescansos = longdescansos;
+    }
+
+    /**
+     * Metodo usado para la copia de una solucion.
+     */
+    public Object clone() {
+        Solucion sol = new Solucion(this.turnos, this.controladores, this.longdescansos);
         return sol;
     }
 
-	public int getLongdescansos() {
-		return longdescansos;
-	}
+    public int getLongdescansos() {
+        return longdescansos;
+    }
 
-	public void setLongdescansos(int longdescansos) {
-		this.longdescansos = longdescansos;
-	}
+    public void setLongdescansos(int longdescansos) {
+        this.longdescansos = longdescansos;
+    }
 
-	public ArrayList<Controlador> getControladores() {
-		return controladores;
-	}
+    public ArrayList<Controlador> getControladores() {
+        return controladores;
+    }
 
-	public void setControladores(ArrayList<Controlador> controladores) {
-		this.controladores = controladores;
-	}
+    public void setControladores(ArrayList<Controlador> controladores) {
+        this.controladores = controladores;
+    }
 
-	public ArrayList<String> getTurnos() {
-		return turnos;
-	}
+    public ArrayList<String> getTurnos() {
+        return turnos;
+    }
 
-	public void setTurnos(ArrayList<String> turnos) {
-		this.turnos = turnos;
-	}
-			
+    public void setTurnos(ArrayList<String> turnos) {
+        this.turnos = turnos;
+    }
+
 }
