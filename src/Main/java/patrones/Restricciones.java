@@ -335,6 +335,8 @@ public class Restricciones {
 
     public static int calculate(ArrayList<Sector> solucionToTest, HashMap<Sector, ArrayList<String>> volumnsOfSectors) {
         int counter = 0;
+
+        @SuppressWarnings("unchecked")
         ArrayList<Sector> resto = (ArrayList<Sector>) solucionToTest.clone();
 
         ArrayList<Sector> toDelete = new ArrayList<>();

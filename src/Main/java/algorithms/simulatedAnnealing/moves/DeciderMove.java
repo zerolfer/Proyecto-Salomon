@@ -2,7 +2,7 @@ package algorithms.simulatedAnnealing.moves;
 
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
-import estructurasDatos.ParametrosAlgoritmo_SA;
+import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
 import patrones.Patrones;
 
@@ -29,9 +29,9 @@ public class DeciderMove {
      * @return Nueva solucion generada por el movimiento a partir de la anterior.
      */
     public static Solucion switchMoves(Solucion individuo, int gMax, int gMin, double desviacionTipica,
-                                       ParametrosAlgoritmo_SA parametrosAlg, Patrones patrones, Entrada entrada,
+                                       ParametrosAlgoritmo parametrosAlg, Patrones patrones, Entrada entrada,
                                        Parametros parametros, ArrayList<String> iteracion) {
-        String move = parametrosAlg.getMovimientosEntorno();
+        String move = parametrosAlg.SA.getMovimientosEntorno();
         Solucion mov = null;
         switch (move) {
             case "movimiento1"://Intervalo maximo a minimo

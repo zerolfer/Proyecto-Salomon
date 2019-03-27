@@ -3,7 +3,7 @@ package algorithms.vnsPablo;
 import estructurasDatos.DominioDelProblema.Controlador;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
-import estructurasDatos.ParametrosAlgoritmo_SA;
+import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
 import patrones.Restricciones;
 
@@ -19,11 +19,11 @@ public class FillNeigbourhoodListTask implements Runnable {
     patrones.Patrones patrones;
     Entrada entrada;
     Parametros parametros;
-    ParametrosAlgoritmo_SA parametrosAlg;
+    ParametrosAlgoritmo parametrosAlg;
     int neigbourhood;
     int nTurno;
 
-    public FillNeigbourhoodListTask(int neigbourhood, Solucion solIni, int nTurno, List<Solucion> neighbourhoodList, int size, patrones.Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo_SA parametrosAlg) {
+    public FillNeigbourhoodListTask(int neigbourhood, Solucion solIni, int nTurno, List<Solucion> neighbourhoodList, int size, patrones.Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo parametrosAlg) {
 
         this.solIni = solIni;
         this.nTurno = nTurno;

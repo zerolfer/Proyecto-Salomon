@@ -4,7 +4,7 @@ import InicializarPoblacion.InicializarPoblacion;
 import algorithms.simulatedAnnealing.moves.DeciderMove;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
-import estructurasDatos.ParametrosAlgoritmo_SA;
+import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
 import patrones.Patrones;
 import pruebasCasos.DeciderCase;
@@ -30,7 +30,7 @@ public class pruebasTiemposMain {
         long t1 = 0, t2 = 0, t3 = 0, t4 = 0, t5 = 0, t6 = 0;
         DeciderCase.switchCase("Caso10");//El caso4 no tiene solucion
         Parametros parametros = new Parametros(propFileParameters, propFileOptions);
-        ParametrosAlgoritmo_SA parametrosAlg = new ParametrosAlgoritmo_SA(propFileParametersAlgorithm);
+        ParametrosAlgoritmo parametrosAlg = new ParametrosAlgoritmo(propFileParametersAlgorithm);
         Entrada entrada = Entrada.leerEntrada(parametros, entradaPath, entradaId, entorno);
         Patrones patrones = new Patrones(entrada, parametros);
         /*Iniciar solucion*/
@@ -70,7 +70,7 @@ public class pruebasTiemposMain {
         long t1 = 0, t2 = 0;
         DeciderCase.switchCase("Caso10");//El caso4 no tiene solucion
         Parametros parametros = new Parametros(propFileParameters, propFileOptions);
-        ParametrosAlgoritmo_SA parametrosAlg = new ParametrosAlgoritmo_SA(propFileParametersAlgorithm);
+        ParametrosAlgoritmo parametrosAlg = new ParametrosAlgoritmo(propFileParametersAlgorithm);
         Entrada entrada = Entrada.leerEntrada(parametros, entradaPath, entradaId, entorno);
         Patrones patrones = new Patrones(entrada, parametros);
         /*Iniciar solucion*/

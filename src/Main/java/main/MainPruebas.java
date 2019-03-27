@@ -3,7 +3,7 @@ package main;
 import InicializarPoblacion.InicializarPoblacion;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
-import estructurasDatos.ParametrosAlgoritmo_SA;
+import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
 import fitnessFunction.DeciderFitnessFunction;
 import herramientas.lecturaSoluciones.LecturaSoluciones;
@@ -106,7 +106,7 @@ public class MainPruebas {
         DeciderCase.switchCase(caso);//El caso4 no tiene solucion
 
         Parametros parametros = new Parametros(Main.propFileParameters, Main.propFileOptions);
-        ParametrosAlgoritmo_SA parametrosAlgoritmo = new ParametrosAlgoritmo_SA(Main.propFileParametersAlgorithm);
+        ParametrosAlgoritmo parametrosAlgoritmo = new ParametrosAlgoritmo();
         Entrada entrada = Entrada.leerEntrada(parametros, Main.entradaPath, Main.entradaId, Main.entorno);
         Patrones patrones = new Patrones(entrada, parametros);
         Main.carpetaSoluciones =
@@ -134,29 +134,29 @@ public class MainPruebas {
     }
 
 
-    private static ParametrosAlgoritmo_SA reajustarParametros(ParametrosAlgoritmo_SA parametrosAlgoritmo,
+    private static ParametrosAlgoritmo reajustarParametros(ParametrosAlgoritmo parametrosAlgoritmo,
                                                               String temperaturaInicial, String literaciones,
                                                               String descensoTemperatura, Entrada entrada,
                                                               Patrones patrones, Parametros parametros) {
         MainPruebas.problema += (problema + "\n");
         switch (temperaturaInicial) {
             case "BenAmeur":
-                parametrosAlgoritmo.setTemperaturaInicial(0.075);
-                System.out.println("TEMP: BenAmeur " + parametrosAlgoritmo.getTemperaturaInicial());
-                MainPruebas.problema += ("TEMP: BenAmeur " + parametrosAlgoritmo.getTemperaturaInicial() + "\n");
+                parametrosAlgoritmo.SA.setTemperaturaInicial(0.075);
+                System.out.println("TEMP: BenAmeur " + parametrosAlgoritmo.SA.getTemperaturaInicial());
+                MainPruebas.problema += ("TEMP: BenAmeur " + parametrosAlgoritmo.SA.getTemperaturaInicial() + "\n");
                 break;
             case "Johnson":
                 double porcentajeAceptacion = 0.95;
-                parametrosAlgoritmo.setTemperaturaInicial(CalcularJohnson(porcentajeAceptacion, entrada, parametros,
+                parametrosAlgoritmo.SA.setTemperaturaInicial(CalcularJohnson(porcentajeAceptacion, entrada, parametros,
                         patrones, parametrosAlgoritmo));
-                System.out.println("TEMP: Johnson " + parametrosAlgoritmo.getTemperaturaInicial());
-                MainPruebas.problema += ("TEMP: Johnson " + parametrosAlgoritmo.getTemperaturaInicial() + "\n");
+                System.out.println("TEMP: Johnson " + parametrosAlgoritmo.SA.getTemperaturaInicial());
+                MainPruebas.problema += ("TEMP: Johnson " + parametrosAlgoritmo.SA.getTemperaturaInicial() + "\n");
                 break;
             case "krikpatric":
-                parametrosAlgoritmo.setTemperaturaInicial(CalcularKrikpatric(entrada, parametros, patrones,
+                parametrosAlgoritmo.SA.setTemperaturaInicial(CalcularKrikpatric(entrada, parametros, patrones,
                         parametrosAlgoritmo));
-                System.out.println("TEMP: krikpatric " + parametrosAlgoritmo.getTemperaturaInicial());
-                MainPruebas.problema += ("TEMP: krikpatric " + parametrosAlgoritmo.getTemperaturaInicial() + "\n");
+                System.out.println("TEMP: krikpatric " + parametrosAlgoritmo.SA.getTemperaturaInicial());
+                MainPruebas.problema += ("TEMP: krikpatric " + parametrosAlgoritmo.SA.getTemperaturaInicial() + "\n");
                 break;
         }
         switch (literaciones) {
@@ -166,17 +166,17 @@ public class MainPruebas {
                     cont += entrada.getSectorizacion().get(i).size();
                 }
                 int L = 8 * cont; //tmb se puede usar el numero de controladores disponibles (menos real)
-                parametrosAlgoritmo.setIteracionesTemperaturaL(L);
-                System.out.println("L: CAdaptativas " + parametrosAlgoritmo.getIteracionesTemperaturaL());
-                MainPruebas.problema += ("L: CAdaptativas " + parametrosAlgoritmo.getIteracionesTemperaturaL() + "\n");
+                parametrosAlgoritmo.SA.setIteracionesTemperaturaL(L);
+                System.out.println("L: CAdaptativas " + parametrosAlgoritmo.SA.getIteracionesTemperaturaL());
+                MainPruebas.problema += ("L: CAdaptativas " + parametrosAlgoritmo.SA.getIteracionesTemperaturaL() + "\n");
                 break;
             case "CEstaticas":
-                parametrosAlgoritmo.setIteracionesTemperaturaL(3000);
+                parametrosAlgoritmo.SA.setIteracionesTemperaturaL(3000);
                 System.out.println("L: CEstaticas " + 3000);
                 MainPruebas.problema += ("L: CEstaticas " + 3000 + "\n");
                 break;
             case "CutOff":
-                parametrosAlgoritmo.setIteracionesTemperaturaL(-1); //Hay que tocar en el codigo (=El umbral esta en
+                parametrosAlgoritmo.SA.setIteracionesTemperaturaL(-1); //Hay que tocar en el codigo (=El umbral esta en
                 // 1000 creo que es muy alto)
                 System.out.println("L: CutOff " + 1000);
                 MainPruebas.problema += ("L: CutOff " + 1000 + "\n");
@@ -184,17 +184,17 @@ public class MainPruebas {
         }
         switch (descensoTemperatura) {
             case "krikpatric":
-                parametrosAlgoritmo.setDescensoTemperatura(0.925);
+                parametrosAlgoritmo.SA.setDescensoTemperatura(0.925);
                 System.out.println("Desc: krikpatric " + 0.9);
                 MainPruebas.problema += ("Desc: krikpatric " + 0.9 + "\n");
                 break;
             case "Aarts":
-                parametrosAlgoritmo.setDescensoTemperatura(-1);//Hay que tocar en el codigo (tocado)
+                parametrosAlgoritmo.SA.setDescensoTemperatura(-1);//Hay que tocar en el codigo (tocado)
                 System.out.println("Desc: Aarts ");
                 MainPruebas.problema += ("Desc: Aarts " + "\n");
                 break;
             case "Adaptativa":
-                parametrosAlgoritmo.setDescensoTemperatura(-2); //Hay que tocar en el codigo (tocado)
+                parametrosAlgoritmo.SA.setDescensoTemperatura(-2); //Hay que tocar en el codigo (tocado)
                 System.out.println("Desc: Adaptativa ");
                 MainPruebas.problema += ("Desc: Adaptativa " + "\n");
                 break;
@@ -203,7 +203,7 @@ public class MainPruebas {
     }
 
     private static double CalcularKrikpatric(Entrada entrada, Parametros parametros, Patrones patrones,
-                                             ParametrosAlgoritmo_SA parametrosAlgoritmo) {
+                                             ParametrosAlgoritmo parametrosAlgoritmo) {
         ArrayList<Solucion> poblacionInicial = InicializarPoblacion.inicializarPoblacion(entrada, parametros, patrones);
         double tmp = 0;
         for (int j = 0; j < 200; j++) {
@@ -226,7 +226,7 @@ public class MainPruebas {
     }
 
     private static double CalcularJohnson(double pAcp, Entrada entrada, Parametros parametros, Patrones patrones,
-                                          ParametrosAlgoritmo_SA parametrosAlgoritmo) {
+                                          ParametrosAlgoritmo parametrosAlgoritmo) {
         ArrayList<Solucion> poblacionInicial = InicializarPoblacion.inicializarPoblacion(entrada, parametros, patrones);
         int cnt = 0;
         double media = 0;
@@ -255,7 +255,7 @@ public class MainPruebas {
     public static void mainPruebas(String[] args) {//PARA UNA PRUEBA
         DeciderCase.switchCase("Caso16");//El caso4 no tiene solucion
         Parametros parametros = new Parametros(Main.propFileParameters, Main.propFileOptions);
-        ParametrosAlgoritmo_SA parametrosAlg = new ParametrosAlgoritmo_SA(Main.propFileParametersAlgorithm);
+        ParametrosAlgoritmo parametrosAlg = new ParametrosAlgoritmo();
         Entrada entrada = Entrada.leerEntrada(parametros, Main.entradaPath, Main.entradaId, Main.entorno);
         Patrones patrones = new Patrones(entrada, parametros);
         Main.carpetaSoluciones =
@@ -282,7 +282,7 @@ public class MainPruebas {
         /*INICIALIZACION DE DATOS*/
         DeciderCase.switchCase("Caso3");
         Parametros parametros = new Parametros(Main.propFileParameters, Main.propFileOptions);
-        ParametrosAlgoritmo_SA parametrosAlg = new ParametrosAlgoritmo_SA(Main.propFileParametersAlgorithm);
+        ParametrosAlgoritmo parametrosAlg = new ParametrosAlgoritmo();
         Entrada entrada = Entrada.leerEntrada(parametros, Main.entradaPath, Main.entradaId, Main.entorno);
         Patrones patrones = new Patrones(entrada, parametros);
         Main.carpetaSoluciones =
@@ -331,7 +331,7 @@ public class MainPruebas {
         DeciderCase.switchCase("Caso16");
         String solucionALeer1 = "solucionMadrid.txt";
         Parametros parametros = new Parametros(Main.propFileParameters, Main.propFileOptions);
-        ParametrosAlgoritmo_SA parametrosAlg = new ParametrosAlgoritmo_SA(Main.propFileParametersAlgorithm);
+        ParametrosAlgoritmo parametrosAlg = new ParametrosAlgoritmo();
         Entrada entrada = Entrada.leerEntrada(parametros, Main.entradaPath, Main.entradaId, Main.entorno);
         Patrones patrones = new Patrones(entrada, parametros);
         Main.carpetaSoluciones =

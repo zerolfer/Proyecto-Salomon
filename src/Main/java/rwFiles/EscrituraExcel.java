@@ -4,7 +4,7 @@ import estructurasDatos.DominioDelProblema.Controlador;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.DominioDelProblema.Sector;
 import estructurasDatos.Parametros;
-import estructurasDatos.ParametrosAlgoritmo_SA;
+import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
 import main.Main;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -42,7 +42,7 @@ public class EscrituraExcel {
      * @param patrones  Clase donde se encuentran todos los patrones necesarios para la comprobacion de las restricciones.
      * @param p         Parametros del problema.
      */
-    public static void EscrituraSoluciones(String titulo, String carpetaS, ArrayList<Solucion> poblacion, Entrada entrada, Patrones patrones, Parametros p, ParametrosAlgoritmo_SA pa) {
+    public static void EscrituraSoluciones(String titulo, String carpetaS, ArrayList<Solucion> poblacion, Entrada entrada, Patrones patrones, Parametros p, ParametrosAlgoritmo pa) {
         String c1 = "resultados/" + Main.entradaPath + Main.entradaId + "/";
         File f = new File(c1);
         f.mkdir();

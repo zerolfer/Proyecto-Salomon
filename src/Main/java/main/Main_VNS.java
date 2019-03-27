@@ -4,7 +4,7 @@ import InicializarPoblacion.InicializarPoblacion;
 import algorithms.VNS.VNS;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
-import estructurasDatos.ParametrosAlgoritmo_SA;
+import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
 import fitnessFunction.DeciderFitnessFunction;
 import patrones.Patrones;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class Main_VNS {
 
-    public static void main_vns(Parametros parametros, ParametrosAlgoritmo_SA parametrosAlgoritmo, Entrada entrada,
+    public static void main_vns(Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo, Entrada entrada,
                                 Patrones patrones) {
 
         /*INICIALIZACION DE SOLUCIONES FACTIBLES*/

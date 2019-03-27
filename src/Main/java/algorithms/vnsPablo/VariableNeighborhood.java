@@ -9,7 +9,7 @@ import algorithms.simulatedAnnealing.SimulatedAnnealing;
 import estructurasDatos.DominioDelProblema.Controlador;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
-import estructurasDatos.ParametrosAlgoritmo_SA;
+import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
 import fitnessFunction.DeciderFitnessFunction;
 import patrones.Restricciones;
@@ -33,7 +33,7 @@ public class VariableNeighborhood extends Thread {
     private static int explored = 0;
     private static int nlSize = 0;
 
-    public static Solucion nVariableNeighborhood(Solucion solIni, patrones.Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo_SA parametrosAlg) {
+    public static Solucion nVariableNeighborhood(Solucion solIni, patrones.Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo parametrosAlg) {
 
         double globalTotalFitnes = 0;
         boolean stopCondition = false;
@@ -198,7 +198,7 @@ public class VariableNeighborhood extends Thread {
         }
     }
 
-    public static List<Solucion> fillNeighborhoodThreads(int wide, Solucion solIni, int size, int neighboorhood, patrones.Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo_SA parametrosAlg) {
+    public static List<Solucion> fillNeighborhoodThreads(int wide, Solucion solIni, int size, int neighboorhood, patrones.Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo parametrosAlg) {
         Solucion solFin = (Solucion) solIni.clone();
         Solucion solIniCopia = (Solucion) solIni.clone();
         List<Solucion> neighbourhoodList = Collections.synchronizedList(new ArrayList<Solucion>());
@@ -341,7 +341,7 @@ public class VariableNeighborhood extends Thread {
         return neighbourhoodList;
     }
 
-    public static ArrayList<Solucion> fillNeighborhood(Solucion solIni, int size, int neighboorhood, patrones.Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo_SA parametrosAlg) {
+    public static ArrayList<Solucion> fillNeighborhood(Solucion solIni, int size, int neighboorhood, patrones.Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo parametrosAlg) {
         Solucion solFin = (Solucion) solIni.clone();
         Solucion solIniCopia = (Solucion) solIni.clone();
         ArrayList<Solucion> neighbourhoodList = new ArrayList<>();
@@ -498,7 +498,7 @@ public class VariableNeighborhood extends Thread {
     }
 
 
-    public static Solucion localSearchNeighborhoods(Solucion solIni, int size, int neighboorhood, List<Solucion> neighbourhoodList, patrones.Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo_SA parametrosAlg) {
+    public static Solucion localSearchNeighborhoods(Solucion solIni, int size, int neighboorhood, List<Solucion> neighbourhoodList, patrones.Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo parametrosAlg) {
         Solucion solFin = (Solucion) solIni.clone();
         Solucion solBest = (Solucion) solIni.clone();
         Solucion solIniCopia = (Solucion) solIni.clone();

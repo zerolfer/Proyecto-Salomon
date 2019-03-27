@@ -4,7 +4,7 @@ import estructurasDatos.DominioDelProblema.Controlador;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Movimiento;
 import estructurasDatos.Parametros;
-import estructurasDatos.ParametrosAlgoritmo_SA;
+import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
 import patrones.Patrones;
 import patrones.Restricciones;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class Entorno2 {
 
-    public static ArrayList<Solucion> movimiento(Solucion individuo1, Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo_SA parametrosAlg, int tmnIntervalo) {
+    public static ArrayList<Solucion> movimiento(Solucion individuo1, Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo parametrosAlg, int tmnIntervalo) {
         ArrayList<Solucion> soluciones = new ArrayList<>();
         ArrayList<String> turnos = individuo1.getTurnos();
         int tmn = turnos.size();
@@ -62,7 +62,7 @@ public class Entorno2 {
         return soluciones;
     }
 
-    private static ArrayList<String> ChangeCont(Solucion ind, Movimiento mov, Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo_SA parametrosAlg) {
+    private static ArrayList<String> ChangeCont(Solucion ind, Movimiento mov, Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo parametrosAlg) {
         /*
          * Comprueba que se pueda hacer un transpaso de trabajo entre dos controladores,
          * si es posible devuelve los dos individuos con el cambio ya hecho, si no devuelve null
@@ -90,7 +90,7 @@ public class Entorno2 {
     }
 
 
-    private static Solucion DoChange1(ArrayList<String> dosInd, Solucion individuo, Movimiento mov, ParametrosAlgoritmo_SA pa) {
+    private static Solucion DoChange1(ArrayList<String> dosInd, Solucion individuo, Movimiento mov, ParametrosAlgoritmo pa) {
         /*
          * Realiza el transpaso de trabajo entre dos controladores,
          * y comprueba que el controlador que entrega la carga de trabajo, tenga algo mas (no sea todo ceros), si no se elimina

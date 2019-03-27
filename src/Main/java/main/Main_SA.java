@@ -4,7 +4,7 @@ import InicializarPoblacion.InicializarPoblacion;
 import algorithms.simulatedAnnealing.SimulatedAnnealing;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
-import estructurasDatos.ParametrosAlgoritmo_SA;
+import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
 import fitnessFunction.DeciderFitnessFunction;
 import patrones.Patrones;
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class Main_SA {
 
 
-    public static void main_sa(Parametros parametros, ParametrosAlgoritmo_SA parametrosAlgoritmo, Entrada entrada, Patrones patrones) {//Principal
+    public static void main_sa(Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo, Entrada entrada, Patrones patrones) {//Principal
 
         MainPruebas.problema += "Fase 2:" + "\n";
 
@@ -72,7 +72,8 @@ public class Main_SA {
         /*MainPruebas*/
         parametrosAlgoritmo.setFuncionFitnessFase2(parametrosAlgoritmo.getFuncionFitnessFase3());
         //parametrosAlgoritmo.setCondicionParadaNumeroMejoras(0);//Esto elimina esta condicion de parada para la fase 3 ya que no es necesaria.
-        parametrosAlgoritmo.setCondicionParadaPorcent(0.1);//Modifica el porcentaje de mejora de la condicion de parada para la fase 3.
+        parametrosAlgoritmo.SA.setCondicionParadaPorcent(0.1);//Modifica el porcentaje de mejora de la condicion de
+        // parada para la fase 3.
 
         ArrayList<Solucion> poblacionOptimizada = new ArrayList<>();
         poblacionOptimizada = SimulatedAnnealing.bucleSA(poblacionFactible, parametrosAlgoritmo, parametros, patrones, entrada);

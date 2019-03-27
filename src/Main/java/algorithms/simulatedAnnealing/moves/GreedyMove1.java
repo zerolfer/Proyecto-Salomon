@@ -2,7 +2,7 @@ package algorithms.simulatedAnnealing.moves;
 
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
-import estructurasDatos.ParametrosAlgoritmo_SA;
+import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
 import fitnessFunction.DeciderFitnessFunction;
 import patrones.Patrones;
@@ -14,7 +14,7 @@ import java.util.concurrent.Executors;
 public class GreedyMove1 {
     public final static int NUM_HILOS = 4;
 
-    public static Solucion movimientoGready(Solucion individuo, Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo_SA parametrosAlg) {
+    public static Solucion movimientoGready(Solucion individuo, Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo parametrosAlg) {
         ArrayList<ParalelMove1> array = new ArrayList<>();
         ArrayList<Double> fitness = new ArrayList<>();
         ExecutorService threadPool = Executors.newFixedThreadPool(NUM_HILOS);  //El parñmetro es en numero de threads que quieres lanzar

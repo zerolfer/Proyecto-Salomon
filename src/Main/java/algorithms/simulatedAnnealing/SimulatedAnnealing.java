@@ -5,7 +5,7 @@ import algorithms.simulatedAnnealing.moves.DeciderMove;
 import estructurasDatos.DominioDelProblema.Controlador;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
-import estructurasDatos.ParametrosAlgoritmo_SA;
+import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
 import fitnessFunction.DeciderFitnessFunction;
 import fitnessFunction.Fitness;
@@ -32,7 +32,7 @@ public class SimulatedAnnealing {
      * @param entrada          Entrada del problema.
      * @return Conjunto de soluciones optimizadas.
      */
-    public static ArrayList<Solucion> bucleSA(ArrayList<Solucion> poblacionInicial, ParametrosAlgoritmo_SA pa,
+    public static ArrayList<Solucion> bucleSA(ArrayList<Solucion> poblacionInicial, ParametrosAlgoritmo pa,
                                               Parametros p, Patrones patrones, Entrada entrada) {
         /*
          * Bucle para operar sobre varios individuos si es necesario
@@ -77,7 +77,7 @@ public class SimulatedAnnealing {
      * @param primeraSolFac
      * @return Devuelve una solucion optimizada.
      */
-    public static Solucion simulatedAnnealing(Solucion individuo, int n, ParametrosAlgoritmo_SA parametrosAlg,
+    public static Solucion simulatedAnnealing(Solucion individuo, int n, ParametrosAlgoritmo parametrosAlg,
                                               Parametros parametros, Patrones patrones, Entrada entrada) {
         /*
          * Ordena la matriz por la vagueza de los controladores y elimina los controladores que no trabajan
@@ -91,8 +91,8 @@ public class SimulatedAnnealing {
         long ti1 = t1;
         long ti2 = 0;
         double pem = 0;
-        double temperatura = parametrosAlg.getTemperaturaInicial();
-        double descensoTemp = parametrosAlg.getDescensoTemperatura();
+        double temperatura = parametrosAlg.SA.getTemperaturaInicial();
+        double descensoTemp = parametrosAlg.SA.getDescensoTemperatura();
         String formulaDesc = "clasica";
         if (descensoTemp == -1) { //USO DE Formulas distintas para el descenso de temp
             formulaDesc = "Aarts";
@@ -100,17 +100,17 @@ public class SimulatedAnnealing {
         } else if (descensoTemp == -2) {
             formulaDesc = "Adaptativa";
         }
-        double iteracionesTemp = parametrosAlg.getIteracionesTemperaturaL();
+        double iteracionesTemp = parametrosAlg.SA.getIteracionesTemperaturaL();
         boolean cutOff = false;
         if (iteracionesTemp == -1) { //USO DE CUTOOF
             iteracionesTemp = 3000;
             cutOff = true;
         }
-        double condicionParadaCiclos = parametrosAlg.getCondicionParadaCiclos();
-        double condicionParadaPorcent = parametrosAlg.getCondicionParadaPorcent();
-        double numeroMejoras = parametrosAlg.getCondicionParadaNumeroMejoras();
-        int gMax = (parametrosAlg.getTamañoMaxMov() / parametros.getTamanoSlots()) * 3;
-        int gMin = (parametrosAlg.getTamañoMinMov() / parametros.getTamanoSlots()) * 3;
+        double condicionParadaCiclos = parametrosAlg.SA.getCondicionParadaCiclos();
+        double condicionParadaPorcent = parametrosAlg.SA.getCondicionParadaPorcent();
+        double numeroMejoras = parametrosAlg.SA.getCondicionParadaNumeroMejoras();
+        int gMax = (parametrosAlg.SA.getTamañoMaxMov() / parametros.getTamanoSlots()) * 3;
+        int gMin = (parametrosAlg.SA.getTamañoMinMov() / parametros.getTamanoSlots()) * 3;
         int iteracionActual = 0;
         double val1 = 0, val2 = 0, porcentMejora = 1;
         individuo = orderByLazyCriteria(individuo);
@@ -213,7 +213,7 @@ public class SimulatedAnnealing {
                     temperatura = temperatura * descensoTemp;
                 } else if (formulaDesc.equalsIgnoreCase("Aarts")) {
                     temperatura =
-                            parametrosAlg.getTemperaturaInicial() / (1 + descensoTemp * Math.log(1 + iteracionActual));
+                            parametrosAlg.SA.getTemperaturaInicial() / (1 + descensoTemp * Math.log(1 + iteracionActual));
                 } else if (formulaDesc.equalsIgnoreCase("Adaptativa")) {
                     temperatura = 0.15 * (1 - bestFit + temperatura - ((double) iteracionActual / 500000.0));
                     //elevado a la 1. TODO: PRUEBAAAAAA!
@@ -222,8 +222,8 @@ public class SimulatedAnnealing {
                     }
                     //System.out.println("temp: "+temperatura);
                 }
-                pem = parametrosAlg.getPorcentajeEleccionMov() * 0.99;
-                parametrosAlg.setPorcentajeEleccionMov(pem);
+                pem = parametrosAlg.SA.getPorcentajeEleccionMov() * 0.99;
+                parametrosAlg.SA.setPorcentajeEleccionMov(pem);
                 aMejor = m / iteracionesTemp;
                 /*Trazas4*/
 //				trazaL =trazaL +iteracionActual+";"+m+";"+pa+";"+pn+"\n";

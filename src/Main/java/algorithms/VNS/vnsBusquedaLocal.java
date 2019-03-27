@@ -3,7 +3,7 @@ package algorithms.VNS;
 import algorithms.VNS.moves.DeciderMove;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
-import estructurasDatos.ParametrosAlgoritmo_SA;
+import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
 import fitnessFunction.DeciderFitnessFunction;
 import patrones.Patrones;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class vnsBusquedaLocal {
 
-    public static Solucion BusquedaLocal(String movimiento, Solucion individuo, Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo_SA parametrosAlg, int tmn) {
+    public static Solucion BusquedaLocal(String movimiento, Solucion individuo, Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo parametrosAlg, int tmn) {
 
 
         ArrayList<Solucion> soluciones = DeciderMove.switchMoves(movimiento, individuo, parametrosAlg, patrones, entrada, parametros, tmn);

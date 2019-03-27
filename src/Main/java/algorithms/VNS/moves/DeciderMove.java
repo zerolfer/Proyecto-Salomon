@@ -2,7 +2,7 @@ package algorithms.VNS.moves;
 
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
-import estructurasDatos.ParametrosAlgoritmo_SA;
+import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
 import patrones.Patrones;
 
@@ -14,7 +14,7 @@ import java.util.concurrent.Executors;
 
 public class DeciderMove extends Thread {
 
-    public static ArrayList<Solucion> switchMoves(String move, Solucion individuo, ParametrosAlgoritmo_SA parametrosAlg, Patrones patrones, Entrada entrada, Parametros parametros, int tmnIntervalo) {
+    public static ArrayList<Solucion> switchMoves(String move, Solucion individuo, ParametrosAlgoritmo parametrosAlg, Patrones patrones, Entrada entrada, Parametros parametros, int tmnIntervalo) {
         ArrayList<Solucion> soluciones = new ArrayList<>();
         List<Solucion> listaSoluciones = Collections.synchronizedList(new ArrayList<Solucion>());
         listaSoluciones.clear();

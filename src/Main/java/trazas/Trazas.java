@@ -1,6 +1,6 @@
 package trazas;
 
-import estructurasDatos.ParametrosAlgoritmo_SA;
+import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
 import main.Main;
 
@@ -24,7 +24,7 @@ public class Trazas {
     }
 
     public static void archivarYLimpiarTrazas(ArrayList<Solucion> poblacionReducirControladores,
-                                              String propFileOptions, ParametrosAlgoritmo_SA pa) {
+                                              String propFileOptions, ParametrosAlgoritmo pa) {
         String c1 = "resultados/" + Main.entradaPath + Main.entradaId + "/";
         File f = new File(c1);
         f.mkdir();
@@ -97,7 +97,7 @@ public class Trazas {
     }
 
     private static String[] ordenarTrazas(int name, int n, ArrayList<ArrayList<String>> trazas, int tmn,
-                                          int[] titulos, String fichero, long time, ParametrosAlgoritmo_SA pa) {
+                                          int[] titulos, String fichero, long time, ParametrosAlgoritmo pa) {
         System.out.println("Escribiendo traza " + name + "...");
         double mej = 0, cam = 0, nomej = 0;
         double mPorcent = 0, mediaIntentosTotal = 0, mediaC1Intentos = 0, mediaIntervalosIntentos = 0;
@@ -128,7 +128,7 @@ public class Trazas {
             mediaIntentosTotal = mediaIntentosTotal + Double.parseDouble(iteracionX.get(4));
             mediaC1Intentos = mediaC1Intentos + Double.parseDouble(iteracionX.get(3));
             mediaIntervalosIntentos = mediaIntervalosIntentos + Double.parseDouble(iteracionX.get(2));
-            //if(pa.getMovimientosEntorno().equalsIgnoreCase("movimiento3")||pa.getMovimientosEntorno()
+            //if(pa.SA.getMovimientosEntorno().equalsIgnoreCase("movimiento3")||pa.SA.getMovimientosEntorno()
             // .equalsIgnoreCase("movimiento2")){
             tamanosIntervalos[(Integer.parseInt(iteracionX.get(1)) / 3)] =
                     tamanosIntervalos[(Integer.parseInt(iteracionX.get(1)) / 3)] + 1;
@@ -163,7 +163,7 @@ public class Trazas {
         }
 
         String info =
-                "Temp: " + pa.getTemperaturaInicial() + " Alpha: " + pa.getDescensoTemperatura() + " L: " + pa.getIteracionesTemperaturaL() + " CPporcent: " + pa.getCondicionParadaPorcent() + " CPciclos: " + pa.getCondicionParadaCiclos() + "FitnessFunction: " + pa.getFuncionFitnessFase2() + " " + pa.getMovimientosEntorno() + "\n" + "Tiempo de ejecuciñn: " + ((time / 1000.0) / 60.0) + "\n";
+                "Temp: " + pa.SA.getTemperaturaInicial() + " Alpha: " + pa.SA.getDescensoTemperatura() + " L: " + pa.SA.getIteracionesTemperaturaL() + " CPporcent: " + pa.SA.getCondicionParadaPorcent() + " CPciclos: " + pa.SA.getCondicionParadaCiclos() + "FitnessFunction: " + pa.getFuncionFitnessFase2() + " " + pa.SA.getMovimientosEntorno() + "\n" + "Tiempo de ejecuciñn: " + ((time / 1000.0) / 60.0) + "\n";
         info = info + "\n" + mediasTotales + "\n" + bucle + "\n" + fichero;
         String[] datosEscritura = {Main.carpetaTrazas + "TrazaN" + name + "_" + 0 + ".txt", info};
         return datosEscritura;

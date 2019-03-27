@@ -4,14 +4,14 @@ import estructurasDatos.DominioDelProblema.Controlador;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.DominioDelProblema.Turno;
 import estructurasDatos.Parametros;
-import estructurasDatos.ParametrosAlgoritmo_SA;
+import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
 
 import java.util.ArrayList;
 
 public class RestriccionesCode {
 
-    public static long comprobarRestricciones(Solucion individuo, Parametros parametros, Entrada entrada, ParametrosAlgoritmo_SA pa) {
+    public static long comprobarRestricciones(Solucion individuo, Parametros parametros, Entrada entrada, ParametrosAlgoritmo pa) {
         long t1 = System.currentTimeMillis();
         /*Inicio Restricciones*/
         int p = 0;
@@ -167,7 +167,7 @@ public class RestriccionesCode {
         return p;
     }
 
-    private static int comprobarTrabajoPosicionMinimoConsecutivo(ArrayList<String> turnos, ParametrosAlgoritmo_SA pa) {
+    private static int comprobarTrabajoPosicionMinimoConsecutivo(ArrayList<String> turnos, ParametrosAlgoritmo pa) {
         int p = 0;
         int min = 3;
         for (String turno : turnos) {

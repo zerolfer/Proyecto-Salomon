@@ -6,7 +6,7 @@ import estructurasDatos.DominioDelProblema.Nucleo;
 import estructurasDatos.DominioDelProblema.Sector;
 import estructurasDatos.Movimiento;
 import estructurasDatos.Parametros;
-import estructurasDatos.ParametrosAlgoritmo_SA;
+import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
 import patrones.Patrones;
 import patrones.Restricciones;
@@ -65,7 +65,7 @@ public class Move8 {
         return intervalo;
     }
 
-    private static Solucion DoChange1(ArrayList<String> dosInd, Solucion individuo, Movimiento mov, ParametrosAlgoritmo_SA pa) {
+    private static Solucion DoChange1(ArrayList<String> dosInd, Solucion individuo, Movimiento mov, ParametrosAlgoritmo pa) {
         /*
          * Realiza el transpaso de trabajo entre dos controladores,
          * y comprueba que el controlador que entrega la carga de trabajo, tenga algo mas (no sea todo ceros), si no se elimina
@@ -130,7 +130,7 @@ public class Move8 {
         return cs;
     }
 
-    private static ArrayList<String> ChangeCont(Solucion ind, Movimiento mov, Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo_SA parametrosAlg) {
+    private static ArrayList<String> ChangeCont(Solucion ind, Movimiento mov, Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo parametrosAlg) {
         /*
          * Comprueba que se pueda hacer un transpaso de trabajo entre dos controladores,
          * si es posible devuelve los dos individuos con el cambio ya hecho, si no devuelve null
@@ -357,7 +357,7 @@ public class Move8 {
         return false;
     }
 
-    public static Solucion movimientoTrabajoIntervalosPseudoAleatorios(Solucion individuo1, int granularidadMax, int granularidadMin, Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo_SA pa, ArrayList<String> iteracion) {
+    public static Solucion movimientoTrabajoIntervalosPseudoAleatorios(Solucion individuo1, int granularidadMax, int granularidadMin, Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo pa, ArrayList<String> iteracion) {
         /*
          * Busca crear un cambio de trabajo entre dos trabajadores:
          */
@@ -420,8 +420,8 @@ public class Move8 {
         return individuo2;
     }
 
-    public static Solucion doblemovimiento(Solucion individuo1, int gMax, int gMin, Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo_SA parametrosAlg, ArrayList<String> iteracion) {
-        double porcent = parametrosAlg.getPorcentajeEleccionMov();
+    public static Solucion doblemovimiento(Solucion individuo1, int gMax, int gMin, Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo parametrosAlg, ArrayList<String> iteracion) {
+        double porcent = parametrosAlg.SA.getPorcentajeEleccionMov();
         double rand = Math.random();
         Solucion ind = null;
         if (porcent >= rand && (individuo1.getControladores().size() >= individuo1.getTurnos().size())) {
@@ -433,7 +433,7 @@ public class Move8 {
         return ind;
     }
 
-    private static Solucion movimientoTrabajoCruceControladores(Solucion individuo1, Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo_SA parametrosAlg, ArrayList<String> iteracion) {
+    private static Solucion movimientoTrabajoCruceControladores(Solucion individuo1, Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo parametrosAlg, ArrayList<String> iteracion) {
 
         /*
          * Busca crear un cambio de trabajo entre dos trabajadores:

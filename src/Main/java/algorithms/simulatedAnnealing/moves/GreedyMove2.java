@@ -3,7 +3,7 @@ package algorithms.simulatedAnnealing.moves;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.DominioDelProblema.Turno;
 import estructurasDatos.Parametros;
-import estructurasDatos.ParametrosAlgoritmo_SA;
+import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
 import patrones.Patrones;
 import patrones.Restricciones;
@@ -14,7 +14,7 @@ public class GreedyMove2 {
     public static boolean posibleM = true;
     public static int contM = 0;
 
-    public static Solucion movimientoGready(Solucion individuo, Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo_SA parametrosAlg) {
+    public static Solucion movimientoGready(Solucion individuo, Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo parametrosAlg) {
         int minT = parametros.getTiempoTrabMin() / parametros.getTamanoSlots();
         ArrayList<String> turnos = individuo.getTurnos();
         for (int i = 0; i < turnos.size(); i++) {

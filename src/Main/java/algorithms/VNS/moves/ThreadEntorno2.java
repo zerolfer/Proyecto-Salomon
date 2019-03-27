@@ -4,7 +4,7 @@ import estructurasDatos.DominioDelProblema.Controlador;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Movimiento;
 import estructurasDatos.Parametros;
-import estructurasDatos.ParametrosAlgoritmo_SA;
+import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
 import patrones.Patrones;
 import patrones.Restricciones;
@@ -21,9 +21,9 @@ public class ThreadEntorno2 implements Runnable {
     public Patrones patrones;
     public Parametros parametros;
     public Entrada entrada;
-    public ParametrosAlgoritmo_SA parametrosAlg;
+    public ParametrosAlgoritmo parametrosAlg;
 
-    public ThreadEntorno2(List<Solucion> listaSoluciones, int i, Solucion individuo1, int tmnIntervalo, Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo_SA parametrosAlg) {
+    public ThreadEntorno2(List<Solucion> listaSoluciones, int i, Solucion individuo1, int tmnIntervalo, Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo parametrosAlg) {
         this.listaSoluciones = listaSoluciones;
         this.i = i;
         this.individuo1 = individuo1;
@@ -81,7 +81,7 @@ public class ThreadEntorno2 implements Runnable {
         }
     }
 
-    private static ArrayList<String> ChangeCont(Solucion ind, Movimiento mov, Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo_SA parametrosAlg) {
+    private static ArrayList<String> ChangeCont(Solucion ind, Movimiento mov, Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo parametrosAlg) {
         /*
          * Comprueba que se pueda hacer un transpaso de trabajo entre dos controladores,
          * si es posible devuelve los dos individuos con el cambio ya hecho, si no devuelve null
@@ -109,7 +109,7 @@ public class ThreadEntorno2 implements Runnable {
     }
 
 
-    private static Solucion DoChange1(ArrayList<String> dosInd, Solucion individuo, Movimiento mov, ParametrosAlgoritmo_SA pa) {
+    private static Solucion DoChange1(ArrayList<String> dosInd, Solucion individuo, Movimiento mov, ParametrosAlgoritmo pa) {
         /*
          * Realiza el transpaso de trabajo entre dos controladores,
          * y comprueba que el controlador que entrega la carga de trabajo, tenga algo mas (no sea todo ceros), si no se elimina

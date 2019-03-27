@@ -2,7 +2,7 @@ package algorithms.simulatedAnnealing.moves;
 
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
-import estructurasDatos.ParametrosAlgoritmo_SA;
+import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
 import patrones.Patrones;
 
@@ -13,9 +13,9 @@ public class ParalelMove1 implements Runnable {
     Patrones patrones;
     Entrada entrada;
     Parametros parametros;
-    ParametrosAlgoritmo_SA parametrosAlgoritmo;
+    ParametrosAlgoritmo parametrosAlgoritmo;
 
-    public ParalelMove1(int controlador, int posicion, Solucion individuo, Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo_SA parametrosAlgoritmo) {
+    public ParalelMove1(int controlador, int posicion, Solucion individuo, Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo) {
         this.controlador = controlador;
         this.posicion = posicion;
         this.individuo = individuo;

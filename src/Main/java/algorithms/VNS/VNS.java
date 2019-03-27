@@ -4,7 +4,7 @@ import algorithms.VNS.moves.DeciderMove;
 import estructurasDatos.DominioDelProblema.Controlador;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
-import estructurasDatos.ParametrosAlgoritmo_SA;
+import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
 import fitnessFunction.DeciderFitnessFunction;
 import fitnessFunction.Fitness;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 public class VNS {
 
-    public static ArrayList<Solucion> bucleVNS(ArrayList<Solucion> poblacionInicial, ParametrosAlgoritmo_SA parametrosAlg, Parametros parametros, Patrones patrones, Entrada entrada) {
+    public static ArrayList<Solucion> bucleVNS(ArrayList<Solucion> poblacionInicial, ParametrosAlgoritmo parametrosAlg, Parametros parametros, Patrones patrones, Entrada entrada) {
         ArrayList<Solucion> poblacionMejorada = new ArrayList<>();
         Solucion individuo = null;
         for (int i = 0; i < poblacionInicial.size(); i++) {
@@ -29,7 +29,7 @@ public class VNS {
         return poblacionMejorada;
     }
 
-    private static Solucion vns(Solucion individuo, int n, ParametrosAlgoritmo_SA parametrosAlg, Parametros parametros, Patrones patrones, Entrada entrada) {
+    private static Solucion vns(Solucion individuo, int n, ParametrosAlgoritmo parametrosAlg, Parametros parametros, Patrones patrones, Entrada entrada) {
 
         // String[] movs = {"entorno2","entorno1","entorno3","entorno4"}; //TIME: 11.995116666666666 | Restricciones: 1.3333333333333333
 

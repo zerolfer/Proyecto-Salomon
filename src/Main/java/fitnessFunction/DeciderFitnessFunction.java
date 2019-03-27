@@ -2,7 +2,7 @@ package fitnessFunction;
 
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
-import estructurasDatos.ParametrosAlgoritmo_SA;
+import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
 import patrones.Patrones;
 
@@ -12,7 +12,7 @@ import patrones.Patrones;
  * @author Tino
  */
 public class DeciderFitnessFunction {
-    public static double[] switchFitnessF(Solucion individuo, Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo_SA parametrosAlg) {
+    public static double[] switchFitnessF(Solucion individuo, Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo parametrosAlg) {
         String funFit = parametrosAlg.getFuncionFitnessFase2();
         double[] fit = {0, 0, 0, 0, 0};
         /*Si se esta utilizando el SA solo se utilizara el valor fit[0]

@@ -4,7 +4,7 @@ import estructurasDatos.DominioDelProblema.Controlador;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Movimiento;
 import estructurasDatos.Parametros;
-import estructurasDatos.ParametrosAlgoritmo_SA;
+import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
 import patrones.Patrones;
 import patrones.Restricciones;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class Move1 {
 
-    public static Solucion movimientoTrabajo(Solucion individuo1, int granularidadMax, int granularidadMin, Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo_SA pa, ArrayList<String> iteracion) {
+    public static Solucion movimientoTrabajo(Solucion individuo1, int granularidadMax, int granularidadMin, Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo pa, ArrayList<String> iteracion) {
         /*
          * Busca crear un cambio de trabajo entre dos trabajadores:
          */
@@ -120,7 +120,7 @@ public class Move1 {
         return intervalo;
     }
 
-    private static Solucion DoChange1(ArrayList<String> dosInd, Solucion individuo, Movimiento mov, ParametrosAlgoritmo_SA pa) {
+    private static Solucion DoChange1(ArrayList<String> dosInd, Solucion individuo, Movimiento mov, ParametrosAlgoritmo pa) {
         /*
          * Realiza el transpaso de trabajo entre dos controladores,
          * y comprueba que el controlador que entrega la carga de trabajo, tenga algo mas (no sea todo ceros), si no se elimina
@@ -185,7 +185,7 @@ public class Move1 {
         return cs;
     }
 
-    private static ArrayList<String> ChangeCont(Solucion ind, Movimiento mov, Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo_SA parametrosAlg) {
+    private static ArrayList<String> ChangeCont(Solucion ind, Movimiento mov, Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo parametrosAlg) {
         /*
          * Comprueba que se pueda hacer un transpaso de trabajo entre dos controladores,
          * si es posible devuelve los dos individuos con el cambio ya hecho, si no devuelve null

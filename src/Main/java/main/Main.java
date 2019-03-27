@@ -2,7 +2,7 @@ package main;
 
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
-import estructurasDatos.ParametrosAlgoritmo_SA;
+import estructurasDatos.ParametrosAlgoritmo;
 import patrones.Patrones;
 import pruebasCasos.DeciderCase;
 
@@ -12,7 +12,7 @@ import java.util.Date;
 public class Main {
     public static String propFileParameters = Main.class.getResource("/problemParameters.properties").getPath();
     public static String propFileOptions = Main.class.getResource("/options.properties").getPath();
-    public static String propFileParametersAlgorithm = Main.class.getResource("/algorithm.properties").getPath();
+//    public static String propFileParametersAlgorithm = Main.class.getResource("/algorithm.properties").getPath();
 
     public static String entradaPath = "Caso2";
     public static String entradaId = "Id1n-06-03-2017";
@@ -33,11 +33,17 @@ public class Main {
         /*INICIALIZACION DE DATOS*/
         DeciderCase.switchCase(caso);//El caso4 no tiene solucion
 
+        // Carga de los parámetros del dominio del problema:
         Parametros parametros = new Parametros(propFileParameters, propFileOptions);
-        ParametrosAlgoritmo_SA parametrosAlgoritmo = new ParametrosAlgoritmo_SA(propFileParametersAlgorithm);
+
+        // Carga de los parámetros del algoritmo
+        ParametrosAlgoritmo parametrosAlgoritmo = new ParametrosAlgoritmo();
+
         //TODO: MODIFICAR ENTRADA PARA EL NUEVO PROBLEMA
         Entrada entrada = Entrada.leerEntrada(parametros, entradaPath, entradaId, entorno);
         Patrones patrones = new Patrones(entrada, parametros);
+
+
         carpetaSoluciones = "resultados/" + entradaPath + entradaId + "/" + parametrosAlgoritmo.getAlgoritmo() + "/Soluciones/";
         carpetaTrazas = "resultados/" + entradaPath + entradaId + "/" + parametrosAlgoritmo.getAlgoritmo() + "/Trazas/";
 
