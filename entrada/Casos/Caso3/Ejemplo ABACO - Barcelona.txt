@@ -1,0 +1,41 @@
+Unidad: Barcelona Ruta Este + Barcelona Ruta Oeste
+Fecha : 01/02/2019
+Turno: Mañana corta (7,5 horas duración)
+
+Personal disponible:
+	Ruta este (turno corto): 7 controladores
+	Ruta este (turno largo): 0 controladores
+	Ruta oeste (turno corto): 17 controladores
+	Ruta oeste (turno largo): 0 controladores
+
+Sectorizaciones abiertas al inicio de sesión:
+	Ruta este: 3 sectores (Sectorización 3D)
+		LECBCVN
+		LECBMNI
+		LECBBAS
+	Ruta oeste: 5 sectores (Sectorización 5A)
+		LECBGOI
+		LECBLVS
+		LECBLVU
+		LECBLVL
+		LECBP2R
+
+Estadillos usados al inicio de sesión:
+	Ruta este:
+		3x1
+		3x1
+		4x1
+	Ruta oeste:
+		3x1
+		3x1
+		8x3
+
+En un momento del turno, pongamos para este ejemplo pasadas 3 horas del inicio, se decide abrir una sectorización más alta en ruta oeste, pasando de una 5A a una 6C,
+lo que provoca que se cierren el sector LECVGOI y se abran los sectores LECBG12 y LECBFO3. 
+Se tienen entonces que redestribuir los recursos para el resto de la sesión teniendo en cuenta lo que había ocurrido (descansos y periodos de trabajo) en función de los estadillos inicales establecidos por SALOMON.
+
+
+
+Se puede plantear otro ejemplo con los mismos datos de partida en el que, en un momento dado, pongamos a las 2 horas del inicio del turno, se produce una baja.
+Se pierde un controlador de ruta oeste, pasando los recuros de 17 a 16 (pongamos el C23). 
+Se tienen que redistribuir los recuros intentando que se mantenga la misma sectorización abierta teniendo en cuenta lo que había ocurrido, igual que en el otro caso.
