@@ -17,7 +17,7 @@ public class GreedyMove1 {
     public static Solucion movimientoGready(Solucion individuo, Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo parametrosAlg) {
         ArrayList<ParalelMove1> array = new ArrayList<>();
         ArrayList<Double> fitness = new ArrayList<>();
-        ExecutorService threadPool = Executors.newFixedThreadPool(NUM_HILOS);  //El parñmetro es en numero de threads que quieres lanzar
+        ExecutorService threadPool = Executors.newFixedThreadPool(NUM_HILOS);  //El parámetro es en numero de threads que quieres lanzar
         ParalelMove1 mov = null;
         for (int i = 0; i < individuo.getTurnos().size(); i++) {
             String t = individuo.getTurnos().get(i);

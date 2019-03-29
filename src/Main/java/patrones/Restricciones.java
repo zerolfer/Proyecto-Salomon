@@ -193,7 +193,7 @@ public class Restricciones {
 
     public static double comprobarRestriccionesEnParalelo(Solucion individuo, Patrones patrones, Entrada entrada, Parametros parametros) {
         ArrayList<RestricionesParalelizadas> arrayRes = new ArrayList<>();
-        ExecutorService threadPool = Executors.newFixedThreadPool(NUM_HILOS);  //El parñmetro es en numero de threads que quieres lanzar
+        ExecutorService threadPool = Executors.newFixedThreadPool(NUM_HILOS);  //El parámetro es en numero de threads que quieres lanzar
         RestricionesParalelizadas restricciones = null;
         for (int i = 1; i <= 14; i++) {
             restricciones = new RestricionesParalelizadas(i, individuo, patrones, entrada, parametros, 0);

@@ -169,7 +169,7 @@ public class TrazasAntiguo {
             } else if (titulos[i] == 11) {
                 fichero += "Mejora;";
             } else if (titulos[i] == 12) {
-                fichero += "Probabilidad de Elecciñn;";
+                fichero += "Probabilidad de Elección;";
             } else if (titulos[i] == 13) {
                 fichero += "Cambio Realizado;";
             }

@@ -17,7 +17,7 @@ public class RestriccionesParalelo {
         long t1 = System.currentTimeMillis();
         /*Inicio Restricciones*/
         ArrayList<RestricionesParalelizadas> arrayRes = new ArrayList<>();
-        ExecutorService threadPool = Executors.newFixedThreadPool(NumHilos);  //El parñmetro es en numero de threads que quieres lanzar
+        ExecutorService threadPool = Executors.newFixedThreadPool(NumHilos);  //El parámetro es en numero de threads que quieres lanzar
         RestricionesParalelizadas restricciones = null;
         for (int i = 1; i <= 14; i++) {
             restricciones = new RestricionesParalelizadas(i, individuo, patrones, entrada, parametros, 0);

@@ -130,7 +130,7 @@ public class FitnessFase3 {
         String str = null;
         double penalizacion = 0;
         double diferencia = 0;
-        int numeroDesviaciones = 0; //Esta variable es para saber cuantos controladores se desvñan
+        int numeroDesviaciones = 0; //Esta variable es para saber cuantos controladores se desvían
         //De momento esa variable no se usa
 
         ArrayList<Double> array = new ArrayList<>();

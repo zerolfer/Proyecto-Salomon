@@ -97,7 +97,7 @@ public class Main_SA {
     }
 
     /**
-     * Main secundario para la realizaciñn de pruebas
+     * Main secundario para la realización de pruebas
      *
      * @param args - Null
      */

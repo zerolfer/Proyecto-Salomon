@@ -163,21 +163,21 @@ public class Trazas {
         }
 
         String info =
-                "Temp: " + pa.SA.getTemperaturaInicial() + " Alpha: " + pa.SA.getDescensoTemperatura() + " L: " + pa.SA.getIteracionesTemperaturaL() + " CPporcent: " + pa.SA.getCondicionParadaPorcent() + " CPciclos: " + pa.SA.getCondicionParadaCiclos() + "FitnessFunction: " + pa.getFuncionFitnessFase2() + " " + pa.SA.getMovimientosEntorno() + "\n" + "Tiempo de ejecuciñn: " + ((time / 1000.0) / 60.0) + "\n";
+                "Temp: " + pa.SA.getTemperaturaInicial() + " Alpha: " + pa.SA.getDescensoTemperatura() + " L: " + pa.SA.getIteracionesTemperaturaL() + " CPporcent: " + pa.SA.getCondicionParadaPorcent() + " CPciclos: " + pa.SA.getCondicionParadaCiclos() + "FitnessFunction: " + pa.getFuncionFitnessFase2() + " " + pa.SA.getMovimientosEntorno() + "\n" + "Tiempo de ejecución: " + ((time / 1000.0) / 60.0) + "\n";
         info = info + "\n" + mediasTotales + "\n" + bucle + "\n" + fichero;
         String[] datosEscritura = {Main.carpetaTrazas + "TrazaN" + name + "_" + 0 + ".txt", info};
         return datosEscritura;
     }
 
     private static String inicioTitulos(int[] titulos) {
-        String fichero = "Nñ Iteraciones;";
+        String fichero = "Nº Iteraciones;";
         for (int i = 1; i < titulos.length; i++) {
             if (titulos[i] == 2) {
-                fichero += "Nñ Controladores1 Probados;";
+                fichero += "Nº Controladores1 Probados;";
             } else if (titulos[i] == 3) {
-                fichero += "Nñ Intervalos Probados;";
+                fichero += "Nº Intervalos Probados;";
             } else if (titulos[i] == 4) {
-                fichero += "Nñ Controladores2 Probados;";
+                fichero += "Nº Controladores2 Probados;";
             } else if (titulos[i] == 5) {
                 fichero += "Fitness Individuo Actual;";
             } else if (titulos[i] == 6) {
@@ -193,7 +193,7 @@ public class Trazas {
             } else if (titulos[i] == 11) {
                 fichero += "Mejora;";
             } else if (titulos[i] == 12) {
-                fichero += "Probabilidad de Elecciñn;";
+                fichero += "Probabilidad de Elección;";
             } else if (titulos[i] == 13) {
                 fichero += "Cambio Realizado;";
             }

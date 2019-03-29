@@ -194,7 +194,7 @@ public class FitnessFase3Info {
         String str = null;
         double penalizacion = 0;
         double diferencia = 0;
-        int numeroDesviaciones = 0; //Esta variable es para saber cuantos controladores se desvñan
+        int numeroDesviaciones = 0; //Esta variable es para saber cuantos controladores se desvían
         //De momento esa variable no se usa
 
         ArrayList<Double> array = new ArrayList<>();
@@ -312,7 +312,7 @@ public class FitnessFase3Info {
             }
             System.out.print("Rest c" + i + ":" + in + " - ");
         }
-        System.out.println("\nNñ Intervalos Descanso: " + numIntervalosDescanso);
+        System.out.println("\nNº Intervalos Descanso: " + numIntervalosDescanso);
         double normalizado = (max - numIntervalosDescanso) / (max - min);
         return normalizado;
     }
