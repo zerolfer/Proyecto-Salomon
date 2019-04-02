@@ -24,7 +24,7 @@ public class Main {
 
     public static void main(String[] args) {
         int nEjecucion = 1;
-        int[] casos = {65, 69, 7, 13, 22, 30};
+        int[] casos = {1};
 
         main1(nEjecucion, "Caso" + 1);
     }

@@ -50,6 +50,9 @@ public class Entrada {
      * Carga de trabajo total representada en slots.
      */
     private int cargaTrabajo;
+    
+    private ArrayList<ArrayList<String>> sectorizacionModificada;
+    private ArrayList<Controlador> controladoresModificados;
 
     /**
      * Contructor
@@ -63,8 +66,10 @@ public class Entrada {
      * @param matrizAfinidad        Indica los sectores que tienen afinidad entre si.
      * @param volumnsOfSectors      Lista con todos los sectores y los volumenes asociados a estos.
      * @param cargaTrabajo          Carga de trabajo total representada en slots.
+     * @param controladoresModificados 
+     * @param sectorizacionModificada 
      */
-    public Entrada(ArrayList<Controlador> controladores, ArrayList<Nucleo> nucleos, Turno turno, ArrayList<Sector> listaSectores, ArrayList<Sector> listaSectoresAbiertos, ArrayList<ArrayList<String>> sectorizacion, ArrayList<ArrayList<String>> matrizAfinidad, HashMap<Sector, ArrayList<String>> volumnsOfSectors, int cargaTrabajo) {
+    public Entrada(ArrayList<Controlador> controladores, ArrayList<Nucleo> nucleos, Turno turno, ArrayList<Sector> listaSectores, ArrayList<Sector> listaSectoresAbiertos, ArrayList<ArrayList<String>> sectorizacion, ArrayList<ArrayList<String>> matrizAfinidad, HashMap<Sector, ArrayList<String>> volumnsOfSectors, int cargaTrabajo, ArrayList<ArrayList<String>> sectorizacionModificada, ArrayList<Controlador> controladoresModificados) {
         this.controladores = controladores;
         this.nucleos = nucleos;
         this.turno = turno;
@@ -74,17 +79,26 @@ public class Entrada {
         this.listaSectoresAbiertos = listaSectoresAbiertos;
         this.volumnsOfSectors = volumnsOfSectors;
         this.cargaTrabajo = cargaTrabajo;
+        this.sectorizacionModificada = sectorizacionModificada;
+        this.controladoresModificados = controladoresModificados;
     }
 
-    public static Entrada leerEntrada(Parametros parametros, String path, String entradaId, String entorno) {
-        ArrayList<String> fAperturaSectores = rwFiles.Lectura.Listar("entrada_old/Casos/" + path + "/AperturaSectorizaciones_" + entradaId + ".csv");
-        ArrayList<String> fRecursosDisponebles = rwFiles.Lectura.Listar("entrada_old/Casos/" + path + "/RecursosDisponibles_" + entradaId + ".csv");
-        ArrayList<String> fTurno = rwFiles.Lectura.Listar("entrada_old/Casos/" + path + "/Turno_" + entradaId + ".csv");
+   
 
-        ArrayList<String> fListaSectoresElementales = rwFiles.Lectura.Listar("entrada_old/" + entorno + "/ListaSectoresElementales_" + entorno + ".csv");
-        ArrayList<String> fMatrizAfinidad = rwFiles.Lectura.Listar("entrada_old/" + entorno + "/MatrizAfinidad_" + entorno + ".csv");
-        ArrayList<String> fSectoresNucleos = rwFiles.Lectura.Listar("entrada_old/" + entorno + "/SectoresNucleos_" + entorno + ".csv");
-        ArrayList<String> fSectorizacionSectoresVolumenes = rwFiles.Lectura.Listar("entrada_old/" + entorno + "/SectorizacionesSectoresVolumenes_" + entorno + ".csv");
+	public static Entrada leerEntrada(Parametros parametros, String path, String entradaId, String entorno) {
+        ArrayList<String> fAperturaSectores = rwFiles.Lectura.Listar("entrada/Casos/" + path + "/AperturaSectorizaciones_" + entradaId + ".csv");
+        ArrayList<String> fRecursosDisponebles = rwFiles.Lectura.Listar("entrada/Casos/" + path + "/RecursosDisponibles_" + entradaId + ".csv");
+        ArrayList<String> fTurno = rwFiles.Lectura.Listar("entrada/Casos/" + path + "/Turno_" + entradaId + ".csv");
+        ArrayList<String> fModificacionSectores = rwFiles.Lectura.Listar("entrada/Casos/" + path + "/ModificacionSectorizaciones_" + entradaId + ".csv");
+        //TODO: Tratamiento exception cuando no encuentra el fichero (xq no existe)
+        ArrayList<String> fModificacionRecursos = rwFiles.Lectura.Listar("entrada/Casos/" + path + "/ModificacionRecursos_" + entradaId + ".csv");
+        ArrayList<String> fDistribucionInicial = rwFiles.Lectura.Listar("entrada/Casos/" + path + "/DistribucionInicial_" + entradaId + ".csv");
+        
+
+        ArrayList<String> fListaSectoresElementales = rwFiles.Lectura.Listar("entrada/" + entorno + "/ListaSectoresElementales_" + entorno + ".csv");
+        ArrayList<String> fMatrizAfinidad = rwFiles.Lectura.Listar("entrada/" + entorno + "/MatrizAfinidad_" + entorno + ".csv");
+        ArrayList<String> fSectoresNucleos = rwFiles.Lectura.Listar("entrada/" + entorno + "/SectoresNucleos_" + entorno + ".csv");
+        ArrayList<String> fSectorizacionSectoresVolumenes = rwFiles.Lectura.Listar("entrada/" + entorno + "/SectorizacionesSectoresVolumenes_" + entorno + ".csv");
 
         ArrayList<Controlador> controladores = crearControladores(fRecursosDisponebles);
         ArrayList<Sector> listaSectores = crearListaSectores(fSectoresNucleos, fListaSectoresElementales);
@@ -94,17 +108,33 @@ public class Entrada {
 
         Turno turno = crearTurno(fTurno, parametros);
         ArrayList<ArrayList<String>> sectorizacion = crearSectorizacion(fAperturaSectores, fSectorizacionSectoresVolumenes, turno, listaSectores);
+        ArrayList<ArrayList<String>> sectorizacionModificada = null;
+        ArrayList<Controlador> controladoresModificados = null;
+        
+        if(!fModificacionSectores.isEmpty()) {        	
+        	sectorizacionModificada = crearSectorizacion(fAperturaSectores, fSectorizacionSectoresVolumenes, turno, listaSectores);
+        }
+        if(!fModificacionRecursos.isEmpty()) {
+        	controladoresModificados = crearControladoresModificados(controladores,fModificacionRecursos);        	
+        }
+        
 
         ArrayList<Sector> listaSectoresAbiertos = crearListaSectoresAbiertos(sectorizacion, listaSectores);
         HashMap<Sector, ArrayList<String>> volumnsOfSectors = crearHashMapSectoresVolumenes(listaSectoresAbiertos, fSectorizacionSectoresVolumenes);
         int cargaTrabajo = calcularCargaTrabajo(sectorizacion, controladores, listaSectoresAbiertos);
 
-        Entrada entrada = new Entrada(controladores, nucleos, turno, listaSectores, listaSectoresAbiertos, sectorizacion, matrizAfinidad, volumnsOfSectors, cargaTrabajo);
+        Entrada entrada = new Entrada(controladores, nucleos, turno, listaSectores, listaSectoresAbiertos, sectorizacion, matrizAfinidad, volumnsOfSectors, cargaTrabajo,sectorizacionModificada,controladoresModificados);
 
         return entrada;
     }
 
-    private static int calcularCargaTrabajo(ArrayList<ArrayList<String>> sectorizacion, ArrayList<Controlador> controladores, ArrayList<Sector> listaSectoresAbiertos) {
+    private static ArrayList<Controlador> crearControladoresModificados(ArrayList<Controlador> controladores2,
+			ArrayList<String> fModificacionRecursos) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private static int calcularCargaTrabajo(ArrayList<ArrayList<String>> sectorizacion, ArrayList<Controlador> controladores, ArrayList<Sector> listaSectoresAbiertos) {
         int c = 0;
         for (int i = 0; i < sectorizacion.size(); i++) {
             c += sectorizacion.get(i).size();
@@ -340,23 +370,12 @@ public class Entrada {
 
     private static ArrayList<Controlador> crearControladores(ArrayList<String> entrada) {
         ArrayList<Controlador> controladores = new ArrayList<>();
-        int id = 0;
         for (int i = 1; i < entrada.size(); i++) {
             String[] linea = entrada.get(i).split(";");
-            for (int j = 1; j < linea.length; j++) {
-                int n = Integer.parseInt(linea[j]);
-                for (int k = 0; k < n; k++) {
-                    if (j == 1 || j == 2) {
-                        controladores.add(new Controlador(id, "Tc", linea[0], false, true, false));
-                    } else if (j == 3) {
-                        controladores.add(new Controlador(id, "Tl", linea[0], false, true, false));
-                    } else if (j == 4 || j == 5) {
-                        controladores.add(new Controlador(id, "Tc", linea[0], true, false, false));
-                    } else if (j == 6) {
-                        controladores.add(new Controlador(id, "Tl", linea[0], true, false, false));
-                    }
-                    id++;
-                }
+            if(linea[1].equalsIgnoreCase("PTD")) {
+            	controladores.add(new Controlador(Integer.parseInt(linea[0].substring(1)), linea[3], linea[2], true, false, false));
+            } else if(linea[1].equalsIgnoreCase("CON")) {
+            	controladores.add(new Controlador(Integer.parseInt(linea[0].substring(1)), linea[3], linea[2], false, true, false));	
             }
         }
         return controladores;
@@ -388,7 +407,7 @@ public class Entrada {
 
     private static ArrayList<Sector> crearListaSectores(ArrayList<String> entrada, ArrayList<String> fListaSectoresElementales) {
         int cnt = 0;
-        String[] idS = {"aaa", "aab", "aac", "aad", "aae", "aaf", "aag", "aah", "aai", "aaj", "aak", "aal", "aam", "aan", "aao", "aap", "aaq", "aar", "aas", "aat", "aau", "aav", "aaw", "aax", "aay", "aaz", "aba", "abb", "abc", "abd", "abe", "abf", "abg", "abh", "abi", "abj", "abk", "abl", "abm", "abn", "abo", "abp", "abq", "abr", "abs", "abt", "abu", "abv", "abw", "abx", "aby", "abz", "aca", "acb", "acc", "acd", "ace", "acf", "acg", "ach", "aci", "acj", "ack", "acl", "acm", "acn", "aco", "acp", "acq", "acr", "acs", "act", "acu", "acv", "acw", "acx", "acy", "acz"};
+        String[] idS = {"aaa", "aab", "aac", "aad", "aae", "aaf", "aag", "aah", "aai", "aaj", "aak", "aal", "aam", "aan", "aao", "aap", "aaq", "aar", "aas", "aat", "aau", "aav", "aaw", "aax", "aay", "aaz", "aba", "abb", "abc", "abd", "abe", "abf", "abg", "abh", "abi", "abj", "abk", "abl", "abm", "abn", "abo", "abp", "abq", "abr", "abs", "abt", "abu", "abv", "abw", "abx", "aby", "abz", "aca", "acb", "acc", "acd", "ace", "acf", "acg", "ach", "aci", "acj", "ack", "acl", "acm", "acn", "aco", "acp", "acq", "acr", "acs", "act", "acu", "acv", "acw", "acx", "acy", "acz", "ada", "adb", "adc", "add", "ade", "adf", "adg", "adh", "adi", "adj", "adk", "adl", "adm", "adn", "ado", "adp", "adq", "adr", "ads", "adt", "adu", "adv", "adw", "adx", "ady", "adz", "aea", "aeb", "aec", "aed", "aee", "aef", "aeg", "aeh", "aei", "aej", "aek", "ael", "aem", "aen", "aeo", "aep", "aeq", "aer", "aes", "aet", "aeu", "aev", "aew", "aex", "aey", "aez", "afa", "afb", "afc", "afd", "afe", "aff", "afg", "afh", "afi", "afj", "afk", "afl", "afm", "afn", "afo", "afp", "afq", "afr", "afs", "aft", "afu", "afv", "afw", "afx", "afy", "afz", "aga", "agb", "agc", "agd", "age", "agf", "agg", "agh", "agi", "agj", "agk", "agl", "agm", "agn", "ago", "agp", "agq", "agr", "ags", "agt", "agu", "agv", "agw", "agx", "agy", "agz", "aha", "ahb", "ahc", "ahd", "ahe", "ahf", "ahg", "ahh", "ahi", "ahj", "ahk", "ahl", "ahm", "ahn", "aho", "ahp", "ahq", "ahr", "ahs", "aht", "ahu", "ahv", "ahw", "ahx", "ahy", "ahz"};
         ArrayList<Sector> listaSectores = new ArrayList<>();
         ArrayList<String> elementales = new ArrayList<>();
         ArrayList<String> elementalesT = new ArrayList<>();
@@ -460,7 +479,21 @@ public class Entrada {
 
 
     }
+    public ArrayList<ArrayList<String>> getSectorizacionModificada() {
+		return sectorizacionModificada;
+	}
 
+	public void setSectorizacionModificada(ArrayList<ArrayList<String>> sectorizacionModificada) {
+		this.sectorizacionModificada = sectorizacionModificada;
+	}
+
+	public ArrayList<Controlador> getControladoresModificados() {
+		return controladoresModificados;
+	}
+
+	public void setControladoresModificados(ArrayList<Controlador> controladoresModificados) {
+		this.controladoresModificados = controladoresModificados;
+	}
 
     public ArrayList<Controlador> getControladores() {
         return controladores;
