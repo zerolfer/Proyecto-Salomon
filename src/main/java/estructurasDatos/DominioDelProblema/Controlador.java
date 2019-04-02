@@ -39,6 +39,10 @@ public class Controlador implements Cloneable {
      * Parametro para marcar cuando se utilizan mas controladores de los disponibles. "Fase pruebas"
      */
     private boolean imaginario;
+    
+    private String bajaAlta;
+    
+    private int slotBajaAlta;
 
     /**
      * Constructor
@@ -50,7 +54,7 @@ public class Controlador implements Cloneable {
      * @param cON        Acreditacion del controlador (Si el controlador tiene esta acreditacion su valor sera true).
      * @param imaginario Parametro para marcar cuando se utilizan mas controladores de los disponibles. "Fase pruebas"
      */
-    public Controlador(int id, String turno, String nucleo, boolean pTD, boolean cON, boolean imaginario) {
+    public Controlador(int id, String turno, String nucleo, boolean pTD, boolean cON, boolean imaginario, String bajaAlta, int slotBajaAlta) {
         this.id = id;
         this.turno = turno;
         this.nucleo = nucleo;
@@ -59,16 +63,26 @@ public class Controlador implements Cloneable {
         this.turnoAsignado = -1;
         this.setTurnoNoche(0);
         this.imaginario = imaginario;
+        this.setBajaAlta(bajaAlta);
+        this.slotBajaAlta = slotBajaAlta;
     }
 
     public Object clone() {
-        Controlador con = new Controlador(this.id, this.turno, this.nucleo, this.PTD, this.CON, this.imaginario);
+        Controlador con = new Controlador(this.id, this.turno, this.nucleo, this.PTD, this.CON, this.imaginario,this.bajaAlta,this.slotBajaAlta);
         con.setTurnoAsignado(this.turnoAsignado);
         con.setTurnoNoche(this.turnoNoche);
         return con;
     }
 
-    public boolean isImaginario() {
+    public int getSlotBajaAlta() {
+		return slotBajaAlta;
+	}
+
+	public void setSlotBajaAlta(int slotBajaAlta) {
+		this.slotBajaAlta = slotBajaAlta;
+	}
+
+	public boolean isImaginario() {
         return imaginario;
     }
 
@@ -131,6 +145,14 @@ public class Controlador implements Cloneable {
     public void setTurnoNoche(int turnoNoche) {
         this.turnoNoche = turnoNoche;
     }
+
+	public String getBajaAlta() {
+		return bajaAlta;
+	}
+
+	public void setBajaAlta(String bajaAlta) {
+		this.bajaAlta = bajaAlta;
+	}
 
 
 }

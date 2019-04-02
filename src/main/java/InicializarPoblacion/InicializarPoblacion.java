@@ -136,7 +136,7 @@ public class InicializarPoblacion {
         for (int i = 0; i < entrada.getControladores().size(); i++) {
             Controlador cntl = entrada.getControladores().get(i);
             c.add(new Controlador(cntl.getId(), cntl.getTurno(), cntl.getNucleo(), cntl.isPTD(), cntl.isCON(),
-                    cntl.isImaginario()));
+                    cntl.isImaginario(),cntl.getBajaAlta(),cntl.getSlotBajaAlta()));
         }
         /*INICIAR LISTA CONTORLADORES*/
         ArrayList<ObjAux1> clasificacionTurnos = new ArrayList<>();

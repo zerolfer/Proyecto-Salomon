@@ -77,7 +77,7 @@ public class Turno {
 
     }
 
-    private int[] turnosSlots(String inicioTL2, String finTL2, String inicioTC2, String finTC2) {
+    public static int[] turnosSlots(String inicioTL2, String finTL2, String inicioTC2, String finTC2) {
         int iTCh = Integer.parseInt(inicioTC2.split(":")[0]);
         int iTCm = Integer.parseInt(inicioTC2.split(":")[1]);
         int fTCh = Integer.parseInt(finTC2.split(":")[0]);

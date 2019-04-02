@@ -115,7 +115,7 @@ public class Entrada {
         	sectorizacionModificada = crearSectorizacion(fAperturaSectores, fSectorizacionSectoresVolumenes, turno, listaSectores);
         }
         if(!fModificacionRecursos.isEmpty()) {
-        	controladoresModificados = crearControladoresModificados(controladores,fModificacionRecursos);        	
+        	controladoresModificados = crearControladoresModificados(controladores,fModificacionRecursos,turno);        	
         }
         
 
@@ -128,34 +128,45 @@ public class Entrada {
         return entrada;
     }
 
-    private static ArrayList<Controlador> crearControladoresModificados(ArrayList<Controlador> controladores2,
-			ArrayList<String> fModificacionRecursos) {
-		// TODO Auto-generated method stub
-		return null;
+    private static ArrayList<Controlador> crearControladoresModificados(ArrayList<Controlador> controladores,
+			ArrayList<String> entrada,Turno turno) {
+    	for (int i = 1; i < entrada.size(); i++) {
+            String[] linea = entrada.get(i).split(";");
+            Controlador c = null;
+            boolean existe=false;
+            for (int j = 0; j < controladores.size(); j++) {
+				if(controladores.get(j).getId()==Integer.parseInt(linea[1].substring(1))) {
+					existe=true;
+					c = controladores.get(j);
+					c.setBajaAlta(linea[0]);
+					c.setSlotBajaAlta(calcularSlot(turno, linea[2]));
+					controladores.set(j, c);
+				}
+				
+			}
+            if(!existe) {
+            	//TODO: Se necesitan las caracteristicas del controlador nuevo en el fichero (redefinir formato)
+            	c = (new Controlador(Integer.parseInt(linea[1].substring(1)), linea[3], linea[2], false, true, false,"ALTA",calcularSlot(turno,linea[3])));
+	            
+            }
+            
+        }
+		return controladores;
 	}
+
+	private static int calcularSlot(Turno turno, String momento) {
+		int[] distancia = Turno.turnosSlots(turno.getInicioTL(), turno.getFinTL(), momento, momento);
+		return distancia[2];
+	}
+
+
 
 	private static int calcularCargaTrabajo(ArrayList<ArrayList<String>> sectorizacion, ArrayList<Controlador> controladores, ArrayList<Sector> listaSectoresAbiertos) {
         int c = 0;
         for (int i = 0; i < sectorizacion.size(); i++) {
             c += sectorizacion.get(i).size();
         }
-		/*
-		double f = 0;
-		for (int i = 0; i < controladores.size(); i++) {
-			f += i * (sectorizacion.size()) *0.95; //CONSIDERAMOS QUE COMO MAXIMO PUEDE TRABAJAR UN 90% DEL TURNO AUNQUE SEA INFACTIBLE
-		}
-		f = f/(controladores.size()* controladores.size());
 		
-		double f2 = 0;
-		for (int i = 0; i < controladores.size(); i++) {
-			f2 += i * ((c*2) / controladores.size()) *0.45; //CONSIDERAMOS QUE COMO MINIMO TRABAJA UN 50% DEL TURNO POR SECTORES ABIERTOS
-		}
-		f2 = f2/(controladores.size()* controladores.size());
-		
-		
-		Fitness.setNormalizacionRedCtrlMax(f);
-		Fitness.setNormalizacionRedCtrlMin(f2);
-		*/
         Fitness.setCtrlsCompletos((c * 2) / sectorizacion.size());
         return (c * 2);
     }
@@ -180,17 +191,6 @@ public class Entrada {
                 }
             }
         }
-		/*
-		Iterator<Entry<Sector, ArrayList<String>>> it = volumnsOfSectors.entrySet().iterator();
-		while (it.hasNext()) {
-		    HashMap.Entry<Sector, ArrayList<String>> e = it.next();
-		    Sector key = e.getKey();
-		    ArrayList<String> value = e.getValue();
-		    if (value.isEmpty()) {
-		        it.remove();
-		    }
-		}
-		*/
         return volumnsOfSectors;
     }
 
@@ -373,9 +373,9 @@ public class Entrada {
         for (int i = 1; i < entrada.size(); i++) {
             String[] linea = entrada.get(i).split(";");
             if(linea[1].equalsIgnoreCase("PTD")) {
-            	controladores.add(new Controlador(Integer.parseInt(linea[0].substring(1)), linea[3], linea[2], true, false, false));
+            	controladores.add(new Controlador(Integer.parseInt(linea[0].substring(1)), linea[3], linea[2], true, false, false,"ALTA",0));
             } else if(linea[1].equalsIgnoreCase("CON")) {
-            	controladores.add(new Controlador(Integer.parseInt(linea[0].substring(1)), linea[3], linea[2], false, true, false));	
+            	controladores.add(new Controlador(Integer.parseInt(linea[0].substring(1)), linea[3], linea[2], false, true, false,"ALTA",0));	
             }
         }
         return controladores;
