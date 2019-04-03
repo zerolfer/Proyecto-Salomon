@@ -123,7 +123,7 @@ public class MainPruebas {
                 Main_SA.main_sa(parametros, parametrosAlgoritmo, entrada, patrones);
                 break;
             case "VNS":
-                Main_VNS.main_vns(parametros, parametrosAlgoritmo, entrada, patrones);
+                Main_VNS_pablo.main_vns(parametros, parametrosAlgoritmo, entrada, patrones);
                 break;
             default:
                 System.out.println("Algoritmo" + parametrosAlgoritmo.getAlgoritmo() + " no encontrado.");
