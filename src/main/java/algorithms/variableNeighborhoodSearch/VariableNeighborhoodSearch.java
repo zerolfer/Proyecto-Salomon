@@ -1,0 +1,7 @@
+package algorithms.variableNeighborhoodSearch;
+
+import estructurasDatos.Solucion;
+
+public interface VariableNeighborhoodSearch {
+    Solucion startExecution(Solucion solucion);
+}

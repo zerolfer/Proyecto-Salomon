@@ -1,10 +1,12 @@
 package estructurasDatos;
 
+import algorithms.variableNeighborhoodSearch.NeighborStructure;
+import algorithms.variableNeighborhoodSearch.moves.MoveFactory;
 import trazas.Trazas;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -235,6 +237,32 @@ public class ParametrosAlgoritmo {
 
     public class VNS {
 
+        // leido en minutos, lo pasamos a milisegundos
+        private long maxMilisecondsAllowed = getInteger("maxTimeAllowed")*60*1000;
+
+        private List<NeighborStructure> neighborStructures = initializeNeighborStructures("neighborStructures");
+
+        // . . .
+
+        private List<NeighborStructure> initializeNeighborStructures(String neighborStructures) {
+
+            String texto = getString(neighborStructures);
+            String[] nombresMovimientos = texto.split(",");
+
+            List<NeighborStructure> result = new ArrayList<>();
+            for (String id : nombresMovimientos) {
+                result.add(MoveFactory.createNeighborhood(id)); // FACTORY METHOD
+            }
+            return result;
+        }
+
+        public long getMaxMilisecondsAllowed() {
+            return maxMilisecondsAllowed;
+        }
+
+        public List<NeighborStructure> getNeighborStructures() {
+            return neighborStructures;
+        }
     }
 
 }
