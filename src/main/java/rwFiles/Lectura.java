@@ -65,6 +65,10 @@ public class Lectura {
      * @return Lista con las distintas lineas del archivo.
      */
     public static ArrayList<String> Listar(String path) {
+        return Listar(path, false);
+    }
+
+    public static ArrayList<String> Listar(String path, boolean opcional) {
         File archivo = null;
         FileReader fr = null;
         BufferedReader br = null;
@@ -85,7 +89,8 @@ public class Lectura {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            if (!opcional)
+                e.printStackTrace();
         } finally {
             // En el finally cerramos el fichero, para asegurarnos
             // que se cierra tanto si todo va bien como si salta
@@ -101,6 +106,7 @@ public class Lectura {
         return resultado;
 
     }
+
 
     /**
      * Metodo para la lectura de un archivo de numeros separados por punto y coma (";"), este metodo devuelve los

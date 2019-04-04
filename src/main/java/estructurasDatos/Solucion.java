@@ -3,6 +3,7 @@ package estructurasDatos;
 import estructurasDatos.DominioDelProblema.Controlador;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Objeto Solucion, este objeto contiene toda la informacion necesaria para la representacion de una solucion del problema.
@@ -13,11 +14,11 @@ public class Solucion implements Cloneable {
     /**
      * Lista de los controladores utilizados para la resolucion del problema.
      */
-    private ArrayList<Controlador> controladores = new ArrayList<>();
+    private ArrayList<Controlador> controladores;
     /**
      * Lista con todos los turnos que cubren los controladores pertenecientes a la lista "controladores".
      */
-    private ArrayList<String> turnos = new ArrayList<>();
+    private ArrayList<String> turnos;
     /**
      * Si la solucion se ha sido creada con el algoritmo de inicializacion propuesto, guarda la longitud de los descansos de la solucion inicial.
      * En caso contrario este valor permanece a cero.
@@ -32,8 +33,8 @@ public class Solucion implements Cloneable {
      * @param longdescansos Longitud de los descansos asocioados a la solucion inicial (parametro de control).
      */
     public Solucion(ArrayList<String> turnos, ArrayList<Controlador> controladores, int longdescansos) {
-        this.controladores = controladores;
         this.turnos = turnos;
+        this.controladores = controladores;
         this.longdescansos = longdescansos;
     }
 

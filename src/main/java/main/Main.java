@@ -39,7 +39,6 @@ public class Main {
         // Carga de los parámetros del algoritmo
         ParametrosAlgoritmo parametrosAlgoritmo = new ParametrosAlgoritmo();
 
-        //TODO: MODIFICAR ENTRADA PARA EL NUEVO PROBLEMA
         Entrada entrada = Entrada.leerEntrada(parametros, entradaPath, entradaId, entorno);
         Patrones patrones = new Patrones(entrada, parametros);
 

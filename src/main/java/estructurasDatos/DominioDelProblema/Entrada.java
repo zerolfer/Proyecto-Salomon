@@ -1,10 +1,13 @@
 package estructurasDatos.DominioDelProblema;
 
 import estructurasDatos.Parametros;
+import estructurasDatos.Solucion;
 import fitnessFunction.Fitness;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
 /**
@@ -14,6 +17,7 @@ import java.util.HashMap;
  */
 public class Entrada {
 
+    private final Solucion distribucionInicial;
     /**
      * Lista con los controladores disponibles y sus caracteristicas.
      */
@@ -50,26 +54,31 @@ public class Entrada {
      * Carga de trabajo total representada en slots.
      */
     private int cargaTrabajo;
-    
     private ArrayList<ArrayList<String>> sectorizacionModificada;
     private ArrayList<Controlador> controladoresModificados;
 
     /**
      * Contructor
      *
-     * @param controladores         Lista con los controladores disponibles y sus caracteristicas.
-     * @param nucleos               Nucleos con sectores abiertos para la instacia del problema a resolver.
-     * @param turno                 Turno a resolver.
-     * @param listaSectores         Lista de todos los sectores que componen el espacio aereo del aeropuerto.
-     * @param listaSectoresAbiertos Lista de los sectores operativos en la instancia del problema.
-     * @param sectorizacion         Sectorizacion utilizada en la instancia del problema. La sectorizacion es el conjunto de sectores que se abren y cierran durante la duracion del turno.
-     * @param matrizAfinidad        Indica los sectores que tienen afinidad entre si.
-     * @param volumnsOfSectors      Lista con todos los sectores y los volumenes asociados a estos.
-     * @param cargaTrabajo          Carga de trabajo total representada en slots.
-     * @param controladoresModificados 
-     * @param sectorizacionModificada 
+     * @param controladores            Lista con los controladores disponibles y sus caracteristicas.
+     * @param nucleos                  Nucleos con sectores abiertos para la instacia del problema a resolver.
+     * @param turno                    Turno a resolver.
+     * @param listaSectores            Lista de todos los sectores que componen el espacio aereo del aeropuerto.
+     * @param listaSectoresAbiertos    Lista de los sectores operativos en la instancia del problema.
+     * @param sectorizacion            Sectorizacion utilizada en la instancia del problema. La sectorizacion es el conjunto de sectores que se abren y cierran durante la duracion del turno.
+     * @param matrizAfinidad           Indica los sectores que tienen afinidad entre si.
+     * @param volumnsOfSectors         Lista con todos los sectores y los volumenes asociados a estos.
+     * @param cargaTrabajo             Carga de trabajo total representada en slots.
+     * @param controladoresModificados
+     * @param sectorizacionModificada
      */
-    public Entrada(ArrayList<Controlador> controladores, ArrayList<Nucleo> nucleos, Turno turno, ArrayList<Sector> listaSectores, ArrayList<Sector> listaSectoresAbiertos, ArrayList<ArrayList<String>> sectorizacion, ArrayList<ArrayList<String>> matrizAfinidad, HashMap<Sector, ArrayList<String>> volumnsOfSectors, int cargaTrabajo, ArrayList<ArrayList<String>> sectorizacionModificada, ArrayList<Controlador> controladoresModificados) {
+    public Entrada(ArrayList<Controlador> controladores, ArrayList<Nucleo> nucleos, Turno turno,
+                   ArrayList<Sector> listaSectores, ArrayList<Sector> listaSectoresAbiertos,
+                   ArrayList<ArrayList<String>> sectorizacion, ArrayList<ArrayList<String>> matrizAfinidad,
+                   HashMap<Sector, ArrayList<String>> volumnsOfSectors, int cargaTrabajo,
+                   ArrayList<ArrayList<String>> sectorizacionModificada,
+                   ArrayList<Controlador> controladoresModificados,
+                   Solucion distribucionInicial) {
         this.controladores = controladores;
         this.nucleos = nucleos;
         this.turno = turno;
@@ -81,26 +90,26 @@ public class Entrada {
         this.cargaTrabajo = cargaTrabajo;
         this.sectorizacionModificada = sectorizacionModificada;
         this.controladoresModificados = controladoresModificados;
+        this.distribucionInicial = distribucionInicial;
     }
 
-   
 
-	public static Entrada leerEntrada(Parametros parametros, String path, String entradaId, String entorno) {
+    public static Entrada leerEntrada(Parametros parametros, String path, String entradaId, String entorno) {
         ArrayList<String> fAperturaSectores = rwFiles.Lectura.Listar("entrada/Casos/" + path + "/AperturaSectorizaciones_" + entradaId + ".csv");
-        ArrayList<String> fRecursosDisponebles = rwFiles.Lectura.Listar("entrada/Casos/" + path + "/RecursosDisponibles_" + entradaId + ".csv");
+        ArrayList<String> fRecursosDisponibles = rwFiles.Lectura.Listar("entrada/Casos/" + path + "/RecursosDisponibles_" + entradaId + ".csv");
         ArrayList<String> fTurno = rwFiles.Lectura.Listar("entrada/Casos/" + path + "/Turno_" + entradaId + ".csv");
         ArrayList<String> fModificacionSectores = rwFiles.Lectura.Listar("entrada/Casos/" + path + "/ModificacionSectorizaciones_" + entradaId + ".csv");
         //TODO: Tratamiento exception cuando no encuentra el fichero (xq no existe)
-        ArrayList<String> fModificacionRecursos = rwFiles.Lectura.Listar("entrada/Casos/" + path + "/ModificacionRecursos_" + entradaId + ".csv");
-        ArrayList<String> fDistribucionInicial = rwFiles.Lectura.Listar("entrada/Casos/" + path + "/DistribucionInicial_" + entradaId + ".csv");
-        
+        ArrayList<String> fModificacionRecursos = rwFiles.Lectura.Listar("entrada/Casos/" + path + "/ModificacionRecursos_" + entradaId + ".csv", true);
+        ArrayList<String> fDistribucionInicial = rwFiles.Lectura.Listar("entrada/Casos/" + path + "/DistribucionInicial_" + entradaId + ".csv", true);
+
 
         ArrayList<String> fListaSectoresElementales = rwFiles.Lectura.Listar("entrada/" + entorno + "/ListaSectoresElementales_" + entorno + ".csv");
         ArrayList<String> fMatrizAfinidad = rwFiles.Lectura.Listar("entrada/" + entorno + "/MatrizAfinidad_" + entorno + ".csv");
         ArrayList<String> fSectoresNucleos = rwFiles.Lectura.Listar("entrada/" + entorno + "/SectoresNucleos_" + entorno + ".csv");
         ArrayList<String> fSectorizacionSectoresVolumenes = rwFiles.Lectura.Listar("entrada/" + entorno + "/SectorizacionesSectoresVolumenes_" + entorno + ".csv");
 
-        ArrayList<Controlador> controladores = crearControladores(fRecursosDisponebles);
+        ArrayList<Controlador> controladores = crearControladores(fRecursosDisponibles);
         ArrayList<Sector> listaSectores = crearListaSectores(fSectoresNucleos, fListaSectoresElementales);
         ArrayList<Nucleo> nucleos = crearNucleos(fSectoresNucleos, listaSectores);
         ArrayList<ArrayList<String>> matrizAfinidad = crearMatrizAfinidad(fMatrizAfinidad, listaSectores);
@@ -110,63 +119,135 @@ public class Entrada {
         ArrayList<ArrayList<String>> sectorizacion = crearSectorizacion(fAperturaSectores, fSectorizacionSectoresVolumenes, turno, listaSectores);
         ArrayList<ArrayList<String>> sectorizacionModificada = null;
         ArrayList<Controlador> controladoresModificados = null;
-        
-        if(!fModificacionSectores.isEmpty()) {        	
-        	sectorizacionModificada = crearSectorizacion(fAperturaSectores, fSectorizacionSectoresVolumenes, turno, listaSectores);
+
+        if (!fModificacionSectores.isEmpty()) {
+            sectorizacionModificada = crearSectorizacion(fAperturaSectores, fSectorizacionSectoresVolumenes, turno, listaSectores);
         }
-        if(!fModificacionRecursos.isEmpty()) {
-        	controladoresModificados = crearControladoresModificados(controladores,fModificacionRecursos,turno);        	
+        if (!fModificacionRecursos.isEmpty()) {
+            controladoresModificados = crearControladoresModificados(controladores, fModificacionRecursos, turno);
         }
-        
+
 
         ArrayList<Sector> listaSectoresAbiertos = crearListaSectoresAbiertos(sectorizacion, listaSectores);
         HashMap<Sector, ArrayList<String>> volumnsOfSectors = crearHashMapSectoresVolumenes(listaSectoresAbiertos, fSectorizacionSectoresVolumenes);
         int cargaTrabajo = calcularCargaTrabajo(sectorizacion, controladores, listaSectoresAbiertos);
 
-        Entrada entrada = new Entrada(controladores, nucleos, turno, listaSectores, listaSectoresAbiertos, sectorizacion, matrizAfinidad, volumnsOfSectors, cargaTrabajo,sectorizacionModificada,controladoresModificados);
+        Solucion distribucionInicial = crearSolucionInicial(fDistribucionInicial, listaSectores, controladores, parametros);
+
+        Entrada entrada = new Entrada(controladores, nucleos, turno, listaSectores, listaSectoresAbiertos,
+                sectorizacion, matrizAfinidad, volumnsOfSectors, cargaTrabajo, sectorizacionModificada,
+                controladoresModificados, distribucionInicial);
 
         return entrada;
     }
 
+    private static Solucion crearSolucionInicial(List<String> entrada, ArrayList<Sector> listaSectores,
+                                                 ArrayList<Controlador> controladores, Parametros parametros) {
+        ArrayList<String> turnos = new ArrayList<>();
+        List<Integer> intervalos = new ArrayList<>();
+        for (String linea : entrada) {
+            String[] columnas = linea.split(";");
+            if (columnas[0].contains("-")) // (Si se cambia por "equals" no funciona)
+                intervalos = actualizarIntervalos(columnas);
+            else { // en caso contrario, creamos el turno y lo asignamos al controlador de la primera columna
+                String turno = crearDistribucionDelTurno(intervalos, columnas, listaSectores, parametros);
+                asignarControlador(Integer.parseInt(columnas[0].substring(1)), turnos.size(), controladores);
+                turnos.add(turno);
+            }
+        }
+        return new Solucion(turnos, controladores, 0);
+    }
+
+    private static String crearDistribucionDelTurno(List<Integer> intervalos, String[] columnas,
+                                                    List<Sector> listaSectores, Parametros parametros) {
+        StringBuilder resultado = new StringBuilder();
+        assert intervalos.size() == columnas.length - 1;
+
+        // saltamos la primera columna
+        for (int i = 1; i < columnas.length; i++) {
+            int intervaloActual = intervalos.get(i - 1); // restamos uno debido a la disonancia de las dos listas
+            String idSector="111";
+            if (!columnas[i].contains("111")) {
+                idSector = obtenerIdSector(columnas[i], listaSectores);
+                idSector = Character.isUpperCase(columnas[i].charAt(0)) ? idSector.toUpperCase() : idSector/*.toLowerCase()*/;
+            }
+            resultado.append(StringUtils.repeat(idSector, intervaloActual / parametros.getTamanoSlots()));
+        }
+
+        return resultado.toString();
+    }
+
+    /**
+     * Obtiene el identificador de un sector a partir de su nombre
+     *
+     * @param nombreSector  nombre del sector que queremos buscar
+     * @param listaSectores lista de sectores de la instancia actual del problema
+     * @return id del sector
+     */
+    private static String obtenerIdSector(String nombreSector, List<Sector> listaSectores) {
+        for (Sector sector : listaSectores) {
+            if (sector.getNombre().equalsIgnoreCase(nombreSector))
+                return sector.getId();
+        }
+        throw new RuntimeException("No encontrado Sector con nombre " + nombreSector);
+    }
+
+    private static void asignarControlador(int idControlador, int indice, List<Controlador> controladores) {
+        for (Controlador controlador : controladores) {
+            if (controlador.getId() == idControlador) {
+                controlador.setTurnoAsignado(indice);
+                return;
+            }
+        }
+    }
+
+    private static List<Integer> actualizarIntervalos(String[] columnas) {
+        List<Integer> result = new ArrayList<>();
+        // saltamos la primera columna
+        for (int i = 1; i < columnas.length; i++) {
+            result.add(Integer.parseInt(columnas[i]));
+        }
+        return result;
+    }
+
     private static ArrayList<Controlador> crearControladoresModificados(ArrayList<Controlador> controladores,
-			ArrayList<String> entrada,Turno turno) {
-    	for (int i = 1; i < entrada.size(); i++) {
+                                                                        ArrayList<String> entrada, Turno turno) {
+        for (int i = 1; i < entrada.size(); i++) {
             String[] linea = entrada.get(i).split(";");
             Controlador c = null;
-            boolean existe=false;
+            boolean existe = false;
             for (int j = 0; j < controladores.size(); j++) {
-				if(controladores.get(j).getId()==Integer.parseInt(linea[1].substring(1))) {
-					existe=true;
-					c = controladores.get(j);
-					c.setBajaAlta(linea[0]);
-					c.setSlotBajaAlta(calcularSlot(turno, linea[2]));
-					controladores.set(j, c);
-				}
-				
-			}
-            if(!existe) {
-            	//TODO: Se necesitan las caracteristicas del controlador nuevo en el fichero (redefinir formato)
-            	c = (new Controlador(Integer.parseInt(linea[1].substring(1)), linea[3], linea[2], false, true, false,"ALTA",calcularSlot(turno,linea[3])));
-	            
+                if (controladores.get(j).getId() == Integer.parseInt(linea[1].substring(1))) {
+                    existe = true;
+                    c = controladores.get(j);
+                    c.setBajaAlta(linea[0]);
+                    c.setSlotBajaAlta(calcularSlot(turno, linea[2]));
+                    controladores.set(j, c);
+                }
+
             }
-            
+            if (!existe) {
+                //TODO: Se necesitan las caracteristicas del controlador nuevo en el fichero (redefinir formato)
+                c = (new Controlador(Integer.parseInt(linea[1].substring(1)), linea[3], linea[2], false, true, false, "ALTA", calcularSlot(turno, linea[3])));
+
+            }
+
         }
-		return controladores;
-	}
+        return controladores;
+    }
 
-	private static int calcularSlot(Turno turno, String momento) {
-		int[] distancia = Turno.turnosSlots(turno.getInicioTL(), turno.getFinTL(), momento, momento);
-		return distancia[2];
-	}
+    private static int calcularSlot(Turno turno, String momento) {
+        int[] distancia = Turno.turnosSlots(turno.getInicioTL(), turno.getFinTL(), momento, momento);
+        return distancia[2];
+    }
 
 
-
-	private static int calcularCargaTrabajo(ArrayList<ArrayList<String>> sectorizacion, ArrayList<Controlador> controladores, ArrayList<Sector> listaSectoresAbiertos) {
+    private static int calcularCargaTrabajo(ArrayList<ArrayList<String>> sectorizacion, ArrayList<Controlador> controladores, ArrayList<Sector> listaSectoresAbiertos) {
         int c = 0;
         for (int i = 0; i < sectorizacion.size(); i++) {
             c += sectorizacion.get(i).size();
         }
-		
+
         Fitness.setCtrlsCompletos((c * 2) / sectorizacion.size());
         return (c * 2);
     }
@@ -372,10 +453,10 @@ public class Entrada {
         ArrayList<Controlador> controladores = new ArrayList<>();
         for (int i = 1; i < entrada.size(); i++) {
             String[] linea = entrada.get(i).split(";");
-            if(linea[1].equalsIgnoreCase("PTD")) {
-            	controladores.add(new Controlador(Integer.parseInt(linea[0].substring(1)), linea[3], linea[2], true, false, false,"ALTA",0));
-            } else if(linea[1].equalsIgnoreCase("CON")) {
-            	controladores.add(new Controlador(Integer.parseInt(linea[0].substring(1)), linea[3], linea[2], false, true, false,"ALTA",0));	
+            if (linea[1].equalsIgnoreCase("PTD")) {
+                controladores.add(new Controlador(Integer.parseInt(linea[0].substring(1)), linea[3], linea[2], true, false, false, "ALTA", 0));
+            } else if (linea[1].equalsIgnoreCase("CON")) {
+                controladores.add(new Controlador(Integer.parseInt(linea[0].substring(1)), linea[3], linea[2], false, true, false, "ALTA", 0));
             }
         }
         return controladores;
@@ -479,21 +560,22 @@ public class Entrada {
 
 
     }
+
     public ArrayList<ArrayList<String>> getSectorizacionModificada() {
-		return sectorizacionModificada;
-	}
+        return sectorizacionModificada;
+    }
 
-	public void setSectorizacionModificada(ArrayList<ArrayList<String>> sectorizacionModificada) {
-		this.sectorizacionModificada = sectorizacionModificada;
-	}
+    public void setSectorizacionModificada(ArrayList<ArrayList<String>> sectorizacionModificada) {
+        this.sectorizacionModificada = sectorizacionModificada;
+    }
 
-	public ArrayList<Controlador> getControladoresModificados() {
-		return controladoresModificados;
-	}
+    public ArrayList<Controlador> getControladoresModificados() {
+        return controladoresModificados;
+    }
 
-	public void setControladoresModificados(ArrayList<Controlador> controladoresModificados) {
-		this.controladoresModificados = controladoresModificados;
-	}
+    public void setControladoresModificados(ArrayList<Controlador> controladoresModificados) {
+        this.controladoresModificados = controladoresModificados;
+    }
 
     public ArrayList<Controlador> getControladores() {
         return controladores;
