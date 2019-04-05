@@ -1,17 +1,19 @@
 package main;
 
+import algorithms.variableNeighborhoodSearch.VariableNeighborhoodSearch;
 import algorithms.variableNeighborhoodSearch.impl.VariableNeighborhoodDescendent;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
 import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
 import patrones.Patrones;
-import algorithms.variableNeighborhoodSearch.*;
+
+import java.util.List;
 
 public class Main_VNS {
 
     public static void main_vns(Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo, Entrada entrada,
-                                Solucion solucion, Patrones patrones) {
+                                Patrones patrones, List<Solucion> poblacionInicial) {
 //
 //        /*PRESENTACION DE RESULTADOS Y TRAZAS*/
 //
@@ -30,7 +32,10 @@ public class Main_VNS {
 //        System.out.println("Done");
 //
         VariableNeighborhoodSearch vnd = new VariableNeighborhoodDescendent(parametros, parametrosAlgoritmo, entrada);
-        vnd.startExecution(solucion);
+
+        for (Solucion solucion : poblacionInicial) {
+            vnd.startExecution(solucion);
+        }
 
     }
 }

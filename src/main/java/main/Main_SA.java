@@ -11,6 +11,7 @@ import patrones.Patrones;
 import patrones.Restricciones;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Main
@@ -20,12 +21,13 @@ import java.util.ArrayList;
 public class Main_SA {
 
 
-    public static void main_sa(Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo, Entrada entrada, Patrones patrones) {//Principal
+    public static void main_sa(Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo, Entrada entrada,
+                               Patrones patrones, List<Solucion> poblacionInicial) {//Principal
 
         MainPruebas.problema += "Fase 2:" + "\n";
 
         /*INICIALIZACION DE SOLUCIONES FACTIBLES*/
-        ArrayList<Solucion> poblacionInicial = InicializarPoblacion.inicializarPoblacion(entrada, parametros, patrones);
+//        ArrayList<Solucion> poblacionInicial = InicializarPoblacion.inicializarPoblacion(entrada, parametros, patrones);
 
         //ArrayList<Solucion> poblacionInicial = new ArrayList<Solucion>();
         /*Solo utilizo multiplos de 4*/

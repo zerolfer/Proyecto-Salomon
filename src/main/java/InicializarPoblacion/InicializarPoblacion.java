@@ -72,7 +72,7 @@ public class InicializarPoblacion {
     }
 
     /**
-     * Metodo para la creacion de una solucion inicial con descansos de un tamaño determinado.
+     * Metodo para la creación de una solución inicial con descansos de un tamaño determinado.
      *
      * @param descanso Tamaño de los descansos de la plantilla usada para la creacion de soluciones.
      * @param maxT     Tiempo de trabajo maximo.

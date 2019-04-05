@@ -118,9 +118,12 @@ public class MainPruebas {
 
         parametrosAlgoritmo = reajustarParametros(parametrosAlgoritmo, temperaturaInicial, literaciones,
                 descensoTemperatura, entrada, patrones, parametros);
+
+        ArrayList<Solucion> poblacionInicial = InicializarPoblacion.inicializarPoblacion(entrada, parametros, patrones);
+
         switch (parametrosAlgoritmo.getAlgoritmo()) {
             case "SA":
-                Main_SA.main_sa(parametros, parametrosAlgoritmo, entrada, patrones);
+                Main_SA.main_sa(parametros, parametrosAlgoritmo, entrada, patrones, poblacionInicial);
                 break;
             case "VNS":
                 Main_VNS_pablo.main_vns(parametros, parametrosAlgoritmo, entrada, patrones);

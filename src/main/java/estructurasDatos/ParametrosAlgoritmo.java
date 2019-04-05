@@ -1,7 +1,7 @@
 package estructurasDatos;
 
 import algorithms.variableNeighborhoodSearch.NeighborStructure;
-import algorithms.variableNeighborhoodSearch.moves.MoveFactory;
+import algorithms.variableNeighborhoodSearch.impl.moves.MoveFactory;
 import trazas.Trazas;
 
 import java.io.IOException;
@@ -256,10 +256,21 @@ public class ParametrosAlgoritmo {
             return result;
         }
 
+        /**
+         * <p>
+         * Tiempo máximo total que le permitimos al VNS ejecutarse,
+         * puesto que en nuestro sistema es crucial el tiempo,
+         * no debemos superar el umbral marcado.
+         * </p>
+         */
         public long getMaxMilisecondsAllowed() {
             return maxMilisecondsAllowed;
         }
 
+        /**
+         * Conjunto de estructuras de vecindad que serán empleadas por el VNS en el
+         * orden estricto en el que se encuentran en la lista.
+         */
         public List<NeighborStructure> getNeighborStructures() {
             return neighborStructures;
         }

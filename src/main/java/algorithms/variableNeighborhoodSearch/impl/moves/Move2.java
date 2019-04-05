@@ -1,4 +1,4 @@
-package algorithms.variableNeighborhoodSearch.moves;
+package algorithms.variableNeighborhoodSearch.impl.moves;
 
 import algorithms.variableNeighborhoodSearch.NeighborStructure;
 

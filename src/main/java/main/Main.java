@@ -1,8 +1,10 @@
 package main;
 
+import InicializarPoblacion.InicializarPoblacion;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
 import estructurasDatos.ParametrosAlgoritmo;
+import estructurasDatos.Solucion;
 import patrones.Patrones;
 import pruebasCasos.DeciderCase;
 
@@ -46,15 +48,18 @@ public class Main {
         carpetaSoluciones = "resultados/" + entradaPath + entradaId + "/" + parametrosAlgoritmo.getAlgoritmo() + "/Soluciones/";
         carpetaTrazas = "resultados/" + entradaPath + entradaId + "/" + parametrosAlgoritmo.getAlgoritmo() + "/Trazas/";
 
+        // la distribucion inicial está en "entrada"
+        ArrayList<Solucion> poblacionInicial = InicializarPoblacion.inicializarPoblacion(entrada, parametros, patrones);
+
         switch (parametrosAlgoritmo.getAlgoritmo()) {
             case "SA":
-                Main_SA.main_sa(parametros, parametrosAlgoritmo, entrada, patrones);
+                Main_SA.main_sa(parametros, parametrosAlgoritmo, entrada, patrones, poblacionInicial);
                 break;
             case "VNS":
-                //Main_VNS.main_vns(parametros, parametrosAlgoritmo, entrada, patrones);
+                Main_VNS.main_vns(parametros, parametrosAlgoritmo, entrada, patrones, poblacionInicial);
                 break;
             default:
-                System.out.println("Algoritmo" + parametrosAlgoritmo.getAlgoritmo() + " no encontrado.");
+                System.out.println("Algoritmo \"" + parametrosAlgoritmo.getAlgoritmo() + "\" no encontrado.");
                 break;
         }
 

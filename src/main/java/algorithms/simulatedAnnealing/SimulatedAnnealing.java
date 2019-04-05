@@ -14,6 +14,7 @@ import patrones.Patrones;
 import patrones.Restricciones;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -32,7 +33,7 @@ public class SimulatedAnnealing {
      * @param entrada          Entrada del problema.
      * @return Conjunto de soluciones optimizadas.
      */
-    public static ArrayList<Solucion> bucleSA(ArrayList<Solucion> poblacionInicial, ParametrosAlgoritmo pa,
+    public static ArrayList<Solucion> bucleSA(List<Solucion> poblacionInicial, ParametrosAlgoritmo pa,
                                               Parametros p, Patrones patrones, Entrada entrada) {
         /*
          * Bucle para operar sobre varios individuos si es necesario
