@@ -55,7 +55,7 @@ public class Entrada {
      */
     private int cargaTrabajo;
     private ArrayList<ArrayList<String>> sectorizacionModificada;
-    private ArrayList<Controlador> controladoresModificados;
+    private int slotMomentoActual;
 
     /**
      * Contructor
@@ -77,8 +77,7 @@ public class Entrada {
                    ArrayList<ArrayList<String>> sectorizacion, ArrayList<ArrayList<String>> matrizAfinidad,
                    HashMap<Sector, ArrayList<String>> volumnsOfSectors, int cargaTrabajo,
                    ArrayList<ArrayList<String>> sectorizacionModificada,
-                   ArrayList<Controlador> controladoresModificados,
-                   Solucion distribucionInicial) {
+                   Solucion distribucionInicial, int slotMomentoActual) {
         this.controladores = controladores;
         this.nucleos = nucleos;
         this.turno = turno;
@@ -89,8 +88,8 @@ public class Entrada {
         this.volumnsOfSectors = volumnsOfSectors;
         this.cargaTrabajo = cargaTrabajo;
         this.sectorizacionModificada = sectorizacionModificada;
-        this.controladoresModificados = controladoresModificados;
         this.distribucionInicial = distribucionInicial;
+        this.slotMomentoActual = slotMomentoActual;
     }
 
 
@@ -118,13 +117,12 @@ public class Entrada {
         Turno turno = crearTurno(fTurno, parametros);
         ArrayList<ArrayList<String>> sectorizacion = crearSectorizacion(fAperturaSectores, fSectorizacionSectoresVolumenes, turno, listaSectores);
         ArrayList<ArrayList<String>> sectorizacionModificada = null;
-        ArrayList<Controlador> controladoresModificados = null;
-
+        
         if (!fModificacionSectores.isEmpty()) {
             sectorizacionModificada = crearSectorizacion(fAperturaSectores, fSectorizacionSectoresVolumenes, turno, listaSectores);// FIXME
         }
         if (!fModificacionRecursos.isEmpty()) {
-            controladoresModificados = modificarControladores(controladores, fModificacionRecursos, turno);
+            modificarControladores(controladores, fModificacionRecursos, turno);
         }
 
 
@@ -133,10 +131,10 @@ public class Entrada {
         int cargaTrabajo = calcularCargaTrabajo(sectorizacion, controladores, listaSectoresAbiertos);
 
         Solucion distribucionInicial = crearSolucionInicial(fDistribucionInicial, listaSectores, controladores, parametros);
+        int slotMomentoActual = calcularSlot(turno, fDistribucionInicial.get(0));
 
         Entrada entrada = new Entrada(controladores, nucleos, turno, listaSectores, listaSectoresAbiertos,
-                sectorizacion, matrizAfinidad, volumnsOfSectors, cargaTrabajo, sectorizacionModificada,
-                controladoresModificados, distribucionInicial);
+                sectorizacion, matrizAfinidad, volumnsOfSectors, cargaTrabajo, sectorizacionModificada, distribucionInicial,slotMomentoActual);
 
         return entrada;
     }
@@ -145,8 +143,8 @@ public class Entrada {
                                                  ArrayList<Controlador> controladores, Parametros parametros) {
         ArrayList<String> turnos = new ArrayList<>();
         List<Integer> intervalos = new ArrayList<>();
-        for (String linea : entrada) {
-            String[] columnas = linea.split(";");
+        for (int i = 1; i < entrada.size(); i++) {
+		    String[] columnas = entrada.get(i).split(";");
             if (columnas[0].contains("-")) // (Si se cambia por "equals" no funciona)
                 intervalos = actualizarIntervalos(columnas);
             else { // en caso contrario, creamos el turno y lo asignamos al controlador de la primera columna
@@ -210,7 +208,7 @@ public class Entrada {
         return result;
     }
 
-    private static ArrayList<Controlador> modificarControladores(ArrayList<Controlador> controladores,
+    private static void modificarControladores(ArrayList<Controlador> controladores,
                                                                  ArrayList<String> entrada, Turno turno) {
         for (int i = 1; i < entrada.size(); i++) {
             String[] linea = entrada.get(i).split(";");
@@ -228,13 +226,18 @@ public class Entrada {
 
             }
             if (!existe) {
-                c = (new Controlador(lineaId, linea[3], linea[2], false, true,
-                        false, Propiedades.ALTA, calcularSlot(turno, linea[3])));
+            	if(linea[5].equalsIgnoreCase("PTD")) {
+            		c = (new Controlador(lineaId, linea[5], linea[4], true, false,
+                            false, Propiedades.ALTA, calcularSlot(turno, linea[2])));
+            	}else if(linea[5].equalsIgnoreCase("CON")){
+            		c = (new Controlador(lineaId, linea[5], linea[4], false, true,
+                            false, Propiedades.ALTA, calcularSlot(turno, linea[2])));
+            	}
+                
                 controladores.add(c);
             }
 
         }
-        return controladores;
     }
 
     private static int calcularSlot(Turno turno, String momento) {
@@ -570,14 +573,6 @@ public class Entrada {
         this.sectorizacionModificada = sectorizacionModificada;
     }
 
-    public ArrayList<Controlador> getControladoresModificados() {
-        return controladoresModificados;
-    }
-
-    public void setControladoresModificados(ArrayList<Controlador> controladoresModificados) {
-        this.controladoresModificados = controladoresModificados;
-    }
-
     public ArrayList<Controlador> getControladores() {
         return controladores;
     }
@@ -654,4 +649,14 @@ public class Entrada {
     public Solucion getDistribucionInicial() {
         return distribucionInicial;
     }
+
+
+	public int getSlotMomentoActual() {
+		return slotMomentoActual;
+	}
+
+
+	public void setSlotMomentoActual(int slotMomentoActual) {
+		this.slotMomentoActual = slotMomentoActual;
+	}
 }

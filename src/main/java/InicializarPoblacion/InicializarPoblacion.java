@@ -100,7 +100,7 @@ public class InicializarPoblacion {
 
     private static Solucion procesarDistribucionInicial(Solucion distribucionInicial, Entrada entrada) {
         Solucion sol = distribucionInicial.clone();
-        if (entrada.getControladoresModificados() != null)
+        if (entrada.getControladores() != null)
             ; // TODO eliminarControladoresBaja();
         if (entrada.getSectorizacionModificada() != null)
             ; // TODO
