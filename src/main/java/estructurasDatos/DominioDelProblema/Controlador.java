@@ -40,21 +40,21 @@ public class Controlador implements Cloneable {
      */
     private boolean imaginario;
     
-    private String bajaAlta;
+    private Propiedades bajaAlta;
     
     private int slotBajaAlta;
 
     /**
      * Constructor
-     *
-     * @param id         ID asignado a un controlador para su identificacion.
+     *  @param id         ID asignado a un controlador para su identificacion.
      * @param turno      Turno de trabajo en el que el controlador realiza su jornada (Mañana Largo, Tarde Corto, Noche...).
      * @param nucleo     Nucleo que el controldor tiene asignado para realizar su trabajo.
      * @param pTD        Acreditacion del controlador (Si el controlador tiene esta acreditacion su valor sera true).
      * @param cON        Acreditacion del controlador (Si el controlador tiene esta acreditacion su valor sera true).
      * @param imaginario Parametro para marcar cuando se utilizan mas controladores de los disponibles. "Fase pruebas"
+     * @param bajaAlta
      */
-    public Controlador(int id, String turno, String nucleo, boolean pTD, boolean cON, boolean imaginario, String bajaAlta, int slotBajaAlta) {
+    public Controlador(int id, String turno, String nucleo, boolean pTD, boolean cON, boolean imaginario, Propiedades bajaAlta, int slotBajaAlta) {
         this.id = id;
         this.turno = turno;
         this.nucleo = nucleo;
@@ -146,11 +146,11 @@ public class Controlador implements Cloneable {
         this.turnoNoche = turnoNoche;
     }
 
-	public String getBajaAlta() {
+	public Propiedades getBajaAlta() {
 		return bajaAlta;
 	}
 
-	public void setBajaAlta(String bajaAlta) {
+	public void setBajaAlta(Propiedades bajaAlta) {
 		this.bajaAlta = bajaAlta;
 	}
 

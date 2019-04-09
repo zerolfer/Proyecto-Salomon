@@ -41,7 +41,7 @@ public class Solucion implements Cloneable {
     /**
      * Metodo usado para la copia de una solucion.
      */
-    public Object clone() {
+    public Solucion clone() {
         Solucion sol = new Solucion(this.turnos, this.controladores, this.longdescansos);
         return sol;
     }

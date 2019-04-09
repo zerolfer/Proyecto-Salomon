@@ -85,6 +85,8 @@ public class InicializarPoblacion {
      */
     private static Solucion inicializarIndividuo(int descanso, int maxT, int minT, int minD, Entrada entrada,
                                                  Parametros p, Patrones patrones) {
+        //FASE 0
+        Solucion inicial = procesarDistribucionInicial(entrada.getDistribucionInicial(), entrada);
         //FASE 1
         ArrayList<ArrayList<String>> cadenasDeTurnos = introduccionPlantillas(entrada, descanso, maxT, minT, minD);
         //FASE 2
@@ -94,6 +96,15 @@ public class InicializarPoblacion {
         Solucion individuo = asignacionControladores(turnos, entrada, descanso);
         //FASE 4
         return individuo;
+    }
+
+    private static Solucion procesarDistribucionInicial(Solucion distribucionInicial, Entrada entrada) {
+        Solucion sol = distribucionInicial.clone();
+        if (entrada.getControladoresModificados() != null)
+            ; // TODO eliminarControladoresBaja();
+        if (entrada.getSectorizacionModificada() != null)
+            ; // TODO
+        return sol;
     }
 
     /**

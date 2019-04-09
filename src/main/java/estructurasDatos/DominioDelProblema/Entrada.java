@@ -121,10 +121,10 @@ public class Entrada {
         ArrayList<Controlador> controladoresModificados = null;
 
         if (!fModificacionSectores.isEmpty()) {
-            sectorizacionModificada = crearSectorizacion(fAperturaSectores, fSectorizacionSectoresVolumenes, turno, listaSectores);
+            sectorizacionModificada = crearSectorizacion(fAperturaSectores, fSectorizacionSectoresVolumenes, turno, listaSectores);// FIXME
         }
         if (!fModificacionRecursos.isEmpty()) {
-            controladoresModificados = crearControladoresModificados(controladores, fModificacionRecursos, turno);
+            controladoresModificados = modificarControladores(controladores, fModificacionRecursos, turno);
         }
 
 
@@ -210,26 +210,27 @@ public class Entrada {
         return result;
     }
 
-    private static ArrayList<Controlador> crearControladoresModificados(ArrayList<Controlador> controladores,
-                                                                        ArrayList<String> entrada, Turno turno) {
+    private static ArrayList<Controlador> modificarControladores(ArrayList<Controlador> controladores,
+                                                                 ArrayList<String> entrada, Turno turno) {
         for (int i = 1; i < entrada.size(); i++) {
             String[] linea = entrada.get(i).split(";");
             Controlador c = null;
             boolean existe = false;
+            int lineaId = Integer.parseInt(linea[1].substring(1));
             for (int j = 0; j < controladores.size(); j++) {
-                if (controladores.get(j).getId() == Integer.parseInt(linea[1].substring(1))) {
+                if (controladores.get(j).getId() == lineaId) {
                     existe = true;
                     c = controladores.get(j);
-                    c.setBajaAlta(linea[0]);
+                    c.setBajaAlta(linea[0].equals("ALTA") ? Propiedades.ALTA : Propiedades.BAJA);
                     c.setSlotBajaAlta(calcularSlot(turno, linea[2]));
                     controladores.set(j, c);
                 }
 
             }
             if (!existe) {
-                //TODO: Se necesitan las caracteristicas del controlador nuevo en el fichero (redefinir formato)
-                c = (new Controlador(Integer.parseInt(linea[1].substring(1)), linea[3], linea[2], false, true, false, "ALTA", calcularSlot(turno, linea[3])));
-
+                c = (new Controlador(lineaId, linea[3], linea[2], false, true,
+                        false, Propiedades.ALTA, calcularSlot(turno, linea[3])));
+                controladores.add(c);
             }
 
         }
@@ -454,9 +455,9 @@ public class Entrada {
         for (int i = 1; i < entrada.size(); i++) {
             String[] linea = entrada.get(i).split(";");
             if (linea[1].equalsIgnoreCase("PTD")) {
-                controladores.add(new Controlador(Integer.parseInt(linea[0].substring(1)), linea[3], linea[2], true, false, false, "ALTA", 0));
+                controladores.add(new Controlador(Integer.parseInt(linea[0].substring(1)), linea[3], linea[2], true, false, false, Propiedades.ALTA, 0));
             } else if (linea[1].equalsIgnoreCase("CON")) {
-                controladores.add(new Controlador(Integer.parseInt(linea[0].substring(1)), linea[3], linea[2], false, true, false, "ALTA", 0));
+                controladores.add(new Controlador(Integer.parseInt(linea[0].substring(1)), linea[3], linea[2], false, true, false, Propiedades.ALTA, 0));
             }
         }
         return controladores;
@@ -650,4 +651,7 @@ public class Entrada {
     }
 
 
+    public Solucion getDistribucionInicial() {
+        return distribucionInicial;
+    }
 }
