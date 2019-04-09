@@ -3,7 +3,6 @@ package estructurasDatos;
 import estructurasDatos.DominioDelProblema.Controlador;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Objeto Solucion, este objeto contiene toda la informacion necesaria para la representacion de una solucion del problema.
@@ -41,10 +40,19 @@ public class Solucion implements Cloneable {
     /**
      * Metodo usado para la copia de una solucion.
      */
+    @SuppressWarnings({"unchecked"})
     public Solucion clone() {
-        Solucion sol = new Solucion(this.turnos, this.controladores, this.longdescansos);
-        return sol;
+        return new Solucion((ArrayList<String>) this.turnos.clone(),
+                (ArrayList<Controlador>) this.controladores.clone(), this.longdescansos);
     }
+
+    /**
+     * Metodo usado para la copia de una solucion.
+     */
+    public Solucion shallowClone() {
+        return new Solucion(this.turnos, this.controladores, this.longdescansos);
+    }
+
 
     public int getLongdescansos() {
         return longdescansos;

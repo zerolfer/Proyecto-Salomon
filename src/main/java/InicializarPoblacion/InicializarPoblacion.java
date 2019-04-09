@@ -11,6 +11,7 @@ import main.MainPruebas;
 import patrones.Patrones;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Clase utilizada para la inicializacion de un conjunto de soluciones iniciales.
@@ -103,8 +104,43 @@ public class InicializarPoblacion {
         if (entrada.getControladores() != null)
             ; // TODO eliminarControladoresBaja();
         if (entrada.getSectorizacionModificada() != null)
-            ; // TODO
+            eliminarSectoresCerrados(entrada.getSlotMomentoActual(), entrada.getSectorizacion(), entrada.getSectorizacionModificada());
         return sol;
+    }
+
+    // TODO: reaprovechar iteración para calcular los nuevos sectores e introducir plantillas???
+    private static void eliminarSectoresCerrados(int slotMomentoActual, ArrayList<ArrayList<String>> sectorizacion,
+                                                 ArrayList<ArrayList<String>> sectorizacionModificada) {
+
+        List<String> sectoresCerrados = null;
+        for (int i = slotMomentoActual; i < sectorizacion.size(); i++) {
+
+            // si la distribucion es identica a la anterior, reutilizarla, sino recalcularla
+            if (sectoresCerrados==null || !sectorizacion.get(i).equals(sectorizacion.get(i - 1))
+                    || !sectorizacionModificada.get(i).equals(sectorizacionModificada.get(i - 1)))
+                sectoresCerrados = obtenerSectoresCerrados(sectorizacion.get(i), sectorizacionModificada.get(i));
+
+//            modificarTurno(sectoresCerrados, i); //TODO!!! (paso 1)
+        }
+    }
+
+    private static List<String> obtenerSectoresCerrados(ArrayList<String> iniciales, ArrayList<String> modificados) {
+        List<String> cerrados = new ArrayList<>();
+        for (String sector : iniciales) {
+            Boolean encontrado = false;
+            // buscar sector
+            for (String sector2 : modificados) {
+                if (sector.equalsIgnoreCase(sector2)) {
+                    encontrado = true;
+                    break; // sector encontrado, no se ha cerrado
+                }
+            }
+
+            if (!encontrado)
+                cerrados.add(sector);
+
+        }
+        return cerrados;
     }
 
     /**

@@ -69,7 +69,6 @@ public class Entrada {
      * @param matrizAfinidad           Indica los sectores que tienen afinidad entre si.
      * @param volumnsOfSectors         Lista con todos los sectores y los volumenes asociados a estos.
      * @param cargaTrabajo             Carga de trabajo total representada en slots.
-     * @param controladoresModificados
      * @param sectorizacionModificada
      */
     public Entrada(ArrayList<Controlador> controladores, ArrayList<Nucleo> nucleos, Turno turno,
@@ -98,7 +97,7 @@ public class Entrada {
         ArrayList<String> fRecursosDisponibles = rwFiles.Lectura.Listar("entrada/Casos/" + path + "/RecursosDisponibles_" + entradaId + ".csv");
         ArrayList<String> fTurno = rwFiles.Lectura.Listar("entrada/Casos/" + path + "/Turno_" + entradaId + ".csv");
         ArrayList<String> fModificacionSectores = rwFiles.Lectura.Listar("entrada/Casos/" + path + "/ModificacionSectorizaciones_" + entradaId + ".csv");
-        //TODO: Tratamiento exception cuando no encuentra el fichero (xq no existe)
+
         ArrayList<String> fModificacionRecursos = rwFiles.Lectura.Listar("entrada/Casos/" + path + "/ModificacionRecursos_" + entradaId + ".csv", true);
         ArrayList<String> fDistribucionInicial = rwFiles.Lectura.Listar("entrada/Casos/" + path + "/DistribucionInicial_" + entradaId + ".csv", true);
 
@@ -119,7 +118,7 @@ public class Entrada {
         ArrayList<ArrayList<String>> sectorizacionModificada = null;
         
         if (!fModificacionSectores.isEmpty()) {
-            sectorizacionModificada = crearSectorizacion(fAperturaSectores, fSectorizacionSectoresVolumenes, turno, listaSectores);// FIXME
+            sectorizacionModificada = crearSectorizacion(fModificacionSectores, fSectorizacionSectoresVolumenes, turno, listaSectores);// FIXME
         }
         if (!fModificacionRecursos.isEmpty()) {
             modificarControladores(controladores, fModificacionRecursos, turno);
@@ -131,12 +130,17 @@ public class Entrada {
         int cargaTrabajo = calcularCargaTrabajo(sectorizacion, controladores, listaSectoresAbiertos);
 
         Solucion distribucionInicial = crearSolucionInicial(fDistribucionInicial, listaSectores, controladores, parametros);
-        int slotMomentoActual = calcularSlot(turno, fDistribucionInicial.get(0));
+        int slotMomentoActual = crearMomentoActual(turno, fDistribucionInicial);
 
         Entrada entrada = new Entrada(controladores, nucleos, turno, listaSectores, listaSectoresAbiertos,
                 sectorizacion, matrizAfinidad, volumnsOfSectors, cargaTrabajo, sectorizacionModificada, distribucionInicial,slotMomentoActual);
 
         return entrada;
+    }
+
+    private static int crearMomentoActual(Turno turno, ArrayList<String> fDistribucionInicial) {
+        String[] linea = fDistribucionInicial.get(0).split(";");
+        return calcularSlot(turno, linea[1]);
     }
 
     private static Solucion crearSolucionInicial(List<String> entrada, ArrayList<Sector> listaSectores,

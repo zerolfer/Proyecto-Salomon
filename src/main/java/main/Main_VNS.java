@@ -31,7 +31,8 @@ public class Main_VNS {
 //        /*FIN PRESENTACION DE RESULTADOS Y TRAZAS*/
 //        System.out.println("Done");
 //
-        VariableNeighborhoodSearch vnd = new VariableNeighborhoodDescendent(parametros, parametrosAlgoritmo, entrada);
+        VariableNeighborhoodSearch vnd = new VariableNeighborhoodDescendent(parametros, patrones,
+                                                                                        parametrosAlgoritmo, entrada);
 
         for (Solucion solucion : poblacionInicial) {
             vnd.startExecution(solucion);

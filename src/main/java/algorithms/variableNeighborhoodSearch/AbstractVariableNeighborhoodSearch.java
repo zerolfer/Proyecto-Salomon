@@ -5,6 +5,7 @@ import estructurasDatos.Parametros;
 import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
 import fitnessFunction.DeciderFitnessFunction;
+import patrones.Patrones;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
      */
     private final Parametros parametros;
 
+    private final Patrones patrones;
 
     /**
      * Información del dominio del problema
@@ -50,9 +52,10 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
     private int currentNeighborhoodIndex = 0;
 
 
-    protected AbstractVariableNeighborhoodSearch(Parametros parametros,
+    protected AbstractVariableNeighborhoodSearch(Parametros parametros, Patrones patrones,
                                                  ParametrosAlgoritmo parametrosAlgoritmo, Entrada entrada) {
         this.parametros = parametros;
+        this.patrones = patrones;
         this.parametrosAlgoritmo = parametrosAlgoritmo;
         this.entrada = entrada;
 
@@ -112,7 +115,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
      * @return
      */
     private double fitness(Solucion x) {
-        return DeciderFitnessFunction.switchFitnessF(x, null, entrada, parametros, parametrosAlgoritmo)[0]; //TODO ¿En que formato retorna el fitness?
+        return DeciderFitnessFunction.switchFitnessF(x, null, entrada, parametros, parametrosAlgoritmo)[0];
     }
 
     /*
@@ -120,5 +123,29 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
      */
     public NeighborStructure getCurrentNeighborHood() {
         return neighborStructures.get(this.currentNeighborhoodIndex);
+    }
+
+    public Entrada getEntrada() {
+        return entrada;
+    }
+
+    public Parametros getParametros() {
+        return parametros;
+    }
+
+    public ParametrosAlgoritmo getParametrosAlgoritmo() {
+        return parametrosAlgoritmo;
+    }
+
+    public long getMaxTimeAllowed() {
+        return maxTimeAllowed;
+    }
+
+    public int getCurrentNeighborhoodIndex() {
+        return currentNeighborhoodIndex;
+    }
+
+    public Patrones getPatrones() {
+        return patrones;
     }
 }
