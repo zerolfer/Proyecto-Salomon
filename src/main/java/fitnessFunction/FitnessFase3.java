@@ -6,6 +6,8 @@ import estructurasDatos.Parametros;
 
 import java.util.ArrayList;
 
+import static herramientas.CridaUtils.STRING_DESCANSO;
+
 /**
  * Esta clase contiene todas las funciones objetivos que se utilizan en la fase de optimizacion del algoritmo (fase 3).
  *
@@ -32,7 +34,7 @@ public class FitnessFase3 {
         for (int i = 0; i < numeroControladores; i++) {
             for (int j = 0; j < numeroFranjasHorarias; j++) {
                 str = tabla.get(i).substring(j * 3, j * 3 + 3);
-                if (!str.equals("111")) {
+                if (!str.equals(STRING_DESCANSO)) {
                     tPosicion += parametros.getTamanoSlots();
                     if (j + 1 == numeroFranjasHorarias) {
                         if (tPosicion != 0) {
@@ -80,25 +82,25 @@ public class FitnessFase3 {
             tPosicion = 0;
             for (int j = 0; j <= numeroFranjasHorarias; j++) {
                 if (j == numeroFranjasHorarias) {
-                    if (!strPrevia.equals("111")) {
+                    if (!strPrevia.equals(STRING_DESCANSO)) {
                         diferencia += Math.abs(tPosicion - parametros.getTiempoPosOpt());
                     }
                 } else {
                     str = tabla.get(i).substring(j * 3, j * 3 + 3);
                     if (strPrevia != null) {
                         if (str.equals(strPrevia)) {
-                            if (!str.equals("111")) {
+                            if (!str.equals(STRING_DESCANSO)) {
                                 tPosicion += parametros.getTamanoSlots();
                             }
                         } else {
-                            if (!strPrevia.equals("111")) {
+                            if (!strPrevia.equals(STRING_DESCANSO)) {
                                 diferencia += Math.abs(tPosicion - parametros.getTiempoPosOpt());
                                 tPosicion = parametros.getTamanoSlots();
                             } else {
                                 tPosicion = parametros.getTamanoSlots();
                             }
                         }
-                    } else if (!str.equals("111")) {
+                    } else if (!str.equals(STRING_DESCANSO)) {
                         tPosicion = parametros.getTamanoSlots();
                     }
                     strPrevia = str;
@@ -140,7 +142,7 @@ public class FitnessFase3 {
             double tEjecutivo = 0;
             for (int j = 0; j < numeroFranjasHorarias; j++) {
                 str = tabla.get(i).substring(j * 3, j * 3 + 3);
-                if (!str.equals("111")) {
+                if (!str.equals(STRING_DESCANSO)) {
                     if (Character.isUpperCase(str.charAt(0))) {
                         tEjecutivo += parametros.getTamanoSlots();
                     }
@@ -214,8 +216,8 @@ public class FitnessFase3 {
             strPrevia = "";
             for (int j = 0; j < numeroFranjasHorarias; j++) {
                 str = tabla.get(i).substring(j * 3, j * 3 + 3);
-                if (str.equals("111")) {
-                    if (!strPrevia.equals("111")) {
+                if (str.equals(STRING_DESCANSO)) {
+                    if (!strPrevia.equals(STRING_DESCANSO)) {
                         numIntervalosDescanso += 1;
                     }
                 }
@@ -256,7 +258,7 @@ public class FitnessFase3 {
             String turno = turnos.get(i);
             ArrayList<Sector> sectoresTurno = new ArrayList<>();
             for (int j = 0; j < turno.length(); j += 3) {
-                if (!turno.substring(j, j + 3).equalsIgnoreCase("111")) {
+                if (!turno.substring(j, j + 3).equalsIgnoreCase(STRING_DESCANSO)) {
                     for (Sector sector : sectoresAbiertos) {
                         if (sector.getId().equalsIgnoreCase(turno.substring(j, j + 3)) && !sectoresTurno.contains(sector)) {
                             sectoresTurno.add(sector);

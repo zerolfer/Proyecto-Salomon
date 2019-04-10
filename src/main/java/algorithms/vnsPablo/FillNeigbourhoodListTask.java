@@ -38,14 +38,13 @@ public class FillNeigbourhoodListTask implements Runnable {
 
     @Override
     public void run() {
-        // TODO Auto-generated method stub
         try {
             Solucion solFin = (Solucion) solIni.clone();
             turno = solIni.getTurnos().get(nTurno);
             //< For each block of the turn
             for (int i = 0; i < turno.length(); i = i + 3) {
                 String firstCandidate = turno.substring(i, i + size);
-                ///< If candidate block i'ts "111", look for the next block
+                ///< If candidate block i'ts STRING_DESCANSO, look for the next block
                 String candidate = "";
                 for (int i2 = 0; i2 < size; i2++) {
                     candidate = candidate.concat("1");

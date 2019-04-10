@@ -11,6 +11,8 @@ import patrones.Restricciones;
 
 import java.util.ArrayList;
 
+import static herramientas.CridaUtils.STRING_DESCANSO;
+
 public class Move4 {
 
     private static int TurnoAleatorio(ArrayList<Integer> contc, ArrayList<String> individuo) {
@@ -34,15 +36,15 @@ public class Move4 {
         ArrayList<Integer> inicio = new ArrayList<>();
         ArrayList<Integer> fin = new ArrayList<>();
         for (int i = 0; i < trabajador.length(); i += 3) {
-            if (!trabajador.substring(i, i + 3).equals("111")) {
-                if (i == 0 || (trabajador.substring(i - 3, i).equals("111"))) {
+            if (!trabajador.substring(i, i + 3).equals(STRING_DESCANSO)) {
+                if (i == 0 || (trabajador.substring(i - 3, i).equals(STRING_DESCANSO))) {
                     inicio.add(i);
                 }
             }
         }
         for (int i = trabajador.length() - 3; i >= 0; i -= 3) {
-            if (!trabajador.substring(i, i + 3).equals("111")) {
-                if (i == trabajador.length() - 3 || (trabajador.substring(i + 3, i + 6).equals("111"))) {
+            if (!trabajador.substring(i, i + 3).equals(STRING_DESCANSO)) {
+                if (i == trabajador.length() - 3 || (trabajador.substring(i + 3, i + 6).equals(STRING_DESCANSO))) {
                     fin.add(i + 3);
                 }
             }
@@ -172,7 +174,7 @@ public class Move4 {
                 String posibles[] = patrones.getArray()[5 + j].toString().split(";");
                 boolean bn = true;
                 for (int l = 0; l < cadena.length(); l += 3) {
-                    if (!cadena.substring(l, l + 3).equalsIgnoreCase("111")) {
+                    if (!cadena.substring(l, l + 3).equalsIgnoreCase(STRING_DESCANSO)) {
                         boolean sectorPos = false;
                         for (int k = 0; k < posibles.length; k++) {
                             if (cadena.substring(l, l + 3).equalsIgnoreCase(posibles[k])) {

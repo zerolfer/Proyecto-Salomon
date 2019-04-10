@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static herramientas.CridaUtils.STRING_DESCANSO;
+
 public class GreedyMove1 {
     public final static int NUM_HILOS = 4;
 
@@ -22,7 +24,7 @@ public class GreedyMove1 {
         for (int i = 0; i < individuo.getTurnos().size(); i++) {
             String t = individuo.getTurnos().get(i);
             for (int j = 0; j < t.length() - 3; j += 3) {
-                if (!t.substring(j, j + 3).equalsIgnoreCase(t.substring(j + 3, j + 6)) && !t.substring(j, j + 3).equals("111")) {
+                if (!t.substring(j, j + 3).equalsIgnoreCase(t.substring(j + 3, j + 6)) && !t.substring(j, j + 3).equals(STRING_DESCANSO)) {
                     mov = new ParalelMove1(i, j, individuo, patrones, entrada, parametros, parametrosAlg);
                     array.add(mov);
                     threadPool.submit(mov);

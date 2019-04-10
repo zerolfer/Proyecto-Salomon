@@ -6,6 +6,7 @@ import estructurasDatos.DominioDelProblema.Sector;
 import estructurasDatos.Parametros;
 import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
+import herramientas.CridaUtils;
 import main.Main;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -24,6 +25,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
+import static herramientas.CridaUtils.STRING_DESCANSO;
 
 
 /**
@@ -297,7 +300,7 @@ public class EscrituraExcel {
                             /*Fin Ultima celda*/
                         }
 
-                        if (line.substring(k - 3, k).equalsIgnoreCase("111")) {//TODO: PARAMETRIZAR
+                        if (line.substring(k - 3, k).equalsIgnoreCase(STRING_DESCANSO)) {
                             row.getCell(cnt - equ).setCellStyle(cstyle);
                         } else {
                             //row.getCell(cnt-equ).setCellValue("");
@@ -322,7 +325,7 @@ public class EscrituraExcel {
                             row.getCell(cnt - equ).setCellValue(line.substring(k - 3, k));
                         }
 
-                        if (line.substring(k - 3, k).equalsIgnoreCase("111")) {//TODO: PARAMETRIZAR
+                        if (line.substring(k - 3, k).equalsIgnoreCase(STRING_DESCANSO)) {
                             row.getCell(cnt - equ).setCellStyle(cstyle);
                         } else {
                             //row.getCell(cnt-equ).setCellValue("");
@@ -350,7 +353,7 @@ public class EscrituraExcel {
                                 row.createCell(cnt).setCellValue(line.substring(k, k + 3));
                             }
 
-                            if (line.substring(k, k + 3).equalsIgnoreCase("111")) {//TODO: PARAMETRIZAR
+                            if (line.substring(k, k + 3).equalsIgnoreCase(STRING_DESCANSO)) {
                                 row.getCell(cnt - equ).setCellStyle(cstyle);
                             } else {
                                 //row.getCell(cnt-equ).setCellValue("");
@@ -442,10 +445,10 @@ public class EscrituraExcel {
                 file = new FileInputStream(new File("resources/PlantillaTrazas.xls"));
                 workbook = new HSSFWorkbook(file);
             } catch (FileNotFoundException e1) {
-                // TODO Auto-generated catch block
+
                 e1.printStackTrace();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
+
                 e.printStackTrace();
             }
             String titulo = "";

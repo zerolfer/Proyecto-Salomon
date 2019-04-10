@@ -64,7 +64,6 @@ public class VariableNeighborhood extends Thread {
 		try {
 			t = new Traces();
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 */
@@ -102,7 +101,6 @@ public class VariableNeighborhood extends Thread {
   /*              try {
   					t.TraceFileCsv(parametrosAlg.getFuncionFitnessFase2(),iterations,duration,totalFitnes, neighborhood.getNeigborhood(),neighborhood.laps, nlSize,explored);
   				} catch (IOException e) {
-  					// TODO Auto-generated catch block
   					e.printStackTrace();
   				}
    */
@@ -136,7 +134,6 @@ public class VariableNeighborhood extends Thread {
    /*             try {
   					t.TraceFileCsv(parametrosAlg.getFuncionFitnessFase2(),iterations,duration,totalFitnes, neighborhood.getNeigborhood(),neighborhood.laps, nlSize,explored);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
     */
@@ -280,7 +277,7 @@ public class VariableNeighborhood extends Thread {
 
                                     // [SECOND CANDIDATE SELECTION] Get second candidate String. It must be all '1'.
                                     secondCandidate = turno.substring(i2, i2 + size);
-                                    ///< If candidate block i'ts "111", look for the next block
+                                    ///< If candidate block i'ts STRING_DESCANSO, look for the next block
                                     String candidate = "";
                                     for (int i3 = 0; i3 < size; i3++) {
                                         candidate = candidate.concat("1");
@@ -358,7 +355,7 @@ public class VariableNeighborhood extends Thread {
                         //< For each block of the turn 
                         for (int i = 0; i < ctrl.getTurno().length(); i = i + 3) {
                             firstCandidate = ctrl.getTurno().substring(i, i + size);
-                            ///< If candidate block i'ts "111", look for the next block
+                            ///< If candidate block i'ts STRING_DESCANSO, look for the next block
                             String candidate = "";
                             for (int i2 = 0; i2 < size; i2++) {
                                 candidate = candidate.concat("1");
@@ -433,7 +430,7 @@ public class VariableNeighborhood extends Thread {
 
                                     // [SECOND CANDIDATE SELECTION] Get second candidate String. It must be all '1'.
                                     secondCandidate = ctrl.getTurno().substring(i2, i2 + size);
-                                    ///< If candidate block i'ts "111", look for the next block
+                                    ///< If candidate block i'ts STRING_DESCANSO, look for the next block
                                     String candidate = "";
                                     for (int i3 = 0; i3 < size; i3++) {
                                         candidate = candidate.concat("1");
@@ -625,7 +622,6 @@ public class VariableNeighborhood extends Thread {
                             explored++;
 
                         } catch (NullPointerException e) {
-                            // TODO Auto-generated catch block
                             e.printStackTrace();
                         }
                         fitness[xPrime + dir] = fit[0];
@@ -750,7 +746,7 @@ public class VariableNeighborhood extends Thread {
                         firstCandidate= randController.getTurno().substring(choice, choice+3);
                         //System.out.println("First candidate:" + firstCandidate);
                     }
-                    while (    ("111".equals(firstCandidate) )
+                    while (    (STRING_DESCANSO.equals(firstCandidate) )
                             && (  (firstCandidate.equals(randController.getTurno().substring(choice-3, choice)))
                                 &&(firstCandidate.equals(randController.getTurno().substring(choice+3, choice+6)))
                                )
@@ -761,7 +757,7 @@ public class VariableNeighborhood extends Thread {
                         secondCandidate = randCont.getTurno().substring(choice, choice+3);
                         //System.out.println("Choice: " + choice);
 
-                        if (   (firstCandidate.equals(randCont.getTurno().substring(choice-3, choice)) || firstCandidate.equals(randCont.getTurno().substring(choice+3, choice+6)) ) && ("111".equals(secondCandidate)))
+                        if (   (firstCandidate.equals(randCont.getTurno().substring(choice-3, choice)) || firstCandidate.equals(randCont.getTurno().substring(choice+3, choice+6)) ) && (STRING_DESCANSO.equals(secondCandidate)))
                         {
                         	//System.out.println("Seccond candidate:" + secondCandidate);
                             //System.out.println("Previous Seccond candidate:" + randCont.getTurno().substring(choice-3, choice));

@@ -14,6 +14,8 @@ import patrones.Restricciones;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import static herramientas.CridaUtils.STRING_DESCANSO;
+
 public class Move8 {
 
     private static int TurnoAleatorio(ArrayList<Integer> contc, ArrayList<String> individuo) {
@@ -37,15 +39,15 @@ public class Move8 {
         ArrayList<Integer> inicio = new ArrayList<>();
         ArrayList<Integer> fin = new ArrayList<>();
         for (int i = 0; i < trabajador.length(); i += 3) {
-            if (!trabajador.substring(i, i + 3).equals("111")) {
-                if (i == 0 || (trabajador.substring(i - 3, i).equals("111"))) {
+            if (!trabajador.substring(i, i + 3).equals(STRING_DESCANSO)) {
+                if (i == 0 || (trabajador.substring(i - 3, i).equals(STRING_DESCANSO))) {
                     inicio.add(i);
                 }
             }
         }
         for (int i = trabajador.length() - 3; i >= 0; i -= 3) {
-            if (!trabajador.substring(i, i + 3).equals("111")) {
-                if (i == trabajador.length() - 3 || (trabajador.substring(i + 3, i + 6).equals("111"))) {
+            if (!trabajador.substring(i, i + 3).equals(STRING_DESCANSO)) {
+                if (i == trabajador.length() - 3 || (trabajador.substring(i + 3, i + 6).equals(STRING_DESCANSO))) {
                     fin.add(i + 3);
                 }
             }
@@ -179,7 +181,7 @@ public class Move8 {
                 String posibles[] = patrones.getArray()[5 + j].toString().split(";");
                 boolean bn = true;
                 for (int l = 0; l < cadena.length(); l += 3) {
-                    if (!cadena.substring(l, l + 3).equalsIgnoreCase("111")) {
+                    if (!cadena.substring(l, l + 3).equalsIgnoreCase(STRING_DESCANSO)) {
                         boolean sectorPos = false;
                         for (int k = 0; k < posibles.length; k++) {
                             if (cadena.substring(l, l + 3).equalsIgnoreCase(posibles[k])) {
@@ -242,7 +244,7 @@ public class Move8 {
             ArrayList<Sector> sectoresN = nucleos.get(i).getSectores();
             if (nucleos.get(i).getNombre().equalsIgnoreCase(nucC1)) {
                 for (int j = 0; j < controladorVago2.length(); j += 3) {
-                    if (!controladorVago2.substring(j, j + 3).equalsIgnoreCase("111")) {
+                    if (!controladorVago2.substring(j, j + 3).equalsIgnoreCase(STRING_DESCANSO)) {
                         boolean in = false;
                         for (int k = 0; k < sectoresN.size(); k++) {
                             if (!sectoresN.get(k).getId().equalsIgnoreCase(controladorVago2.substring(j, j + 3))) {
@@ -257,7 +259,7 @@ public class Move8 {
             }
             if (nucleos.get(i).getNombre().equalsIgnoreCase(nucC2)) {
                 for (int j = 0; j < controladorP2.length(); j += 3) {
-                    if (!controladorP2.substring(j, j + 3).equalsIgnoreCase("111")) {
+                    if (!controladorP2.substring(j, j + 3).equalsIgnoreCase(STRING_DESCANSO)) {
                         boolean in = false;
                         for (int k = 0; k < sectoresN.size(); k++) {
                             if (!sectoresN.get(k).getId().equalsIgnoreCase(controladorP2.substring(j, j + 3))) {

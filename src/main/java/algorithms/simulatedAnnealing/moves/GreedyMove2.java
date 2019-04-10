@@ -10,6 +10,8 @@ import patrones.Restricciones;
 
 import java.util.ArrayList;
 
+import static herramientas.CridaUtils.STRING_DESCANSO;
+
 public class GreedyMove2 {
     public static boolean posibleM = true;
     public static int contM = 0;
@@ -22,7 +24,7 @@ public class GreedyMove2 {
             int cont = 0;
             for (int l = 0; l < turno.length(); l += 3) {
                 String ant = turno.substring(l, l + 3);
-                if (!ant.equals("111")) {
+                if (!ant.equals(STRING_DESCANSO)) {
                     if (l + 3 < turno.length() && ant.equals(turno.substring(l + 3, l + 6))) {
                         cont++;
                     } else {

@@ -9,6 +9,8 @@ import estructurasDatos.Solucion;
 
 import java.util.ArrayList;
 
+import static herramientas.CridaUtils.STRING_DESCANSO;
+
 public class RestriccionesCode {
 
     public static long comprobarRestricciones(Solucion individuo, Parametros parametros, Entrada entrada, ParametrosAlgoritmo pa) {
@@ -39,7 +41,7 @@ public class RestriccionesCode {
                 t = turnos.get(controladores.get(i).getTurnoAsignado());
                 int cnt = 0;
                 for (int j = 0; j < t.length(); j += 3) {
-                    if (t.substring(j, j + 3).equalsIgnoreCase("111")) {
+                    if (t.substring(j, j + 3).equalsIgnoreCase(STRING_DESCANSO)) {
                         cnt++;
                     }
                 }
@@ -62,9 +64,9 @@ public class RestriccionesCode {
         for (String turno : turnos) {
             int cnt = 0;
             for (int i = 0; i < turno.length(); i += 3) {
-                if (!turno.substring(i, i + 3).equalsIgnoreCase("111")) {
+                if (!turno.substring(i, i + 3).equalsIgnoreCase(STRING_DESCANSO)) {
                     cnt++;
-                } else if (turno.substring(i, i + 3).equalsIgnoreCase("111")) {
+                } else if (turno.substring(i, i + 3).equalsIgnoreCase(STRING_DESCANSO)) {
                     if (cnt > max && cnt != 0) {
                         p++;
                     }
@@ -89,14 +91,14 @@ public class RestriccionesCode {
                     String t = turnos.get(controladores.get(i).getTurnoAsignado());
                     if (inicioTCorto == 0) {
                         for (int j = t.length() - (resto * 3); j < t.length(); j += 3) {
-                            if (!t.substring(i, i + 3).equalsIgnoreCase("111")) {
+                            if (!t.substring(i, i + 3).equalsIgnoreCase(STRING_DESCANSO)) {
                                 p++;
                             }
                         }
                         //array[1] = Pattern.compile("^.*(111){"+ resto +"}$");
                     } else {
                         for (int j = 0; j < (inicioTCorto * 3); j += 3) {
-                            if (!t.substring(i, i + 3).equalsIgnoreCase("111")) {
+                            if (!t.substring(i, i + 3).equalsIgnoreCase(STRING_DESCANSO)) {
                                 p++;
                             }
                         }
@@ -114,7 +116,7 @@ public class RestriccionesCode {
         for (String turno : individuo.getTurnos()) {
             int cnt = 0;
             for (int i = 0; i < turno.length(); i += 3) {
-                if (!turno.substring(i, i + 3).equalsIgnoreCase("111")) {
+                if (!turno.substring(i, i + 3).equalsIgnoreCase(STRING_DESCANSO)) {
                     cnt++;
                 }
             }
@@ -132,9 +134,9 @@ public class RestriccionesCode {
         for (String turno : turnos) {
             int cnt = 0;
             for (int i = 0; i < turno.length(); i += 3) {
-                if (!turno.substring(i, i + 3).equalsIgnoreCase("111")) {
+                if (!turno.substring(i, i + 3).equalsIgnoreCase(STRING_DESCANSO)) {
                     cnt++;
-                } else if (turno.substring(i, i + 3).equalsIgnoreCase("111")) {
+                } else if (turno.substring(i, i + 3).equalsIgnoreCase(STRING_DESCANSO)) {
                     if (cnt < min && cnt != 0) {
                         p++;
                     }
@@ -154,9 +156,9 @@ public class RestriccionesCode {
         for (String turno : turnos) {
             int cnt = 0;
             for (int i = 0; i < turno.length(); i += 3) {
-                if (turno.substring(i, i + 3).equalsIgnoreCase("111")) {
+                if (turno.substring(i, i + 3).equalsIgnoreCase(STRING_DESCANSO)) {
                     cnt++;
-                } else if (!turno.substring(i, i + 3).equalsIgnoreCase("111")) {
+                } else if (!turno.substring(i, i + 3).equalsIgnoreCase(STRING_DESCANSO)) {
                     if (cnt < min && cnt != 0) {
                         p++;
                     }
@@ -173,13 +175,13 @@ public class RestriccionesCode {
         for (String turno : turnos) {
             int cnt = 0;
             for (int i = 0; i < turno.length(); i += 3) {
-                if (turno.substring(i, i + 3).equals("111") && cnt == 0) {
+                if (turno.substring(i, i + 3).equals(STRING_DESCANSO) && cnt == 0) {
 
-                } else if (turno.substring(i, i + 3).equals("111") && cnt < min) {
+                } else if (turno.substring(i, i + 3).equals(STRING_DESCANSO) && cnt < min) {
                     p++;
-                } else if (turno.substring(i, i + 3).equals("111") && cnt >= min) {
+                } else if (turno.substring(i, i + 3).equals(STRING_DESCANSO) && cnt >= min) {
                     cnt = 0;
-                } else if (!turno.substring(i, i + 3).equals("111")) {
+                } else if (!turno.substring(i, i + 3).equals(STRING_DESCANSO)) {
                     if (i == 0) {
                         cnt++;
                     } else {

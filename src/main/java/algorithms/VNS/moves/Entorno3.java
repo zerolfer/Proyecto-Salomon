@@ -11,6 +11,8 @@ import patrones.Restricciones;
 
 import java.util.ArrayList;
 
+import static herramientas.CridaUtils.STRING_DESCANSO;
+
 public class Entorno3 {
 
     public static ArrayList<Solucion> movimiento(Solucion individuo1, Patrones patrones, Entrada entrada, Parametros parametros, ParametrosAlgoritmo parametrosAlg, int tmnIntervalo) {
@@ -28,7 +30,7 @@ public class Entorno3 {
                         intervalo = c1.substring(k, k + (3 * tmnIntervalo));
                         intervalo2 = c2.substring(k, k + (3 * tmnIntervalo));
                         //REGLA 1 y 2
-                        if (!intervalo.replaceAll("111", "").equalsIgnoreCase("") && intervalo2.replaceAll("111", "").equalsIgnoreCase("")) { //c1:NoVacio c2:Vacio
+                        if (!intervalo.replaceAll(STRING_DESCANSO, "").equalsIgnoreCase("") && intervalo2.replaceAll(STRING_DESCANSO, "").equalsIgnoreCase("")) { //c1:NoVacio c2:Vacio
                             if (k != 0) {
                                 ant = c2.substring(k - 3, k);
                             } else {
@@ -40,7 +42,7 @@ public class Entorno3 {
                                 pos = "";
                             }
                             //REGLA 3
-                            if ((!ant.equals(intervalo.substring(0, 3)) || ant.equals("111")) && (!pos.equals(intervalo.substring(intervalo.length() - 3, intervalo.length())) || pos.equals("111"))) {         //NO CONCATENA
+                            if ((!ant.equals(intervalo.substring(0, 3)) || ant.equals(STRING_DESCANSO)) && (!pos.equals(intervalo.substring(intervalo.length() - 3, intervalo.length())) || pos.equals(STRING_DESCANSO))) {         //NO CONCATENA
                                 Movimiento mov = new Movimiento(i, j, k, k + (3 * tmnIntervalo));
                                 ArrayList<String> dosInd = ChangeCont(individuo1, mov, patrones, entrada, parametros, parametrosAlg);//comprueba que cumpla las condiciones (devuelve 2 string cambiados o null)
                                 if (dosInd != null) {

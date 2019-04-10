@@ -3,11 +3,13 @@ package estructurasDatos.DominioDelProblema;
 import estructurasDatos.Parametros;
 import estructurasDatos.Solucion;
 import fitnessFunction.Fitness;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import static herramientas.CridaUtils.STRING_DESCANSO;
 
 
 /**
@@ -168,8 +170,8 @@ public class Entrada {
         // saltamos la primera columna
         for (int i = 1; i < columnas.length; i++) {
             int intervaloActual = intervalos.get(i - 1); // restamos uno debido a la disonancia de las dos listas
-            String idSector="111";
-            if (!columnas[i].contains("111")) {
+            String idSector=STRING_DESCANSO;
+            if (!columnas[i].contains(STRING_DESCANSO)) {
                 idSector = obtenerIdSector(columnas[i], listaSectores);
                 idSector = Character.isUpperCase(columnas[i].charAt(0)) ? idSector.toUpperCase() : idSector/*.toLowerCase()*/;
             }
@@ -341,7 +343,7 @@ public class Entrada {
         ArrayList<ArrayList<String>> sectorizacion = new ArrayList<>();
         for (int i = 0; i < turno.getTl()[1]; i++) {
             ArrayList<String> slot = new ArrayList<>();
-            slot.add("111");
+            slot.add(STRING_DESCANSO);
             sectorizacion.add(slot);
         }
         for (int i = 1; i < entrada.size(); i++) {

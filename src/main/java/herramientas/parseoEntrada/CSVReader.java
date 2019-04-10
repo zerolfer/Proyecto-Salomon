@@ -12,6 +12,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static herramientas.CridaUtils.STRING_DESCANSO;
+
 public class CSVReader {
     /*DEAD CODE*/
     public static Solucion readSolution(Entrada entrada, Parametros parametros,
@@ -41,7 +43,7 @@ public class CSVReader {
                                 str = previous;
                             }
                             String id = "";
-                            if (str.equals("111")) {
+                            if (str.equals(STRING_DESCANSO)) {
                                 turn.append(str);
                             } else {
                                 for (Sector sector : entrada.getListaSectores()) {

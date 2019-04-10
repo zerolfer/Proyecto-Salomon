@@ -8,10 +8,15 @@ import estructurasDatos.DominioDelProblema.Sector;
 import estructurasDatos.Parametros;
 import estructurasDatos.Solucion;
 import main.MainPruebas;
+import org.apache.commons.lang3.StringUtils;
 import patrones.Patrones;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
+
+import static herramientas.CridaUtils.LONGITUD_CADENAS;
+import static herramientas.CridaUtils.STRING_DESCANSO;
 
 /**
  * Clase utilizada para la inicializacion de un conjunto de soluciones iniciales.
@@ -104,23 +109,80 @@ public class InicializarPoblacion {
         if (entrada.getControladores() != null)
             ; // TODO eliminarControladoresBaja();
         if (entrada.getSectorizacionModificada() != null)
-            eliminarSectoresCerrados(entrada.getSlotMomentoActual(), entrada.getSectorizacion(), entrada.getSectorizacionModificada());
+            eliminarSectoresCerrados(entrada.getSlotMomentoActual(), entrada.getSectorizacion(),
+                    entrada.getSectorizacionModificada(), sol);
         return sol;
     }
 
     // TODO: reaprovechar iteración para calcular los nuevos sectores e introducir plantillas???
     private static void eliminarSectoresCerrados(int slotMomentoActual, ArrayList<ArrayList<String>> sectorizacion,
-                                                 ArrayList<ArrayList<String>> sectorizacionModificada) {
+                                                 ArrayList<ArrayList<String>> sectorizacionModificada,
+                                                 Solucion distribucionInicial) {
 
         List<String> sectoresCerrados = null;
-        for (int i = slotMomentoActual; i < sectorizacion.size(); i++) {
+        boolean hayCambio = false;
+        int idxInicio = slotMomentoActual;
 
-            // si la distribucion es identica a la anterior, reutilizarla, sino recalcularla
-            if (sectoresCerrados==null || !sectorizacion.get(i).equals(sectorizacion.get(i - 1))
-                    || !sectorizacionModificada.get(i).equals(sectorizacionModificada.get(i - 1)))
-                sectoresCerrados = obtenerSectoresCerrados(sectorizacion.get(i), sectorizacionModificada.get(i));
+        // iteramos por todos los slots de la instancia del problema
+        for (int slot = slotMomentoActual; slot < sectorizacion.size(); slot++) {
 
-//            modificarTurno(sectoresCerrados, i); //TODO!!! (paso 1)
+            // Solamente vamos a computar los slots en los que haya cambio en los sectores cerrados
+            // Recorremos la distribución de trozo en trozo, para mayor eficiencia
+            if (sectoresCerrados == null  // si estamos al inicio
+                    || !sectorizacionModificada.get(slot).equals(sectorizacionModificada.get(slot - 1)) // si hay cambio
+                    || !sectorizacion.get(slot).equals(sectorizacion.get(slot - 1))) {
+
+                // como hay un cambio, obtenemos los nuevos sectores cerrados, será una lista vacia o no
+                sectoresCerrados = obtenerSectoresCerrados(sectorizacion.get(slot), sectorizacionModificada.get(slot));
+
+                // si ya se habia alcanzado un cambio, modificamos los turnos en el intervalo que va
+                // desde el slot donde se produjo dicho cambio, hasta el actual
+                if (hayCambio) {
+                    modificarTurno(idxInicio, slot, sectoresCerrados, distribucionInicial);
+                    hayCambio = false;
+                }
+
+                // como ha habido un cambio, lo marcamos en la baliza hayCambio,
+                // y guardamos la posicion (numero del slot) de dicho cambio para
+                // utilizarlo en el if anterior la proxima vez que se detecte un cambio
+                if (sectoresCerrados.size() > 0) {
+                    hayCambio = true;
+                    idxInicio = slot;
+                }
+            }
+        }
+        // si solo hay un unico cambio en toda la sectorización, el cambio no habrá sido computado, lo computamos
+        if (hayCambio) {
+            modificarTurno(idxInicio, sectorizacion.size(), sectoresCerrados, distribucionInicial);
+        }
+    }
+
+    /**
+     * Actualiza el turno (el String) <b>de todos los controladores</b> dentro del intervalo de tiempo
+     * (en slots de 3 caracteres cada uno) fijado en los parámetros
+     * Importante: este método MODIFICA LA <code>distribucionInicial<code/> pasada como argumento
+     *
+     * @param slotInicio          inicio del intervalo (numero de slot)
+     * @param slotFin             final del intervalo (numero de slot)
+     * @param sectoresCerrados    lista de sectores cerrados en el intervalo
+     * @param distribucionInicial distribucion inicial a modificar
+     */
+    private static void modificarTurno(int slotInicio, int slotFin, final List<String> sectoresCerrados,
+                                       Solucion distribucionInicial) {
+        // para cada sector que se cierra
+        for (String sectorCerrado : sectoresCerrados) {
+            Pattern patron = Pattern.compile("(?i)" + sectorCerrado);
+
+            // para cada uno de los turnos de la distribucion inicial
+            for (int j = 0; j < distribucionInicial.getTurnos().size(); j++) {
+                String s = distribucionInicial.getTurnos().get(j); // turno original
+                String previo = s.substring(0, slotInicio * LONGITUD_CADENAS);
+                String medio = StringUtils.replaceIgnoreCase(
+                        s.substring(slotInicio * LONGITUD_CADENAS, slotFin * LONGITUD_CADENAS), sectorCerrado, STRING_DESCANSO
+                ); // sustituimos todas las apariciones del sector (ya sea mayus o minus) por descansos
+                String posterior = s.substring(slotFin * LONGITUD_CADENAS);
+                distribucionInicial.getTurnos().set(j, previo + medio + posterior);  // recomponemos y actualizamos el turno
+            }
         }
     }
 
@@ -130,7 +192,7 @@ public class InicializarPoblacion {
             Boolean encontrado = false;
             // buscar sector
             for (String sector2 : modificados) {
-                if (sector.equalsIgnoreCase(sector2)) {
+                if (sector.equalsIgnoreCase(sector2)) { // TODO lista dinamica modificar "modificados" para evitar comparar de más???
                     encontrado = true;
                     break; // sector encontrado, no se ha cerrado
                 }
@@ -378,7 +440,7 @@ public class InicializarPoblacion {
         ArrayList<String> nucleo = new ArrayList<>();
         ArrayList<Nucleo> nucleos = entrada.getNucleos();
         for (int i = 0; i < turno.length(); i += 3) {
-            if (!turno.substring(i, i + 3).equalsIgnoreCase("111")) {
+            if (!turno.substring(i, i + 3).equalsIgnoreCase(STRING_DESCANSO)) {
                 for (int j = 0; j < nucleos.size(); j++) {
                     ArrayList<Sector> sctNucleo = nucleos.get(j).getSectores();
                     for (int k = 0; k < sctNucleo.size(); k++) {
@@ -436,7 +498,7 @@ public class InicializarPoblacion {
         int[] tc = entrada.getTurno().getTc();
         for (int i = 0; i < turno.length(); i += 3) {
             String slot = turno.substring(i, i + 3);
-            if (!slot.equalsIgnoreCase("111") && (tc[0] > nSlot || tc[1] < nSlot)) {
+            if (!slot.equalsIgnoreCase(STRING_DESCANSO) && (tc[0] > nSlot || tc[1] < nSlot)) {
                 return true;
             }
 
@@ -463,7 +525,7 @@ public class InicializarPoblacion {
             ArrayList<String> turno = cadenasDeTurnos.get(i);
             int cont = 0;
             for (int l = 0; l < turno.size(); l++) {
-                if (!turno.get(l).equals("111")) {
+                if (!turno.get(l).equals(STRING_DESCANSO)) {
                     String ant = turno.get(l);
                     if (l + 1 < turno.size() && ant.equals(turno.get(l + 1))) {
                         cont++;
@@ -605,21 +667,21 @@ public class InicializarPoblacion {
         if (j < desc) {
             c1.add(id.toLowerCase());
             c2.add(id.toUpperCase());
-            c3.add("111");
-            c4.add("111");
+            c3.add(STRING_DESCANSO);
+            c4.add(STRING_DESCANSO);
         } else if (j < desc * 2) {
-            c1.add("111");
-            c2.add("111");
+            c1.add(STRING_DESCANSO);
+            c2.add(STRING_DESCANSO);
             c3.add(id.toUpperCase());
             c4.add(id.toLowerCase());
         } else if (j < desc * 3) {
             c1.add(id.toUpperCase());
             c2.add(id.toLowerCase());
-            c3.add("111");
-            c4.add("111");
+            c3.add(STRING_DESCANSO);
+            c4.add(STRING_DESCANSO);
         } else if (j < desc * 4) {
-            c1.add("111");
-            c2.add("111");
+            c1.add(STRING_DESCANSO);
+            c2.add(STRING_DESCANSO);
             c3.add(id.toLowerCase());
             c4.add(id.toUpperCase());
         }
@@ -655,9 +717,9 @@ public class InicializarPoblacion {
         ArrayList<String> c1 = plantilla.get(plantilla.size() - 3);
         ArrayList<String> c2 = plantilla.get(plantilla.size() - 2);
         ArrayList<String> c3 = plantilla.get(plantilla.size() - 1);
-        c1.add("111");
-        c2.add("111");
-        c3.add("111");
+        c1.add(STRING_DESCANSO);
+        c2.add(STRING_DESCANSO);
+        c3.add(STRING_DESCANSO);
         plantilla.set(plantilla.size() - 3, c1);
         plantilla.set(plantilla.size() - 2, c2);
         plantilla.set(plantilla.size() - 1, c3);
@@ -685,13 +747,13 @@ public class InicializarPoblacion {
         if (j < desc) {
             c1.add(id.toLowerCase());
             c2.add(id.toUpperCase());
-            c3.add("111");
+            c3.add(STRING_DESCANSO);
         } else if (j < desc * 2) {
             c1.add(id.toUpperCase());
-            c2.add("111");
+            c2.add(STRING_DESCANSO);
             c3.add(id.toLowerCase());
         } else if (j < desc * 3) {
-            c1.add("111");
+            c1.add(STRING_DESCANSO);
             c2.add(id.toLowerCase());
             c3.add(id.toUpperCase());
         }

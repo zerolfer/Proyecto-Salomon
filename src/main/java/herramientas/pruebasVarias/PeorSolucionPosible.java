@@ -8,31 +8,33 @@ import patrones.Patrones;
 
 import java.util.ArrayList;
 
+import static herramientas.CridaUtils.STRING_DESCANSO;
+
 public class PeorSolucionPosible {
 
     public static void testes() {
         for (int i = 0; i < 32; i++) {
-            System.out.print("111" + "aaz" + "AAQ");
+            System.out.print(STRING_DESCANSO + "aaz" + "AAQ");
         }
         System.out.println();
         for (int i = 0; i < 32; i++) {
-            System.out.print("aaq" + "111" + "AAZ");
+            System.out.print("aaq" + STRING_DESCANSO + "AAZ");
         }
         System.out.println();
         for (int i = 0; i < 32; i++) {
-            System.out.print("111" + "AAZ" + "aaq");
+            System.out.print(STRING_DESCANSO + "AAZ" + "aaq");
         }
         System.out.println();
         for (int i = 0; i < 32; i++) {
-            System.out.print("AAQ" + "111" + "aaz");
+            System.out.print("AAQ" + STRING_DESCANSO + "aaz");
         }
         System.out.println();
         for (int i = 0; i < 32; i++) {
-            System.out.print("AAZ" + "aaq" + "111");
+            System.out.print("AAZ" + "aaq" + STRING_DESCANSO);
         }
         System.out.println();
         for (int i = 0; i < 32; i++) {
-            System.out.print("aaz" + "AAQ" + "111");
+            System.out.print("aaz" + "AAQ" + STRING_DESCANSO);
         }
 
         ArrayList<String> turnos = new ArrayList<>();

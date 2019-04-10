@@ -9,6 +9,8 @@ import patrones.Patrones;
 
 import java.util.ArrayList;
 
+import static herramientas.CridaUtils.STRING_DESCANSO;
+
 public class FitnessFase3Info {
 
     public static void fitGlobal(Solucion individuo, Entrada entrada, Patrones patrones, Parametros parametros) {
@@ -51,7 +53,7 @@ public class FitnessFase3Info {
         for (int i = 0; i < numeroControladores; i++) {
             for (int j = 0; j < numeroFranjasHorarias; j++) {
                 str = tabla.get(i).substring(j * 3, j * 3 + 3);
-                if (!str.equals("111")) {
+                if (!str.equals(STRING_DESCANSO)) {
                     tPosicion += parametros.getTamanoSlots();
                     if (j + 1 == numeroFranjasHorarias) {
                         if (tPosicion != 0) {
@@ -122,7 +124,7 @@ public class FitnessFase3Info {
             tPosicion = 0;
             for (int j = 0; j <= numeroFranjasHorarias; j++) {
                 if (j == numeroFranjasHorarias) {
-                    if (!strPrevia.equals("111")) {
+                    if (!strPrevia.equals(STRING_DESCANSO)) {
                         diferencia += Math.abs(tPosicion - parametros.getTiempoPosOpt());
                         if (Math.abs(tPosicion - parametros.getTiempoPosOpt()) >= 10) {
                             c++;
@@ -139,11 +141,11 @@ public class FitnessFase3Info {
                     str = tabla.get(i).substring(j * 3, j * 3 + 3);
                     if (strPrevia != null) {
                         if (str.equals(strPrevia)) {
-                            if (!str.equals("111")) {
+                            if (!str.equals(STRING_DESCANSO)) {
                                 tPosicion += parametros.getTamanoSlots();
                             }
                         } else {
-                            if (!strPrevia.equals("111")) {
+                            if (!strPrevia.equals(STRING_DESCANSO)) {
                                 diferencia += Math.abs(tPosicion - parametros.getTiempoPosOpt());
                                 if (Math.abs(tPosicion - parametros.getTiempoPosOpt()) >= 10) {
                                     c++;
@@ -160,7 +162,7 @@ public class FitnessFase3Info {
                                 tPosicion = parametros.getTamanoSlots();
                             }
                         }
-                    } else if (!str.equals("111")) {
+                    } else if (!str.equals(STRING_DESCANSO)) {
                         tPosicion = parametros.getTamanoSlots();
                     }
                     strPrevia = str;
@@ -206,7 +208,7 @@ public class FitnessFase3Info {
             double tEjecutivo = 0;
             for (int j = 0; j < numeroFranjasHorarias; j++) {
                 str = tabla.get(i).substring(j * 3, j * 3 + 3);
-                if (!str.equals("111")) {
+                if (!str.equals(STRING_DESCANSO)) {
                     if (Character.isUpperCase(str.charAt(0))) {
                         tEjecutivo += parametros.getTamanoSlots();
                     }
@@ -302,8 +304,8 @@ public class FitnessFase3Info {
             int in = 0;
             for (int j = 0; j < numeroFranjasHorarias; j++) {
                 str = tabla.get(i).substring(j * 3, j * 3 + 3);
-                if (str.equals("111")) {
-                    if (!strPrevia.equals("111")) {
+                if (str.equals(STRING_DESCANSO)) {
+                    if (!strPrevia.equals(STRING_DESCANSO)) {
                         numIntervalosDescanso += 1;
                         in++;
                     }
@@ -348,7 +350,7 @@ public class FitnessFase3Info {
             String turno = turnos.get(i);
             ArrayList<Sector> sectoresTurno = new ArrayList<>();
             for (int j = 0; j < turno.length(); j += 3) {
-                if (!turno.substring(j, j + 3).equalsIgnoreCase("111")) {
+                if (!turno.substring(j, j + 3).equalsIgnoreCase(STRING_DESCANSO)) {
                     for (Sector sector : sectoresAbiertos) {
                         if (sector.getId().equalsIgnoreCase(turno.substring(j, j + 3)) && !sectoresTurno.contains(sector)) {
                             sectoresTurno.add(sector);
@@ -386,7 +388,7 @@ public class FitnessFase3Info {
         double sum = 0;
         for (int i = 0; i < arrayList.size(); i++) {
             for (int j = 0; j < arrayList.get(i).length(); j += 3) {
-                if (!arrayList.get(i).substring(j, j + 3).equals("000") && !arrayList.get(i).substring(j, j + 3).equals("111")) {
+                if (!arrayList.get(i).substring(j, j + 3).equals("000") && !arrayList.get(i).substring(j, j + 3).equals(STRING_DESCANSO)) {
                     sum++;
                 }
             }
@@ -400,7 +402,7 @@ public class FitnessFase3Info {
         double sum = 0;
         for (int i = 0; i < arrayList.size(); i++) {
             for (int j = 0; j < arrayList.get(i).length(); j += 3) {
-                if (!arrayList.get(i).substring(j, j + 3).equals("000") && !arrayList.get(i).substring(j, j + 3).equals("111")) {
+                if (!arrayList.get(i).substring(j, j + 3).equals("000") && !arrayList.get(i).substring(j, j + 3).equals(STRING_DESCANSO)) {
                     sum++;
                 }
             }

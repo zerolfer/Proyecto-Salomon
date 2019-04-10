@@ -42,7 +42,6 @@ public class Traces {
             //formatter.format="%$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS %4$s %2$s %5$s%6$s%n";
 
         } catch (SecurityException | IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         try {

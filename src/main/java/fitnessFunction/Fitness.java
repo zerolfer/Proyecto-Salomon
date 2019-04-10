@@ -9,6 +9,8 @@ import patrones.Restricciones;
 
 import java.util.ArrayList;
 
+import static herramientas.CridaUtils.STRING_DESCANSO;
+
 
 /**
  * Clase utilizada para guardar las distintas funciones objetivo del problema.
@@ -77,7 +79,7 @@ public class Fitness {
         int[] sum = {0, 0};
         int unos = 0, letras = 0;
         for (int e = 0; e < controlador.length(); e += 3) {
-            if (controlador.substring(e, e + 3).equals("111")) {
+            if (controlador.substring(e, e + 3).equals(STRING_DESCANSO)) {
                 unos++;
             } else {
                 letras++;
@@ -99,7 +101,7 @@ public class Fitness {
         double sum = 0;
         for (int i = 0; i < arrayList.size(); i++) {
             for (int j = 0; j < arrayList.get(i).length(); j += 3) {
-                if (!arrayList.get(i).substring(j, j + 3).equals("000") && !arrayList.get(i).substring(j, j + 3).equals("111")) {
+                if (!arrayList.get(i).substring(j, j + 3).equals("000") && !arrayList.get(i).substring(j, j + 3).equals(STRING_DESCANSO)) {
                     sum++;
                 }
             }
@@ -119,7 +121,7 @@ public class Fitness {
         double sum = 0;
         for (int i = 0; i < arrayList.size(); i++) {
             for (int j = 0; j < arrayList.get(i).length(); j += 3) {
-                if (!arrayList.get(i).substring(j, j + 3).equals("000") && !arrayList.get(i).substring(j, j + 3).equals("111")) {
+                if (!arrayList.get(i).substring(j, j + 3).equals("000") && !arrayList.get(i).substring(j, j + 3).equals(STRING_DESCANSO)) {
                     sum++;
                 }
             }
@@ -319,7 +321,7 @@ public class Fitness {
         if (!find) {
             String t = individuo.getTurnos().get(i);
             for (int j = 0; j < t.length(); j += 3) {
-                if (!t.substring(j, j + 3).equalsIgnoreCase("111")) {
+                if (!t.substring(j, j + 3).equalsIgnoreCase(STRING_DESCANSO)) {
                     p++;
                 }
             }

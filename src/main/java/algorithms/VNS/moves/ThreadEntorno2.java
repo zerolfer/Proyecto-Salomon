@@ -12,6 +12,8 @@ import patrones.Restricciones;
 import java.util.ArrayList;
 import java.util.List;
 
+import static herramientas.CridaUtils.STRING_DESCANSO;
+
 public class ThreadEntorno2 implements Runnable {
 
     public List<Solucion> listaSoluciones;
@@ -49,7 +51,7 @@ public class ThreadEntorno2 implements Runnable {
                     intervalo = c1.substring(k, k + (3 * tmnIntervalo));
                     intervalo2 = c2.substring(k, k + (3 * tmnIntervalo));
                     //REGLA 1 y 2
-                    if (!intervalo.replaceAll("111", "").equalsIgnoreCase("") && !intervalo2.replaceAll("111", "").equalsIgnoreCase("")) { //c1:NoVacio c2:NoVacio
+                    if (!intervalo.replaceAll(STRING_DESCANSO, "").equalsIgnoreCase("") && !intervalo2.replaceAll(STRING_DESCANSO, "").equalsIgnoreCase("")) { //c1:NoVacio c2:NoVacio
                         if (k != 0) {
                             ant = c2.substring(k - 3, k);
                         } else {
@@ -61,7 +63,7 @@ public class ThreadEntorno2 implements Runnable {
                             pos = "";
                         }
                         //REGLA 3
-                        if ((ant.equals(intervalo.substring(0, 3)) && !ant.equals("111")) || (pos.equals(intervalo.substring(intervalo.length() - 3, intervalo.length())) && !pos.equals("111"))) {        //CONCATENA
+                        if ((ant.equals(intervalo.substring(0, 3)) && !ant.equals(STRING_DESCANSO)) || (pos.equals(intervalo.substring(intervalo.length() - 3, intervalo.length())) && !pos.equals(STRING_DESCANSO))) {        //CONCATENA
                             Movimiento mov = new Movimiento(i, j, k, k + (3 * tmnIntervalo));
                             ArrayList<String> dosInd = ChangeCont(individuo1, mov, patrones, entrada, parametros, parametrosAlg);//comprueba que cumpla las condiciones (devuelve 2 string cambiados o null)
                             if (dosInd != null) {
