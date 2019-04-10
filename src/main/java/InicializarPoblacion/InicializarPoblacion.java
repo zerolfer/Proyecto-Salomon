@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import patrones.Patrones;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -91,27 +92,51 @@ public class InicializarPoblacion {
      */
     private static Solucion inicializarIndividuo(int descanso, int maxT, int minT, int minD, Entrada entrada,
                                                  Parametros p, Patrones patrones) {
-        //FASE 0
-        Solucion inicial = procesarDistribucionInicial(entrada.getDistribucionInicial(), entrada);
-        //FASE 1
-        ArrayList<ArrayList<String>> cadenasDeTurnos = introduccionPlantillas(entrada, descanso, maxT, minT, minD);
-        //FASE 2
-        cadenasDeTurnos = reparacionSoluciones(entrada, p, cadenasDeTurnos, minT, patrones);
-        //FASE 3
-        ArrayList<String> turnos = transformacionSoluciones(cadenasDeTurnos);
-        Solucion individuo = asignacionControladores(turnos, entrada, descanso);
-        //FASE 4
-        return individuo;
-    }
 
-    private static Solucion procesarDistribucionInicial(Solucion distribucionInicial, Entrada entrada) {
-        Solucion sol = distribucionInicial.clone();
+        Solucion individuo = entrada.getDistribucionInicial().clone();
         if (entrada.getControladores() != null)
             ; // TODO eliminarControladoresBaja();
-        if (entrada.getSectorizacionModificada() != null)
+        if (entrada.getSectorizacionModificada() != null) {
+            // < PASO 1 >
             eliminarSectoresCerrados(entrada.getSlotMomentoActual(), entrada.getSectorizacion(),
-                    entrada.getSectorizacionModificada(), sol);
-        return sol;
+                    entrada.getSectorizacionModificada(), individuo);
+            // < PASO 2 >
+            introducirPlantillaNuevosSectores(entrada, descanso, maxT, minT, minD); // < Paso 2 >
+        }
+        return individuo;
+
+
+
+
+        //FASE 0
+//        Solucion inicial = procesarDistribucionInicial(entrada.getDistribucionInicial(), entrada);
+        //FASE 1
+//        ArrayList<ArrayList<String>> cadenasDeTurnos = introduccionPlantillas(entrada, descanso, maxT, minT, minD);
+        //FASE 2
+//        cadenasDeTurnos = reparacionSoluciones(entrada, p, cadenasDeTurnos, minT, patrones);
+        //FASE 3
+//        ArrayList<String> turnos = transformacionSoluciones(cadenasDeTurnos);
+//        Solucion individuo = asignacionControladores(turnos, entrada, descanso);
+        //FASE 4
+//        return individuo;
+    }
+
+//    private static Solucion procesarDistribucionInicial(Solucion distribucionInicial, Entrada entrada) {
+//        Solucion sol = distribucionInicial.clone();
+//        if (entrada.getControladores() != null)
+//            ; // TODO eliminarControladoresBaja();
+//        if (entrada.getSectorizacionModificada() != null) {
+//             < PASO 1 >
+//            eliminarSectoresCerrados(entrada.getSlotMomentoActual(), entrada.getSectorizacion(),
+//                    entrada.getSectorizacionModificada(), sol);
+//             < PASO 2 >
+//            introducirPlantillaNuevosSectores(); // < Paso 2 >
+//        }
+//        return sol;
+//    }
+
+    private static void introducirPlantillaNuevosSectores(Entrada entrada, int descanso, int maxT, int minT, int minD) {
+        introduccionPlantillas(entrada, descanso, maxT, minT, minD);
     }
 
     // TODO: reaprovechar iteración para calcular los nuevos sectores e introducir plantillas???
@@ -119,7 +144,7 @@ public class InicializarPoblacion {
                                                  ArrayList<ArrayList<String>> sectorizacionModificada,
                                                  Solucion distribucionInicial) {
 
-        List<String> sectoresCerrados = null;
+        Collection<String> sectoresCerrados = null;
         boolean hayCambio = false;
         int idxInicio = slotMomentoActual;
 
@@ -167,7 +192,7 @@ public class InicializarPoblacion {
      * @param sectoresCerrados    lista de sectores cerrados en el intervalo
      * @param distribucionInicial distribucion inicial a modificar
      */
-    private static void modificarTurno(int slotInicio, int slotFin, final List<String> sectoresCerrados,
+    private static void modificarTurno(int slotInicio, int slotFin, final Collection<String> sectoresCerrados,
                                        Solucion distribucionInicial) {
         // para cada sector que se cierra
         for (String sectorCerrado : sectoresCerrados) {
@@ -186,23 +211,55 @@ public class InicializarPoblacion {
         }
     }
 
-    private static List<String> obtenerSectoresCerrados(ArrayList<String> iniciales, ArrayList<String> modificados) {
-        List<String> cerrados = new ArrayList<>();
-        for (String sector : iniciales) {
+    private static Collection<String> obtenerSectoresCerrados(ArrayList<String> iniciales, ArrayList<String> modificados) {
+        /*
+         * iniciales - modificados = cerrados
+         *  {a,b,c}  -   {a,c,d,e}     =     {b}
+         */
+
+        return diferenciaConjuntos(iniciales, modificados);
+    }
+
+    private static Collection<String> obtenerNuevosSectoresAbiertos(ArrayList<String> iniciales, ArrayList<String> modificados) {
+        /*
+         * modificados - iniciales = nuevos abiertos
+         *  {a,c,d,e}  -   {a,b,c}     =     {d,e}
+         */
+        return diferenciaConjuntos(modificados, iniciales);
+    }
+
+    private static List<String> diferenciaConjuntos(List<String> c1, List<String> c2) {
+
+        /*
+        // TODO: ¿Podría implementarse con HashSets de forma más eficiente?
+        Set<String> cerradosSET = new HashSet<>(iniciales);
+        Set<String> modificadosSET = new HashSet<>(modificados);
+        if (cerradosSET.retainAll(modificadosSET)) {
+            modificadosSET.forEach(System.out::println);
+            System.out.println(("tenia tamaño " + modificadosSET.size()));
+            return cerradosSET;
+        } else return new HashSet<>();
+        */
+        List<String> res = new ArrayList<>();
+        /*List<String> saltar = new ArrayList<>();*/
+        // TODO: Alternativa? Registro índices que ya sabemos seguro que no está porque ya han sido usados? mas/menos eficiente?
+
+        for (String el1 : c1) {
             Boolean encontrado = false;
             // buscar sector
-            for (String sector2 : modificados) {
-                if (sector.equalsIgnoreCase(sector2)) { // TODO lista dinamica modificar "modificados" para evitar comparar de más???
+            for (String el2 : c2) {
+                if (/*!saltar.contains(el2) && */el1.equalsIgnoreCase(el2)) {
                     encontrado = true;
                     break; // sector encontrado, no se ha cerrado
                 }
             }
 
             if (!encontrado)
-                cerrados.add(sector);
+                res.add(el1);
 
         }
-        return cerrados;
+        return res;
+
     }
 
     /**
@@ -245,7 +302,7 @@ public class InicializarPoblacion {
         for (int i = 0; i < entrada.getControladores().size(); i++) {
             Controlador cntl = entrada.getControladores().get(i);
             c.add(new Controlador(cntl.getId(), cntl.getTurno(), cntl.getNucleo(), cntl.isPTD(), cntl.isCON(),
-                    cntl.isImaginario(),cntl.getBajaAlta(),cntl.getSlotBajaAlta()));
+                    cntl.isImaginario(), cntl.getBajaAlta(), cntl.getSlotBajaAlta()));
         }
         /*INICIAR LISTA CONTORLADORES*/
         ArrayList<ObjAux1> clasificacionTurnos = new ArrayList<>();
@@ -569,7 +626,7 @@ public class InicializarPoblacion {
         ArrayList<Integer> secNoc = new ArrayList<>();
         for (Sector sector : sectores) {
             ArrayList<ArrayList<String>> plantilla = new ArrayList<>();// agrupacion de 3 controladores (usando
-                                                                       // plantilla 3x1)
+            // plantilla 3x1)
             ArrayList<String> c1 = new ArrayList<>();
             ArrayList<String> c2 = new ArrayList<>();
             ArrayList<String> c3 = new ArrayList<>();

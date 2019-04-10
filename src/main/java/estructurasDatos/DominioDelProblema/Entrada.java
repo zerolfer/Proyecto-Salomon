@@ -575,10 +575,6 @@ public class Entrada {
         return sectorizacionModificada;
     }
 
-    public void setSectorizacionModificada(ArrayList<ArrayList<String>> sectorizacionModificada) {
-        this.sectorizacionModificada = sectorizacionModificada;
-    }
-
     public ArrayList<Controlador> getControladores() {
         return controladores;
     }
