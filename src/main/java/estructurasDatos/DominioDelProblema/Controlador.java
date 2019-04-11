@@ -67,7 +67,7 @@ public class Controlador implements Cloneable {
         this.slotBajaAlta = slotBajaAlta;
     }
 
-    public Object clone() {
+    public Controlador clone() {
         Controlador con = new Controlador(this.id, this.turno, this.nucleo, this.PTD, this.CON, this.imaginario,this.bajaAlta,this.slotBajaAlta);
         con.setTurnoAsignado(this.turnoAsignado);
         con.setTurnoNoche(this.turnoNoche);

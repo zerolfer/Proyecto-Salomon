@@ -4,21 +4,25 @@ import estructurasDatos.Auxiliares.ObjAux1;
 import estructurasDatos.DominioDelProblema.Controlador;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.DominioDelProblema.Nucleo;
+import estructurasDatos.DominioDelProblema.Propiedades;
 import estructurasDatos.DominioDelProblema.Sector;
 import estructurasDatos.Parametros;
 import estructurasDatos.Solucion;
 import main.MainPruebas;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.xmlbeans.impl.jam.xml.TunnelledException;
+
 import patrones.Patrones;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 
 import static herramientas.CridaUtils.LONGITUD_CADENAS;
 import static herramientas.CridaUtils.STRING_DESCANSO;
-
+import static herramientas.CridaUtils.STRING_NO_TURNO;
 /**
  * Clase utilizada para la inicializacion de un conjunto de soluciones iniciales.
  *
@@ -46,11 +50,11 @@ public class InicializarPoblacion {
         int minD = p.getTiempoDesMin() / p.getTamanoSlots();
         int maxT = p.getTiempoTrabMax() / p.getTamanoSlots();
         int minT = p.getTiempoTrabMin() / p.getTamanoSlots();
+        int descanso =6;
 
-        for (int descanso = minD; descanso <= maxD; descanso++) {
-            Solucion individuo = inicializarIndividuo(descanso, maxT, minT, minD, entrada, p, patrones);
-            poblacion = comprobarCondicionesEntorno(individuo, poblacion, entrada, patrones, p);
-        }
+        Solucion individuo = inicializarIndividuo(descanso, maxT, minT, minD, entrada, p, patrones);
+        poblacion = comprobarCondicionesEntorno(individuo, poblacion, entrada, patrones, p);
+        
         System.out.println("La poblacion inicial es de: " + poblacion.size() + " individuos");
         MainPruebas.problema += ("La poblacion inicial es de: " + poblacion.size() + " individuos" + "\n");
         return poblacion;
@@ -94,8 +98,6 @@ public class InicializarPoblacion {
                                                  Parametros p, Patrones patrones) {
 
         Solucion individuo = entrada.getDistribucionInicial().clone();
-        if (entrada.getControladores() != null)
-            ; // TODO eliminarControladoresBaja();
         if (entrada.getSectorizacionModificada() != null) {
             // < PASO 1 >
             eliminarSectoresCerrados(entrada.getSlotMomentoActual(), entrada.getSectorizacion(),
@@ -103,6 +105,12 @@ public class InicializarPoblacion {
             // < PASO 2 >
             introducirPlantillaNuevosSectores(entrada, descanso, maxT, minT, minD); // < Paso 2 >
         }
+        
+        // < PASO 3 >
+        eliminarControladoresBaja(entrada,individuo);
+        // < PASO 4 >
+        anadirControladoresAlta(entrada,individuo);
+        
         return individuo;
 
 
@@ -120,6 +128,63 @@ public class InicializarPoblacion {
         //FASE 4
 //        return individuo;
     }
+
+private static void anadirControladoresAlta(Entrada entrada, Solucion individuo) {
+	ArrayList<Controlador> controladores = individuo.getControladores();
+	ArrayList<String> turnos = individuo.getTurnos();
+	String t  = turnos.get(0);
+	//TODO: PROBAR QUE LOS CORTES EN LA CADENA SEAN CORRECTOS
+	for (int i = 0; i < controladores.size(); i++) {
+		if (controladores.get(i).getBajaAlta() == Propiedades.ALTA && controladores.get(i).getSlotBajaAlta()!=0) {
+			int momentoAlta = controladores.get(i).getSlotBajaAlta()*LONGITUD_CADENAS;
+			String turno ="";
+			for (int j = 0; j < t.length(); j+=LONGITUD_CADENAS) {
+				if (j<momentoAlta) {
+					turno += STRING_NO_TURNO;					
+				}else {
+					turno += STRING_DESCANSO;
+				}
+			}
+			turnos.add(turno);
+			controladores.get(i).setTurnoAsignado(turnos.size()-1);
+		}
+	}
+	}
+
+private static void eliminarControladoresBaja(Entrada entrada, Solucion individuo) {
+	ArrayList<Controlador> controladores = individuo.getControladores();
+	ArrayList<String> turnos = individuo.getTurnos();
+	for (int i = 0; i < controladores.size(); i++) {
+		if (controladores.get(i).getBajaAlta() == Propiedades.BAJA) {
+			Controlador c = controladores.get(i);
+			int momentoBaja = c.getSlotBajaAlta();
+			String t = turnos.get(c.getTurnoAsignado());
+			//TODO: PROBAR QUE LOS CORTES EN LA CADENA SEAN CORRECTOS
+			String cadFin = t.substring(momentoBaja*LONGITUD_CADENAS, t.length());
+			String cadIni = t.substring(0,momentoBaja*LONGITUD_CADENAS);
+			for (int j = momentoBaja*LONGITUD_CADENAS; j < t.length(); j+=LONGITUD_CADENAS) {
+				cadIni += STRING_NO_TURNO;
+			}
+			for (int j = 0; j < momentoBaja*LONGITUD_CADENAS; j+=LONGITUD_CADENAS) {
+				if(entrada.getSlotMomentoActual()*LONGITUD_CADENAS>j) {
+					cadFin = STRING_NO_TURNO + cadFin;
+				}else {
+					cadFin = STRING_DESCANSO + cadFin;
+				}
+			}
+			Controlador cImaginario = c.clone();
+			cImaginario.setBajaAlta(Propiedades.ALTA);
+			cImaginario.setSlotBajaAlta(0);
+			cImaginario.setId(controladores.size());
+			cImaginario.setImaginario(true);
+			cImaginario.setTurnoAsignado(turnos.size()-1);
+			turnos.set(c.getTurnoAsignado(), cadIni);
+			turnos.add(cadFin);
+			controladores.add(cImaginario);
+		}
+	}
+		
+	}
 
 //    private static Solucion procesarDistribucionInicial(Solucion distribucionInicial, Entrada entrada) {
 //        Solucion sol = distribucionInicial.clone();
