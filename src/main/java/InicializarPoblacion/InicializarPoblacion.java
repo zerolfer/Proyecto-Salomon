@@ -13,6 +13,7 @@ import patrones.Patrones;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -101,17 +102,16 @@ public class InicializarPoblacion {
             eliminarSectoresCerrados(entrada.getSlotMomentoActual(), entrada.getSectorizacion(),
                     entrada.getSectorizacionModificada(), individuo);
             // < PASO 2 >
-            introducirPlantillaNuevosSectores(entrada, descanso, maxT, minT, minD); // < Paso 2 >
+            introducirPlantillasNuevosSectores(entrada, descanso, maxT, minT, minD);
         }
         return individuo;
 
 
 
+        /*         LEGACY:         */
 
-        //FASE 0
-//        Solucion inicial = procesarDistribucionInicial(entrada.getDistribucionInicial(), entrada);
         //FASE 1
-//        ArrayList<ArrayList<String>> cadenasDeTurnos = introduccionPlantillas(entrada, descanso, maxT, minT, minD);
+//        ArrayList<ArrayList<String>> cadenasDeTurnos = introducirPlantillasNuevosSectores(entrada, descanso, maxT, minT, minD);
         //FASE 2
 //        cadenasDeTurnos = reparacionSoluciones(entrada, p, cadenasDeTurnos, minT, patrones);
         //FASE 3
@@ -121,25 +121,6 @@ public class InicializarPoblacion {
 //        return individuo;
     }
 
-//    private static Solucion procesarDistribucionInicial(Solucion distribucionInicial, Entrada entrada) {
-//        Solucion sol = distribucionInicial.clone();
-//        if (entrada.getControladores() != null)
-//            ; // TODO eliminarControladoresBaja();
-//        if (entrada.getSectorizacionModificada() != null) {
-//             < PASO 1 >
-//            eliminarSectoresCerrados(entrada.getSlotMomentoActual(), entrada.getSectorizacion(),
-//                    entrada.getSectorizacionModificada(), sol);
-//             < PASO 2 >
-//            introducirPlantillaNuevosSectores(); // < Paso 2 >
-//        }
-//        return sol;
-//    }
-
-    private static void introducirPlantillaNuevosSectores(Entrada entrada, int descanso, int maxT, int minT, int minD) {
-        introduccionPlantillas(entrada, descanso, maxT, minT, minD);
-    }
-
-    // TODO: reaprovechar iteración para calcular los nuevos sectores e introducir plantillas???
     private static void eliminarSectoresCerrados(int slotMomentoActual, ArrayList<ArrayList<String>> sectorizacion,
                                                  ArrayList<ArrayList<String>> sectorizacionModificada,
                                                  Solucion distribucionInicial) {
@@ -211,7 +192,7 @@ public class InicializarPoblacion {
         }
     }
 
-    private static Collection<String> obtenerSectoresCerrados(ArrayList<String> iniciales, ArrayList<String> modificados) {
+    private static List<String> obtenerSectoresCerrados(ArrayList<String> iniciales, ArrayList<String> modificados) {
         /*
          * iniciales - modificados = cerrados
          *  {a,b,c}  -   {a,c,d,e}     =     {b}
@@ -220,12 +201,26 @@ public class InicializarPoblacion {
         return diferenciaConjuntos(iniciales, modificados);
     }
 
-    private static Collection<String> obtenerNuevosSectoresAbiertos(ArrayList<String> iniciales, ArrayList<String> modificados) {
+//    private static Collection<String> obtenerNuevosSectoresAbiertos(ArrayList<String> iniciales, ArrayList<String> modificados) {
+//        /*
+//         * modificados - iniciales = nuevos abiertos
+//         *  {a,c,d,e}  -   {a,b,c}     =     {d,e}
+//         */
+//        return diferenciaConjuntos(modificados, iniciales);
+//    }
+
+    private static List<List<String>> obtenerNuevosSectoresAbiertos(ArrayList<ArrayList<String>> sectorizacionInicial, ArrayList<ArrayList<String>> sectorizacionModificada) {
         /*
          * modificados - iniciales = nuevos abiertos
          *  {a,c,d,e}  -   {a,b,c}     =     {d,e}
          */
-        return diferenciaConjuntos(modificados, iniciales);
+        HashSet<List<String>> set = new HashSet<>();
+        for (int i = 0; i < sectorizacionInicial.size(); i++) {
+            List<String> iniciales = sectorizacionInicial.get(i);
+            List<String> modificados = sectorizacionModificada.get(i);
+            set.add(diferenciaConjuntos(modificados, iniciales));
+        }
+        return new ArrayList<>(set);
     }
 
     private static List<String> diferenciaConjuntos(List<String> c1, List<String> c2) {
@@ -618,32 +613,48 @@ public class InicializarPoblacion {
      * @param minD     Tiempo de descanso minimo.
      * @return Lista de turnos de trabajo.
      */
-    private static ArrayList<ArrayList<String>> introduccionPlantillas(Entrada entrada, int descanso, int maxT,
-                                                                       int minT, int minD) {
-        ArrayList<ArrayList<String>> turnos = new ArrayList<>(); // esto es la matriz de trabajo
-        ArrayList<ArrayList<String>> sectorizacion = entrada.getSectorizacion();
-        ArrayList<Sector> sectores = entrada.getListaSectoresAbiertos();
+    private static void introducirPlantillasNuevosSectores(Entrada entrada, int descanso, int maxT,
+                                                                        int minT, int minD) {
+        Solucion distribucion = entrada.getDistribucionInicial(); // individuo final a actualizar
+        ArrayList<String> turnos = distribucion.getTurnos(); // esto es la matriz de trabajo
+
+        ArrayList<ArrayList<String>> sectorizacionPorSlots = entrada.getSectorizacionModificada();
+        ArrayList<Sector> sectoresAbiertosTrasMomentoActual = entrada.getListaSectoresAbiertosTrasMomentoActual();
         ArrayList<Integer> secNoc = new ArrayList<>();
-        for (Sector sector : sectores) {
-            ArrayList<ArrayList<String>> plantilla = new ArrayList<>();// agrupacion de 3 controladores (usando
-            // plantilla 3x1)
-            ArrayList<String> c1 = new ArrayList<>();
-            ArrayList<String> c2 = new ArrayList<>();
-            ArrayList<String> c3 = new ArrayList<>();
-            plantilla.add(c1);
-            plantilla.add(c2);
-            plantilla.add(c3);
+
+        for (Sector sector : sectoresAbiertosTrasMomentoActual) {
+
+            //
+            // Crear plantilla para cada nuevo sector:
+            //
+
+            ArrayList<ArrayList<String>> plantilla = new ArrayList<>();// agrupacion de 3 controladores (usando plantilla 3x1)
+
+            plantilla.add(new ArrayList<>());
+            plantilla.add(new ArrayList<>());
+            plantilla.add(new ArrayList<>());
+
+
+            //
+            // {LEGACY}
+            // Rellenar plantilla:
 
             // si el sector no es nocturno
             if (sector.getNoche() == 0) {
-                // verificamos si el sector está abierto en ese intante
-                for (int j = 0; j < sectorizacion.size(); j++) {
-                    ArrayList<String> sectoresAbiertos = sectorizacion.get(j);
+                // para cada slot, verificamos si el sector está abierto en ese instante
+                for (int j = 0; j < sectorizacionPorSlots.size(); j++) {
+
+                    // FIXME: en las nuevas plantillas, antes del momento actual, añadimos 0s o 1s??
+//                    if(j<entrada.getSlotMomentoActual())
+//                        introducirCero(plantilla);
+
+                    List<String> sectoresAbiertos = sectorizacionPorSlots.get(j);
                     boolean open = false;
                     for (int k = 0; k < sectoresAbiertos.size(); k++) {
                         if (sector.getId().equalsIgnoreCase(sectoresAbiertos.get(k))) {
                             open = true;
                             plantilla = introducirSector(plantilla, descanso, sector.getId());
+                            break;
                         }
                     }
                     if (!open) {
@@ -659,12 +670,13 @@ public class InicializarPoblacion {
                 }
                 if (!yaIntroducido) {
                     secNoc.add(sector.getNoche());
-                    plantilla = introducirSectorNoche(plantilla, sectores, sector.getNoche(), sectorizacion);
+                    plantilla = introducirSectorNoche(plantilla, sectoresAbiertosTrasMomentoActual, sector.getNoche(), sectorizacionPorSlots);
                 }
             }
-            turnos = introducirEnTurnos(plantilla, turnos);
+
+            // meter la plantilla a los turnos de la instancia, actualizando el formato
+            introducirEnTurnos(plantilla, turnos);
         }
-        return turnos;
     }
 
     /**
@@ -756,12 +768,39 @@ public class InicializarPoblacion {
      * @param turnos    Conjunto de turnos de trabajo en construccion.
      * @return Conjunto de turnos de trabajo en construccion con la nueva plantilla incorporada
      */
-    private static ArrayList<ArrayList<String>> introducirEnTurnos(ArrayList<ArrayList<String>> plantilla,
-                                                                   ArrayList<ArrayList<String>> turnos) {
-        if (plantilla.get(0).size() != 0) {
-            turnos.addAll(plantilla);
+    private static void introducirEnTurnos(ArrayList<ArrayList<String>> plantilla,
+                                           ArrayList<String> turnos) {
+
+        // Para cada "fila" de la plantilla
+        plantilla.forEach((pseudocontrolador) -> {
+            // primero cambiamos el formato
+            StringBuilder turnoString = new StringBuilder();
+            pseudocontrolador.forEach(slot -> turnoString.append(slot));
+
+            // segundo lo añadimos al turno
+            turnos.add(turnoString.toString());
+
+        });
+
+        // NOTE: Si no compila lo anterior, cámbiese por la version sin expresiones lambda:
+        /*
+
+        List<String> turnosFormateados = new ArrayList<>();
+        for (ArrayList<String> pseudocontrolador : plantilla) {
+
+            // primero cambiamos el formato
+            StringBuilder turnoString = new StringBuilder();
+            pseudocontrolador.forEach(slot->turnoString.append(slot));
+
+            for (String slot : pseudocontrolador)
+                turnoString.append(slot);
+
+            // segundo lo añadimos al turno
+            turnos.add(turnoString.toString());
         }
-        return turnos;
+
+        */
+
     }
 
     /**

@@ -344,7 +344,7 @@ public class FitnessFase3Info {
      * @return Valor de la funcion objetivo normalizado.
      */
     public static double maximizarAcreditacion(Entrada entrada, int numControladores, int numTurnos, ArrayList<String> turnos, double sectoresElementalesTotales) {
-        ArrayList<Sector> sectoresAbiertos = entrada.getListaSectoresAbiertos();
+        ArrayList<Sector> sectoresAbiertos = entrada.getListaSectoresAbiertosTrasMomentoActual();
         double cnt = 0;
         for (int i = 0; i < turnos.size(); i++) {
             String turno = turnos.get(i);

@@ -6,7 +6,6 @@ import estructurasDatos.DominioDelProblema.Sector;
 import estructurasDatos.Parametros;
 import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
-import herramientas.CridaUtils;
 import main.Main;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -120,7 +119,7 @@ public class EscrituraExcel {
             e.printStackTrace();
         }
         ArrayList<ArrayList<String>> sect = entrada.getSectorizacion();
-        ArrayList<Sector> sectAbiertos = entrada.getListaSectoresAbiertos();
+        ArrayList<Sector> sectAbiertos = entrada.getListaSectoresAbiertosTrasMomentoActual();
         /*MODIFICO LA SECTORIZACION PARA PASAR DE ID A NOMBRE*/
         for (int i = 0; i < sect.size(); i++) {
             ArrayList<String> slot = sect.get(i);
@@ -233,7 +232,7 @@ public class EscrituraExcel {
             /*INICIO SOLUCION*/
             ArrayList<String> sol = poblacion.get(e).getTurnos();
             ArrayList<Controlador> controladores = poblacion.get(e).getControladores();
-            ArrayList<Sector> lstSect = entrada.getListaSectoresAbiertos();
+            ArrayList<Sector> lstSect = entrada.getListaSectoresAbiertosTrasMomentoActual();
             for (int i = 0; i < sol.size(); i++) {
                 row = sheet.createRow(4 + i);
                 String line = sol.get(i);
