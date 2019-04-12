@@ -16,11 +16,7 @@ import patrones.Patrones;
 
 import java.util.ArrayList;
 import java.util.Collection;
-<<<<<<< HEAD
-import java.util.Iterator;
-=======
 import java.util.HashSet;
->>>>>>> 7bbd6052fffd31e098560a253806099f8b0c30e1
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -132,7 +128,6 @@ public class InicializarPoblacion {
 //        return individuo;
     }
 
-<<<<<<< HEAD
 private static void anadirControladoresAlta(Entrada entrada, Solucion individuo) {
 	ArrayList<Controlador> controladores = individuo.getControladores();
 	ArrayList<String> turnos = individuo.getTurnos();
@@ -202,14 +197,6 @@ private static void eliminarControladoresBaja(Entrada entrada, Solucion individu
 //        }
 //        return sol;
 //    }
-
-    private static void introducirPlantillaNuevosSectores(Entrada entrada, int descanso, int maxT, int minT, int minD) {
-        introduccionPlantillas(entrada, descanso, maxT, minT, minD);
-    }
-
-    // TODO: reaprovechar iteración para calcular los nuevos sectores e introducir plantillas???
-=======
->>>>>>> 7bbd6052fffd31e098560a253806099f8b0c30e1
     private static void eliminarSectoresCerrados(int slotMomentoActual, ArrayList<ArrayList<String>> sectorizacion,
                                                  ArrayList<ArrayList<String>> sectorizacionModificada,
                                                  Solucion distribucionInicial) {

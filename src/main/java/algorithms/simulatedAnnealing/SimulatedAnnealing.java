@@ -291,7 +291,7 @@ public class SimulatedAnnealing {
      * @param ind Solucion
      * @return Solucion ordenada.
      */
-    public static Solucion orderByLazyCriteria(Solucion ind) {
+    public static Solucion orderByLazyCriteria(Solucion ind) { // LEGACY
         /*
          * Ordena un array de controladores (el que tiene menos letras se situa primero y asi en orden)
          * Este orden se usa para saber cual es el controlador que menos trabaja.
