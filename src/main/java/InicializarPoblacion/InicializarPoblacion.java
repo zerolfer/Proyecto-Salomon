@@ -10,7 +10,6 @@ import estructurasDatos.Parametros;
 import estructurasDatos.Solucion;
 import main.MainPruebas;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.xmlbeans.impl.jam.xml.TunnelledException;
 
 import patrones.Patrones;
 
@@ -695,10 +694,10 @@ private static void eliminarControladoresBaja(Entrada entrada, Solucion individu
         ArrayList<String> turnos = distribucion.getTurnos(); // esto es la matriz de trabajo
 
         ArrayList<ArrayList<String>> sectorizacionPorSlots = entrada.getSectorizacionModificada();
-        ArrayList<Sector> sectoresAbiertosTrasMomentoActual = entrada.getListaSectoresAbiertosTrasMomentoActual();
+        List<Sector> sectoresNuevosAbiertosTrasMomentoActual = entrada.getListaNuevosSectoresAbiertosTrasMomentoActual();
         ArrayList<Integer> secNoc = new ArrayList<>();
 
-        for (Sector sector : sectoresAbiertosTrasMomentoActual) {
+        for (Sector sector : sectoresNuevosAbiertosTrasMomentoActual) {
 
             //
             // Crear plantilla para cada nuevo sector:
@@ -720,9 +719,11 @@ private static void eliminarControladoresBaja(Entrada entrada, Solucion individu
                 // para cada slot, verificamos si el sector está abierto en ese instante
                 for (int j = 0; j < sectorizacionPorSlots.size(); j++) {
 
-                    // FIXME: en las nuevas plantillas, antes del momento actual, añadimos 0s o 1s??
-//                    if(j<entrada.getSlotMomentoActual())
-//                        introducirCero(plantilla);
+                    // FIXME: en las nuevas plantillas, antes del momento actual, añadimos 0s o 1s?? -> SOLUCION: CEROS!!
+                    if(j<entrada.getSlotMomentoActual()) {
+//                        introducirCero(plantilla); //TODO: IMPLEMENTAR ESTE METODO
+                        continue;
+                    }
 
                     List<String> sectoresAbiertos = sectorizacionPorSlots.get(j);
                     boolean open = false;
@@ -746,7 +747,7 @@ private static void eliminarControladoresBaja(Entrada entrada, Solucion individu
                 }
                 if (!yaIntroducido) {
                     secNoc.add(sector.getNoche());
-                    plantilla = introducirSectorNoche(plantilla, sectoresAbiertosTrasMomentoActual, sector.getNoche(), sectorizacionPorSlots);
+                    plantilla = introducirSectorNoche(plantilla, sectoresNuevosAbiertosTrasMomentoActual, sector.getNoche(), sectorizacionPorSlots);
                 }
             }
 
@@ -765,7 +766,7 @@ private static void eliminarControladoresBaja(Entrada entrada, Solucion individu
      * @return Lista de turnos de trabajo, con los turnos para cubrir los sectores nocturos incluidos, si estos existen.
      */
     private static ArrayList<ArrayList<String>> introducirSectorNoche(ArrayList<ArrayList<String>> plantilla,
-                                                                      ArrayList<Sector> sectores, int noche,
+                                                                      List<Sector> sectores, int noche,
                                                                       ArrayList<ArrayList<String>> sectorizacion) {
         ArrayList<String> c4 = new ArrayList<>();
         plantilla.add(c4);

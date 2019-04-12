@@ -138,7 +138,7 @@ extends java.lang.Object</pre>
        java.util.ArrayList&lt;<a href="../../estructurasDatos/DominioDelProblema/Nucleo.html" title="class in estructurasDatos.DominioDelProblema">Nucleo</a>&gt;&nbsp;nucleos,
        <a href="../../estructurasDatos/DominioDelProblema/Turno.html" title="class in estructurasDatos.DominioDelProblema">Turno</a>&nbsp;turno,
        java.util.ArrayList&lt;<a href="../../estructurasDatos/DominioDelProblema/Sector.html" title="class in estructurasDatos.DominioDelProblema">Sector</a>&gt;&nbsp;listaSectores,
-       java.util.ArrayList&lt;<a href="../../estructurasDatos/DominioDelProblema/Sector.html" title="class in estructurasDatos.DominioDelProblema">Sector</a>&gt;&nbsp;listaSectoresAbiertosTrasMomentoActual,
+       java.util.ArrayList&lt;<a href="../../estructurasDatos/DominioDelProblema/Sector.html" title="class in estructurasDatos.DominioDelProblema">Sector</a>&gt;&nbsp;listaSectoresAbiertos,
        java.util.ArrayList&lt;java.util.ArrayList&lt;java.lang.String&gt;&gt;&nbsp;sectorizacion,
        java.util.ArrayList&lt;java.util.ArrayList&lt;java.lang.String&gt;&gt;&nbsp;matrizAfinidad,
        java.util.HashMap&lt;<a href="../../estructurasDatos/DominioDelProblema/Sector.html" title="class in estructurasDatos.DominioDelProblema">Sector</a>,java.util.ArrayList&lt;java.lang.String&gt;&gt;&nbsp;volumnsOfSectors,
@@ -218,7 +218,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../estructurasDatos/DominioDelProblema/Entrada.html#setListaSectoresAbiertos-java.util.ArrayList-">setListaSectoresAbiertos</a></span>(java.util.ArrayList&lt;<a href="../../estructurasDatos/DominioDelProblema/Sector.html" title="class in estructurasDatos.DominioDelProblema">Sector</a>&gt;&nbsp;listaSectoresAbiertosTrasMomentoActual)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../estructurasDatos/DominioDelProblema/Entrada.html#setListaSectoresAbiertos-java.util.ArrayList-">setListaSectoresAbiertos</a></span>(java.util.ArrayList&lt;<a href="../../estructurasDatos/DominioDelProblema/Sector.html" title="class in estructurasDatos.DominioDelProblema">Sector</a>&gt;&nbsp;listaSectoresAbiertos)</code>&nbsp;</td>
 </tr>
 <tr id="i14" class="altColor">
 <td class="colFirst"><code>void</code></td>
@@ -272,7 +272,7 @@ extends java.lang.Object</pre>
                java.util.ArrayList&lt;<a href="../../estructurasDatos/DominioDelProblema/Nucleo.html" title="class in estructurasDatos.DominioDelProblema">Nucleo</a>&gt;&nbsp;nucleos,
                <a href="../../estructurasDatos/DominioDelProblema/Turno.html" title="class in estructurasDatos.DominioDelProblema">Turno</a>&nbsp;turno,
                java.util.ArrayList&lt;<a href="../../estructurasDatos/DominioDelProblema/Sector.html" title="class in estructurasDatos.DominioDelProblema">Sector</a>&gt;&nbsp;listaSectores,
-               java.util.ArrayList&lt;<a href="../../estructurasDatos/DominioDelProblema/Sector.html" title="class in estructurasDatos.DominioDelProblema">Sector</a>&gt;&nbsp;listaSectoresAbiertosTrasMomentoActual,
+               java.util.ArrayList&lt;<a href="../../estructurasDatos/DominioDelProblema/Sector.html" title="class in estructurasDatos.DominioDelProblema">Sector</a>&gt;&nbsp;listaSectoresAbiertos,
                java.util.ArrayList&lt;java.util.ArrayList&lt;java.lang.String&gt;&gt;&nbsp;sectorizacion,
                java.util.ArrayList&lt;java.util.ArrayList&lt;java.lang.String&gt;&gt;&nbsp;matrizAfinidad,
                java.util.HashMap&lt;<a href="../../estructurasDatos/DominioDelProblema/Sector.html" title="class in estructurasDatos.DominioDelProblema">Sector</a>,java.util.ArrayList&lt;java.lang.String&gt;&gt;&nbsp;volumnsOfSectors,
@@ -284,7 +284,7 @@ extends java.lang.Object</pre>
 <dd><code>nucleos</code> - Nucleos con sectores abiertos para la instacia del problema a resolver.</dd>
 <dd><code>turno</code> - Turno a resolver.</dd>
 <dd><code>listaSectores</code> - Lista de todos los sectores que componen el espacio aereo del aeropuerto.</dd>
-<dd><code>listaSectoresAbiertosTrasMomentoActual</code> - Lista de los sectores operativos en la instancia del problema.</dd>
+<dd><code>listaSectoresAbiertos</code> - Lista de los sectores operativos en la instancia del problema.</dd>
 <dd><code>sectorizacion</code> - Sectorizacion utilizada en la instancia del problema. La sectorizacion es el conjunto de sectores que se abren y cierran durante la duracion del turno.</dd>
 <dd><code>matrizAfinidad</code> - Indica los sectores que tienen afinidad entre si.</dd>
 <dd><code>volumnsOfSectors</code> - Lista con todos los sectores y los volumenes asociados a estos.</dd>
@@ -435,7 +435,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>setListaSectoresAbiertos</h4>
-<pre>public&nbsp;void&nbsp;setListaSectoresAbiertos(java.util.ArrayList&lt;<a href="../../estructurasDatos/DominioDelProblema/Sector.html" title="class in estructurasDatos.DominioDelProblema">Sector</a>&gt;&nbsp;listaSectoresAbiertosTrasMomentoActual)</pre>
+<pre>public&nbsp;void&nbsp;setListaSectoresAbiertos(java.util.ArrayList&lt;<a href="../../estructurasDatos/DominioDelProblema/Sector.html" title="class in estructurasDatos.DominioDelProblema">Sector</a>&gt;&nbsp;listaSectoresAbiertos)</pre>
 </li>
 </ul>
 <a name="getVolumnsOfSectors--">

@@ -79,7 +79,7 @@ public class Patrones {
         array[89] = Pattern.compile("([A-Z]{3})");
         array[88] = Pattern.compile("([a-z]{3})");
 
-        ArrayList<Sector> lstSec = entrada.getListaSectoresAbiertosTrasMomentoActual();
+        ArrayList<Sector> lstSec = entrada.getListaSectoresAbiertos();
         String ls = "";
         for (int i = 0; i < lstSec.size(); i++) {
             if (lstSec.get(i).isRuta()) {

@@ -176,7 +176,7 @@ public class Fitness {
             }
         } else {
             /*Inicio Normalizacion*/
-            double cMax = entrada.getListaSectoresAbiertosTrasMomentoActual().size() * 3;
+            double cMax = entrada.getListaSectoresAbiertos().size() * 3;
             double f1Max = 0;
             double f1Min = 0;
             for (int i = 1; i <= tmn; i++) {

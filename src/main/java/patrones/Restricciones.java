@@ -99,7 +99,7 @@ public class Restricciones {
         restriccionesNoCumplidas[6] = n;
         //Restriccion 11
         t1 = System.currentTimeMillis();
-        n = comprobarCambioPosicion(individuo.getTurnos(), entrada.getMatrizAfinidad(), entrada.getListaSectoresAbiertosTrasMomentoActual());
+        n = comprobarCambioPosicion(individuo.getTurnos(), entrada.getMatrizAfinidad(), entrada.getListaSectoresAbiertos());
         p += (n * pesoPorRestriccion[7]);
         timers[7] += System.currentTimeMillis() - t1;
         restriccionesNoCumplidas[7] = n;
@@ -308,7 +308,7 @@ public class Restricciones {
         //TODO: En vez de sumar uno al incumplir, se puede sumar la diferencia (es decir, por cuanto pasa la restriccion), da mas informacion.
         int p = 0;
         for (String turno : turnos) {
-            ArrayList<Sector> sectoresAbiertosEnTurno = listaDeSectoresTurno(turno, entrada.getListaSectoresAbiertosTrasMomentoActual());
+            ArrayList<Sector> sectoresAbiertosEnTurno = listaDeSectoresTurno(turno, entrada.getListaSectoresAbiertos());
             if (calculate(sectoresAbiertosEnTurno, entrada.getVolumnsOfSectors()) > parametros.getNumSctrsMax()) {
                 p++;
             }

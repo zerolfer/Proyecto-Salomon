@@ -48,7 +48,23 @@ public class Entrada {
     /**
      * Lista de los sectores operativos en la instancia del problema.
      */
-    private ArrayList<Sector> listaSectoresAbiertosTrasMomentoActual;
+    private ArrayList<Sector> listaSectoresAbiertos;
+
+    /**
+     * <p>
+     * Lista de los sectores que se abren en la nueva sectorización.
+     * Incluye aquellos sectores que, si bien no son nuevos,
+     * se abren en un momento diferente en la nueva sectorización
+     * </p>
+     * <p>
+     * (Son tratados como nuevos en
+     * {@link InicializarPoblacion.InicializarPoblacion#introducirPlantillasNuevosSectores})
+     * </p>
+     * <p>
+     * Inicializado en {@link #crearListaNuevosSectoresAbiertos}
+     * </p>
+     */
+    private final List<Sector> listaNuevosSectoresAbiertosTrasMomentoActual;
     /**
      * Lista con todos los sectores y los volumenes asociados a estos.
      */
@@ -75,8 +91,9 @@ public class Entrada {
      * @param sectorizacionModificada
      */
     public Entrada(ArrayList<Controlador> controladores, ArrayList<Nucleo> nucleos, Turno turno,
-                   ArrayList<Sector> listaSectores, ArrayList<Sector> listaSectoresAbiertosTrasMomentoActual,
-                   ArrayList<ArrayList<String>> sectorizacion, ArrayList<ArrayList<String>> matrizAfinidad,
+                   ArrayList<Sector> listaSectores, ArrayList<Sector> listaSectoresAbiertos,
+                   ArrayList<Sector> listaNuevosSectoresAbiertosTrasMomentoActual, ArrayList<ArrayList<String>> sectorizacion,
+                   ArrayList<ArrayList<String>> matrizAfinidad,
                    HashMap<Sector, ArrayList<String>> volumnsOfSectors, /*int cargaTrabajo,*/
                    ArrayList<ArrayList<String>> sectorizacionModificada,
                    Solucion distribucionInicial, int slotMomentoActual) {
@@ -86,7 +103,8 @@ public class Entrada {
         this.listaSectores = listaSectores;
         this.sectorizacion = sectorizacion;
         this.matrizAfinidad = matrizAfinidad;
-        this.listaSectoresAbiertosTrasMomentoActual = listaSectoresAbiertosTrasMomentoActual;
+        this.listaSectoresAbiertos = listaSectoresAbiertos;
+        this.listaNuevosSectoresAbiertosTrasMomentoActual = listaNuevosSectoresAbiertosTrasMomentoActual;
         this.volumnsOfSectors = volumnsOfSectors;
 //        this.cargaTrabajo = cargaTrabajo;
         this.sectorizacionModificada = sectorizacionModificada;
@@ -99,10 +117,10 @@ public class Entrada {
         ArrayList<String> fAperturaSectores = rwFiles.Lectura.Listar("entrada/Casos/" + path + "/AperturaSectorizaciones_" + entradaId + ".csv");
         ArrayList<String> fRecursosDisponibles = rwFiles.Lectura.Listar("entrada/Casos/" + path + "/RecursosDisponibles_" + entradaId + ".csv");
         ArrayList<String> fTurno = rwFiles.Lectura.Listar("entrada/Casos/" + path + "/Turno_" + entradaId + ".csv");
-        ArrayList<String> fModificacionSectores = rwFiles.Lectura.Listar("entrada/Casos/" + path + "/ModificacionSectorizaciones_" + entradaId + ".csv");
+        ArrayList<String> fModificacionSectores = rwFiles.Lectura.Listar("entrada/Casos/" + path + "/ModificacionSectorizaciones_" + entradaId + ".csv",true);
 
         ArrayList<String> fModificacionRecursos = rwFiles.Lectura.Listar("entrada/Casos/" + path + "/ModificacionRecursos_" + entradaId + ".csv", true);
-        ArrayList<String> fDistribucionInicial = rwFiles.Lectura.Listar("entrada/Casos/" + path + "/DistribucionInicial_" + entradaId + ".csv", true);
+        ArrayList<String> fDistribucionInicial = rwFiles.Lectura.Listar("entrada/Casos/" + path + "/DistribucionInicial_" + entradaId + ".csv");
 
 
         ArrayList<String> fListaSectoresElementales = rwFiles.Lectura.Listar("entrada/" + entorno + "/ListaSectoresElementales_" + entorno + ".csv");
@@ -119,24 +137,28 @@ public class Entrada {
         Turno turno = crearTurno(fTurno, parametros);
         ArrayList<ArrayList<String>> sectorizacion = crearSectorizacion(fAperturaSectores, fSectorizacionSectoresVolumenes, turno, listaSectores);
         ArrayList<ArrayList<String>> sectorizacionModificada = null;
+        ArrayList<Sector> listaNuevosSectoresAbiertosTrasMomentoActual = null; // Hay que verificar que son NULL o no al acceder a ellos
+
+        int slotMomentoActual = crearMomentoActual(turno, fDistribucionInicial);
 
         if (!fModificacionSectores.isEmpty()) {
-            sectorizacionModificada = crearSectorizacion(fModificacionSectores, fSectorizacionSectoresVolumenes, turno, listaSectores);// FIXME
+            sectorizacionModificada = crearSectorizacion(fModificacionSectores, fSectorizacionSectoresVolumenes, turno, listaSectores);
+            listaNuevosSectoresAbiertosTrasMomentoActual =
+                    crearListaNuevosSectoresAbiertos(slotMomentoActual, sectorizacion, sectorizacionModificada, listaSectores);
         }
         if (!fModificacionRecursos.isEmpty()) {
             modificarControladores(controladores, fModificacionRecursos, turno);
         }
 
-        int slotMomentoActual = crearMomentoActual(turno, fDistribucionInicial);
+        ArrayList<Sector> listaSectoresAbiertos =
+                crearListaSectoresAbiertos(slotMomentoActual, sectorizacion, listaSectores);
 
-        ArrayList<Sector> listaSectoresAbiertosTrasMomentoActual =
-                crearListaNuevosSectoresAbiertos(slotMomentoActual, sectorizacion, sectorizacionModificada, listaSectores);
-        HashMap<Sector, ArrayList<String>> volumnsOfSectors = crearHashMapSectoresVolumenes(listaSectoresAbiertosTrasMomentoActual, fSectorizacionSectoresVolumenes);
-//        int cargaTrabajo = calcularCargaTrabajo(sectorizacion, controladores, listaSectoresAbiertosTrasMomentoActual);
+        HashMap<Sector, ArrayList<String>> volumnsOfSectors = crearHashMapSectoresVolumenes(listaSectoresAbiertos, fSectorizacionSectoresVolumenes);
+//        int cargaTrabajo = calcularCargaTrabajo(sectorizacion, controladores, listaNuevosSectoresAbiertosTrasMomentoActual);
 
         Solucion distribucionInicial = crearSolucionInicial(fDistribucionInicial, listaSectores, controladores, parametros);
 
-        Entrada entrada = new Entrada(controladores, nucleos, turno, listaSectores, listaSectoresAbiertosTrasMomentoActual,
+        Entrada entrada = new Entrada(controladores, nucleos, turno, listaSectores, listaSectoresAbiertos, listaNuevosSectoresAbiertosTrasMomentoActual,
                 sectorizacion, matrizAfinidad, volumnsOfSectors, sectorizacionModificada, distribucionInicial, slotMomentoActual);
 
         return entrada;
@@ -330,14 +352,14 @@ public class Entrada {
             // para cada sector abierto en ese slot
             for (String sct : slot) {
 
-                // Si aun no esta en la lista (lo ponemos primero para mayor eficiencia)
+                // Si aun no esta en la lista (esta condición primero para mayor eficiencia)
                 // (No es necesario verificar la capitalización puesto que todos vienen con minúscula)
                 if (!CridaUtils.containsSectorById/*IngoreCase*/(sectoresAbiertos, sct)
                         // Y si tampoco pertenece a la sectorización antigua
                         // (con esta condición, si un sector no-nuevo se abre en la nueva sectorización,
                         // en un momento que antes no lo hacía, también se le considera como nuevo
                         // [y será tratado como los demás: le añadirá plantilla, etc.])
-                        && !sectorizacion.get(numSlot).contains(sct)) { // TODO: ¿es éste el comportamiento deseado?
+                        && !sectorizacion.get(numSlot).contains(sct)) {
 
                     // buscamos el "Sector" de entre todos los sectores de la instancia del problema
                     Sector s = CridaUtils.findSectorById(listaSectores, sct);
@@ -346,7 +368,7 @@ public class Entrada {
                     if (s == null)
                         throw new RuntimeException("No se encuentra el sector con id \"" + sct + "\"");
 
-                        // pero si todo va bien, entonces lo añadimos a la lista
+                    // pero si todo va bien, entonces lo añadimos a la lista
                     else sectoresAbiertos.add(s.clone());
                 }
 
@@ -670,12 +692,12 @@ public class Entrada {
         this.matrizAfinidad = matrizAfinidad;
     }
 
-    public ArrayList<Sector> getListaSectoresAbiertosTrasMomentoActual() {
-        return listaSectoresAbiertosTrasMomentoActual;
+    public ArrayList<Sector> getListaSectoresAbiertos() {
+        return listaSectoresAbiertos;
     }
 
-    public void setListaSectoresAbiertosTrasMomentoActual(ArrayList<Sector> listaSectoresAbiertosTrasMomentoActual) {
-        this.listaSectoresAbiertosTrasMomentoActual = listaSectoresAbiertosTrasMomentoActual;
+    public void setListaSectoresAbiertos(ArrayList<Sector> listaSectoresAbiertos) {
+        this.listaSectoresAbiertos = listaSectoresAbiertos;
     }
 
     public HashMap<Sector, ArrayList<String>> getVolumnsOfSectors() {
@@ -705,7 +727,7 @@ public class Entrada {
     }
 
 
-    public void setSlotMomentoActual(int slotMomentoActual) {
-        this.slotMomentoActual = slotMomentoActual;
+    public List<Sector> getListaNuevosSectoresAbiertosTrasMomentoActual() {
+        return listaNuevosSectoresAbiertosTrasMomentoActual;
     }
 }
