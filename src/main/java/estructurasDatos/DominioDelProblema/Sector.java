@@ -1,6 +1,7 @@
 package estructurasDatos.DominioDelProblema;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Objeto Sector, el cual contiene toda la informacion relativa a los sectores del espacio aereo de un aeropuerto
@@ -54,9 +55,8 @@ public class Sector implements Cloneable {
 
     }
 
-    public Object clone() {
-        Sector s = new Sector(this.nombre, this.id, this.pDT, this.ruta, this.noche, this.sectoresElementales);
-        return s;
+    public Sector clone() {
+        return new Sector(this.nombre, this.id, this.pDT, this.ruta, this.noche, this.sectoresElementales);
     }
 
     public ArrayList<String> getSectoresElementales() {
@@ -105,5 +105,30 @@ public class Sector implements Cloneable {
 
     public void setNoche(int noche) {
         this.noche = noche;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Sector sector = (Sector) o;
+        return id.equals(sector.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Sector{" +
+                "nombre='" + nombre + '\'' +
+                ", id='" + id + '\'' +
+                ", pDT=" + pDT +
+                ", ruta=" + ruta +
+                ", noche=" + noche +
+                ", sectoresElementales=" + sectoresElementales +
+                '}';
     }
 }

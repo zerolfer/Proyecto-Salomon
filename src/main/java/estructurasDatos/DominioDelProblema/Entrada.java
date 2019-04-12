@@ -3,6 +3,7 @@ package estructurasDatos.DominioDelProblema;
 import estructurasDatos.Parametros;
 import estructurasDatos.Solucion;
 import fitnessFunction.Fitness;
+import herramientas.CridaUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public class Entrada {
     /**
      * Lista de los sectores operativos en la instancia del problema.
      */
-    private ArrayList<Sector> listaSectoresAbiertos;
+    private ArrayList<Sector> listaSectoresAbiertosTrasMomentoActual;
     /**
      * Lista con todos los sectores y los volumenes asociados a estos.
      */
@@ -55,28 +56,28 @@ public class Entrada {
     /**
      * Carga de trabajo total representada en slots.
      */
-    private int cargaTrabajo;
+//    private int cargaTrabajo; TODO: es necesario? Nunca se usaba...
     private ArrayList<ArrayList<String>> sectorizacionModificada;
     private int slotMomentoActual;
 
     /**
      * Contructor
      *
-     * @param controladores            Lista con los controladores disponibles y sus caracteristicas.
-     * @param nucleos                  Nucleos con sectores abiertos para la instacia del problema a resolver.
-     * @param turno                    Turno a resolver.
-     * @param listaSectores            Lista de todos los sectores que componen el espacio aereo del aeropuerto.
-     * @param listaSectoresAbiertos    Lista de los sectores operativos en la instancia del problema.
-     * @param sectorizacion            Sectorizacion utilizada en la instancia del problema. La sectorizacion es el conjunto de sectores que se abren y cierran durante la duracion del turno.
-     * @param matrizAfinidad           Indica los sectores que tienen afinidad entre si.
-     * @param volumnsOfSectors         Lista con todos los sectores y los volumenes asociados a estos.
-     * @param cargaTrabajo             Carga de trabajo total representada en slots.
+     * @param controladores           Lista con los controladores disponibles y sus caracteristicas.
+     * @param nucleos                 Nucleos con sectores abiertos para la instacia del problema a resolver.
+     * @param turno                   Turno a resolver.
+     * @param listaSectores           Lista de todos los sectores que componen el espacio aereo del aeropuerto.
+     * @param listaSectoresAbiertos   Lista de los sectores operativos en la instancia del problema.
+     * @param sectorizacion           Sectorizacion utilizada en la instancia del problema. La sectorizacion es el conjunto de sectores que se abren y cierran durante la duracion del turno.
+     * @param matrizAfinidad          Indica los sectores que tienen afinidad entre si.
+     * @param volumnsOfSectors        Lista con todos los sectores y los volumenes asociados a estos.
+     * @param cargaTrabajo            Carga de trabajo total representada en slots.
      * @param sectorizacionModificada
      */
     public Entrada(ArrayList<Controlador> controladores, ArrayList<Nucleo> nucleos, Turno turno,
-                   ArrayList<Sector> listaSectores, ArrayList<Sector> listaSectoresAbiertos,
+                   ArrayList<Sector> listaSectores, ArrayList<Sector> listaSectoresAbiertosTrasMomentoActual,
                    ArrayList<ArrayList<String>> sectorizacion, ArrayList<ArrayList<String>> matrizAfinidad,
-                   HashMap<Sector, ArrayList<String>> volumnsOfSectors, int cargaTrabajo,
+                   HashMap<Sector, ArrayList<String>> volumnsOfSectors, /*int cargaTrabajo,*/
                    ArrayList<ArrayList<String>> sectorizacionModificada,
                    Solucion distribucionInicial, int slotMomentoActual) {
         this.controladores = controladores;
@@ -85,9 +86,9 @@ public class Entrada {
         this.listaSectores = listaSectores;
         this.sectorizacion = sectorizacion;
         this.matrizAfinidad = matrizAfinidad;
-        this.listaSectoresAbiertos = listaSectoresAbiertos;
+        this.listaSectoresAbiertosTrasMomentoActual = listaSectoresAbiertosTrasMomentoActual;
         this.volumnsOfSectors = volumnsOfSectors;
-        this.cargaTrabajo = cargaTrabajo;
+//        this.cargaTrabajo = cargaTrabajo;
         this.sectorizacionModificada = sectorizacionModificada;
         this.distribucionInicial = distribucionInicial;
         this.slotMomentoActual = slotMomentoActual;
@@ -118,7 +119,7 @@ public class Entrada {
         Turno turno = crearTurno(fTurno, parametros);
         ArrayList<ArrayList<String>> sectorizacion = crearSectorizacion(fAperturaSectores, fSectorizacionSectoresVolumenes, turno, listaSectores);
         ArrayList<ArrayList<String>> sectorizacionModificada = null;
-        
+
         if (!fModificacionSectores.isEmpty()) {
             sectorizacionModificada = crearSectorizacion(fModificacionSectores, fSectorizacionSectoresVolumenes, turno, listaSectores);// FIXME
         }
@@ -126,16 +127,17 @@ public class Entrada {
             modificarControladores(controladores, fModificacionRecursos, turno);
         }
 
-
-        ArrayList<Sector> listaSectoresAbiertos = crearListaSectoresAbiertos(sectorizacion, listaSectores);
-        HashMap<Sector, ArrayList<String>> volumnsOfSectors = crearHashMapSectoresVolumenes(listaSectoresAbiertos, fSectorizacionSectoresVolumenes);
-        int cargaTrabajo = calcularCargaTrabajo(sectorizacion, controladores, listaSectoresAbiertos);
-
-        Solucion distribucionInicial = crearSolucionInicial(fDistribucionInicial, listaSectores, controladores, parametros);
         int slotMomentoActual = crearMomentoActual(turno, fDistribucionInicial);
 
-        Entrada entrada = new Entrada(controladores, nucleos, turno, listaSectores, listaSectoresAbiertos,
-                sectorizacion, matrizAfinidad, volumnsOfSectors, cargaTrabajo, sectorizacionModificada, distribucionInicial,slotMomentoActual);
+        ArrayList<Sector> listaSectoresAbiertosTrasMomentoActual =
+                crearListaNuevosSectoresAbiertos(slotMomentoActual, sectorizacion, sectorizacionModificada, listaSectores);
+        HashMap<Sector, ArrayList<String>> volumnsOfSectors = crearHashMapSectoresVolumenes(listaSectoresAbiertosTrasMomentoActual, fSectorizacionSectoresVolumenes);
+//        int cargaTrabajo = calcularCargaTrabajo(sectorizacion, controladores, listaSectoresAbiertosTrasMomentoActual);
+
+        Solucion distribucionInicial = crearSolucionInicial(fDistribucionInicial, listaSectores, controladores, parametros);
+
+        Entrada entrada = new Entrada(controladores, nucleos, turno, listaSectores, listaSectoresAbiertosTrasMomentoActual,
+                sectorizacion, matrizAfinidad, volumnsOfSectors, sectorizacionModificada, distribucionInicial, slotMomentoActual);
 
         return entrada;
     }
@@ -150,7 +152,7 @@ public class Entrada {
         ArrayList<String> turnos = new ArrayList<>();
         List<Integer> intervalos = new ArrayList<>();
         for (int i = 1; i < entrada.size(); i++) {
-		    String[] columnas = entrada.get(i).split(";");
+            String[] columnas = entrada.get(i).split(";");
             if (columnas[0].contains("-")) // (Si se cambia por "equals" no funciona)
                 intervalos = actualizarIntervalos(columnas);
             else { // en caso contrario, creamos el turno y lo asignamos al controlador de la primera columna
@@ -170,7 +172,7 @@ public class Entrada {
         // saltamos la primera columna
         for (int i = 1; i < columnas.length; i++) {
             int intervaloActual = intervalos.get(i - 1); // restamos uno debido a la disonancia de las dos listas
-            String idSector=STRING_DESCANSO;
+            String idSector = STRING_DESCANSO;
             if (!columnas[i].contains(STRING_DESCANSO)) {
                 idSector = obtenerIdSector(columnas[i], listaSectores);
                 idSector = Character.isUpperCase(columnas[i].charAt(0)) ? idSector.toUpperCase() : idSector/*.toLowerCase()*/;
@@ -215,7 +217,7 @@ public class Entrada {
     }
 
     private static void modificarControladores(ArrayList<Controlador> controladores,
-                                                                 ArrayList<String> entrada, Turno turno) {
+                                               ArrayList<String> entrada, Turno turno) {
         for (int i = 1; i < entrada.size(); i++) {
             String[] linea = entrada.get(i).split(";");
             Controlador c = null;
@@ -232,14 +234,14 @@ public class Entrada {
 
             }
             if (!existe) {
-            	if(linea[5].equalsIgnoreCase("PTD")) {
-            		c = (new Controlador(lineaId, linea[5], linea[4], true, false,
+                if (linea[5].equalsIgnoreCase("PTD")) {
+                    c = (new Controlador(lineaId, linea[5], linea[4], true, false,
                             false, Propiedades.ALTA, calcularSlot(turno, linea[2])));
-            	}else if(linea[5].equalsIgnoreCase("CON")){
-            		c = (new Controlador(lineaId, linea[5], linea[4], false, true,
+                } else if (linea[5].equalsIgnoreCase("CON")) {
+                    c = (new Controlador(lineaId, linea[5], linea[4], false, true,
                             false, Propiedades.ALTA, calcularSlot(turno, linea[2])));
-            	}
-                
+                }
+
                 controladores.add(c);
             }
 
@@ -285,29 +287,74 @@ public class Entrada {
         return volumnsOfSectors;
     }
 
-    private static ArrayList<Sector> crearListaSectoresAbiertos(ArrayList<ArrayList<String>> sectorizacion, ArrayList<Sector> listaSectores) {
-        ArrayList<Sector> sectoresAbiertos = new ArrayList<>();
-        for (int i = 0; i < sectorizacion.size(); i++) {
+    private static ArrayList<Sector> crearListaSectoresAbiertos(int slotMomentoActual, ArrayList<ArrayList<String>> sectorizacion, ArrayList<Sector> listaSectores) {
+        List<Sector> sectoresAbiertos = new ArrayList<>();
+
+        // para cada slot
+        for (int i = slotMomentoActual; i < sectorizacion.size(); i++) {
             ArrayList<String> slot = sectorizacion.get(i);
-            for (int j = 0; j < slot.size(); j++) {
-                String sct = slot.get(j);
-                for (int k = 0; k < listaSectores.size(); k++) {
-                    if (sct.equalsIgnoreCase(listaSectores.get(k).getId())) {
-                        boolean esta = false;
-                        for (int l = 0; l < sectoresAbiertos.size(); l++) {
-                            if (sectoresAbiertos.get(l).getId().equalsIgnoreCase(sct)) {
-                                esta = true;
-                            }
-                        }
-                        if (!esta) {
-                            sectoresAbiertos.add((Sector) listaSectores.get(k).clone());
-                        }
-                    }
+
+            // para cada sector abierto en ese slot
+            for (String sct : slot) {
+
+                // Si aun no esta en la lista (lo ponemos primero para major eficiencia)
+                // No es necesario verificar la capitalización puesto que todos vienen con minúscula
+                if (!CridaUtils.containsSectorById/*IngoreCase*/(sectoresAbiertos, sct)) {
+
+                    // buscamos el "Sector" de entre todos los sectores de la instancia del problema
+                    Sector s = CridaUtils.findSectorById(listaSectores, sct);
+
+                    // si no existe el sector es que algo va mal
+                    if (s == null)
+                        throw new RuntimeException("No se encuentra el sector con id \"" + sct + "\"");
+
+                        // pero si todo va bien, entonces lo añadimos a la lista
+                    else sectoresAbiertos.add(s.clone());
                 }
+
             }
         }
-        return sectoresAbiertos;
+        return new ArrayList<>(sectoresAbiertos);
     }
+
+    private static ArrayList<Sector> crearListaNuevosSectoresAbiertos(int slotMomentoActual,
+                                                                      ArrayList<ArrayList<String>> sectorizacion,
+                                                                      ArrayList<ArrayList<String>> sectorizacionModificada,
+                                                                      ArrayList<Sector> listaSectores) {
+        List<Sector> sectoresAbiertos = new ArrayList<>();
+
+        // para cada slot
+        for (int numSlot = slotMomentoActual; numSlot < sectorizacion.size(); numSlot++) {
+            ArrayList<String> slot = sectorizacionModificada.get(numSlot);
+
+            // para cada sector abierto en ese slot
+            for (String sct : slot) {
+
+                // Si aun no esta en la lista (lo ponemos primero para mayor eficiencia)
+                // (No es necesario verificar la capitalización puesto que todos vienen con minúscula)
+                if (!CridaUtils.containsSectorById/*IngoreCase*/(sectoresAbiertos, sct)
+                        // Y si tampoco pertenece a la sectorización antigua
+                        // (con esta condición, si un sector no-nuevo se abre en la nueva sectorización,
+                        // en un momento que antes no lo hacía, también se le considera como nuevo
+                        // [y será tratado como los demás: le añadirá plantilla, etc.])
+                        && !sectorizacion.get(numSlot).contains(sct)) { // TODO: ¿es éste el comportamiento deseado?
+
+                    // buscamos el "Sector" de entre todos los sectores de la instancia del problema
+                    Sector s = CridaUtils.findSectorById(listaSectores, sct);
+
+                    // si no existe el sector es que algo va mal
+                    if (s == null)
+                        throw new RuntimeException("No se encuentra el sector con id \"" + sct + "\"");
+
+                        // pero si todo va bien, entonces lo añadimos a la lista
+                    else sectoresAbiertos.add(s.clone());
+                }
+
+            }
+        }
+        return new ArrayList<>(sectoresAbiertos);
+    }
+
 
     private static ArrayList<ArrayList<String>> crearMatrizAfinidad(ArrayList<String> entrada, ArrayList<Sector> listaSectores) {
         ArrayList<ArrayList<String>> matrizAfinidad = new ArrayList<>();
@@ -623,12 +670,12 @@ public class Entrada {
         this.matrizAfinidad = matrizAfinidad;
     }
 
-    public ArrayList<Sector> getListaSectoresAbiertos() {
-        return listaSectoresAbiertos;
+    public ArrayList<Sector> getListaSectoresAbiertosTrasMomentoActual() {
+        return listaSectoresAbiertosTrasMomentoActual;
     }
 
-    public void setListaSectoresAbiertos(ArrayList<Sector> listaSectoresAbiertos) {
-        this.listaSectoresAbiertos = listaSectoresAbiertos;
+    public void setListaSectoresAbiertosTrasMomentoActual(ArrayList<Sector> listaSectoresAbiertosTrasMomentoActual) {
+        this.listaSectoresAbiertosTrasMomentoActual = listaSectoresAbiertosTrasMomentoActual;
     }
 
     public HashMap<Sector, ArrayList<String>> getVolumnsOfSectors() {
@@ -639,13 +686,13 @@ public class Entrada {
         this.volumnsOfSectors = volumnsOfSectors;
     }
 
-    public int getCargaTrabajo() {
-        return cargaTrabajo;
-    }
+//    public int getCargaTrabajo() {
+//        return cargaTrabajo;
+//    }
 
-    public void setCargaTrabajo(int cargaTrabajo) {
-        this.cargaTrabajo = cargaTrabajo;
-    }
+//    public void setCargaTrabajo(int cargaTrabajo) {
+//        this.cargaTrabajo = cargaTrabajo;
+//    }
 
 
     public Solucion getDistribucionInicial() {
@@ -653,12 +700,12 @@ public class Entrada {
     }
 
 
-	public int getSlotMomentoActual() {
-		return slotMomentoActual;
-	}
+    public int getSlotMomentoActual() {
+        return slotMomentoActual;
+    }
 
 
-	public void setSlotMomentoActual(int slotMomentoActual) {
-		this.slotMomentoActual = slotMomentoActual;
-	}
+    public void setSlotMomentoActual(int slotMomentoActual) {
+        this.slotMomentoActual = slotMomentoActual;
+    }
 }
