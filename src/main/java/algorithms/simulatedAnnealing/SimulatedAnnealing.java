@@ -1,14 +1,13 @@
 package algorithms.simulatedAnnealing;
 
 
+import algorithms.MetaheuristicUtil;
 import algorithms.simulatedAnnealing.moves.DeciderMove;
-import estructurasDatos.DominioDelProblema.Controlador;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
 import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
 import fitnessFunction.DeciderFitnessFunction;
-import fitnessFunction.Fitness;
 import main.MainPruebas;
 import patrones.Patrones;
 import patrones.Restricciones;
@@ -75,7 +74,6 @@ public class SimulatedAnnealing {
      * @param parametros    Parametros del problema.
      * @param patrones      Patrones utilizados para la comprobacion de restricciones.
      * @param entrada       Entrada del problema.
-     * @param primeraSolFac
      * @return Devuelve una solucion optimizada.
      */
     public static Solucion simulatedAnnealing(Solucion individuo, int n, ParametrosAlgoritmo parametrosAlg,
@@ -114,7 +112,7 @@ public class SimulatedAnnealing {
         int gMin = (parametrosAlg.SA.getTamañoMinMov() / parametros.getTamanoSlots()) * 3;
         int iteracionActual = 0;
         double val1 = 0, val2 = 0, porcentMejora = 1;
-        individuo = orderByLazyCriteria(individuo);
+        individuo = MetaheuristicUtil.orderByLazyCriteria(individuo);
         double rand = 0;
         double empeora = 0;
         double aMejor = 1;
@@ -142,7 +140,7 @@ public class SimulatedAnnealing {
             Solucion individuo2 = DeciderMove.switchMoves(individuo, gMax, gMin, 0, parametrosAlg, patrones, entrada,
                     parametros, new ArrayList<String>());
             if (individuo.getTurnos().size() != individuo.getControladores().size()) {
-                individuo2 = orderByLazyCriteria(individuo2);
+                individuo2 = MetaheuristicUtil.orderByLazyCriteria(individuo2);
             }
 
             //fitIteraciones1 = DeciderFitnessFunction.switchFitnessF(individuo, patrones, entrada, parametros,
@@ -283,55 +281,6 @@ public class SimulatedAnnealing {
 //		trazas = new ArrayList<ArrayList<String>>();
         /*Trazas5*/
         return bestSol;
-    }
-
-    /**
-     * Ordena en la solucion, los turnos de trabajo de menor a mayor carga de trabajo en la lista.
-     *
-     * @param ind Solucion
-     * @return Solucion ordenada.
-     */
-    public static Solucion orderByLazyCriteria(Solucion ind) { // LEGACY
-        /*
-         * Ordena un array de controladores (el que tiene menos letras se situa primero y asi en orden)
-         * Este orden se usa para saber cual es el controlador que menos trabaja.
-         */
-        ArrayList<Controlador> controladores = ind.getControladores();
-        ArrayList<Integer> numControladores = new ArrayList<>();
-        ArrayList<String> individuo2 = new ArrayList<>();
-        ArrayList<String> individuo = ind.getTurnos();
-        ArrayList<Integer> order = new ArrayList<>();
-        for (int i = 0; i < individuo.size(); i++) {
-            int[] sum = Fitness.slotsClassification(individuo.get(i));
-            order.add(sum[1]);
-        }
-        for (int e = 0; e < order.size(); e++) {
-            int r = 0;
-            int lAnt = 288;
-            for (int i = 0; i < order.size(); i++) {
-                if (lAnt > order.get(i)) {
-                    lAnt = order.get(i);
-                    r = i;
-                }
-            }
-            order.set(r, 300);
-            individuo2.add(individuo.get(r));
-            for (int i = 0; i < controladores.size(); i++) {
-                if (r == controladores.get(i).getTurnoAsignado()) {
-                    numControladores.add(controladores.get(i).getId());
-                }
-            }
-        }
-        for (int i = 0; i < numControladores.size(); i++) {
-            for (int j = 0; j < controladores.size(); j++) {
-                if (numControladores.get(i) == controladores.get(j).getId()) {
-                    controladores.get(j).setTurnoAsignado(i);
-                }
-            }
-        }
-        ind.setTurnos(individuo2);
-        ind.setControladores(controladores);
-        return ind;
     }
 
 }

@@ -1,5 +1,6 @@
 package algorithms.VNS;
 
+import algorithms.MetaheuristicUtil;
 import algorithms.VNS.moves.DeciderMove;
 import estructurasDatos.DominioDelProblema.Controlador;
 import estructurasDatos.DominioDelProblema.Entrada;
@@ -36,7 +37,7 @@ public class VNS {
         String[] movs = {"entorno1", "entorno2", "entorno4", "entorno3"};
 
 
-        individuo = orderByLazyCriteria(individuo);
+        individuo = MetaheuristicUtil.orderByLazyCriteria(individuo);
         double bestFit = DeciderFitnessFunction.switchFitnessF(individuo, patrones, entrada, parametros, parametrosAlg)[0];
         double antFit = bestFit;
         boolean restar = false;
@@ -87,49 +88,6 @@ public class VNS {
         System.out.println("TIME: " + (((t2 - t1) / 1000.0) / 60.0) + " | Restricciones: " + Restricciones.penalizacionPorRestricciones(individuo, patrones, entrada, parametros));
 
         return individuo;
-    }
-
-    public static Solucion orderByLazyCriteria(Solucion ind) {
-        /*
-         * Ordena un array de controladores (el que tiene menos letras se situa primero y asi en orden)
-         * Este orden se usa para saber cual es el controlador que menos trabaja.
-         */
-        ArrayList<Controlador> controladores = ind.getControladores();
-        ArrayList<Integer> numControladores = new ArrayList<>();
-        ArrayList<String> individuo2 = new ArrayList<>();
-        ArrayList<String> individuo = ind.getTurnos();
-        ArrayList<Integer> order = new ArrayList<>();
-        for (int i = 0; i < individuo.size(); i++) {
-            int[] sum = Fitness.slotsClassification(individuo.get(i));
-            order.add(sum[1]);
-        }
-        for (int e = 0; e < order.size(); e++) {
-            int r = 0;
-            int lAnt = 288;
-            for (int i = 0; i < order.size(); i++) {
-                if (lAnt > order.get(i)) {
-                    lAnt = order.get(i);
-                    r = i;
-                }
-            }
-            order.set(r, 300);
-            individuo2.add(individuo.get(r));
-            for (int i = 0; i < controladores.size(); i++) {
-                if (r == controladores.get(i).getTurnoAsignado()) {
-                    numControladores.add(controladores.get(i).getId());
-                }
-            }
-        }
-        for (int i = 0; i < numControladores.size(); i++) {
-            for (int j = 0; j < controladores.size(); j++) {
-                if (numControladores.get(i) == controladores.get(j).getId()) {
-                    controladores.get(j).setTurnoAsignado(i);
-                }
-            }
-        }
-        ind.setTurnos(individuo2);
-        ind.setControladores(controladores);
-        return ind;
     }
 
 }

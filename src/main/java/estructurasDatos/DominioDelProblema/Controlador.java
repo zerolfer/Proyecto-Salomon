@@ -154,5 +154,12 @@ public class Controlador implements Cloneable {
 		this.bajaAlta = bajaAlta;
 	}
 
-
+    @Override
+    public String toString() {
+        return "Controlador{" +
+                "id=" + id +
+                ", imaginario=" + imaginario +
+                ", turnoAsignado=" + turnoAsignado +
+                '}';
+    }
 }
