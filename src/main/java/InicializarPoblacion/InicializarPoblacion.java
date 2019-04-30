@@ -172,9 +172,9 @@ private static void eliminarControladoresBaja(Entrada entrada, Solucion individu
 			Controlador cImaginario = c.clone();
 			cImaginario.setBajaAlta(Propiedades.ALTA);
 			cImaginario.setSlotBajaAlta(0);
-			cImaginario.setId(controladores.size());
+			cImaginario.setId(controladores.size()+1);
 			cImaginario.setImaginario(true);
-			cImaginario.setTurnoAsignado(turnos.size()-1);
+			cImaginario.setTurnoAsignado(turnos.size());
 			turnos.set(c.getTurnoAsignado(), cadIni);
 			turnos.add(cadFin);
 			controladores.add(cImaginario);
