@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import static herramientas.CridaUtils.*;
+
 /**
  * Clase utilizada para la inicializacion de un conjunto de soluciones iniciales.
  *
@@ -42,7 +43,7 @@ public class InicializarPoblacion {
         int minD = p.getTiempoDesMin() / p.getTamanoSlots();
         int maxT = p.getTiempoTrabMax() / p.getTamanoSlots();
         int minT = p.getTiempoTrabMin() / p.getTamanoSlots();
-        int descanso =6;
+        int descanso = 6;
 
         Solucion individuo = inicializarIndividuo(descanso, maxT, minT, minD, entrada, p, patrones);
         poblacion = comprobarCondicionesEntorno(individuo, poblacion, entrada, patrones, p);
@@ -99,9 +100,9 @@ public class InicializarPoblacion {
         }
 
         // < PASO 3 >
-        eliminarControladoresBaja(entrada,individuo);
+        eliminarControladoresBaja(entrada, individuo);
         // < PASO 4 >
-        anadirControladoresAlta(entrada,individuo);
+        anadirControladoresAlta(entrada, individuo);
         // < PASO 5 >
 //        reparacionSoluciones(entrada,p, minT,patrones);
         return individuo;
@@ -124,21 +125,21 @@ public class InicializarPoblacion {
     private static void anadirControladoresAlta(Entrada entrada, Solucion individuo) {
         ArrayList<Controlador> controladores = individuo.getControladores();
         ArrayList<String> turnos = individuo.getTurnos();
-        String t  = turnos.get(0);
+        String t = turnos.get(0);
         //TODO: PROBAR QUE LOS CORTES EN LA CADENA SEAN CORRECTOS
         for (int i = 0; i < controladores.size(); i++) {
-            if (controladores.get(i).getBajaAlta() == Propiedades.ALTA && controladores.get(i).getSlotBajaAlta()!=0) {
-                int momentoAlta = controladores.get(i).getSlotBajaAlta()*LONGITUD_CADENAS;
-                String turno ="";
-                for (int j = 0; j < t.length(); j+=LONGITUD_CADENAS) {
-                    if (j<momentoAlta) {
+            if (controladores.get(i).getBajaAlta() == Propiedades.ALTA && controladores.get(i).getSlotBajaAlta() != 0) {
+                int momentoAlta = controladores.get(i).getSlotBajaAlta() * LONGITUD_CADENAS;
+                String turno = "";
+                for (int j = 0; j < t.length(); j += LONGITUD_CADENAS) {
+                    if (j < momentoAlta) {
                         turno += STRING_NO_TURNO;
-                    }else {
+                    } else {
                         turno += STRING_DESCANSO;
                     }
                 }
                 turnos.add(turno);
-                controladores.get(i).setTurnoAsignado(turnos.size()-1);
+                controladores.get(i).setTurnoAsignado(turnos.size() - 1);
             }
         }
     }
@@ -701,7 +702,7 @@ public class InicializarPoblacion {
                 // para cada slot, verificamos si el sector está abierto en ese instante
                 for (int j = 0; j < sectorizacionPorSlots.size(); j++) {
 
-                    if(j<entrada.getSlotMomentoActual()) {
+                    if (j < entrada.getSlotMomentoActual()) {
                         plantilla = introducirCeros(plantilla);
                         continue;
                     }
@@ -867,7 +868,7 @@ public class InicializarPoblacion {
      * @param plantilla Plantilla 3x1.
      * @return Plantilla con un slot de descanso mas en los 3 turnos.
      */
-    private static ArrayList<ArrayList<String>> introducirDescanso(ArrayList<ArrayList<String>> plantilla){
+    private static ArrayList<ArrayList<String>> introducirDescanso(ArrayList<ArrayList<String>> plantilla) {
         return introducirString(plantilla, STRING_DESCANSO);
     }
 
@@ -878,7 +879,7 @@ public class InicializarPoblacion {
      * @param plantilla Plantilla 3x1.
      * @return Plantilla con un slot de ceros mas en los 3 turnos.
      */
-    private static ArrayList<ArrayList<String>> introducirCeros(ArrayList<ArrayList<String>> plantilla){
+    private static ArrayList<ArrayList<String>> introducirCeros(ArrayList<ArrayList<String>> plantilla) {
         return introducirString(plantilla, STRING_NO_TURNO);
     }
 
