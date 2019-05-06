@@ -8,7 +8,7 @@ import estructurasDatos.Parametros;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
-import static herramientas.CridaUtils.STRING_DESCANSO;
+import static herramientas.CridaUtils.*;
 
 /**
  * Objeto donde se almacenan todos los patrones necesarios para la comprobacion de restricciones mediante Regex.
@@ -88,7 +88,7 @@ public class Patrones {
             }
         }
         //array[4] = Pattern.compile("^(111"+ ls +")$", Pattern.CASE_INSENSITIVE);
-        array[4] = Pattern.compile(STRING_DESCANSO + ls + "", Pattern.CASE_INSENSITIVE);
+        array[4] = Pattern.compile(STRING_NO_TURNO+";"+STRING_DESCANSO + ls + "", Pattern.CASE_INSENSITIVE);
 
         ArrayList<Nucleo> lstNuc = entrada.getNucleos();
         for (int i = 0; i < lstNuc.size(); i++) {
@@ -104,7 +104,7 @@ public class Patrones {
             }
             nuc.add(lstNuc.get(i).getNombre());
             //array[5+i] = Pattern.compile("^(111"+ ln +")$", Pattern.CASE_INSENSITIVE);
-            array[5 + i] = Pattern.compile(STRING_DESCANSO + ln + "", Pattern.CASE_INSENSITIVE);
+            array[5 + i] = Pattern.compile(STRING_NO_TURNO+";"+STRING_DESCANSO + ln + "", Pattern.CASE_INSENSITIVE);
         }
 
         int numNoche = 1, numNocheAnt = 0;

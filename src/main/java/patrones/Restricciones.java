@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static herramientas.CridaUtils.STRING_DESCANSO;
+import static herramientas.CridaUtils.*;
 
 /**
  * @author Tino
@@ -321,7 +321,7 @@ public class Restricciones {
         String slot = "", slotAnt = "";
         for (int k = 0; k < turno.length(); k += 3) {
             slot = turno.substring(k, k + 3);
-            if (!slot.equalsIgnoreCase(slotAnt) && !slot.equalsIgnoreCase(STRING_DESCANSO)) {
+            if (!slot.equalsIgnoreCase(slotAnt) && !slot.equalsIgnoreCase(STRING_DESCANSO) && !slot.equalsIgnoreCase(STRING_NO_TURNO)) {
                 for (int j = 0; j < listaSectoresAbiertos.size(); j++) {
                     if (listaSectoresAbiertos.get(j).getId().equalsIgnoreCase(slot)) {
                         if (!sectoresEnTurno.contains(listaSectoresAbiertos.get(j))) {
@@ -426,18 +426,18 @@ public class Restricciones {
             double t1 = 0;
             int cnt = 0;
             for (int i = 0; i < turno.length(); i += 3) {
-                if (turno.substring(i, i + 3).equals(STRING_DESCANSO) && cnt == 0) {
+                if ((turno.substring(i, i + 3).equals(STRING_DESCANSO) || turno.substring(i, i + 3).equals(STRING_NO_TURNO)) && cnt == 0) {
 
-                } else if (turno.substring(i, i + 3).equals(STRING_DESCANSO) && cnt < pMin) {
+                } else if ((turno.substring(i, i + 3).equals(STRING_DESCANSO) || turno.substring(i, i + 3).equals(STRING_NO_TURNO)) && cnt < pMin) {
                     if (t1 == 0) {
                         p++;
                         t1 = 1;
                     } else {
                         p = p + 0.05;
                     }
-                } else if (turno.substring(i, i + 3).equals(STRING_DESCANSO) && cnt >= pMin) {
+                } else if ((turno.substring(i, i + 3).equals(STRING_DESCANSO) || turno.substring(i, i + 3).equals(STRING_NO_TURNO)) && cnt >= pMin) {
                     cnt = 0;
-                } else if (!turno.substring(i, i + 3).equals(STRING_DESCANSO)) {
+                } else if (!turno.substring(i, i + 3).equals(STRING_DESCANSO) && !turno.substring(i, i + 3).equals(STRING_NO_TURNO)) {
                     if (i == 0) {
                         cnt++;
                     } else {
@@ -480,7 +480,7 @@ public class Restricciones {
                 if (turno.substring(i, i + 3).equalsIgnoreCase(STRING_DESCANSO)) {
                     cnt++;
                 } else if (!turno.substring(i, i + 3).equalsIgnoreCase(STRING_DESCANSO)) {
-                    if (cnt < dMin && cnt != 0) {
+                    if (cnt < dMin && cnt != 0 && !turno.substring(i, i + 3).equalsIgnoreCase(STRING_NO_TURNO)) {
                         if (t1 == 0) {
                             p++;
                             t1 = 1;
@@ -509,9 +509,9 @@ public class Restricciones {
             int cnt = 0;
             double t1 = 0;
             for (int i = 0; i < turno.length(); i += 3) {
-                if (!turno.substring(i, i + 3).equalsIgnoreCase(STRING_DESCANSO)) {
+                if (!turno.substring(i, i + 3).equalsIgnoreCase(STRING_DESCANSO) && !turno.substring(i, i + 3).equalsIgnoreCase(STRING_NO_TURNO)) {
                     cnt++;
-                } else if (turno.substring(i, i + 3).equalsIgnoreCase(STRING_DESCANSO)) {
+                } else if (turno.substring(i, i + 3).equalsIgnoreCase(STRING_DESCANSO) || turno.substring(i, i + 3).equalsIgnoreCase(STRING_NO_TURNO)) {
                     if (cnt < tMin && cnt != 0) {
                         if (t1 == 0) {
                             p++;
@@ -547,7 +547,7 @@ public class Restricciones {
         for (String turno : individuo.getTurnos()) {
             int cnt = 0;
             for (int i = 0; i < turno.length(); i += 3) {
-                if (!turno.substring(i, i + 3).equalsIgnoreCase(STRING_DESCANSO)) {
+                if (!turno.substring(i, i + 3).equalsIgnoreCase(STRING_DESCANSO) && !turno.substring(i, i + 3).equalsIgnoreCase(STRING_NO_TURNO)) {
                     cnt++;
                 }
             }
@@ -611,9 +611,11 @@ public class Restricciones {
                 if (t.substring(j, j + 3).equalsIgnoreCase(STRING_DESCANSO)) {
                     ds++;
                 } else {
-                    tr++;
+                	if(!t.substring(j, j + 3).equalsIgnoreCase(STRING_NO_TURNO)) {
+                		tr++;
+                	}
                 }
-                if (j >= ventanaTiempo) {
+                if (j >= ventanaTiempo && ds+tr>=ventanaTiempo) {
                     if (t.substring(j - ventanaTiempo, j - ventanaTiempo + 3).equalsIgnoreCase(STRING_DESCANSO)) {
                         ds--;
                     } else {
@@ -647,13 +649,15 @@ public class Restricciones {
         for (int j = 0; j < turnos.size(); j++) {
             t = turnos.get(j);
             for (int i = 0; i < t.length() - 3; i += 3) {
-                if (!t.substring(i, i + 3).equalsIgnoreCase(STRING_DESCANSO) && !t.substring(i + 3, i + 6).equalsIgnoreCase(STRING_DESCANSO) && !t.substring(i, i + 3).equals(t.substring(i + 3, i + 6))) {
-                    if (t.substring(i, i + 3).equals(t.substring(i, i + 3).toUpperCase()) && t.substring(i + 3, i + 6).equals(t.substring(i + 3, i + 6).toUpperCase())) {
-                        if (!comprobarAfinidad(t.substring(i, i + 3), t.substring(i + 3, i + 6), arrayList, listaSec)) {
-                            x += penalizacion;
+            	if (!t.substring(i, i + 3).equalsIgnoreCase(STRING_DESCANSO) && !t.substring(i + 3, i + 6).equalsIgnoreCase(STRING_DESCANSO) && !t.substring(i, i + 3).equalsIgnoreCase(STRING_NO_TURNO) && !t.substring(i + 3, i + 6).equalsIgnoreCase(STRING_NO_TURNO)) {
+            		if (!t.substring(i, i + 3).equals(t.substring(i + 3, i + 6))) {
+                        if (t.substring(i, i + 3).equals(t.substring(i, i + 3).toUpperCase()) && t.substring(i + 3, i + 6).equals(t.substring(i + 3, i + 6).toUpperCase())) {
+                            if (!comprobarAfinidad(t.substring(i, i + 3), t.substring(i + 3, i + 6), arrayList, listaSec)) {
+                                x += penalizacion;
+                            }
                         }
                     }
-                }
+            	}
             }
             if (x != 0) {
                 p = p + 1 + x;
@@ -796,7 +800,7 @@ public class Restricciones {
                     String t = turnos.get(controladores.get(i).getTurnoAsignado());
                     if (inicioTCorto == 0) {
                         for (int j = t.length() - (resto * 3); j < t.length(); j += 3) {
-                            if (!t.substring(i, i + 3).equalsIgnoreCase(STRING_DESCANSO)) {
+                            if (!t.substring(i, i + 3).equalsIgnoreCase(STRING_DESCANSO) && !t.substring(i, i + 3).equalsIgnoreCase(STRING_NO_TURNO)) {
                                 if (t1 == 0) {
                                     p++;
                                     t1 = 1;
@@ -808,7 +812,7 @@ public class Restricciones {
                         //array[1] = Pattern.compile("^.*(111){"+ resto +"}$");
                     } else {
                         for (int j = 0; j < (inicioTCorto * 3); j += 3) {
-                            if (!t.substring(i, i + 3).equalsIgnoreCase(STRING_DESCANSO)) {
+                            if (!t.substring(i, i + 3).equalsIgnoreCase(STRING_DESCANSO) && !t.substring(i, i + 3).equalsIgnoreCase(STRING_NO_TURNO)) {
                                 if (t1 == 0) {
                                     p++;
                                     t1 = 1;
@@ -839,9 +843,9 @@ public class Restricciones {
             double t = 0;
             int cnt = 0;
             for (int i = 0; i < turno.length(); i += 3) {
-                if (!turno.substring(i, i + 3).equalsIgnoreCase(STRING_DESCANSO)) {
+            if (!turno.substring(i, i + 3).equalsIgnoreCase(STRING_DESCANSO) && !turno.substring(i, i + 3).equalsIgnoreCase(STRING_NO_TURNO)) {
                     cnt++;
-                } else if (turno.substring(i, i + 3).equalsIgnoreCase(STRING_DESCANSO)) {
+                } else if (turno.substring(i, i + 3).equalsIgnoreCase(STRING_DESCANSO)||turno.substring(i, i + 3).equalsIgnoreCase(STRING_NO_TURNO)) {
                     if (cnt > tMax && cnt != 0) {
                         if (t == 0) {
                             p++;
@@ -916,7 +920,7 @@ public class Restricciones {
                 t = turnos.get(controladores.get(i).getTurnoAsignado());
                 int cnt = 0;
                 for (int j = 0; j < t.length(); j += 3) {
-                    if (t.substring(j, j + 3).equalsIgnoreCase(STRING_DESCANSO)) {
+                    if (t.substring(j, j + 3).equalsIgnoreCase(STRING_DESCANSO) || t.substring(j, j + 3).equalsIgnoreCase(STRING_NO_TURNO)) {
                         cnt++;
                     }
                 }

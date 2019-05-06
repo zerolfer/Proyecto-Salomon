@@ -48,7 +48,7 @@ public class RestricionesParalelizadas implements Runnable {
             case 8:
                 n = Restricciones.comprobarCambioPosicion(individuo.getTurnos(), entrada.getMatrizAfinidad(), entrada.getListaSectores());
                 break;
-            case 9:
+            case 9: //REDUNDANTE (mantener temporalmente por seguridad)
                 n = Restricciones.comprobarTrabajoMinimoConsecutivo(individuo.getTurnos(), parametros);
                 break;
             case 10:
