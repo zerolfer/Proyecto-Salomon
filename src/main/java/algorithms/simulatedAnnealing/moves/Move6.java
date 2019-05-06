@@ -12,6 +12,8 @@ import patrones.Restricciones;
 import java.util.ArrayList;
 
 import static herramientas.CridaUtils.STRING_DESCANSO;
+import static herramientas.CridaUtils.STRING_NO_TURNO;;
+
 
 public class Move6 {
 
@@ -31,24 +33,29 @@ public class Move6 {
         return c;
     }
 
-    private static ArrayList<ArrayList<Integer>> GetIntervalos(String trabajador) {
+    private static ArrayList<ArrayList<Integer>> GetIntervalos(String trabajador, int slotMomentoActual) {
         ArrayList<ArrayList<Integer>> intervalo = new ArrayList<>();
         ArrayList<Integer> inicio = new ArrayList<>();
         ArrayList<Integer> fin = new ArrayList<>();
-        for (int i = 0; i < trabajador.length(); i += 3) {
-            if (!trabajador.substring(i, i + 3).equals(STRING_DESCANSO)) {
-                if (i == 0 || (trabajador.substring(i - 3, i).equals(STRING_DESCANSO))) {
+        int mActual = slotMomentoActual*3;
+        //TODO: Comprobar que variable mActual es la correcta.
+        //Primeros slots de trabajo (cuando se inicia un intervalo)
+        for (int i = mActual; i < trabajador.length(); i += 3) {
+            if (!trabajador.substring(i, i + 3).equals(STRING_DESCANSO) && !trabajador.substring(i, i + 3).equals(STRING_NO_TURNO)) {
+                if (i == mActual || (trabajador.substring(i - 3, i).equals(STRING_DESCANSO)) || (trabajador.substring(i - 3, i).equals(STRING_NO_TURNO))) {
                     inicio.add(i);
                 }
             }
         }
-        for (int i = trabajador.length() - 3; i >= 0; i -= 3) {
-            if (!trabajador.substring(i, i + 3).equals(STRING_DESCANSO)) {
-                if (i == trabajador.length() - 3 || (trabajador.substring(i + 3, i + 6).equals(STRING_DESCANSO))) {
+        //Ultimos slots de trabajo (cuando finaliza un intervalo)
+        for (int i = trabajador.length() - 3; i >= mActual; i -= 3) {
+            if (!trabajador.substring(i, i + 3).equals(STRING_DESCANSO) && !trabajador.substring(i, i + 3).equals(STRING_NO_TURNO)) {
+                if (i == mActual || (trabajador.substring(i + 3, i + 6).equals(STRING_DESCANSO)) || (trabajador.substring(i + 3, i + 6).equals(STRING_NO_TURNO))) {
                     fin.add(i + 3);
                 }
             }
         }
+        //Union para crear los distintos intervalos
         for (int i = 0; i < inicio.size(); i++) {
             ArrayList<Integer> pos = new ArrayList<>();
             pos.add(inicio.get(i));
@@ -142,12 +149,14 @@ public class Move6 {
         String cadenaP = controladorP.substring(mov.getInicio(), mov.getFin());
         String controladorVago2 = controladorVago.substring(0, mov.getInicio()) + cadenaP + controladorVago.substring(mov.getFin(), controladorVago.length());
         String controladorP2 = controladorP.substring(0, mov.getInicio()) + cadena + controladorP.substring(mov.getFin(), controladorP.length());
-
+        if(cadena.contains(STRING_NO_TURNO)||cadenaP.contains(STRING_NO_TURNO)) {
+        	return null;
+        }        	
         boolean t = false;// comprobarLibre(individuo, mov, cadena);
         boolean m = comprobarNucleos(controladorVago, cadenaP, patrones);
         boolean m1 = comprobarNucleos(controladorP, cadena, patrones);
         if (t || !m || !m1) {
-            return null;
+        	return null;
         }
 
         ArrayList<String> dosInd = new ArrayList<>();
@@ -229,7 +238,7 @@ public class Move6 {
             int cv = TurnoAleatorio(contcv, matrizTurnos);
             contcv.add(cv);
             int granularidad = granularidadMax;
-            ArrayList<ArrayList<Integer>> intervalos = GetIntervalos(matrizTurnos.get(cv));
+            ArrayList<ArrayList<Integer>> intervalos = GetIntervalos(matrizTurnos.get(cv), entrada.getSlotMomentoActual());
             if (intervalos.size() != 0) {
                 ArrayList<Integer> pos = intervalos.get((int) (Math.floor(Math.random() * ((intervalos.size() - 1) - 0 + 1)) + 0));
                 ArrayList<Integer> listG = crearListG(individuo1.getLongdescansos(), granularidadMax);
@@ -281,6 +290,7 @@ public class Move6 {
 
     private static ArrayList<Integer> crearListG(int longdescansos, int granularidadMax) {
         ArrayList<Integer> listG = new ArrayList<>();
+       
         if (longdescansos == 3 || longdescansos == 6 || longdescansos == 9 || longdescansos == 12) {
             for (int i = 9; i <= granularidadMax; i += 9) {
                 listG.add(i);
@@ -294,11 +304,11 @@ public class Move6 {
                 listG.add(i);
             }
         } else if (longdescansos == 0) {
-            for (int i = 3; i <= granularidadMax; i += 3) {
+            for (int i = 9; i <= granularidadMax; i += 9) {
                 listG.add(i);
             }
         } else {
-            listG.add(longdescansos * 3);
+            listG.add(longdescansos * 9);
         }
         return listG;
     }

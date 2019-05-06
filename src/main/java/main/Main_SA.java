@@ -30,10 +30,7 @@ public class Main_SA {
 //        ArrayList<Solucion> poblacionInicial = InicializarPoblacion.inicializarPoblacion(entrada, parametros, patrones);
 
         //ArrayList<Solucion> poblacionInicial = new ArrayList<Solucion>();
-        /*Solo utilizo multiplos de 4*/
 
-        //poblacionInicial.add(poblacionInicial1.get(0));
-        //poblacionInicial.add(poblacionInicial1.get(3));//poblacionInicial.add(poblacionInicial1.get(9));
         ArrayList<Solucion> poblacionReducirControladores = new ArrayList<>();
         poblacionReducirControladores = SimulatedAnnealing.bucleSA(poblacionInicial, parametrosAlgoritmo, parametros, patrones, entrada);
 
