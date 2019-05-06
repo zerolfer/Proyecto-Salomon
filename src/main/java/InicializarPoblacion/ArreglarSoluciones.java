@@ -27,7 +27,10 @@ public class ArreglarSoluciones {
      * @param patrones        Conjunto de patrones utilizados en la comprobacion de restricciones.
      * @return Conjunto de turnos de trabajo con las restricciones arregladas si esto ha sido posible. En caso de no serlo devuelve el mismo conjunto de turnos.
      */
-    public static ArrayList<ArrayList<String>> arregloTrabajoMinimo(Entrada entrada, Parametros p, ArrayList<ArrayList<String>> cadenasDeTurnos, int posTurno, ArrayList<String> turno, int posChar, String ant, Patrones patrones) {
+    public static ArrayList<ArrayList<String>> arregloTrabajoMinimo(Entrada entrada, Parametros p,
+                                                                    ArrayList<ArrayList<String>> cadenasDeTurnos,
+                                                                    int posTurno, ArrayList<String> turno,
+                                                                    int posChar, String ant, Patrones patrones) {
         //TODO: Revisar funcionamiento
         int[] posicionTras = busquedaTraspaso(entrada, p, cadenasDeTurnos, posTurno, turno, posChar, ant, patrones);
         if (posicionTras[0] == -1) {//No encontrado -  Intentar donacion

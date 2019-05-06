@@ -43,7 +43,7 @@ public class InicializarPoblacion {
         int minD = p.getTiempoDesMin() / p.getTamanoSlots();
         int maxT = p.getTiempoTrabMax() / p.getTamanoSlots();
         int minT = p.getTiempoTrabMin() / p.getTamanoSlots();
-        int descanso = 6;
+        int descanso = 6; // {LEGACY: Ajustado experimentalmente}
 
         Solucion individuo = inicializarIndividuo(descanso, maxT, minT, minD, entrada, p, patrones);
         poblacion = comprobarCondicionesEntorno(individuo, poblacion, entrada, patrones, p);
@@ -90,6 +90,7 @@ public class InicializarPoblacion {
     private static Solucion inicializarIndividuo(int descanso, int maxT, int minT, int minD, Entrada entrada,
                                                  Parametros p, Patrones patrones) {
 
+        // FASE 1
         Solucion individuo = entrada.getDistribucionInicial().clone();
         if (entrada.getSectorizacionModificada() != null) {
             // < PASO 1 >
@@ -104,8 +105,13 @@ public class InicializarPoblacion {
         // < PASO 4 >
         anadirControladoresAlta(entrada, individuo);
         // < PASO 5 >
-//        reparacionSoluciones(entrada,p, minT,patrones);
+//        eliminarImaginariosSiEsPosible(...);
+
+        // FASE 2
+        individuo.setTurnos(reparacionSolucionesAdapter(entrada, p, individuo.getTurnos(), minT, patrones));
+
         return individuo;
+
 
 
 
@@ -626,11 +632,13 @@ public class InicializarPoblacion {
      * @param patrones        Patrones para comprobacion de restricciones.
      * @return Lista de los turnos de trabajo con las modificaciones pertenentes reducir la infactibilidad.
      */
-    /*public static ArrayList<ArrayList<String>> reparacionSoluciones(Entrada entrada, Parametros p,
+    public static ArrayList<ArrayList<String>> reparacionSoluciones(Entrada entrada, Parametros p,
+                                                                    ArrayList<ArrayList<String>> cadenasDeTurnos,
                                                                     int minT, Patrones patrones) {
 
-        ArrayList<String> cadenasDeTurnos = entrada.getDistribucionInicial().getTurnos();
-
+        /*
+        {   LEGACY  }
+        */
         for (int i = 0; i < cadenasDeTurnos.size(); i++) {
             ArrayList<String> turno = cadenasDeTurnos.get(i);
             int cont = 0;
@@ -640,7 +648,10 @@ public class InicializarPoblacion {
                     if (l + 1 < turno.size() && ant.equals(turno.get(l + 1))) {
                         cont++;
                     } else {
-                        if (cont < minT - 1) { //No se cumple el trabajo minimo
+                        if (cont < minT - 1 && l >= entrada.getSlotMomentoActual()) { //No se cumple el trabajo minimo
+                            // NOTE: Modificada condición
+                            // TODO: comprobar si la condicion es correcta
+
                             cadenasDeTurnos = ArreglarSoluciones.arregloTrabajoMinimo(entrada, p, cadenasDeTurnos, i,
                                     turno, l, ant, patrones);
                             if (posible == false) {
@@ -659,7 +670,7 @@ public class InicializarPoblacion {
             }
         }
         return cadenasDeTurnos;
-    }*/
+    }
 
     /**
      * Metodo para la generacion de soluciones con plantillas de 3x1.
@@ -935,7 +946,7 @@ public class InicializarPoblacion {
         return plantilla;
     }
 
-    public static ArrayList<String> reparacionSoluciones2(Entrada entrada, Parametros parametros,
+    public static ArrayList<String> reparacionSolucionesAdapter(Entrada entrada, Parametros parametros,
                                                           ArrayList<String> turnos, int minT, Patrones patrones) {
         String turno = "";
         ArrayList<String> turno2 = new ArrayList<>();
@@ -948,8 +959,8 @@ public class InicializarPoblacion {
             turnos2.add(turno2);
             turno2 = new ArrayList<>();
         }
-        ArrayList<ArrayList<String>> cadenasDeTurnos = null/*reparacionSoluciones(entrada, parametros, turnos2, minT,
-                patrones)*/;
+        ArrayList<ArrayList<String>> cadenasDeTurnos = reparacionSoluciones(entrada, parametros, turnos2, minT, patrones);
+
         return transformacionSoluciones(cadenasDeTurnos);
     }
 
