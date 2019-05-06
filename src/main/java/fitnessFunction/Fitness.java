@@ -9,7 +9,7 @@ import patrones.Restricciones;
 
 import java.util.ArrayList;
 
-import static herramientas.CridaUtils.STRING_DESCANSO;
+import static herramientas.CridaUtils.*;
 
 
 /**
@@ -74,14 +74,14 @@ public class Fitness {
      *
      * @param controlador Turno de trabajo.
      * @return Array con el numero de slots de descanso y trabajo. <br/>
-     *          Posicion 0: descanso <br/>
+     *          Posicion 0: descanso y fuera de turno <br/>
      *          Posicion 1: trabajos
      */
     public static int[] slotsClassification(String controlador) {
         int[] sum = {0, 0};
         int unos = 0, letras = 0;
         for (int e = 0; e < controlador.length(); e += 3) {
-            if (controlador.substring(e, e + 3).equals(STRING_DESCANSO)) {
+            if (controlador.substring(e, e + 3).equals(STRING_DESCANSO)|| controlador.substring(e, e + 3).equals(STRING_NO_TURNO)) {
                 unos++;
             } else {
                 letras++;
