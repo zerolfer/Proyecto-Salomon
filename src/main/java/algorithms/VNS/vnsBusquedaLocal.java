@@ -1,5 +1,6 @@
 package algorithms.VNS;
 
+import algorithms.MetaheuristicUtil;
 import algorithms.VNS.moves.DeciderMove;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
@@ -46,7 +47,7 @@ public class vnsBusquedaLocal {
                     return individuo;
                 }
                 if (indNuevo.getTurnos().size() != indNuevo.getControladores().size()) {
-                    indNuevo = VNS.orderByLazyCriteria(indNuevo);
+                    indNuevo = MetaheuristicUtil.orderByLazyCriteria(indNuevo);
                 }
                 newFit = DeciderFitnessFunction.switchFitnessF(indNuevo, patrones, entrada, parametros, parametrosAlg)[0];
                 if (newFit <= bestFit) {

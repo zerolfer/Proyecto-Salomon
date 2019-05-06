@@ -5,7 +5,7 @@
  */
 package algorithms.vnsPablo;
 
-import algorithms.simulatedAnnealing.SimulatedAnnealing;
+import algorithms.MetaheuristicUtil;
 import estructurasDatos.DominioDelProblema.Controlador;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
@@ -583,7 +583,7 @@ public class VariableNeighborhood extends Thread {
                         try {
 
                             if (rightCandidate.getTurnos().size() != rightCandidate.getControladores().size()) {
-                                rightCandidate = SimulatedAnnealing.orderByLazyCriteria(rightCandidate);
+                                rightCandidate = MetaheuristicUtil.orderByLazyCriteria(rightCandidate);
                             }
 
                             if (rightCandidate.getControladores().size() != rightCandidate.getTurnos().size()) {
@@ -642,7 +642,7 @@ public class VariableNeighborhood extends Thread {
 
 
                             if (solBest.getTurnos().size() != solBest.getControladores().size()) {
-                                solBest = SimulatedAnnealing.orderByLazyCriteria(solBest);
+                                solBest = MetaheuristicUtil.orderByLazyCriteria(solBest);
                             }
 
                             if (solBest.getControladores().size() != solBest.getTurnos().size()) {

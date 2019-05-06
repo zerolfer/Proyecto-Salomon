@@ -73,7 +73,9 @@ public class Fitness {
      * Metodo que devuelve un array con el numero de slots de trabajo y descanso.
      *
      * @param controlador Turno de trabajo.
-     * @return Array con el numero de slots de descanso y trabajo.
+     * @return Array con el numero de slots de descanso y trabajo. <br/>
+     *          Posicion 0: descanso <br/>
+     *          Posicion 1: trabajos
      */
     public static int[] slotsClassification(String controlador) {
         int[] sum = {0, 0};
