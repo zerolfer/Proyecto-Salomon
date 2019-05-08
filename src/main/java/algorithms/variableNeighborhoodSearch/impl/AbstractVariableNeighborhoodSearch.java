@@ -83,7 +83,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
     }
 
     // neighborhood change
-    protected Solucion neighborhoodChange(Solucion x, Solucion x_prime) {
+    private Solucion neighborhoodChange(Solucion x, Solucion x_prime) {
         if (fitness(x_prime) < fitness(x)) {
             x = x_prime; // Make a move
             currentNeighborhoodIndex = 1; // reset the neighborhood iteration
@@ -111,8 +111,8 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
     /**
      * Método ADAPTER que retorna el valor de la función objetivo
      *
-     * @param x
-     * @return
+     * @param x solucion incial
+     * @return valor total ponderado de la funcion objetivo para la solucion x
      */
     private double fitness(Solucion x) {
         return DeciderFitnessFunction.switchFitnessF(x, null, entrada, parametros, parametrosAlgoritmo)[0];

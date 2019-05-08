@@ -158,6 +158,8 @@ public class Entrada {
 
         Solucion distribucionInicial = crearSolucionInicial(fDistribucionInicial, listaSectores, controladores, parametros);
 
+        calcularCargaTrabajo(sectorizacion, controladores, listaSectoresAbiertos);
+
         Entrada entrada = new Entrada(controladores, nucleos, turno, listaSectores, listaSectoresAbiertos, listaNuevosSectoresAbiertosTrasMomentoActual,
                 sectorizacion, matrizAfinidad, volumnsOfSectors, sectorizacionModificada, distribucionInicial, slotMomentoActual);
 
