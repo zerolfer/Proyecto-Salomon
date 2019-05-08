@@ -50,9 +50,13 @@ public class Move6 {
         //Ultimos slots de trabajo (cuando finaliza un intervalo)
         for (int i = trabajador.length() - 3; i >= mActual; i -= 3) {
             if (!trabajador.substring(i, i + 3).equals(STRING_DESCANSO) && !trabajador.substring(i, i + 3).equals(STRING_NO_TURNO)) {
-                if (i == mActual || (trabajador.substring(i + 3, i + 6).equals(STRING_DESCANSO)) || (trabajador.substring(i + 3, i + 6).equals(STRING_NO_TURNO))) {
-                    fin.add(i + 3);
-                }
+            	if(i>=trabajador.length() - 3) {
+            		fin.add(i + 3);
+            	}else {
+            		if (i == mActual || (trabajador.substring(i + 3, i + 6).equals(STRING_DESCANSO)) || (trabajador.substring(i + 3, i + 6).equals(STRING_NO_TURNO))) {
+                        fin.add(i + 3);
+                    }	
+            	}
             }
         }
         //Union para crear los distintos intervalos

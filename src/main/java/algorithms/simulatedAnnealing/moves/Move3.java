@@ -37,7 +37,6 @@ public class Move3 {
         ArrayList<Integer> inicio = new ArrayList<>();
         ArrayList<Integer> fin = new ArrayList<>();
         int mActual = slotMomentoActual*3;
-        //TODO: Comprobar que variable mActual es la correcta.
         //Primeros slots de trabajo (cuando se inicia un intervalo)
         for (int i = mActual; i < trabajador.length(); i += 3) {
             if (!trabajador.substring(i, i + 3).equals(STRING_DESCANSO) && !trabajador.substring(i, i + 3).equals(STRING_NO_TURNO)) {
@@ -46,12 +45,16 @@ public class Move3 {
                 }
             }
         }
-        //Ultimos slots de trabajo (cuando finaliza un intervalo)
+      //Ultimos slots de trabajo (cuando finaliza un intervalo)
         for (int i = trabajador.length() - 3; i >= mActual; i -= 3) {
             if (!trabajador.substring(i, i + 3).equals(STRING_DESCANSO) && !trabajador.substring(i, i + 3).equals(STRING_NO_TURNO)) {
-                if (i == mActual || (trabajador.substring(i + 3, i + 6).equals(STRING_DESCANSO)) || (trabajador.substring(i + 3, i + 6).equals(STRING_NO_TURNO))) {
-                    fin.add(i + 3);
-                }
+            	if(i>=trabajador.length() - 3) {
+            		fin.add(i + 3);
+            	}else {
+            		if (i == mActual || (trabajador.substring(i + 3, i + 6).equals(STRING_DESCANSO)) || (trabajador.substring(i + 3, i + 6).equals(STRING_NO_TURNO))) {
+                        fin.add(i + 3);
+                    }	
+            	}
             }
         }
         //Union para crear los distintos intervalos

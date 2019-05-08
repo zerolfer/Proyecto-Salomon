@@ -174,10 +174,10 @@ public class FitnessFase3 {
      * @param tabla                 Lista de turnos de trabajo.
      * @return Valor de la funcion objetivo normalizado.
      */
-    public static double estadillos(int numeroControladores, int numeroFranjasHorarias, ArrayList<String> tabla) {
+    public static double estadillos(int numeroControladores, int numeroFranjasHorarias, ArrayList<String> tabla,int momentoActual) {
         int count = 0;
         for (int i = 0; i < numeroControladores; i++) {
-            for (int j = 0; j < numeroFranjasHorarias; j++) {
+            for (int j = momentoActual; j < numeroFranjasHorarias; j++) {
                 String actual = tabla.get(i).substring(j * 3, j * 3 + 3);
                 if (j < numeroFranjasHorarias - 1) {
                     String derecha = tabla.get(i).substring((j + 1) * 3, (j + 1) * 3 + 3);
@@ -193,7 +193,7 @@ public class FitnessFase3 {
                 }
             }
         }
-        double max = (numeroControladores - 1) * (numeroFranjasHorarias - 1) * 2;
+        double max = (numeroControladores - 1) * ((numeroFranjasHorarias - momentoActual)- 1) * 2;
         double normalizado = 1 - ((max - count) / max);
         return normalizado;
     }

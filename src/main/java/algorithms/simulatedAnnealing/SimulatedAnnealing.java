@@ -168,7 +168,7 @@ public class SimulatedAnnealing {
                 ti2 = System.currentTimeMillis();
                 System.out.println("TempAct: " + temperatura + "| " + "Iteracion: " + iteracionActual + " |Tama" +
                         "ño Ind: " + individuo.getTurnos().size() + " |Porct. de Mejora: " + porcentMejora + "% o N. " +
-                        "Mejoras: " + aMejor + " |FITAnt .. FITBest: " + fitAnt + " " + bestFit + " |tiempo: " + (((ti2 - ti1) / 1000.0) / 60.0) + "\n");
+                        "Mejoras: " + aMejor + " |FITAnt .. FITBest: " + fitAnt + " " + bestFit + " |tiempo: " + (((ti2 - ti1) / 1000.0) / 60.0));
                 ti1 = System.currentTimeMillis();
                 if (bestFit > fitAnt) {
                     fitAnt = bestFit;

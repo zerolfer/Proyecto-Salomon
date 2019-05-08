@@ -219,6 +219,20 @@ public class Fitness {
         Fitness.ctrlsCompletos = ctrlsCompletos;
     }
 
+    
+    public static double continuidadMomentoCambio(Solucion solucion, Entrada entrada) {
+    	int actual = entrada.getSlotMomentoActual()*3;
+    	ArrayList<String> turnos = solucion.getTurnos();
+    	double fit = 0;
+    	double norm = 1/turnos.size();
+    	for (int i = 0; i < turnos.size(); i++) {
+			String turno = turnos.get(i);
+			if (turno.substring(actual-3, actual).equals(turno.substring(actual, actual+3))) {
+				fit += norm;
+			}
+		}
+    	return fit;
+    }
     /**
      * Funcion objetivo fase 3. Objetivos deseables. Suma ponderada de 4 objetivos con distintos sub-objetivos.
      *
@@ -237,7 +251,7 @@ public class Fitness {
         PesosObjetivos pObj = parametros.getPesosObjetivos();
         double cDeseables = pObj.getPesoObj1Sub1() * traPosicion + pObj.getPesoObj1Sub2() * traDescanso + pObj.getPesoObj1Sub3() * porcentaje;
 
-        double estadillos = FitnessFase3.estadillos(numControladores, numTurnos, individuo.getTurnos());
+        double estadillos = FitnessFase3.estadillos(numControladores, numTurnos, individuo.getTurnos(),entrada.getSlotMomentoActual());
 
         double minimizarIntervalos = FitnessFase3.minimizarIntervalos(numControladores, numTurnos, individuo.getTurnos());
         double maximizarAcreditacion = FitnessFase3.maximizarAcreditacion(entrada, numControladores, numTurnos, individuo.getTurnos(), sectoresElementalesTotales);
