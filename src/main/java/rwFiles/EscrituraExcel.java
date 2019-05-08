@@ -109,7 +109,7 @@ public class EscrituraExcel {
         XSSFWorkbook workbook = null;
 
         try {
-            file = new FileInputStream(new File("resources/PlantillaSoluciones.xlsx"));
+            file = new FileInputStream(new File("src/main/resources/PlantillaSoluciones.xlsx"));
             workbook = new XSSFWorkbook(file);
         } catch (FileNotFoundException e1) {
             System.out.println("FileNotFoundException");
@@ -441,7 +441,7 @@ public class EscrituraExcel {
             FileInputStream file;
             HSSFWorkbook workbook = null;
             try {
-                file = new FileInputStream(new File("resources/PlantillaTrazas.xls"));
+                file = new FileInputStream(new File("src/main/resources/PlantillaTrazas.xls"));
                 workbook = new HSSFWorkbook(file);
             } catch (FileNotFoundException e1) {
 
