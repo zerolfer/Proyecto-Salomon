@@ -14,12 +14,12 @@ public class Move3 extends AbstractNeighborStructure {
     }
 
     @Override
-    public Solucion FirstImprovement(Solucion x, Entrada e, Patrones pt, Parametros p, ParametrosAlgoritmo pa) {
+    public Solucion firstImprovement(Solucion x, Entrada e, Patrones pt, Parametros p, ParametrosAlgoritmo pa) {
         return null;
     }
 
     @Override
-    public Solucion Shake(Solucion x, Entrada e, Patrones pt, Parametros p, ParametrosAlgoritmo pa) {
+    public Solucion shake(Solucion x, Entrada e, Patrones pt, Parametros p, ParametrosAlgoritmo pa) {
         return null;
     }
 }

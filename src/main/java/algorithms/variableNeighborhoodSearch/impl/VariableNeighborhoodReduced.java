@@ -6,7 +6,7 @@ import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
 import patrones.Patrones;
 
-public class VariableNeighborhoodDescendent extends AbstractVariableNeighborhoodSearch {
+public class VariableNeighborhoodReduced extends AbstractVariableNeighborhoodSearch {
 
     /**
      * VNS de tipo determinista
@@ -15,8 +15,8 @@ public class VariableNeighborhoodDescendent extends AbstractVariableNeighborhood
      * @param parametrosAlgoritmo
      * @param entrada
      */
-    public VariableNeighborhoodDescendent(Parametros parametros, Patrones patrones,
-                                          ParametrosAlgoritmo parametrosAlgoritmo, Entrada entrada) {
+    public VariableNeighborhoodReduced(Parametros parametros, Patrones patrones,
+                                       ParametrosAlgoritmo parametrosAlgoritmo, Entrada entrada) {
         super(parametros, patrones, parametrosAlgoritmo, entrada);
     }
 
@@ -27,7 +27,7 @@ public class VariableNeighborhoodDescendent extends AbstractVariableNeighborhood
      */
     @Override
     protected Solucion vnsImplemetation(Solucion solucion) {
-        return super.getCurrentNeighborHood().bestImprovement(solucion, super.getEntrada(),
+        return super.getCurrentNeighborHood().shake(solucion, super.getEntrada(),
                 super.getPatrones(), super.getParametros(), super.getParametrosAlgoritmo());
     }
 

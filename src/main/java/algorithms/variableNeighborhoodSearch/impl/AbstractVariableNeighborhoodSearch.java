@@ -1,5 +1,7 @@
-package algorithms.variableNeighborhoodSearch;
+package algorithms.variableNeighborhoodSearch.impl;
 
+import algorithms.variableNeighborhoodSearch.NeighborStructure;
+import algorithms.variableNeighborhoodSearch.VariableNeighborhoodSearch;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
 import estructurasDatos.ParametrosAlgoritmo;
@@ -74,10 +76,17 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
         long initTime = System.currentTimeMillis();
         long t = 0;
         do {
+
+            // dada la estructura de vecindad actual, se ejecuta la busqueda según la implementación concreta
             Solucion x_prime = vnsImplemetation(x);
+
+            // se decide si seguir en esa estructura de vencindad u otra,
+            // y se actualiza la solución actual a aquella con mejor valor objetivo de entre la anterior y la nueva
             x = neighborhoodChange(x, x_prime);
 
+            // se actualiza el tiempo (condición de parada)
             t += System.currentTimeMillis() - initTime;
+
         } while (t < maxTimeAllowed);
         return x;
     }

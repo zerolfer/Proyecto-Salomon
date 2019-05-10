@@ -14,4 +14,9 @@ abstract class AbstractNeighborStructure implements NeighborStructure {
         return DeciderFitnessFunction.switchFitnessF(solucion, patrones, entrada, parametros, parametrosAlgoritmo)[0];
     }
 
+    @Override
+    public Solucion localSearch(Solucion x, Entrada e, Patrones pt, Parametros p, ParametrosAlgoritmo pa) {
+        Solucion x_prime = encontrarSolucionMejor();
+
+    }
 }
