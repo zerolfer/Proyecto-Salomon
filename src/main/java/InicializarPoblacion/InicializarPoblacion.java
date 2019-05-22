@@ -8,11 +8,7 @@ import main.MainPruebas;
 import org.apache.commons.lang3.StringUtils;
 import patrones.Patrones;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.regex.Pattern;
+import java.util.*;
 
 import static herramientas.CridaUtils.*;
 
@@ -93,11 +89,16 @@ public class InicializarPoblacion {
         // FASE 1
         Solucion individuo = entrada.getDistribucionInicial().clone();
         if (entrada.getSectorizacionModificada() != null) {
+
+            sustituirTrabajoEnSectoresAfines(entrada, individuo);
+
             // < PASO 1 >
             eliminarSectoresCerrados(entrada.getSlotMomentoActual(), entrada.getSectorizacion(),
                     entrada.getSectorizacionModificada(), individuo);
             // < PASO 2 >
-            introducirPlantillasNuevosSectores(entrada, descanso, maxT, minT, minD);
+//            asignarTrabajoAControladoresExistentes(entrada, descanso);
+            introducirPlantillasNuevosSectores(entrada, entrada.getListaNuevosSectoresAbiertosTrasMomentoActual(),
+                    individuo, descanso, maxT, minT, minD);
         }
 
         // < PASO 3 >
@@ -127,6 +128,32 @@ public class InicializarPoblacion {
         //FASE 4
 //        return individuo;
     }
+
+    private static void sustituirTrabajoEnSectoresAfines(Entrada entrada, Solucion individuo) {
+//        for( Sector sNuevo : entrada.getListaNuevosSectoresAbiertosTrasMomentoActual()){
+//
+//            for(Sector sCerrado:entrada.getDistribucionInicial())
+//        }
+
+        for (int i = 0; i < entrada.getSectorizacion().size(); i++) {
+            if (!entrada.getSectorizacion().get(i).equals(entrada.getSectorizacionModificada().get(i))) {
+
+            }
+        }
+
+    }
+
+//    private static void asignarTrabajoAControladoresExistentes(Entrada entrada, int descanso) {
+//        List<Sector> sectoresAbiertosTrasMomentoActual = entrada.getListaNuevosSectoresAbiertosTrasMomentoActual();
+//        List<Sector> sectoresNuevos = entrada.getListaSectoresAbiertos();
+//
+//        for (Sector sectorAbierto : sectoresAbiertosTrasMomentoActual) {
+//            for (Sector sectorNuevo : sectoresAbiertosTrasMomentoActual) {
+//                if (sectorAbierto.getId().equals(sectorNuevo.getId()))
+//
+//            }
+//        }
+//    }
 
     private static void anadirControladoresAlta(Entrada entrada, Solucion individuo) {
         ArrayList<Controlador> controladores = individuo.getControladores();
@@ -184,8 +211,8 @@ public class InicializarPoblacion {
 
     }
 
-    private static void eliminarSectoresCerrados(int slotMomentoActual, ArrayList<ArrayList<String>> sectorizacion,
-                                                 ArrayList<ArrayList<String>> sectorizacionModificada,
+    private static void eliminarSectoresCerrados(int slotMomentoActual, ArrayList<Set<String>> sectorizacion,
+                                                 ArrayList<Set<String>> sectorizacionModificada,
                                                  Solucion distribucionInicial) {
 
         Collection<String> sectoresCerrados = null;
@@ -240,7 +267,7 @@ public class InicializarPoblacion {
                                        Solucion distribucionInicial) {
         // para cada sector que se cierra
         for (String sectorCerrado : sectoresCerrados) {
-            Pattern patron = Pattern.compile("(?i)" + sectorCerrado);
+//            Pattern patron = Pattern.compile("(?i)" + sectorCerrado);
 
             // para cada uno de los turnos de la distribucion inicial
             for (int j = 0; j < distribucionInicial.getTurnos().size(); j++) {
@@ -255,7 +282,7 @@ public class InicializarPoblacion {
         }
     }
 
-    private static List<String> obtenerSectoresCerrados(ArrayList<String> iniciales, ArrayList<String> modificados) {
+    private static Set<String> obtenerSectoresCerrados(Set<String> iniciales, Set<String> modificados) {
         /*
          * iniciales - modificados = cerrados
          *  {a,b,c}  -   {a,c,d,e}     =     {b}
@@ -272,21 +299,21 @@ public class InicializarPoblacion {
 //        return diferenciaConjuntos(modificados, iniciales);
 //    }
 
-    private static List<List<String>> obtenerNuevosSectoresAbiertos(ArrayList<ArrayList<String>> sectorizacionInicial, ArrayList<ArrayList<String>> sectorizacionModificada) {
-        /*
-         * modificados - iniciales = nuevos abiertos
-         *  {a,c,d,e}  -   {a,b,c}     =     {d,e}
-         */
-        HashSet<List<String>> set = new HashSet<>();
-        for (int i = 0; i < sectorizacionInicial.size(); i++) {
-            List<String> iniciales = sectorizacionInicial.get(i);
-            List<String> modificados = sectorizacionModificada.get(i);
-            set.add(diferenciaConjuntos(modificados, iniciales));
-        }
-        return new ArrayList<>(set);
-    }
+//    private static List<List<String>> obtenerNuevosSectoresAbiertos(ArrayList<ArrayList<String>> sectorizacionInicial, ArrayList<ArrayList<String>> sectorizacionModificada) {
+//        /*
+//         * modificados - iniciales = nuevos abiertos
+//         *  {a,c,d,e}  -   {a,b,c}     =     {d,e}
+//         */
+//        HashSet<List<String>> set = new HashSet<>();
+//        for (int i = 0; i < sectorizacionInicial.size(); i++) {
+//            List<String> iniciales = sectorizacionInicial.get(i);
+//            List<String> modificados = sectorizacionModificada.get(i);
+//            set.add(diferenciaConjuntos(modificados, iniciales));
+//        }
+//        return new ArrayList<>(set);
+//    }
 
-    private static List<String> diferenciaConjuntos(List<String> c1, List<String> c2) {
+    private static Set<String> diferenciaConjuntos(Set<String> c1, Set<String> c2) {
 
         /*
         // TODO: ¿Podría implementarse con HashSets de forma más eficiente?
@@ -298,12 +325,12 @@ public class InicializarPoblacion {
             return cerradosSET;
         } else return new HashSet<>();
         */
-        List<String> res = new ArrayList<>();
+        Set<String> res = new HashSet<>();
         /*List<String> saltar = new ArrayList<>();*/
         // TODO: Alternativa? Registro índices que ya sabemos seguro que no está porque ya han sido usados? mas/menos eficiente?
 
         for (String el1 : c1) {
-            Boolean encontrado = false;
+            boolean encontrado = false;
             // buscar sector
             for (String el2 : c2) {
                 if (/*!saltar.contains(el2) && */el1.equalsIgnoreCase(el2)) {
@@ -316,7 +343,10 @@ public class InicializarPoblacion {
                 res.add(el1);
 
         }
-        return res;
+        Set<String> res2 = new HashSet<>(c1);
+        res2.removeIf(c2::contains);
+        assert res.equals(res2);
+        return res2;
 
     }
 
@@ -626,10 +656,10 @@ public class InicializarPoblacion {
      * Metodo utilizado para la reparacion de soluciones, entendiendo esto, como la modificacion de las mismas para
      * reducir el numero de restricciones incumplidas.
      *
-     * @param entrada         Entrada del problema
-     * @param p               Parametros del problema.
-     * @param minT            Tiempo de trabajo minimo.
-     * @param patrones        Patrones para comprobacion de restricciones.
+     * @param entrada  Entrada del problema
+     * @param p        Parametros del problema.
+     * @param minT     Tiempo de trabajo minimo.
+     * @param patrones Patrones para comprobacion de restricciones.
      * @return Lista de los turnos de trabajo con las modificaciones pertenentes reducir la infactibilidad.
      */
     public static ArrayList<ArrayList<String>> reparacionSoluciones(Entrada entrada, Parametros p,
@@ -682,17 +712,17 @@ public class InicializarPoblacion {
      * @param minD     Tiempo de descanso minimo.
      * @return Lista de turnos de trabajo.
      */
-    private static void introducirPlantillasNuevosSectores(Entrada entrada, int descanso, int maxT,
+    private static void introducirPlantillasNuevosSectores(Entrada entrada, List<Sector> sectoresNuevosAbiertosTrasMomentoActual,
+                                                           Solucion distribucion, int descanso, int maxT,
                                                            int minT, int minD) {
-        Solucion distribucion = entrada.getDistribucionInicial(); // individuo final a actualizar
+        ArrayList<Controlador> controladores = entrada.getControladores(); // individuo final a actualizar
         ArrayList<String> turnos = distribucion.getTurnos(); // esto es la matriz de trabajo
 
-        ArrayList<ArrayList<String>> sectorizacionPorSlots = entrada.getSectorizacionModificada();
-        List<Sector> sectoresNuevosAbiertosTrasMomentoActual = entrada.getListaNuevosSectoresAbiertosTrasMomentoActual();
+        ArrayList<Set<String>> sectorizacionPorSlots = entrada.getSectorizacionModificada();
+//        List<Sector> sectoresNuevosAbiertosTrasMomentoActual = entrada.getListaNuevosSectoresAbiertosTrasMomentoActual();
         ArrayList<Integer> secNoc = new ArrayList<>();
 
         for (Sector sector : sectoresNuevosAbiertosTrasMomentoActual) {
-
             //
             // Crear plantilla para cada nuevo sector:
             //
@@ -718,10 +748,10 @@ public class InicializarPoblacion {
                         continue;
                     }
 
-                    List<String> sectoresAbiertos = sectorizacionPorSlots.get(j);
+                    Set<String> sectoresAbiertos = sectorizacionPorSlots.get(j);
                     boolean open = false;
-                    for (int k = 0; k < sectoresAbiertos.size(); k++) {
-                        if (sector.getId().equalsIgnoreCase(sectoresAbiertos.get(k))) {
+                    for (/*int k = 0; k < sectoresAbiertos.size(); k++*/String sectAbiert : sectoresAbiertos) {
+                        if (sector.getId().equalsIgnoreCase(/*sectoresAbiertos.get(k)*/sectAbiert)) {
                             open = true;
                             plantilla = introducirSector(plantilla, descanso, sector.getId());
                             break;
@@ -746,6 +776,7 @@ public class InicializarPoblacion {
 
             // meter la plantilla a los turnos de la instancia, actualizando el formato
             introducirEnTurnos(plantilla, turnos);
+            controladores.add(new Controlador())
         }
     }
 
@@ -760,7 +791,7 @@ public class InicializarPoblacion {
      */
     private static ArrayList<ArrayList<String>> introducirSectorNoche(ArrayList<ArrayList<String>> plantilla,
                                                                       List<Sector> sectores, int noche,
-                                                                      ArrayList<ArrayList<String>> sectorizacion) {
+                                                                      ArrayList<Set<String>> sectorizacion) {
         ArrayList<String> c4 = new ArrayList<>();
         plantilla.add(c4);
         /*Lista de sectores noche = int noche*/
@@ -770,12 +801,11 @@ public class InicializarPoblacion {
                 sectoresNocturnos.add(sectores.get(j));
             }
         }
-        for (int j = 0; j < sectorizacion.size(); j++) {
-            ArrayList<String> sectoresAbiertos = sectorizacion.get(j);
-            for (int k = 0; k < sectoresAbiertos.size(); k++) {
-                for (int i = 0; i < sectoresNocturnos.size(); i++) {
-                    if (sectoresNocturnos.get(i).getId().equalsIgnoreCase(sectoresAbiertos.get(k))) {
-                        plantilla = introducirSlotSectorNocturno(plantilla, sectoresNocturnos.get(i).getId());
+        for (Set<String> sectoresAbiertos : sectorizacion) {
+            for (/*int k = 0; k < sectoresAbiertos.size(); k++*/String sectorAbierto : sectoresAbiertos) {
+                for (Sector sectoresNocturno : sectoresNocturnos) {
+                    if (sectoresNocturno.getId().equalsIgnoreCase(sectorAbierto)) {
+                        plantilla = introducirSlotSectorNocturno(plantilla, sectoresNocturno.getId());
                     }
                 }
             }
@@ -947,7 +977,7 @@ public class InicializarPoblacion {
     }
 
     public static ArrayList<String> reparacionSolucionesAdapter(Entrada entrada, Parametros parametros,
-                                                          ArrayList<String> turnos, int minT, Patrones patrones) {
+                                                                ArrayList<String> turnos, int minT, Patrones patrones) {
         String turno = "";
         ArrayList<String> turno2 = new ArrayList<>();
         ArrayList<ArrayList<String>> turnos2 = new ArrayList<>();

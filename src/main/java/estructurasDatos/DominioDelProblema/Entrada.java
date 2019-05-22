@@ -6,9 +6,7 @@ import fitnessFunction.Fitness;
 import herramientas.CridaUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import static herramientas.CridaUtils.STRING_DESCANSO;
 
@@ -40,7 +38,7 @@ public class Entrada {
     /**
      * Sectorizacion utilizada en la instancia del problema. La sectorizacion es el conjunto de sectores que se abren y cierran durante la duracion del turno.
      */
-    private ArrayList<ArrayList<String>> sectorizacion;
+    private ArrayList<Set<String>> sectorizacion;
     /**
      * Indica los sectores que tienen afinidad entre si.
      */
@@ -73,7 +71,7 @@ public class Entrada {
      * Carga de trabajo total representada en slots.
      */
 //    private int cargaTrabajo; TODO: es necesario? Nunca se usaba...
-    private ArrayList<ArrayList<String>> sectorizacionModificada;
+    private ArrayList<Set<String>> sectorizacionModificada;
     private int slotMomentoActual;
 
     /**
@@ -92,10 +90,10 @@ public class Entrada {
      */
     public Entrada(ArrayList<Controlador> controladores, ArrayList<Nucleo> nucleos, Turno turno,
                    ArrayList<Sector> listaSectores, ArrayList<Sector> listaSectoresAbiertos,
-                   ArrayList<Sector> listaNuevosSectoresAbiertosTrasMomentoActual, ArrayList<ArrayList<String>> sectorizacion,
+                   ArrayList<Sector> listaNuevosSectoresAbiertosTrasMomentoActual, ArrayList<Set<String>> sectorizacion,
                    ArrayList<ArrayList<String>> matrizAfinidad,
                    HashMap<Sector, ArrayList<String>> volumnsOfSectors, /*int cargaTrabajo,*/
-                   ArrayList<ArrayList<String>> sectorizacionModificada,
+                   ArrayList<Set<String>> sectorizacionModificada,
                    Solucion distribucionInicial, int slotMomentoActual) {
         this.controladores = controladores;
         this.nucleos = nucleos;
@@ -135,8 +133,8 @@ public class Entrada {
 
 
         Turno turno = crearTurno(fTurno, parametros);
-        ArrayList<ArrayList<String>> sectorizacion = crearSectorizacion(fAperturaSectores, fSectorizacionSectoresVolumenes, turno, listaSectores);
-        ArrayList<ArrayList<String>> sectorizacionModificada = null;
+        ArrayList<Set<String>> sectorizacion = crearSectorizacion(fAperturaSectores, fSectorizacionSectoresVolumenes, turno, listaSectores);
+        ArrayList<Set<String>> sectorizacionModificada = null;
         ArrayList<Sector> listaNuevosSectoresAbiertosTrasMomentoActual = null; // Hay que verificar que son NULL o no al acceder a ellos
 
         int slotMomentoActual = crearMomentoActual(turno, fDistribucionInicial);
@@ -278,7 +276,7 @@ public class Entrada {
     }
 
 
-    private static int calcularCargaTrabajo(ArrayList<ArrayList<String>> sectorizacion, ArrayList<Controlador> controladores, ArrayList<Sector> listaSectoresAbiertos) {
+    private static int calcularCargaTrabajo(ArrayList<Set<String>> sectorizacion, ArrayList<Controlador> controladores, ArrayList<Sector> listaSectoresAbiertos) {
         int c = 0;
         for (int i = 0; i < sectorizacion.size(); i++) {
             c += sectorizacion.get(i).size();
@@ -311,17 +309,17 @@ public class Entrada {
         return volumnsOfSectors;
     }
 
-    private static ArrayList<Sector> crearListaSectoresAbiertos(int slotMomentoActual, ArrayList<ArrayList<String>> sectorizacion, ArrayList<Sector> listaSectores) {
+    private static ArrayList<Sector> crearListaSectoresAbiertos(int slotMomentoActual, ArrayList<Set<String>> sectorizacion, ArrayList<Sector> listaSectores) {
         List<Sector> sectoresAbiertos = new ArrayList<>();
 
         // para cada slot
         for (int i = slotMomentoActual; i < sectorizacion.size(); i++) {
-            ArrayList<String> slot = sectorizacion.get(i);
+            Set<String> slot = sectorizacion.get(i);
 
             // para cada sector abierto en ese slot
             for (String sct : slot) {
 
-                // Si aun no esta en la lista (lo ponemos primero para major eficiencia)
+                // Si aun no esta en la lista (lo ponemos primero para mayor eficiencia)
                 // No es necesario verificar la capitalización puesto que todos vienen con minúscula
                 if (!CridaUtils.containsSectorById/*IngoreCase*/(sectoresAbiertos, sct)) {
 
@@ -342,14 +340,14 @@ public class Entrada {
     }
 
     private static ArrayList<Sector> crearListaNuevosSectoresAbiertos(int slotMomentoActual,
-                                                                      ArrayList<ArrayList<String>> sectorizacion,
-                                                                      ArrayList<ArrayList<String>> sectorizacionModificada,
+                                                                      ArrayList<Set<String>> sectorizacion,
+                                                                      ArrayList<Set<String>> sectorizacionModificada,
                                                                       ArrayList<Sector> listaSectores) {
         List<Sector> sectoresAbiertos = new ArrayList<>();
 
         // para cada slot
         for (int numSlot = slotMomentoActual; numSlot < sectorizacion.size(); numSlot++) {
-            ArrayList<String> slot = sectorizacionModificada.get(numSlot);
+            Set<String> slot = sectorizacionModificada.get(numSlot);
 
             // para cada sector abierto en ese slot
             for (String sct : slot) {
@@ -410,27 +408,28 @@ public class Entrada {
         return matrizAfinidad;
     }
 
-    private static ArrayList<ArrayList<String>> crearSectorizacion(ArrayList<String> entrada, ArrayList<String> confSectores, Turno turno, ArrayList<Sector> listaSectores) {
-        ArrayList<ArrayList<String>> sectorizacion = new ArrayList<>();
+    private static ArrayList<Set<String>> crearSectorizacion(ArrayList<String> entrada, ArrayList<String> confSectores, Turno turno, ArrayList<Sector> listaSectores) {
+        ArrayList<ArrayList<String>> sectorizacionTemp = new ArrayList<>();
+        ArrayList<Set<String>> sectorizacion = new ArrayList<>();
         for (int i = 0; i < turno.getTl()[1]; i++) {
             ArrayList<String> slot = new ArrayList<>();
             slot.add(STRING_DESCANSO);
-            sectorizacion.add(slot);
+            sectorizacionTemp.add(slot);
         }
         for (int i = 1; i < entrada.size(); i++) {
             String[] linea = entrada.get(i).split(";");
             if (linea[1].equalsIgnoreCase("SECTOR")) {
-                sectorizacion = introducirSector(linea, sectorizacion, turno, listaSectores, false);
+                sectorizacionTemp = introducirSector(linea, sectorizacionTemp, turno, listaSectores, false);
             } else if (linea[1].equalsIgnoreCase("CONF")) {
-                sectorizacion = introducirListaSectores(linea, confSectores, sectorizacion, turno, listaSectores);
+                sectorizacionTemp = introducirListaSectores(linea, confSectores, sectorizacionTemp, turno, listaSectores);
             } else if (linea[1].equalsIgnoreCase("SECTORNOCTURNO")) {
-                sectorizacion = introducirSector(linea, sectorizacion, turno, listaSectores, true);
+                sectorizacionTemp = introducirSector(linea, sectorizacionTemp, turno, listaSectores, true);
             }
         }
-        for (int i = 0; i < sectorizacion.size(); i++) {
-            ArrayList<String> slot = sectorizacion.get(i);
+        for (int i = 0; i < sectorizacionTemp.size(); i++) {
+            ArrayList<String> slot = sectorizacionTemp.get(i);
             slot.remove(0);
-            sectorizacion.set(i, slot);
+            sectorizacion.add(new HashSet<>(slot));
         }
 
         return sectorizacion;
@@ -642,7 +641,7 @@ public class Entrada {
 
     }
 
-    public ArrayList<ArrayList<String>> getSectorizacionModificada() {
+    public ArrayList<Set<String>> getSectorizacionModificada() {
         return sectorizacionModificada;
     }
 
@@ -678,11 +677,11 @@ public class Entrada {
         this.listaSectores = listaSectores;
     }
 
-    public ArrayList<ArrayList<String>> getSectorizacion() {
+    public ArrayList<Set<String>> getSectorizacion() {
         return sectorizacion;
     }
 
-    public void setSectorizacion(ArrayList<ArrayList<String>> sectorizacion) {
+    public void setSectorizacion(ArrayList<Set<String>> sectorizacion) {
         this.sectorizacion = sectorizacion;
     }
 

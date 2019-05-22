@@ -24,6 +24,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 import static herramientas.CridaUtils.STRING_DESCANSO;
 
@@ -118,21 +120,22 @@ public class EscrituraExcel {
             System.out.println("IOException");
             e.printStackTrace();
         }
-        ArrayList<ArrayList<String>> sect = entrada.getSectorizacion();
+        ArrayList<Set<String>> sect = entrada.getSectorizacion();
+        ArrayList<List<String>> sectFinal = new ArrayList<>();
         ArrayList<Sector> sectAbiertos = entrada.getListaSectoresAbiertos();
         /*MODIFICO LA SECTORIZACION PARA PASAR DE ID A NOMBRE*/
-        for (int i = 0; i < sect.size(); i++) {
-            ArrayList<String> slot = sect.get(i);
+        for (Set<String> strings : sect) {
+            List<String> slot = new ArrayList<>(strings);
             for (int j = 0; j < slot.size(); j++) {
                 String s = slot.get(j);
-                for (int k = 0; k < sectAbiertos.size(); k++) {
-                    if (s.equalsIgnoreCase(sectAbiertos.get(k).getId())) {
-                        slot.set(j, sectAbiertos.get(k).getNombre());
+                for (Sector sectAbierto : sectAbiertos) {
+                    if (s.equalsIgnoreCase(sectAbierto.getId())) {
+                        slot.set(j, sectAbierto.getNombre());
                         break;
                     }
                 }
             }
-            sect.set(i, slot);
+            sectFinal.add(slot);
         }
         /*TERMINO DE MODIFICAR LA SECTORIZACION PARA PASAR DE ID A NOMBRE*/
         if (titulo == null) {
@@ -172,54 +175,54 @@ public class EscrituraExcel {
             /*INICIO SECTORIZACION*/
             row = sheet.createRow(2);
             int cnt = 1, equ = 0;
-            for (int i = 0; i < sect.size(); i++) {
+            for (int i = 0; i < sectFinal.size(); i++) {
                 if (cnt != 1) {
                     row.createCell(cnt).setCellStyle(center);
                 } else {
                     row.createCell(cnt);
                 }
-                if (i == sect.size() - 1) {
+                if (i == sectFinal.size() - 1) {
                     if (equ != 0) {
                         row.createCell(cnt + 1).setCellStyle(center);
                         sheet.addMergedRegion(new CellRangeAddress(2, 2, cnt - equ, cnt + 1));
                     }
                     String tmp = "";
-                    for (int j = 0; j < sect.get(i).size(); j++) {
-                        if (j + 1 == sect.get(i).size()) {
-                            tmp += sect.get(i).get(j);
+                    for (int j = 0; j < sectFinal.get(i).size(); j++) {
+                        if (j + 1 == sectFinal.get(i).size()) {
+                            tmp += sectFinal.get(i).get(j);
                         } else {
-                            tmp += sect.get(i).get(j) + "-";
+                            tmp += sectFinal.get(i).get(j) + "-";
                         }
                     }
                     row.getCell(cnt - equ).setCellValue(tmp);
                     row.getCell(cnt - equ).setCellStyle(center);
                 } else if (i == 0) {
-                    if (sect.get(i).equals(sect.get(i + 1))) {
+                    if (sectFinal.get(i).equals(sectFinal.get(i + 1))) {
                         //equ++;
                     } else {
                         String tmp = "";
-                        for (int j = 0; j < sect.get(i).size(); j++) {
-                            if (j + 1 == sect.get(i).size()) {
-                                tmp += sect.get(i).get(j);
+                        for (int j = 0; j < sectFinal.get(i).size(); j++) {
+                            if (j + 1 == sectFinal.get(i).size()) {
+                                tmp += sectFinal.get(i).get(j);
                             } else {
-                                tmp += sect.get(i).get(j) + "-";
+                                tmp += sectFinal.get(i).get(j) + "-";
                             }
                         }
                         row.getCell(cnt).setCellValue(tmp);
                         row.getCell(cnt).setCellStyle(center);
                     }
-                } else if (sect.get(i).equals(sect.get(i - 1))) {
+                } else if (sectFinal.get(i).equals(sectFinal.get(i - 1))) {
                     equ++;
-                } else if (!sect.get(i).equals(sect.get(i - 1))) {
+                } else if (!sectFinal.get(i).equals(sectFinal.get(i - 1))) {
                     if (equ != 0) {
                         sheet.addMergedRegion(new CellRangeAddress(2, 2, cnt - equ, cnt));
                     }
                     String tmp = "";
-                    for (int j = 0; j < sect.get(i - 1).size(); j++) {
-                        if (j + 1 == sect.get(i - 1).size()) {
-                            tmp += sect.get(i - 1).get(j);
+                    for (int j = 0; j < sectFinal.get(i - 1).size(); j++) {
+                        if (j + 1 == sectFinal.get(i - 1).size()) {
+                            tmp += sectFinal.get(i - 1).get(j);
                         } else {
-                            tmp += sect.get(i - 1).get(j) + "-";
+                            tmp += sectFinal.get(i - 1).get(j) + "-";
                         }
                     }
                     row.getCell(cnt - equ).setCellValue(tmp);
