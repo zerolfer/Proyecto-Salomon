@@ -1,7 +1,9 @@
 package herramientas;
 
+import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.DominioDelProblema.Sector;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -55,5 +57,9 @@ public class CridaUtils {
                 return sector;
         }
         return null;
+    }
+
+    public static boolean esAfin(String sectorCerrado, String sectorAbierto, ArrayList<ArrayList<String>> matrizAfinidad) {
+        return false;
     }
 }

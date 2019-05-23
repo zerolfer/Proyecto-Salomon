@@ -4,6 +4,7 @@ import estructurasDatos.Auxiliares.ObjAux1;
 import estructurasDatos.DominioDelProblema.*;
 import estructurasDatos.Parametros;
 import estructurasDatos.Solucion;
+import herramientas.CridaUtils;
 import main.MainPruebas;
 import org.apache.commons.lang3.StringUtils;
 import patrones.Patrones;
@@ -90,11 +91,12 @@ public class InicializarPoblacion {
         Solucion individuo = entrada.getDistribucionInicial().clone();
         if (entrada.getSectorizacionModificada() != null) {
 
-            sustituirTrabajoEnSectoresAfines(entrada, individuo);
+//            sustituirTrabajoEnSectoresAfines(entrada, individuo);
 
             // < PASO 1 >
             eliminarSectoresCerrados(entrada.getSlotMomentoActual(), entrada.getSectorizacion(),
-                    entrada.getSectorizacionModificada(), individuo);
+                    entrada.getSectorizacionModificada(), entrada.getListaNuevosSectoresAbiertosTrasMomentoActual(),
+                    individuo, entrada.getMatrizAfinidad());
             // < PASO 2 >
 //            asignarTrabajoAControladoresExistentes(entrada, descanso);
             introducirPlantillasNuevosSectores(entrada, entrada.getListaNuevosSectoresAbiertosTrasMomentoActual(),
@@ -135,8 +137,11 @@ public class InicializarPoblacion {
 //            for(Sector sCerrado:entrada.getDistribucionInicial())
 //        }
 
-        for (int i = 0; i < entrada.getSectorizacion().size(); i++) {
-            if (!entrada.getSectorizacion().get(i).equals(entrada.getSectorizacionModificada().get(i))) {
+        List<Set<String>> anterior = entrada.getSectorizacion();
+        List<Set<String>> nueva = entrada.getSectorizacionModificada();
+
+        for (int i = 0; i < anterior.size(); i++) {
+            if (!anterior.get(i).equals(nueva.get(i))) { // como son sets se comparan los elementos solo, el orden no importa
 
             }
         }
@@ -213,9 +218,11 @@ public class InicializarPoblacion {
 
     private static void eliminarSectoresCerrados(int slotMomentoActual, ArrayList<Set<String>> sectorizacion,
                                                  ArrayList<Set<String>> sectorizacionModificada,
-                                                 Solucion distribucionInicial) {
+                                                 List<Sector> listaNuevosSectoresAbiertosTrasMomentoActual,
+                                                 Solucion distribucionInicial, ArrayList<ArrayList<String>> matrizAfinidad) {
 
         Collection<String> sectoresCerrados = null;
+        Collection<String> sectoresQueSeAbren = null;
         boolean hayCambio = false;
         int idxInicio = slotMomentoActual;
 
@@ -228,20 +235,22 @@ public class InicializarPoblacion {
                     || !sectorizacionModificada.get(slot).equals(sectorizacionModificada.get(slot - 1)) // si hay cambio
                     || !sectorizacion.get(slot).equals(sectorizacion.get(slot - 1))) {
 
-                // como hay un cambio, obtenemos los nuevos sectores cerrados, será una lista vacia o no
-                sectoresCerrados = obtenerSectoresCerrados(sectorizacion.get(slot), sectorizacionModificada.get(slot));
-
                 // si ya se habia alcanzado un cambio, modificamos los turnos en el intervalo que va
                 // desde el slot donde se produjo dicho cambio, hasta el actual
                 if (hayCambio) {
-                    modificarTurno(idxInicio, slot, sectoresCerrados, distribucionInicial);
+                    modificarTurno(idxInicio, slot, sectoresCerrados, sectoresQueSeAbren,
+                            listaNuevosSectoresAbiertosTrasMomentoActual, distribucionInicial, matrizAfinidad);
                     hayCambio = false;
                 }
+
+                // como hay un cambio, obtenemos los nuevos sectores cerrados, será una lista vacia o no
+                sectoresCerrados = obtenerSectoresCerrados(sectorizacion.get(slot), sectorizacionModificada.get(slot));
+                sectoresQueSeAbren = obtenerNuevosSectoresAbiertos(sectorizacion.get(slot), sectorizacionModificada.get(slot));
 
                 // como ha habido un cambio, lo marcamos en la baliza hayCambio,
                 // y guardamos la posicion (numero del slot) de dicho cambio para
                 // utilizarlo en el if anterior la proxima vez que se detecte un cambio
-                if (sectoresCerrados.size() > 0) {
+                if (sectoresCerrados.size() > 0 || sectoresQueSeAbren.size() > 0) {
                     hayCambio = true;
                     idxInicio = slot;
                 }
@@ -249,7 +258,8 @@ public class InicializarPoblacion {
         }
         // si solo hay un unico cambio en toda la sectorización, el cambio no habrá sido computado, lo computamos
         if (hayCambio) {
-            modificarTurno(idxInicio, sectorizacion.size(), sectoresCerrados, distribucionInicial);
+            modificarTurno(idxInicio, sectorizacion.size(), sectoresCerrados, sectoresQueSeAbren,
+                    listaNuevosSectoresAbiertosTrasMomentoActual, distribucionInicial, matrizAfinidad);
         }
     }
 
@@ -258,28 +268,46 @@ public class InicializarPoblacion {
      * (en slots de 3 caracteres cada uno) fijado en los parámetros
      * Importante: este método MODIFICA LA <code>distribucionInicial<code/> pasada como argumento
      *
-     * @param slotInicio          inicio del intervalo (numero de slot)
-     * @param slotFin             final del intervalo (numero de slot)
-     * @param sectoresCerrados    lista de sectores cerrados en el intervalo
-     * @param distribucionInicial distribucion inicial a modificar
+     * @param slotInicio                                   inicio del intervalo (numero de slot)
+     * @param slotFin                                      final del intervalo (numero de slot)
+     * @param sectoresCerrados                             lista de sectores cerrados en el intervalo
+     * @param listaNuevosSectoresAbiertosTrasMomentoActual
+     * @param distribucionInicial                          distribucion inicial a modificar
      */
     private static void modificarTurno(int slotInicio, int slotFin, final Collection<String> sectoresCerrados,
-                                       Solucion distribucionInicial) {
+                                       final Collection<String> sectoresQueSeAbren,
+                                       List<Sector> listaNuevosSectoresAbiertosTrasMomentoActual,
+                                       Solucion distribucionInicial, ArrayList<ArrayList<String>> matrizAfinidad) {
         // para cada sector que se cierra
         for (String sectorCerrado : sectoresCerrados) {
 //            Pattern patron = Pattern.compile("(?i)" + sectorCerrado);
+
+            String stringParaSustituir = STRING_DESCANSO; // por defecto, si no hay afinidades, se cambia por descanso
+            String afin = buscarSectorAfin(sectorCerrado, sectoresQueSeAbren, matrizAfinidad);
+            if (!afin.equals(""))
+                stringParaSustituir=afin;
 
             // para cada uno de los turnos de la distribucion inicial
             for (int j = 0; j < distribucionInicial.getTurnos().size(); j++) {
                 String s = distribucionInicial.getTurnos().get(j); // turno original
                 String previo = s.substring(0, slotInicio * LONGITUD_CADENAS);
                 String medio = StringUtils.replaceIgnoreCase(
-                        s.substring(slotInicio * LONGITUD_CADENAS, slotFin * LONGITUD_CADENAS), sectorCerrado, STRING_DESCANSO
+                        s.substring(slotInicio * LONGITUD_CADENAS, slotFin * LONGITUD_CADENAS), sectorCerrado, stringParaSustituir
                 ); // sustituimos todas las apariciones del sector (ya sea mayus o minus) por descansos
                 String posterior = s.substring(slotFin * LONGITUD_CADENAS);
                 distribucionInicial.getTurnos().set(j, previo + medio + posterior);  // recomponemos y actualizamos el turno
             }
         }
+    }
+
+    private static String buscarSectorAfin(String sectorCerrado, Collection<String> sectoresQueSeAbren,
+                                           ArrayList<ArrayList<String>> matrizAfinidad) {
+        if(sectoresQueSeAbren.contains(sectorCerrado)) return sectorCerrado; // [Caso 4]
+        for (String sectorAbierto : sectoresQueSeAbren) {
+            if(CridaUtils.esAfin(sectorCerrado, sectorAbierto, matrizAfinidad))
+                return sectorAbierto;
+        }
+        return "";
     }
 
     private static Set<String> obtenerSectoresCerrados(Set<String> iniciales, Set<String> modificados) {
@@ -291,13 +319,13 @@ public class InicializarPoblacion {
         return diferenciaConjuntos(iniciales, modificados);
     }
 
-//    private static Collection<String> obtenerNuevosSectoresAbiertos(ArrayList<String> iniciales, ArrayList<String> modificados) {
-//        /*
-//         * modificados - iniciales = nuevos abiertos
-//         *  {a,c,d,e}  -   {a,b,c}     =     {d,e}
-//         */
-//        return diferenciaConjuntos(modificados, iniciales);
-//    }
+    private static Set<String> obtenerNuevosSectoresAbiertos(Set<String> iniciales, Set<String> modificados) {
+        /*
+         * modificados - iniciales = nuevos abiertos
+         *  {a,c,d,e}  -   {a,b,c}     =     {d,e}
+         */
+        return diferenciaConjuntos(modificados, iniciales);
+    }
 
 //    private static List<List<String>> obtenerNuevosSectoresAbiertos(ArrayList<ArrayList<String>> sectorizacionInicial, ArrayList<ArrayList<String>> sectorizacionModificada) {
 //        /*
@@ -776,7 +804,7 @@ public class InicializarPoblacion {
 
             // meter la plantilla a los turnos de la instancia, actualizando el formato
             introducirEnTurnos(plantilla, turnos);
-            controladores.add(new Controlador())
+//            controladores.add(new Controlador()) // TODO: AÑADIR CONTROLADORES IMAGINARIOS
         }
     }
 
