@@ -95,8 +95,8 @@ public class InicializarPoblacion {
 
             // < PASO 1 >
             eliminarSectoresCerrados(entrada.getSlotMomentoActual(), entrada.getSectorizacion(),
-                    entrada.getSectorizacionModificada(), entrada.getListaNuevosSectoresAbiertosTrasMomentoActual(),
-                    individuo, entrada.getMatrizAfinidad());
+                    entrada.getSectorizacionModificada(), entrada.getControladores(),
+                    entrada.getListaNuevosSectoresAbiertosTrasMomentoActual(), individuo, entrada.getMapaAfinidad());
             // < PASO 2 >
 //            asignarTrabajoAControladoresExistentes(entrada, descanso);
             introducirPlantillasNuevosSectores(entrada, entrada.getListaNuevosSectoresAbiertosTrasMomentoActual(),
@@ -218,8 +218,8 @@ public class InicializarPoblacion {
 
     private static void eliminarSectoresCerrados(int slotMomentoActual, ArrayList<Set<String>> sectorizacion,
                                                  ArrayList<Set<String>> sectorizacionModificada,
-                                                 List<Sector> listaNuevosSectoresAbiertosTrasMomentoActual,
-                                                 Solucion distribucionInicial, ArrayList<ArrayList<String>> matrizAfinidad) {
+                                                 List<Controlador> controladores, List<Sector> sectores,
+                                                 Solucion distribucionInicial, Map<String, Set<String>> mapaAfinidad) {
 
         Collection<String> sectoresCerrados = null;
         Collection<String> sectoresQueSeAbren = null;
@@ -239,7 +239,7 @@ public class InicializarPoblacion {
                 // desde el slot donde se produjo dicho cambio, hasta el actual
                 if (hayCambio) {
                     modificarTurno(idxInicio, slot, sectoresCerrados, sectoresQueSeAbren,
-                            listaNuevosSectoresAbiertosTrasMomentoActual, distribucionInicial, matrizAfinidad);
+                            controladores, sectores, distribucionInicial, mapaAfinidad);
                     hayCambio = false;
                 }
 
@@ -259,7 +259,7 @@ public class InicializarPoblacion {
         // si solo hay un unico cambio en toda la sectorización, el cambio no habrá sido computado, lo computamos
         if (hayCambio) {
             modificarTurno(idxInicio, sectorizacion.size(), sectoresCerrados, sectoresQueSeAbren,
-                    listaNuevosSectoresAbiertosTrasMomentoActual, distribucionInicial, matrizAfinidad);
+                    controladores, sectores, distribucionInicial, mapaAfinidad);
         }
     }
 
@@ -276,35 +276,67 @@ public class InicializarPoblacion {
      */
     private static void modificarTurno(int slotInicio, int slotFin, final Collection<String> sectoresCerrados,
                                        final Collection<String> sectoresQueSeAbren,
-                                       List<Sector> listaNuevosSectoresAbiertosTrasMomentoActual,
-                                       Solucion distribucionInicial, ArrayList<ArrayList<String>> matrizAfinidad) {
+                                       List<Controlador> controladores, List<Sector> sectores,
+                                       Solucion distribucionInicial, Map<String, Set<String>> mapaAfinidad) {
         // para cada sector que se cierra
         for (String sectorCerrado : sectoresCerrados) {
 //            Pattern patron = Pattern.compile("(?i)" + sectorCerrado);
 
-            String stringParaSustituir = STRING_DESCANSO; // por defecto, si no hay afinidades, se cambia por descanso
-            String afin = buscarSectorAfin(sectorCerrado, sectoresQueSeAbren, matrizAfinidad);
+            String stringParaSustituir = ""; // por defecto, si no hay afinidades, se cambia por descanso
+            String afin = buscarSectorAfin(sectorCerrado, sectoresQueSeAbren, mapaAfinidad);
             if (!afin.equals(""))
-                stringParaSustituir=afin;
+                stringParaSustituir = afin;
 
             // para cada uno de los turnos de la distribucion inicial
             for (int j = 0; j < distribucionInicial.getTurnos().size(); j++) {
                 String s = distribucionInicial.getTurnos().get(j); // turno original
+
+                if (!s.contains(sectorCerrado) && checkAcreditaciones(sectores, controladores.get(j), afin, j)) // TODO: segurarse de que el check es necesario o no!!!!! FIXME !!!
+                    continue;
+
                 String previo = s.substring(0, slotInicio * LONGITUD_CADENAS);
-                String medio = StringUtils.replaceIgnoreCase(
-                        s.substring(slotInicio * LONGITUD_CADENAS, slotFin * LONGITUD_CADENAS), sectorCerrado, stringParaSustituir
-                ); // sustituimos todas las apariciones del sector (ya sea mayus o minus) por descansos
+
+                String medio = "";
+                if (stringParaSustituir.equals(""))
+                    medio = StringUtils.replaceIgnoreCase(
+                            s.substring(slotInicio * LONGITUD_CADENAS, slotFin * LONGITUD_CADENAS), sectorCerrado, STRING_DESCANSO
+                    ); // sustituimos todas las apariciones del sector (ya sea mayus o minus) por descansos
+                else
+                    medio = reemplazarPorAfin(s, slotInicio, LONGITUD_CADENAS, slotFin, sectorCerrado,
+                            stringParaSustituir);
+
                 String posterior = s.substring(slotFin * LONGITUD_CADENAS);
                 distribucionInicial.getTurnos().set(j, previo + medio + posterior);  // recomponemos y actualizamos el turno
             }
         }
     }
 
+    /*
+     * TODO: ASEGURARSE DE SI ES REALMENTE NECESARIO ESTA COMPROBACIÓN O NO
+     * FIXME: ES REALMENTE NECESARIO ESTA COMPROBACIÓN?!?!
+     */
+    private static boolean checkAcreditaciones(List<Sector> sectores, Controlador controlador, String afin, int indice) {
+        Sector sector = CridaUtils.findSectorById(sectores, afin);
+        if (controlador.getTurnoAsignado() != indice) return false;
+        if (controlador.isCON() && !sector.isRuta()) return false;
+        return true;
+    }
+
+    private static String reemplazarPorAfin(String s, int slotInicio, int longitudCadenas, int slotFin,
+                                            String sectorCerrado, String stringParaSustituir) {
+
+        String medio = s.substring(slotInicio * LONGITUD_CADENAS, slotFin * LONGITUD_CADENAS);
+        medio = StringUtils.replace(medio, sectorCerrado, stringParaSustituir); // vienen en minúscula por defecto
+        medio = StringUtils.replace(medio, sectorCerrado.toUpperCase(), stringParaSustituir.toUpperCase());
+        return medio;
+
+    }
+
     private static String buscarSectorAfin(String sectorCerrado, Collection<String> sectoresQueSeAbren,
-                                           ArrayList<ArrayList<String>> matrizAfinidad) {
-        if(sectoresQueSeAbren.contains(sectorCerrado)) return sectorCerrado; // [Caso 4]
+                                           Map<String, Set<String>> mapaAfinidad) {
+        if (sectoresQueSeAbren.contains(sectorCerrado)) return sectorCerrado; // [Caso 4]
         for (String sectorAbierto : sectoresQueSeAbren) {
-            if(CridaUtils.esAfin(sectorCerrado, sectorAbierto, matrizAfinidad))
+            if (CridaUtils.esAfin(sectorCerrado, sectorAbierto, mapaAfinidad))
                 return sectorAbierto;
         }
         return "";

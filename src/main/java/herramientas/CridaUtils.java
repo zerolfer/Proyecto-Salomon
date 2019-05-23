@@ -1,20 +1,20 @@
 package herramientas;
 
-import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.DominioDelProblema.Sector;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class CridaUtils {
     public static final String STRING_DESCANSO = "111";
     public static final String STRING_NO_TURNO = "000";
     public static final int LONGITUD_CADENAS = 3; // Es decir, el tamaño de cada unidad (aaa, 111, 000,...)
+    public static final String STRING_SEPARADOR_CSV = ";";
 
-    public static boolean containsIgnoreCase(Collection<String> collection, String s){
-        for (String element : collection ) {
+    public static boolean containsIgnoreCase(Collection<String> collection, String s) {
+        for (String element : collection) {
             if (element.equalsIgnoreCase(s))
                 return true;
         }
@@ -44,10 +44,10 @@ public class CridaUtils {
     }
 
 
-    public static Sector findSectorById(List<Sector> listaSectores, String id){
+    public static Sector findSectorById(Collection<Sector> listaSectores, String id) {
         for (Sector sector : listaSectores) {
 
-            if(CridaUtils.class.desiredAssertionStatus()) {
+            if (CridaUtils.class.desiredAssertionStatus()) {
                 for (char c : sector.getId().toCharArray()) {
                     assert Character.isLowerCase(c);
                 }
@@ -56,10 +56,18 @@ public class CridaUtils {
             if (sector.getId().equals/*IgnoreCase*/(id))
                 return sector;
         }
-        return null;
+        throw new RuntimeException("ERROR: NO EXISTE NINGUN SECTOR CON IDENTIFICADOR '" + id + "'");
     }
 
-    public static boolean esAfin(String sectorCerrado, String sectorAbierto, ArrayList<ArrayList<String>> matrizAfinidad) {
-        return false;
+    public static boolean esAfin(String sectorCerrado, String sectorAbierto, Map<String, Set<String>> mapaAfinidad) {
+        return mapaAfinidad.get(sectorCerrado).contains(sectorAbierto);
+    }
+
+    public static Sector findSectorByName(String nombre, List<Sector> sectores) {
+        for (Sector sector : sectores) {
+            if (sector.getNombre().equalsIgnoreCase(nombre))
+                return sector;
+        }
+        throw new RuntimeException("MATRIZ DE AFINIDAD INCORRECTA: NO EXISTE SECTOR DE NOMBRE '" + nombre + "'");
     }
 }

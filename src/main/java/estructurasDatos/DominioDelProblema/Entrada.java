@@ -1,14 +1,17 @@
 package estructurasDatos.DominioDelProblema;
 
+import InicializarPoblacion.InicializarPoblacion;
 import estructurasDatos.Parametros;
 import estructurasDatos.Solucion;
 import fitnessFunction.Fitness;
 import herramientas.CridaUtils;
 import org.apache.commons.lang3.StringUtils;
+import rwFiles.Lectura;
 
 import java.util.*;
 
 import static herramientas.CridaUtils.STRING_DESCANSO;
+import static herramientas.CridaUtils.STRING_SEPARADOR_CSV;
 
 
 /**
@@ -19,6 +22,21 @@ import static herramientas.CridaUtils.STRING_DESCANSO;
 public class Entrada {
 
     private final Solucion distribucionInicial;
+    /**
+     * <p>
+     * Lista de los sectores que se abren en la nueva sectorización.
+     * Incluye aquellos sectores que, si bien no son nuevos,
+     * se abren en un momento diferente en la nueva sectorización
+     * </p>
+     * <p>
+     * (Son tratados como nuevos en
+     * {@link InicializarPoblacion#introducirPlantillasNuevosSectores})
+     * </p>
+     * <p>
+     * Inicializado en {@link #crearListaNuevosSectoresAbiertos}
+     * </p>
+     */
+    private final List<Sector> listaNuevosSectoresAbiertosTrasMomentoActual;
     /**
      * Lista con los controladores disponibles y sus caracteristicas.
      */
@@ -43,26 +61,11 @@ public class Entrada {
      * Indica los sectores que tienen afinidad entre si.
      */
     private ArrayList<ArrayList<String>> matrizAfinidad;
+    private Map<String, Set<String>> mapaAfinidad;
     /**
      * Lista de los sectores operativos en la instancia del problema.
      */
     private ArrayList<Sector> listaSectoresAbiertos;
-
-    /**
-     * <p>
-     * Lista de los sectores que se abren en la nueva sectorización.
-     * Incluye aquellos sectores que, si bien no son nuevos,
-     * se abren en un momento diferente en la nueva sectorización
-     * </p>
-     * <p>
-     * (Son tratados como nuevos en
-     * {@link InicializarPoblacion.InicializarPoblacion#introducirPlantillasNuevosSectores})
-     * </p>
-     * <p>
-     * Inicializado en {@link #crearListaNuevosSectoresAbiertos}
-     * </p>
-     */
-    private final List<Sector> listaNuevosSectoresAbiertosTrasMomentoActual;
     /**
      * Lista con todos los sectores y los volumenes asociados a estos.
      */
@@ -91,7 +94,7 @@ public class Entrada {
     public Entrada(ArrayList<Controlador> controladores, ArrayList<Nucleo> nucleos, Turno turno,
                    ArrayList<Sector> listaSectores, ArrayList<Sector> listaSectoresAbiertos,
                    ArrayList<Sector> listaNuevosSectoresAbiertosTrasMomentoActual, ArrayList<Set<String>> sectorizacion,
-                   ArrayList<ArrayList<String>> matrizAfinidad,
+                   ArrayList<ArrayList<String>> matrizAfinidad, Map<String, Set<String>> mapaAfinidad,
                    HashMap<Sector, ArrayList<String>> volumnsOfSectors, /*int cargaTrabajo,*/
                    ArrayList<Set<String>> sectorizacionModificada,
                    Solucion distribucionInicial, int slotMomentoActual) {
@@ -101,6 +104,7 @@ public class Entrada {
         this.listaSectores = listaSectores;
         this.sectorizacion = sectorizacion;
         this.matrizAfinidad = matrizAfinidad;
+        this.mapaAfinidad = mapaAfinidad;
         this.listaSectoresAbiertos = listaSectoresAbiertos;
         this.listaNuevosSectoresAbiertosTrasMomentoActual = listaNuevosSectoresAbiertosTrasMomentoActual;
         this.volumnsOfSectors = volumnsOfSectors;
@@ -112,23 +116,24 @@ public class Entrada {
 
 
     public static Entrada leerEntrada(Parametros parametros, String path, String entradaId, String entorno) {
-        ArrayList<String> fAperturaSectores = rwFiles.Lectura.Listar("entrada/Casos/" + path + "/AperturaSectorizaciones_" + entradaId + ".csv");
-        ArrayList<String> fRecursosDisponibles = rwFiles.Lectura.Listar("entrada/Casos/" + path + "/RecursosDisponibles_" + entradaId + ".csv");
-        ArrayList<String> fTurno = rwFiles.Lectura.Listar("entrada/Casos/" + path + "/Turno_" + entradaId + ".csv");
-        ArrayList<String> fModificacionSectores = rwFiles.Lectura.Listar("entrada/Casos/" + path + "/ModificacionSectorizaciones_" + entradaId + ".csv",true);
+        ArrayList<String> fAperturaSectores = Lectura.Listar("entrada/Casos/" + path + "/AperturaSectorizaciones_" + entradaId + ".csv");
+        ArrayList<String> fRecursosDisponibles = Lectura.Listar("entrada/Casos/" + path + "/RecursosDisponibles_" + entradaId + ".csv");
+        ArrayList<String> fTurno = Lectura.Listar("entrada/Casos/" + path + "/Turno_" + entradaId + ".csv");
+        ArrayList<String> fModificacionSectores = Lectura.Listar("entrada/Casos/" + path + "/ModificacionSectorizaciones_" + entradaId + ".csv", true);
 
-        ArrayList<String> fModificacionRecursos = rwFiles.Lectura.Listar("entrada/Casos/" + path + "/ModificacionRecursos_" + entradaId + ".csv", true);
-        ArrayList<String> fDistribucionInicial = rwFiles.Lectura.Listar("entrada/Casos/" + path + "/DistribucionInicial_" + entradaId + ".csv");
+        ArrayList<String> fModificacionRecursos = Lectura.Listar("entrada/Casos/" + path + "/ModificacionRecursos_" + entradaId + ".csv", true);
+        ArrayList<String> fDistribucionInicial = Lectura.Listar("entrada/Casos/" + path + "/DistribucionInicial_" + entradaId + ".csv");
 
 
-        ArrayList<String> fListaSectoresElementales = rwFiles.Lectura.Listar("entrada/" + entorno + "/ListaSectoresElementales_" + entorno + ".csv");
-        ArrayList<String> fMatrizAfinidad = rwFiles.Lectura.Listar("entrada/" + entorno + "/MatrizAfinidad_" + entorno + ".csv");
-        ArrayList<String> fSectoresNucleos = rwFiles.Lectura.Listar("entrada/" + entorno + "/SectoresNucleos_" + entorno + ".csv");
-        ArrayList<String> fSectorizacionSectoresVolumenes = rwFiles.Lectura.Listar("entrada/" + entorno + "/SectorizacionesSectoresVolumenes_" + entorno + ".csv");
+        ArrayList<String> fListaSectoresElementales = Lectura.Listar("entrada/" + entorno + "/ListaSectoresElementales_" + entorno + ".csv");
+        ArrayList<String> fMatrizAfinidad = Lectura.Listar("entrada/" + entorno + "/MatrizAfinidad_" + entorno + ".csv");
+        ArrayList<String> fSectoresNucleos = Lectura.Listar("entrada/" + entorno + "/SectoresNucleos_" + entorno + ".csv");
+        ArrayList<String> fSectorizacionSectoresVolumenes = Lectura.Listar("entrada/" + entorno + "/SectorizacionesSectoresVolumenes_" + entorno + ".csv");
 
         ArrayList<Controlador> controladores = crearControladores(fRecursosDisponibles);
         ArrayList<Sector> listaSectores = crearListaSectores(fSectoresNucleos, fListaSectoresElementales);
         ArrayList<Nucleo> nucleos = crearNucleos(fSectoresNucleos, listaSectores);
+        Map<String, Set<String>> mapaAfinidad = crearMapaAfinidad(fMatrizAfinidad, listaSectores);
         ArrayList<ArrayList<String>> matrizAfinidad = crearMatrizAfinidad(fMatrizAfinidad, listaSectores);
 
 
@@ -159,7 +164,8 @@ public class Entrada {
         calcularCargaTrabajo(sectorizacion, controladores, listaSectoresAbiertos);
 
         Entrada entrada = new Entrada(controladores, nucleos, turno, listaSectores, listaSectoresAbiertos, listaNuevosSectoresAbiertosTrasMomentoActual,
-                sectorizacion, matrizAfinidad, volumnsOfSectors, sectorizacionModificada, distribucionInicial, slotMomentoActual);
+                sectorizacion, matrizAfinidad, mapaAfinidad,
+                volumnsOfSectors, sectorizacionModificada, distribucionInicial, slotMomentoActual);
 
         return entrada;
     }
@@ -368,7 +374,7 @@ public class Entrada {
                     if (s == null)
                         throw new RuntimeException("No se encuentra el sector con id \"" + sct + "\"");
 
-                    // pero si todo va bien, entonces lo añadimos a la lista
+                        // pero si todo va bien, entonces lo añadimos a la lista
                     else sectoresAbiertos.add(s.clone());
                 }
 
@@ -380,7 +386,6 @@ public class Entrada {
 
     private static ArrayList<ArrayList<String>> crearMatrizAfinidad(ArrayList<String> entrada, ArrayList<Sector> listaSectores) {
         ArrayList<ArrayList<String>> matrizAfinidad = new ArrayList<>();
-
         ArrayList<String> filaAf = new ArrayList<>();
         for (int i = 0; i < entrada.size(); i++) {
             String[] fila = entrada.get(i).split(";");
@@ -407,6 +412,23 @@ public class Entrada {
 
         return matrizAfinidad;
     }
+
+    private static Map<String, Set<String>> crearMapaAfinidad(ArrayList<String> entrada, ArrayList<Sector> listaSectores) {
+        Map<String, Set<String>> mapaAfinidad = new HashMap<>();
+
+        String[] nombres = entrada.get(0).replaceAll("'", "").split(STRING_SEPARADOR_CSV);
+        for (int i = 1; i < entrada.size(); i++) {
+            Set<String> afines = new HashSet<>();
+            String[] fila = entrada.get(i).replaceAll("'", "").split(STRING_SEPARADOR_CSV);
+            for (int j = 1; j < fila.length; j++) {
+                if (Integer.parseInt(fila[j]) >= 1)
+                    afines.add(CridaUtils.findSectorByName(nombres[j], listaSectores).getId());
+            }
+            mapaAfinidad.put(CridaUtils.findSectorByName(fila[0], listaSectores).getId(), afines);
+        }
+        return mapaAfinidad;
+    }
+
 
     private static ArrayList<Set<String>> crearSectorizacion(ArrayList<String> entrada, ArrayList<String> confSectores, Turno turno, ArrayList<Sector> listaSectores) {
         ArrayList<ArrayList<String>> sectorizacionTemp = new ArrayList<>();
@@ -730,5 +752,13 @@ public class Entrada {
 
     public List<Sector> getListaNuevosSectoresAbiertosTrasMomentoActual() {
         return listaNuevosSectoresAbiertosTrasMomentoActual;
+    }
+
+    public Map<String, Set<String>> getMapaAfinidad() {
+        return mapaAfinidad;
+    }
+
+    public void setMapaAfinidad(Map<String, Set<String>> mapaAfinidad) {
+        this.mapaAfinidad = mapaAfinidad;
     }
 }
