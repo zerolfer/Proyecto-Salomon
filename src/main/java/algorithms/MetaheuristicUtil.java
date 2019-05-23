@@ -5,7 +5,9 @@ import estructurasDatos.Solucion;
 import fitnessFunction.Fitness;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /*
  * Clase que refactoriza métodos comunes necesarios en ambas metaheurísticas
@@ -31,8 +33,8 @@ public class MetaheuristicUtil {
 
         // obtener carga de trabajo de cada controlador y buscar el mayor
         int mayor = 0;
-        for (int i = 0; i < individuo.size(); i++) {
-            int[] sum = Fitness.slotsClassification(individuo.get(i));
+        for (String s : individuo) {
+            int[] sum = Fitness.slotsClassification(s);
 
             order.add(sum[1]);
 
@@ -40,10 +42,14 @@ public class MetaheuristicUtil {
                 mayor = sum[1];
         }
 
-        for (int i = 0; i < order.size(); i++) {
-            if (controladores.get(i).isImaginario())
-                order.set(i, order.get(i) - mayor);
+        Set<Integer> indices = getIndicesTurnosControladoresImaginarios(controladores, individuo.size());
+        for (int i : indices) {
+            order.set(i, order.get(i) - mayor);
         }
+//        for (int i = 0; i < order.size(); i++) {
+//            if (controladores.get(i).isImaginario())
+//                order.set(i, order.get(i) - mayor);
+//        }
 
         for (int e = 0; e < order.size(); e++) {
 
@@ -71,6 +77,24 @@ public class MetaheuristicUtil {
         ind.setTurnos(individuo2);
         ind.setControladores(controladores);
         return ind;
+    }
+
+    /**
+     * Método <code>ADAPTER</code> para obtener los indices de aquellos turnos que no son asignados a
+     * ninguno de los controladores existentes. Eso se hace porque en la version anterior del software,
+     * no todos los controladores imaginarios se añaden a la lista de controladores, sino que se crea
+     * una incoherencia entre las longitudes de la lista "controladores" de la lista que representa
+     * los "turnos". <br/> Para resolver esto, se hace una búsqueda de los índices que no son asignados
+     * nunca a ningún controlador
+     */
+    private static Set<Integer> getIndicesTurnosControladoresImaginarios(ArrayList<Controlador> controladores, int size) {
+        Set<Integer> indices = new HashSet<>();
+        // el primer índice es el 0
+        for (int i = 0; i < size; i++) indices.add(i);
+        for (Controlador controlador : controladores)
+            if (!controlador.isImaginario()) // si el controlador es imaginario, nos quedamos con el índice!!
+                indices.removeIf(value -> value == controlador.getTurnoAsignado());
+        return indices;
     }
 
     private static Controlador buscarControladorPorId(int id, List<Controlador> controladores) {
