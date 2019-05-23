@@ -8,7 +8,7 @@ import patrones.Patrones;
 
 public class Move1 extends AbstractNeighborStructure {
 
-    @Override
+//    @Override
     public Solucion bestImprovement(Solucion solActual, Entrada e, Patrones pt, Parametros p, ParametrosAlgoritmo pa) {
         Solucion x = solActual.clone(); // partimos de la solucion actual
         do {

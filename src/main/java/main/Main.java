@@ -16,7 +16,7 @@ public class Main {
     public static String propFileOptions = Main.class.getResource("/options.properties").getPath();
 //    public static String propFileParametersAlgorithm = Main.class.getResource("/algorithm.properties").getPath();
 
-    public static String entradaPath = "Caso2";
+    public static String entradaPath = "Caso1";
     public static String entradaId = "Id1n-06-03-2017";
     public static String entorno = "Canarias";
 
@@ -28,7 +28,7 @@ public class Main {
         int nEjecucion = 1;
         int[] casos = {1,3};
 
-        main1(nEjecucion, "Caso" + casos[1]);
+        main1(nEjecucion, "Caso" + casos[0]);
     }
 
     public static void main1(int ejecucion, String caso) {

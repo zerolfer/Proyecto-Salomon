@@ -27,8 +27,9 @@ public class VariableNeighborhoodReduced extends AbstractVariableNeighborhoodSea
      */
     @Override
     protected Solucion vnsImplemetation(Solucion solucion) {
-        return super.getCurrentNeighborHood().shake(solucion, super.getEntrada(),
-                super.getPatrones(), super.getParametros(), super.getParametrosAlgoritmo());
+//        return super.getCurrentNeighborHood().shake(solucion, super.getEntrada(),
+//                super.getPatrones(), super.getParametros(), super.getParametrosAlgoritmo());
+        return null;
     }
 
 }

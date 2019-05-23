@@ -8,17 +8,17 @@ import patrones.Patrones;
 
 public class Move2 extends AbstractNeighborStructure {
 
-    @Override
+//    @Override
     public Solucion bestImprovement(Solucion x, Entrada e, Patrones pt, Parametros p, ParametrosAlgoritmo pa) {
         return null;
     }
 
-    @Override
+//    @Override
     public Solucion firstImprovement(Solucion x, Entrada e, Patrones pt, Parametros p, ParametrosAlgoritmo pa) {
         return null;
     }
 
-    @Override
+//    @Override
     public Solucion shake(Solucion x, Entrada e, Patrones pt, Parametros p, ParametrosAlgoritmo pa) {
         return null;
     }

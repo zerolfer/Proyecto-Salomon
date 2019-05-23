@@ -27,8 +27,9 @@ public class VariableNeighborhoodDescendent extends AbstractVariableNeighborhood
      */
     @Override
     protected Solucion vnsImplemetation(Solucion solucion) {
-        return super.getCurrentNeighborHood().bestImprovement(solucion, super.getEntrada(),
-                super.getPatrones(), super.getParametros(), super.getParametrosAlgoritmo());
+//        return super.getCurrentNeighborHood().bestImprovement(solucion, super.getEntrada(),
+//                super.getPatrones(), super.getParametros(), super.getParametrosAlgoritmo());
+    return null;
     }
 
 }

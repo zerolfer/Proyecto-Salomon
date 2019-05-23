@@ -16,7 +16,7 @@ abstract class AbstractNeighborStructure implements NeighborStructure {
 
     @Override
     public Solucion localSearch(Solucion x, Entrada e, Patrones pt, Parametros p, ParametrosAlgoritmo pa) {
-        Solucion x_prime = encontrarSolucionMejor();
-
+//        Solucion x_prime = encontrarSolucionMejor();
+return null;
     }
 }
