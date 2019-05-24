@@ -202,15 +202,8 @@ public class InicializarPoblacion {
                         cadFin = STRING_DESCANSO + cadFin;
                     }
                 }
-                Controlador cImaginario = c.clone();
-                cImaginario.setBajaAlta(Propiedades.ALTA);
-                cImaginario.setSlotBajaAlta(0);
-                cImaginario.setId(controladores.size() + 1);
-                cImaginario.setImaginario(true);
-                cImaginario.setTurnoAsignado(turnos.size());
                 turnos.set(c.getTurnoAsignado(), cadIni.toString());
                 turnos.add(cadFin);
-                controladores.add(cImaginario);
             }
         }
 
