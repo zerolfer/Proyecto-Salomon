@@ -9,6 +9,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static herramientas.CridaUtils.*;
+
 /*
  * Clase que refactoriza métodos comunes necesarios en ambas metaheurísticas
  */
@@ -105,5 +107,37 @@ public class MetaheuristicUtil {
         }
         throw new RuntimeException("Controlador no encontrado");
     }
+
+    public static int[] comprobarTrabajoMinimo(String turnoA) {
+        int numSlotsTrabajando = 0;
+        for (int i = 0; i < turnoA.length(); i += 3) {
+            if (esTrabajo(turnoA.substring(i, i + 3)))
+                numSlotsTrabajando++;
+            else {
+                if (numSlotsTrabajando > 0 && numSlotsTrabajando < 3) // 1 slot ~ 5min, trabajo minimo es 15 mim ~ 3 slots
+                    return new int[]{3 - numSlotsTrabajando, i};
+                else
+                    numSlotsTrabajando = 0;
+            }
+        }
+        return new int[]{0, -1};
+    }
+
+    private static boolean esTrabajo(String str) {
+        return !str.equals(STRING_DESCANSO) &&
+                !str.equals(STRING_NO_TURNO);
+    }
+
+    // éste método puede ser usado para debuguear más cómodamente
+    public static List<String> split3In3(String string) {
+        List<String> res = new ArrayList<>();//StringBuilder sb=new StringBuilder();
+        char[] charArray = string.toCharArray();
+        for (int i = 0; i < string.length(); i += 3) {
+           res.add(string.substring(i,i+LONGITUD_CADENAS));
+        }
+        return res;
+
+    }
+
 
 }

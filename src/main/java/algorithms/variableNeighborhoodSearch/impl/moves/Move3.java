@@ -7,19 +7,23 @@ import estructurasDatos.Solucion;
 import patrones.Patrones;
 
 public class Move3 extends AbstractNeighborStructure {
-
-//    @Override
-    public Solucion bestImprovement(Solucion x, Entrada e, Patrones pt, Parametros p, ParametrosAlgoritmo pa) {
+    @Override
+    public Solucion encontrarSolucionEntorno(Solucion x, Entrada e, Patrones pt, Parametros p, ParametrosAlgoritmo pa) {
         return null;
     }
 
-//    @Override
-    public Solucion firstImprovement(Solucion x, Entrada e, Patrones pt, Parametros p, ParametrosAlgoritmo pa) {
-        return null;
-    }
-
-//    @Override
-    public Solucion shake(Solucion x, Entrada e, Patrones pt, Parametros p, ParametrosAlgoritmo pa) {
-        return null;
-    }
+////    @Override
+//    public Solucion bestImprovement(Solucion x, Entrada e, Patrones pt, Parametros p, ParametrosAlgoritmo pa) {
+//        return null;
+//    }
+//
+////    @Override
+//    public Solucion firstImprovement(Solucion x, Entrada e, Patrones pt, Parametros p, ParametrosAlgoritmo pa) {
+//        return null;
+//    }
+//
+////    @Override
+//    public Solucion shake(Solucion x, Entrada e, Patrones pt, Parametros p, ParametrosAlgoritmo pa) {
+//        return null;
+//    }
 }

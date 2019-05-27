@@ -70,4 +70,5 @@ public class CridaUtils {
         }
         throw new RuntimeException("MATRIZ DE AFINIDAD INCORRECTA: NO EXISTE SECTOR DE NOMBRE '" + nombre + "'");
     }
+
 }

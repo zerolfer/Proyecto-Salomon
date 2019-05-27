@@ -8,5 +8,7 @@ import patrones.Patrones;
 
 public interface NeighborStructure {
 
-    Solucion localSearch(Solucion x, Entrada e, Patrones pt, Parametros p, ParametrosAlgoritmo pa);
+//    Solucion localSearch(Solucion x, Entrada e, Patrones pt, Parametros p, ParametrosAlgoritmo pa);
+
+    Solucion encontrarSolucionEntorno(Solucion x, Entrada e, Patrones pt, Parametros p, ParametrosAlgoritmo pa);
 }

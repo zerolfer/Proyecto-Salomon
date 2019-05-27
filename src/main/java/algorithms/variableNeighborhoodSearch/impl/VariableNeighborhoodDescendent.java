@@ -25,11 +25,21 @@ public class VariableNeighborhoodDescendent extends AbstractVariableNeighborhood
      * <p>
      * Inherited Java-Doc:{@inheritDoc}
      */
-    @Override
-    protected Solucion vnsImplemetation(Solucion solucion) {
+//    @Override
+//    protected Solucion vnsImplemetation(Solucion x) {
+//
+//         dada la estructura de vecindad actual, se ejecuta la busqueda según la implementación concreta
+//        return super.localSearch(x);
+//
+//         se decide si seguir en esa estructura de vencindad u otra,
+//         y se actualiza la solución actual a aquella con mejor valor objetivo de entre la anterior y la nueva
+//
+//
+//        if (super.fitness(solucion)>)
+//
 //        return super.getCurrentNeighborHood().bestImprovement(solucion, super.getEntrada(),
 //                super.getPatrones(), super.getParametros(), super.getParametrosAlgoritmo());
-    return null;
-    }
-
+//
+//    return null;
+//    }
 }

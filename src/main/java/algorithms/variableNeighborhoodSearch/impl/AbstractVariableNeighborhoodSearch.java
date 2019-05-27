@@ -13,6 +13,7 @@ import java.util.List;
 
 public abstract class AbstractVariableNeighborhoodSearch implements VariableNeighborhoodSearch {
 
+    private static final int NUM_MAX_ITER_SIN_MEJORA = 10;
     /**
      * Parametros del dominio del problema
      */
@@ -78,11 +79,11 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
         do {
 
             // dada la estructura de vecindad actual, se ejecuta la busqueda según la implementación concreta
-            Solucion x_prime = vnsImplemetation(x);
+            x = vnsImplemetation(x);
 
-            // se decide si seguir en esa estructura de vencindad u otra,
+            // se decide si seguir en esa estructura de vecindad u otra,
             // y se actualiza la solución actual a aquella con mejor valor objetivo de entre la anterior y la nueva
-            x = neighborhoodChange(x, x_prime);
+//            x = neighborhoodChange(x, x_prime);
 
             // se actualiza el tiempo (condición de parada)
             t += System.currentTimeMillis() - initTime;
@@ -92,7 +93,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
     }
 
     // neighborhood change
-    private Solucion neighborhoodChange(Solucion x, Solucion x_prime) {
+    Solucion neighborhoodChange(Solucion x, Solucion x_prime) {
         if (fitness(x_prime) < fitness(x)) {
             x = x_prime; // Make a move
             currentNeighborhoodIndex = 1; // reset the neighborhood iteration
@@ -100,6 +101,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
             currentNeighborhoodIndex++;   // Next neighborhood of the list
         return x;
     }
+
 
     /**
      * <p> Implementación de la búsqueda propiamente dicha del VNS concreto.
@@ -109,13 +111,52 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
      * <p> Debe realizar los cambios oportunos para a partir de una solución dada,
      * obtenga la siguente solución a evaluar. </p>
      *
-     * @param solucion Solución inicial de la cual se ha de partir, para
+     * @param x Solución inicial de la cual se ha de partir, para
      *                 lograr una solución incluida dentro del conjunto de soluciones
      *                 factibles pertenecientes a la vecindad (neighborhood) actual
      *                 {@link #currentNeighborhoodIndex} <br/> ( <code>x_prime "pertenece a" N_k(x) </code>)
      * @return Siguiente solcuíon <code>x_prime</code> a evaluar para continuar el *bucle* VNS
      */
-    protected abstract Solucion vnsImplemetation(Solucion solucion);
+    protected Solucion vnsImplemetation(Solucion x){
+
+        ///////////////////
+        //  localSearch  //
+        ///////////////////
+
+        Solucion x_prime;
+        int numIteracionesSinMejora = 0;
+        double f_x = fitness(x);
+        double f_x_prime;
+
+        do {
+            x_prime = encontrarSolucionEntornoActual(x);
+            f_x_prime = fitness(x_prime);
+
+            // si la solucion encontrada es mejor, se actualiza
+            if (f_x > f_x_prime) {
+                x = x_prime;
+                f_x = f_x_prime;
+                numIteracionesSinMejora = 0;
+
+            } else {
+                // ... pero si no era mejor, se incrementa el numero de iteraciones sin mejoría
+                numIteracionesSinMejora++;
+            }
+        } while (numIteracionesSinMejora < NUM_MAX_ITER_SIN_MEJORA);
+        // y así hasta que se haya que la busqueda local deje de ser fructífera
+
+        //////////////////////////
+        //  neighborhoodChange  //
+        //////////////////////////
+
+        if (f_x_prime < f_x) {
+            x = x_prime; // Make a move
+            currentNeighborhoodIndex = 1; // reset the neighborhood iteration
+        } else
+            currentNeighborhoodIndex++;   // Next neighborhood of the list
+        return x;
+
+    }
 
     /**
      * Método ADAPTER que retorna el valor de la función objetivo
@@ -123,8 +164,12 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
      * @param x solucion incial
      * @return valor total ponderado de la funcion objetivo para la solucion x
      */
-    private double fitness(Solucion x) {
+    double fitness(Solucion x) {
         return DeciderFitnessFunction.switchFitnessF(x, null, entrada, parametros, parametrosAlgoritmo)[0];
+    }
+
+    Solucion encontrarSolucionEntornoActual(Solucion x) {
+        return getCurrentNeighborHood().encontrarSolucionEntorno(x, entrada, patrones, parametros, parametrosAlgoritmo);
     }
 
     /*
@@ -157,4 +202,5 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
     public Patrones getPatrones() {
         return patrones;
     }
+
 }
