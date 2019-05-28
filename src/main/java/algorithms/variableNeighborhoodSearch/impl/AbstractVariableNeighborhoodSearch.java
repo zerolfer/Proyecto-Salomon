@@ -7,6 +7,7 @@ import estructurasDatos.Parametros;
 import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
 import fitnessFunction.DeciderFitnessFunction;
+import fitnessFunction.Fitness;
 import patrones.Patrones;
 
 import java.util.List;
@@ -53,6 +54,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
      * <p>Aka " k "</p>
      */
     private int currentNeighborhoodIndex = 0;
+    private int numeroIteracionesSinMejora = 0;
 
 
     protected AbstractVariableNeighborhoodSearch(Parametros parametros, Patrones patrones,
@@ -77,28 +79,31 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
         long initTime = System.currentTimeMillis();
         long t = 0;
         do {
+            while (getCurrentNeighborhoodIndex() < neighborStructures.size()) {
+                // dada la estructura de vecindad actual, se ejecuta la busqueda según la implementación concreta
+                x = vnsImplemetation(x);
 
-            // dada la estructura de vecindad actual, se ejecuta la busqueda según la implementación concreta
-            x = vnsImplemetation(x);
-
-            // se decide si seguir en esa estructura de vecindad u otra,
-            // y se actualiza la solución actual a aquella con mejor valor objetivo de entre la anterior y la nueva
+                // se decide si seguir en esa estructura de vecindad u otra,
+                // y se actualiza la solución actual a aquella con mejor valor objetivo de entre la anterior y la nueva
 //            x = neighborhoodChange(x, x_prime);
 
-            // se actualiza el tiempo (condición de parada)
+                // se actualiza el tiempo (condición de parada)
+            }
             t += System.currentTimeMillis() - initTime;
-
-        } while (t < maxTimeAllowed);
+        } while (t < maxTimeAllowed && numeroIteracionesSinMejora < NUM_MAX_ITER_SIN_MEJORA);
         return x;
     }
 
     // neighborhood change
-    Solucion neighborhoodChange(Solucion x, Solucion x_prime) {
-        if (fitness(x_prime) < fitness(x)) {
+    Solucion neighborhoodChange(Solucion x, Solucion x_prime, double f_x, double f_x_prime) {
+        if (f_x_prime > f_x) { // si es mejor... NOTE: maximización
             x = x_prime; // Make a move
             currentNeighborhoodIndex = 1; // reset the neighborhood iteration
-        } else
+            numeroIteracionesSinMejora = 0;
+        } else {
             currentNeighborhoodIndex++;   // Next neighborhood of the list
+            numeroIteracionesSinMejora++;
+        }
         return x;
     }
 
@@ -112,12 +117,13 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
      * obtenga la siguente solución a evaluar. </p>
      *
      * @param x Solución inicial de la cual se ha de partir, para
-     *                 lograr una solución incluida dentro del conjunto de soluciones
-     *                 factibles pertenecientes a la vecindad (neighborhood) actual
-     *                 {@link #currentNeighborhoodIndex} <br/> ( <code>x_prime "pertenece a" N_k(x) </code>)
+     *          lograr una solución incluida dentro del conjunto de soluciones
+     *          factibles pertenecientes a la vecindad (neighborhood) actual
+     *          {@link #currentNeighborhoodIndex} <br/> ( <code>x_prime "pertenece a" N_k(x) </code>)
      * @return Siguiente solcuíon <code>x_prime</code> a evaluar para continuar el *bucle* VNS
      */
-    protected Solucion vnsImplemetation(Solucion x){
+    protected abstract Solucion vnsImplemetation(Solucion x);
+        /*protected Solucion vnsImplemetation(Solucion x) {
 
         ///////////////////
         //  localSearch  //
@@ -133,7 +139,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
             f_x_prime = fitness(x_prime);
 
             // si la solucion encontrada es mejor, se actualiza
-            if (f_x > f_x_prime) {
+            if (f_x < f_x_prime) {
                 x = x_prime;
                 f_x = f_x_prime;
                 numIteracionesSinMejora = 0;
@@ -156,7 +162,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
             currentNeighborhoodIndex++;   // Next neighborhood of the list
         return x;
 
-    }
+    }*/
 
     /**
      * Método ADAPTER que retorna el valor de la función objetivo
@@ -168,8 +174,12 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
         return DeciderFitnessFunction.switchFitnessF(x, null, entrada, parametros, parametrosAlgoritmo)[0];
     }
 
-    Solucion encontrarSolucionEntornoActual(Solucion x) {
-        return getCurrentNeighborHood().encontrarSolucionEntorno(x, entrada, patrones, parametros, parametrosAlgoritmo);
+    boolean esMejorQue(Solucion x, Solucion y) {
+        return Fitness.esMejorQue(patrones, entrada, parametros, parametrosAlgoritmo, x, y);
+    }
+
+    Object[] encontrarSolucionEntornoActual(Solucion x) {
+        return getCurrentNeighborHood().busquedaLocal(x);
     }
 
     /*

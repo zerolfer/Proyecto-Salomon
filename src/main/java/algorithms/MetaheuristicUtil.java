@@ -123,17 +123,23 @@ public class MetaheuristicUtil {
         return new int[]{0, -1};
     }
 
-    private static boolean esTrabajo(String str) {
-        return !str.equals(STRING_DESCANSO) &&
-                !str.equals(STRING_NO_TURNO);
+    public static boolean esTrabajo(String str) {
+
+        // caso base: longitud = 3
+        if (str.length() == LONGITUD_CADENAS)
+            return !str.equals(STRING_DESCANSO) &&
+                    !str.equals(STRING_NO_TURNO);
+        for (int i = 0; i < str.length(); i += 3) {
+            if (!esTrabajo(str.substring(i, i + LONGITUD_CADENAS))) return false;
+        }
+        return true; // TODO: test this method
     }
 
     // éste método puede ser usado para debuguear más cómodamente
     public static List<String> split3In3(String string) {
         List<String> res = new ArrayList<>();//StringBuilder sb=new StringBuilder();
-        char[] charArray = string.toCharArray();
         for (int i = 0; i < string.length(); i += 3) {
-           res.add(string.substring(i,i+LONGITUD_CADENAS));
+            res.add(string.substring(i, i + LONGITUD_CADENAS));
         }
         return res;
 

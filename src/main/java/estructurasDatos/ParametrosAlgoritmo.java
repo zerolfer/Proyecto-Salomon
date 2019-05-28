@@ -2,6 +2,8 @@ package estructurasDatos;
 
 import algorithms.variableNeighborhoodSearch.NeighborStructure;
 import algorithms.variableNeighborhoodSearch.impl.moves.MoveFactory;
+import estructurasDatos.DominioDelProblema.Entrada;
+import patrones.Patrones;
 import trazas.Trazas;
 
 import java.io.IOException;
@@ -15,9 +17,13 @@ import java.util.Properties;
  */
 public class ParametrosAlgoritmo {
     private static final String RESOURCE_PATH = "/algorithm.properties";
-    public String algoritmo;
     public SA SA;
     public VNS VNS;
+    /**
+     * Fichero que contiene los parametros del algoritmo de resolucion.
+     */
+    private static Properties propParametrosAlgoritmo = new Properties();
+    public String algoritmo;
     /**
      * Nombre de la funcion objetivo que se utiliza en la fase2 del algoritmo.
      */
@@ -26,10 +32,6 @@ public class ParametrosAlgoritmo {
      * Nombre de la funcion objetivo que se utiliza en la fase3 del algoritmo.
      */
     protected String funcionFitnessFase3;
-    /**
-     * Fichero que contiene los parametros del algoritmo de resolucion.
-     */
-    private Properties propParametrosAlgoritmo = new Properties();
 
     public ParametrosAlgoritmo(String propFileParametersAlgorithm) {
         loadProperties(propFileParametersAlgorithm);
@@ -39,6 +41,25 @@ public class ParametrosAlgoritmo {
     public ParametrosAlgoritmo() {
         loadProperties(RESOURCE_PATH);
         ininicializarResto();
+    }
+
+    private static String getString(String propertie) {
+        return propParametrosAlgoritmo.getProperty(propertie);
+    }
+
+    public List<NeighborStructure> initializeNeighborStructures(Entrada entrada, Patrones patrones,
+                                                                        Parametros parametros,
+                                                                        ParametrosAlgoritmo parametrosAlgoritmo) {
+
+        String texto = getString(VNS.NEIGHBOR_STRUCTURES);
+        String[] nombresMovimientos = texto.split(",");
+
+        List<NeighborStructure> result = new ArrayList<>();
+        for (String id : nombresMovimientos) {
+            // FACTORY METHOD
+            result.add(MoveFactory.createNeighborhood(id, entrada, patrones, parametros, parametrosAlgoritmo));
+        }
+        return result;
     }
 
     private void loadProperties(String resourcePath) {
@@ -66,10 +87,6 @@ public class ParametrosAlgoritmo {
 
     private int getInteger(String propertie) {
         return Integer.parseInt(propParametrosAlgoritmo.getProperty(propertie));
-    }
-
-    private String getString(String propertie) {
-        return propParametrosAlgoritmo.getProperty(propertie);
     }
 
     public String getAlgoritmo() {
@@ -237,24 +254,13 @@ public class ParametrosAlgoritmo {
 
     public class VNS {
 
+        private static final String NEIGHBOR_STRUCTURES = "neighborStructures";
         // leido en minutos, lo pasamos a milisegundos
-        private long maxMilisecondsAllowed = getInteger("maxTimeAllowed")*60*1000;
-
-        private List<NeighborStructure> neighborStructures = initializeNeighborStructures("neighborStructures");
+        private long maxMilisecondsAllowed = getInteger("maxTimeAllowed") * 60 * 1000;
+        private List<NeighborStructure> neighborStructures;
 
         // . . .
 
-        private List<NeighborStructure> initializeNeighborStructures(String neighborStructures) {
-
-            String texto = getString(neighborStructures);
-            String[] nombresMovimientos = texto.split(",");
-
-            List<NeighborStructure> result = new ArrayList<>();
-            for (String id : nombresMovimientos) {
-                result.add(MoveFactory.createNeighborhood(id)); // FACTORY METHOD
-            }
-            return result;
-        }
 
         /**
          * <p>

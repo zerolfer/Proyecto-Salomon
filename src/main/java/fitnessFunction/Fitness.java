@@ -2,6 +2,7 @@ package fitnessFunction;
 
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
+import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.PesosObjetivos;
 import estructurasDatos.Solucion;
 import patrones.Patrones;
@@ -9,7 +10,8 @@ import patrones.Restricciones;
 
 import java.util.ArrayList;
 
-import static herramientas.CridaUtils.*;
+import static herramientas.CridaUtils.STRING_DESCANSO;
+import static herramientas.CridaUtils.STRING_NO_TURNO;
 
 
 /**
@@ -19,8 +21,8 @@ import static herramientas.CridaUtils.*;
  */
 public class Fitness {
 
-    private static double ctrlsCompletos = 0;
     public static double sectoresElementalesTotales = 0;
+    private static double ctrlsCompletos = 0;
 
     /**
      * Funcion objetivo utilizada para reducir el numero de controladores de forma progresiva. Permite soluciones invalidas y no las penaliza.
@@ -74,14 +76,14 @@ public class Fitness {
      *
      * @param controlador Turno de trabajo.
      * @return Array con el numero de slots de descanso y trabajo. <br/>
-     *          Posicion 0: descanso y fuera de turno <br/>
-     *          Posicion 1: trabajos
+     * Posicion 0: descanso y fuera de turno <br/>
+     * Posicion 1: trabajos
      */
     public static int[] slotsClassification(String controlador) {
         int[] sum = {0, 0};
         int unos = 0, letras = 0;
         for (int e = 0; e < controlador.length(); e += 3) {
-            if (controlador.substring(e, e + 3).equals(STRING_DESCANSO)|| controlador.substring(e, e + 3).equals(STRING_NO_TURNO)) {
+            if (controlador.substring(e, e + 3).equals(STRING_DESCANSO) || controlador.substring(e, e + 3).equals(STRING_NO_TURNO)) {
                 unos++;
             } else {
                 letras++;
@@ -219,20 +221,21 @@ public class Fitness {
         Fitness.ctrlsCompletos = ctrlsCompletos;
     }
 
-    
+
     public static double continuidadMomentoCambio(Solucion solucion, Entrada entrada) {
-    	int actual = entrada.getSlotMomentoActual()*3;
-    	ArrayList<String> turnos = solucion.getTurnos();
-    	double fit = 0;
-    	double norm = 1/turnos.size();
-    	for (int i = 0; i < turnos.size(); i++) {
-			String turno = turnos.get(i);
-			if (turno.substring(actual-3, actual).equals(turno.substring(actual, actual+3))) {
-				fit += norm;
-			}
-		}
-    	return fit;
+        int actual = entrada.getSlotMomentoActual() * 3;
+        ArrayList<String> turnos = solucion.getTurnos();
+        double fit = 0;
+        double norm = 1 / turnos.size();
+        for (int i = 0; i < turnos.size(); i++) {
+            String turno = turnos.get(i);
+            if (turno.substring(actual - 3, actual).equals(turno.substring(actual, actual + 3))) {
+                fit += norm;
+            }
+        }
+        return fit;
     }
+
     /**
      * Funcion objetivo fase 3. Objetivos deseables. Suma ponderada de 4 objetivos con distintos sub-objetivos.
      *
@@ -251,7 +254,7 @@ public class Fitness {
         PesosObjetivos pObj = parametros.getPesosObjetivos();
         double cDeseables = pObj.getPesoObj1Sub1() * traPosicion + pObj.getPesoObj1Sub2() * traDescanso + pObj.getPesoObj1Sub3() * porcentaje;
 
-        double estadillos = FitnessFase3.estadillos(numControladores, numTurnos, individuo.getTurnos(),entrada.getSlotMomentoActual());
+        double estadillos = FitnessFase3.estadillos(numControladores, numTurnos, individuo.getTurnos(), entrada.getSlotMomentoActual());
 
         double minimizarIntervalos = FitnessFase3.minimizarIntervalos(numControladores, numTurnos, individuo.getTurnos());
         double maximizarAcreditacion = FitnessFase3.maximizarAcreditacion(entrada, numControladores, numTurnos, individuo.getTurnos(), sectoresElementalesTotales);
@@ -343,5 +346,12 @@ public class Fitness {
             }
         }
         return p;
+    }
+
+    public static boolean esMejorQue(Patrones patrones, Entrada entrada, Parametros parametros,
+                                     ParametrosAlgoritmo parametrosAlgoritmo, Solucion x, Solucion y) {
+        double f_x = DeciderFitnessFunction.switchFitnessF(x, patrones, entrada, parametros, parametrosAlgoritmo)[0];
+        double f_y = DeciderFitnessFunction.switchFitnessF(y, patrones, entrada, parametros, parametrosAlgoritmo)[0];
+        return f_x < f_y;
     }
 }
