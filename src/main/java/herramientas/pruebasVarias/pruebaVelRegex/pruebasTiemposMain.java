@@ -9,11 +9,12 @@ import estructurasDatos.Solucion;
 import patrones.Patrones;
 import pruebasCasos.DeciderCase;
 
+import java.net.URL;
 import java.util.ArrayList;
 
 public class pruebasTiemposMain {
-    public static String propFileParameters = "resources/problemParameters.properties";
-    public static String propFileOptions = "resources/options.properties";
+    public static URL propFileParameters = pruebasTiemposMain.class.getResource("/problemParameters.properties");
+    public static URL propFileOptions = pruebasTiemposMain.class.getResource("/options.properties");
     public static String propFileParametersAlgorithm = "resources/algorithm.properties";
 
     public static String entradaPath = "Caso2";

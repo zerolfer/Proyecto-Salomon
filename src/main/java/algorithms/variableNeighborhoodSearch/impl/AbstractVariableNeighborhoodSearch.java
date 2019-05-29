@@ -64,7 +64,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
         this.parametrosAlgoritmo = parametrosAlgoritmo;
         this.entrada = entrada;
 
-        this.maxTimeAllowed = parametrosAlgoritmo.VNS.getMaxMilisecondsAllowed();
+        this.maxTimeAllowed = parametrosAlgoritmo.getMaxMilisecondsAllowed();
         this.neighborStructures = parametrosAlgoritmo.VNS.getNeighborStructures();
 
 

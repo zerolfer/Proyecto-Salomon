@@ -67,7 +67,7 @@ public class RestricionesParalelizadas implements Runnable {
                 n = Restricciones.comprobarTurnoVacio(individuo);
                 break;
             default:
-                System.out.println("ERROR");
+                System.err.println("ERROR");
                 break;
         }
     }

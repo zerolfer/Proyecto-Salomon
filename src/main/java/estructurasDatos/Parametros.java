@@ -3,6 +3,8 @@ package estructurasDatos;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Properties;
 
 /**
@@ -81,7 +83,7 @@ public class Parametros {
      * @param nombreFicheroP Ruta del fichero con las propiedades del problema.
      * @param nombreFicheroO Ruta del fichero con las opciones para la resolucion del problema.
      */
-    public Parametros(String nombreFicheroP, String nombreFicheroO) {
+    public Parametros(URL nombreFicheroP, URL nombreFicheroO) {
         getPropertiesP(nombreFicheroP);
         this.porcentDescansoDia = Double.parseDouble(propParametros.getProperty("porcentajeDeDescansoDuranteDia"));
         this.porcentDescansoNoche = Double.parseDouble(propParametros.getProperty("porcentajeDeDescansoDuranteNoche"));
@@ -213,11 +215,11 @@ public class Parametros {
         this.porcentPosMin = porcentPosMin;
     }
 
-    public static void getPropertiesP(String propFileName) {
-        FileInputStream input = null;
+    public static void getPropertiesP(URL propFileName) {
+        InputStream input = null;
         try {
-            input = new FileInputStream(propFileName);
-        } catch (FileNotFoundException e1) {
+            input = propFileName.openStream();
+        } catch (IOException e1) {
             e1.printStackTrace();
         }
         try {
@@ -227,11 +229,11 @@ public class Parametros {
         }
     }
 
-    public static void getPropertiesO(String propFileName) {
-        FileInputStream input = null;
+    public static void getPropertiesO(URL propFileName) {
+        InputStream input = null;
         try {
-            input = new FileInputStream(propFileName);
-        } catch (FileNotFoundException e1) {
+            input = propFileName.openStream();
+        } catch (IOException e1) {
             e1.printStackTrace();
         }
         try {

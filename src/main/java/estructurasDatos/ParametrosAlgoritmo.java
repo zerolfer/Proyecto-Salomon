@@ -6,7 +6,9 @@ import estructurasDatos.DominioDelProblema.Entrada;
 import patrones.Patrones;
 import trazas.Trazas;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -17,12 +19,12 @@ import java.util.Properties;
  */
 public class ParametrosAlgoritmo {
     private static final String RESOURCE_PATH = "/algorithm.properties";
-    public SA SA;
-    public VNS VNS;
     /**
      * Fichero que contiene los parametros del algoritmo de resolucion.
      */
     private static Properties propParametrosAlgoritmo = new Properties();
+    public SA SA;
+    public VNS VNS;
     public String algoritmo;
     /**
      * Nombre de la funcion objetivo que se utiliza en la fase2 del algoritmo.
@@ -32,6 +34,22 @@ public class ParametrosAlgoritmo {
      * Nombre de la funcion objetivo que se utiliza en la fase3 del algoritmo.
      */
     protected String funcionFitnessFase3;
+
+    /**
+     * <p>
+     * Tiempo máximo total que le permitimos al algoritmo ejecutarse,
+     * puesto que en nuestro sistema es crucial el tiempo,
+     * no debemos superar el umbral marcado.
+     * Leído en minutos, se pasa a milisegundos.
+     * </p>
+     */
+    private long maxMilisecondsAllowed;
+
+    private double ponderacionFitness1;
+    private double ponderacionFitness2;
+    private double ponderacionFitness3;
+    private double ponderacionFitness4;
+
 
     public ParametrosAlgoritmo(String propFileParametersAlgorithm) {
         loadProperties(propFileParametersAlgorithm);
@@ -47,9 +65,9 @@ public class ParametrosAlgoritmo {
         return propParametrosAlgoritmo.getProperty(propertie);
     }
 
-    public List<NeighborStructure> initializeNeighborStructures(Entrada entrada, Patrones patrones,
-                                                                        Parametros parametros,
-                                                                        ParametrosAlgoritmo parametrosAlgoritmo) {
+    public void initializeNeighborStructures(Entrada entrada, Patrones patrones,
+                                             Parametros parametros,
+                                             ParametrosAlgoritmo parametrosAlgoritmo) {
 
         String texto = getString(VNS.NEIGHBOR_STRUCTURES);
         String[] nombresMovimientos = texto.split(",");
@@ -59,7 +77,7 @@ public class ParametrosAlgoritmo {
             // FACTORY METHOD
             result.add(MoveFactory.createNeighborhood(id, entrada, patrones, parametros, parametrosAlgoritmo));
         }
-        return result;
+        VNS.neighborStructures = result;
     }
 
     private void loadProperties(String resourcePath) {
@@ -74,8 +92,15 @@ public class ParametrosAlgoritmo {
 
     private void ininicializarResto() {
         this.algoritmo = getString("algoritmo");
+        this.maxMilisecondsAllowed = getInteger("maxTimeAllowed") * 60 * 1000;
+
         this.funcionFitnessFase2 = getString("funcionFitnessFase2");
         this.funcionFitnessFase3 = getString("funcionFitnessFase3");
+
+        this.ponderacionFitness1 = getDouble("ponderacionFitness1");
+        this.ponderacionFitness2 = getDouble("ponderacionFitness2");
+        this.ponderacionFitness3 = getDouble("ponderacionFitness3");
+        this.ponderacionFitness4 = getDouble("ponderacionFitness4");
 
         this.SA = new SA(); // inicializar variables de cada metaheuristica
         this.VNS = new VNS();
@@ -90,7 +115,7 @@ public class ParametrosAlgoritmo {
     }
 
     public String getAlgoritmo() {
-        return getString("algoritmo");
+        return algoritmo;
     }
 
     public String getFuncionFitnessFase2() {
@@ -107,6 +132,77 @@ public class ParametrosAlgoritmo {
 
     public void setFuncionFitnessFase3(String funcionFitnessFase3) {
         this.funcionFitnessFase3 = funcionFitnessFase3;
+    }
+
+    /**
+     * <p>
+     * Tiempo máximo total que le permitimos al VNS ejecutarse,
+     * puesto que en nuestro sistema es crucial el tiempo,
+     * no debemos superar el umbral marcado.
+     * </p>
+     */
+    public long getMaxMilisecondsAllowed() {
+        return maxMilisecondsAllowed;
+    }
+
+
+    //
+    // HACK: método temporal para el deploy en forma de JAR (Mayo 2019)
+    //
+    public void sobreescribirParametrosViaExterna(String propFileExternoParametros) {
+        Properties parametrosExternos = new Properties();
+        InputStream input = null;
+        try {
+            input = new FileInputStream(propFileExternoParametros);
+            parametrosExternos.load(input);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+
+        for (Object s : parametrosExternos.keySet()) {
+            String key = (String) s;
+            String value = parametrosExternos.getProperty(key);
+            switch (key) {
+                case "algoritmo":
+                    this.algoritmo = value;
+                    break;
+                case "tiempoMaximo":
+                    this.maxMilisecondsAllowed = Integer.parseInt(value);
+                    break;
+                case "ponderacionFitness1":
+                    this.ponderacionFitness1 = Double.parseDouble(value);
+                    break;
+                case "ponderacionFitness2":
+                    this.ponderacionFitness2 = Double.parseDouble(value);
+                    break;
+                case "ponderacionFitness3":
+                    this.ponderacionFitness3 = Double.parseDouble(value);
+                    break;
+                case "ponderacionFitness4":
+                    this.ponderacionFitness4 = Double.parseDouble(value);
+                    break;
+                case "numeroDelCasoParaResolver": break;
+                default:
+                    System.err.println("El parámetro \"" + key + "\" no se reconoce como parámetro interno del sistema.");
+                    break;
+            }
+        }
+    }
+
+    public double getPonderacionFitness1() {
+        return ponderacionFitness1;
+    }
+
+    public double getPonderacionFitness2() {
+        return ponderacionFitness2;
+    }
+
+    public double getPonderacionFitness3() {
+        return ponderacionFitness3;
+    }
+
+    public double getPonderacionFitness4() {
+        return ponderacionFitness4;
     }
 
     public class SA {
@@ -255,23 +351,11 @@ public class ParametrosAlgoritmo {
     public class VNS {
 
         private static final String NEIGHBOR_STRUCTURES = "neighborStructures";
-        // leido en minutos, lo pasamos a milisegundos
-        private long maxMilisecondsAllowed = getInteger("maxTimeAllowed") * 60 * 1000;
+        //        // leido en minutos, lo pasamos a milisegundos
+//        private long maxMilisecondsAllowed = getInteger("maxTimeAllowed") * 60 * 1000;
         private List<NeighborStructure> neighborStructures;
 
         // . . .
-
-
-        /**
-         * <p>
-         * Tiempo máximo total que le permitimos al VNS ejecutarse,
-         * puesto que en nuestro sistema es crucial el tiempo,
-         * no debemos superar el umbral marcado.
-         * </p>
-         */
-        public long getMaxMilisecondsAllowed() {
-            return maxMilisecondsAllowed;
-        }
 
         /**
          * Conjunto de estructuras de vecindad que serán empleadas por el VNS en el

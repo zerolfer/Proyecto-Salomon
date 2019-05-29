@@ -18,6 +18,9 @@ public class DeciderFitnessFunction {
         /*Si se esta utilizando el SA solo se utilizara el valor fit[0]
          * */
         switch (funFit) {
+            case "reduccionControladoresYRestriccionesYSimilitudYContinuidad":
+                fit = Fitness.fitPonderadoRestricYNumCtrlsYSimilitudYContinuidad(individuo, entrada, patrones, parametros, parametrosAlg);
+                break;
             case "reduccionControladoresAIS":
                 fit = Fitness.fitReduccionControladoresAIS(individuo, entrada, patrones, parametros);
                 break;

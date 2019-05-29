@@ -129,7 +129,7 @@ public class MainPruebas {
                 Main_VNS_pablo.main_vns(parametros, parametrosAlgoritmo, entrada, patrones);
                 break;
             default:
-                System.out.println("Algoritmo" + parametrosAlgoritmo.getAlgoritmo() + " no encontrado.");
+                System.err.println("Algoritmo" + parametrosAlgoritmo.getAlgoritmo() + " no encontrado.");
                 break;
         }
 

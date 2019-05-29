@@ -5,6 +5,7 @@ import estructurasDatos.Solucion;
 import main.Main;
 
 import java.io.*;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Properties;
@@ -24,7 +25,7 @@ public class Trazas {
     }
 
     public static void archivarYLimpiarTrazas(ArrayList<Solucion> poblacionReducirControladores,
-                                              String propFileOptions, ParametrosAlgoritmo pa) {
+                                              URL propFileOptions, ParametrosAlgoritmo pa) {
         String c1 = "resultados/" + Main.entradaPath + Main.entradaId + "/";
         File f = new File(c1);
         f.mkdir();
@@ -319,11 +320,11 @@ public class Trazas {
         return resultado;
     }
 
-    public static void getPropertiesO(String propFileName) {
-        FileInputStream input = null;
+    public static void getPropertiesO(URL propFileName) {
+        InputStream input = null;
         try {
-            input = new FileInputStream(propFileName);
-        } catch (FileNotFoundException e1) {
+            input = propFileName.openStream();
+        } catch (IOException e1) {
             e1.printStackTrace();
         }
         try {

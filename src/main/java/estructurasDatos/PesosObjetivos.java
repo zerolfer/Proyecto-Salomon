@@ -3,6 +3,8 @@ package estructurasDatos;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Properties;
 
 /**
@@ -55,7 +57,7 @@ public class PesosObjetivos {
     /**
      * @param nombreFicheroP Ruta del fichero con las propiedades del problema.
      */
-    public PesosObjetivos(String nombreFicheroP) {
+    public PesosObjetivos(URL nombreFicheroP) {
         getPropertiesP(nombreFicheroP);
         this.pesoObj1 = Double.parseDouble(propParametros.getProperty("Obj1"));
         this.pesoObj2 = Double.parseDouble(propParametros.getProperty("Obj2"));
@@ -140,11 +142,11 @@ public class PesosObjetivos {
         this.pesoObj3Sub2 = pesoObj3Sub2;
     }
 
-    public static void getPropertiesP(String propFileName) {
-        FileInputStream input = null;
+    public static void getPropertiesP(URL propFileName) {
+        InputStream input = null;
         try {
-            input = new FileInputStream(propFileName);
-        } catch (FileNotFoundException e1) {
+            input = propFileName.openStream();
+        } catch (IOException e1) {
             e1.printStackTrace();
         }
         try {

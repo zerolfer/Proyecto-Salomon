@@ -44,7 +44,7 @@ public class DeciderCase {
                 Main.entorno = "Barcelona";
                 break;
             default:
-                System.out.println("No es un caso predefinido, introducir ID y entorno");
+                System.err.println("No es un caso predefinido, introducir ID y entorno");
                 break;
         }
 
