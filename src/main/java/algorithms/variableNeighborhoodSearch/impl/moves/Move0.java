@@ -52,7 +52,7 @@ public class Move0 extends AbstractNeighborStructure {
     }
 
     @Override
-    public Solucion busquedaLocal(Solucion solActual) {
+    public Object[] busquedaLocal(Solucion solActual) {
         Solucion x = solActual.clone();
 //        int num1 = 0;
         int idx1, idx2;
@@ -82,11 +82,11 @@ public class Move0 extends AbstractNeighborStructure {
 
                 doChange(x, turnoA, turnoB, previoB, posteriorB, idx, numSlotsNecesarios, idx1, idx2);
 
-                return x;
+                return new Object[]{x, fitness(x)};
 
             }
         }
-        return x;
+        return new Object[]{x, fitness(x)};
     }
 
     @Override

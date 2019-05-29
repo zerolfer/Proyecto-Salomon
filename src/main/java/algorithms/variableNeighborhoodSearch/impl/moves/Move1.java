@@ -53,6 +53,7 @@ public class Move1 extends AbstractNeighborStructure {
         return x;
     }
 
+    // TODO: testar todo ésto.......
     private boolean doMovement(Solucion x, ArrayList<String> turnos, int idx1, int idx2) {
         String turnoA = turnos.get(idx1);
         String turnoB = turnos.get(idx2);
@@ -85,7 +86,7 @@ public class Move1 extends AbstractNeighborStructure {
             return checkFinal(turnoB, hasta, sector);
 
         // si estamos el final, solo podemos mirar el principio
-        if (hasta >= turnoB.length())
+        if (hasta + LONGITUD_CADENAS >= turnoB.length())
             return checkInicio(turnoB, desde, sector);
 
         // Si estamos en el medio, cualquiera de ellos nos sirve
