@@ -7,6 +7,8 @@ import estructurasDatos.Solucion;
 import herramientas.CridaUtils;
 import main.MainPruebas;
 import org.apache.commons.lang3.StringUtils;
+import org.checkerframework.checker.units.qual.C;
+
 import patrones.Patrones;
 
 import java.util.*;
@@ -88,7 +90,14 @@ public class InicializarPoblacion {
                                                  Parametros p, Patrones patrones) {
 
         // FASE 1
-        Solucion individuo = entrada.getDistribucionInicial().clone();
+    	ArrayList<String> turnos = (ArrayList<String>) entrada.getDistribucionInicial().getTurnos().clone();
+    	ArrayList<Controlador> controladores = entrada.getControladores();
+    	ArrayList<Controlador> cnew = new ArrayList<Controlador>();
+    	for (int i = 0; i < controladores.size(); i++) {
+			cnew.add(controladores.get(i).clone());
+		}
+        Solucion individuo = new Solucion(turnos, cnew, entrada.getDistribucionInicial().getLongdescansos());
+        
         if (entrada.getSectorizacionModificada() != null) {
 
 //            sustituirTrabajoEnSectoresAfines(entrada, individuo);
@@ -725,6 +734,7 @@ public class InicializarPoblacion {
         for (int i = 0; i < cadenasDeTurnos.size(); i++) {
             ArrayList<String> turno = cadenasDeTurnos.get(i);
             int cont = 0;
+            int limit = 0;
             for (int l = 0; l < turno.size(); l++) {
                 if (!turno.get(l).equals(STRING_DESCANSO)) {
                     String ant = turno.get(l);
@@ -737,6 +747,7 @@ public class InicializarPoblacion {
 
                             cadenasDeTurnos = ArreglarSoluciones.arregloTrabajoMinimo(entrada, p, cadenasDeTurnos, i,
                                     turno, l, ant, patrones);
+                            limit++;if (limit>100) {break;}
                             if (posible == false) {
                                 posible = true;
                                 return cadenasDeTurnos;

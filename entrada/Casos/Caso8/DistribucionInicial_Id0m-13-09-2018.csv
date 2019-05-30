@@ -1,0 +1,25 @@
+Momento Actual;10:10:00;;;;;;;;;;;
+-;55;55;55;55;55;55;50;50;50;;;
+C1;lecpapp;LECPAPP;111;lecpapp;LECPAPP;111;lecpapp;LECPAPP;111;;;
+C2;111;lecpapp;LECPAPP;111;lecpapp;LECPAPP;111;lecpapp;LECPAPP;;;
+C3;LECPAPP;111;lecpapp;LECPAPP;111;lecpapp;LECPAPP;111;lecpapp;;;
+C4;lecpiaw;LECPIAW;111;lecpiaw;LECPIAW;111;lecpiaw;LECPIAW;111;;;
+C5;111;lecpiaw;LECPIAW;111;lecpiaw;LECPIAW;111;lecpiaw;LECPIAW;;;
+C6;LECPIAW;111;lecpiaw;LECPIAW;111;lecpiaw;LECPIAW;111;lecpiaw;;;
+-;40;40;40;40;40;40;40;40;40;40;40;40
+C7;LECPL1W;111;lecpl1w;lecpl1w;LECPL1W;111;LECPL1W;LECPL1W;lecpl1w;111;lecpl1w;lecpl1w
+C8;lecpl1w;111;LECPL1W;LECPL1W;lecpl1w;111;lecpl1w;lecpl1w;LECPL1W;111;LECPL1W;LECPL1W
+C9;LECPDWX;lecpl1w;111;lecpdwx;lecpdwx;LECPL1W;111;LECPDWX;LECPDWX;lecpl1w;111;lecpdwx
+C10;lecpdwx;LECPL1W;111;LECPDWX;LECPDWX;lecpl1w;111;lecpdwx;lecpdwx;LECPL1W;111;LECPDWX
+C11;LECPL2W;lecpdwx;lecpdwx;111;lecpl2w;LECPDWX;LECPDWX;111;lecpl2w;LECPDWX;LECPDWX;111
+C12;lecpl2w;LECPDWX;LECPDWX;111;LECPL2W;lecpdwx;lecpdwx;111;LECPL2W;lecpdwx;lecpdwx;111
+C13;111;LECPL2W;LECPL2W;lecpl2w;111;lecpl2w;lecpl2w;LECPL2W;111;LECPL2W;LECPL2W;lecpl2w
+C14;111;lecpl2w;lecpl2w;LECPL2W;111;LECPL2W;LECPL2W;lecpl2w;111;lecpl2w;lecpl2w;LECPL2W
+C15;LECPIRW;111;lecpirw;lecpirw;LECPIRW;111;LECPIRW;LECPIRW;lecpirw;111;lecpirw;lecpirw
+C16;lecpirw;111;LECPIRW;LECPIRW;lecpirw;111;lecpirw;lecpirw;LECPIRW;111;LECPIRW;LECPIRW
+C17;LECPGOX;lecpirw;111;lecpgox;lecpgox;LECPIRW;111;LECPGOX;LECPGOX;lecpirw;111;lecpgox
+C18;lecpgox;LECPIRW;111;LECPGOX;LECPGOX;lecpirw;111;lecpgox;lecpgox;LECPIRW;111;LECPGOX
+C19;LECPMXX;lecpgox;lecpgox;111;lecpmxx;LECPGOX;LECPGOX;111;lecpmxx;LECPGOX;LECPGOX;111
+C20;lecpmxx;LECPGOX;LECPGOX;111;LECPMXX;lecpgox;lecpgox;111;LECPMXX;lecpgox;lecpgox;111
+C21;111;LECPMXX;LECPMXX;lecpmxx;111;lecpmxx;lecpmxx;LECPMXX;111;LECPMXX;LECPMXX;lecpmxx
+C22;111;lecpmxx;lecpmxx;LECPMXX;111;LECPMXX;LECPMXX;lecpmxx;111;lecpmxx;lecpmxx;LECPMXX
