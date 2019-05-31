@@ -90,14 +90,8 @@ public class InicializarPoblacion {
                                                  Parametros p, Patrones patrones) {
 
         // FASE 1
-    	ArrayList<String> turnos = (ArrayList<String>) entrada.getDistribucionInicial().getTurnos().clone();
-    	ArrayList<Controlador> controladores = entrada.getControladores();
-    	ArrayList<Controlador> cnew = new ArrayList<Controlador>();
-    	for (int i = 0; i < controladores.size(); i++) {
-			cnew.add(controladores.get(i).clone());
-		}
-        Solucion individuo = new Solucion(turnos, cnew, entrada.getDistribucionInicial().getLongdescansos());
-        
+        Solucion individuo = entrada.getDistribucionInicial().clone();
+
         if (entrada.getSectorizacionModificada() != null) {
 
 //            sustituirTrabajoEnSectoresAfines(entrada, individuo);
