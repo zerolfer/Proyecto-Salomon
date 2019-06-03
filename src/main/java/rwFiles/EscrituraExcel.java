@@ -414,7 +414,7 @@ public class EscrituraExcel {
             DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss");
             Date date = new Date();
 
-            FileOutputStream out = new FileOutputStream(new File(carpetaS + "/Soluciones_" + titulo + "_CurrentDate_" + dateFormat.format(date) + ".xls"));
+            FileOutputStream out = new FileOutputStream(new File(carpetaS + "/Soluciones_" + titulo + "_CurrentDate_" + dateFormat.format(date) + ".xlsx"));
 
             workbook.write(out);
             workbook.close();
@@ -444,7 +444,7 @@ public class EscrituraExcel {
             FileInputStream file;
             HSSFWorkbook workbook = null;
             try {
-                file = new FileInputStream(new File("src/main/resources/PlantillaTrazas.xls"));
+                file = new FileInputStream(new File("src/main/resources/PlantillaTrazas.xlsx"));
                 workbook = new HSSFWorkbook(file);
             } catch (FileNotFoundException e1) {
 
@@ -549,7 +549,7 @@ public class EscrituraExcel {
             try {
                 DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss");
                 FileOutputStream out =
-                        new FileOutputStream(new File(Main.carpetaTrazas + "/Traza" + titulo + "_" + dateFormat.format(new Date()) + ".xls"));
+                        new FileOutputStream(new File(Main.carpetaTrazas + "/Traza" + titulo + "_" + dateFormat.format(new Date()) + ".xlsx"));
                 //System.out.println(titulo);
                 workbook.write(out);
                 workbook.close();

@@ -91,14 +91,11 @@ public class InicializarPoblacion {
         Solucion individuo = entrada.getDistribucionInicial().clone();
         if (entrada.getSectorizacionModificada() != null) {
 
-//            sustituirTrabajoEnSectoresAfines(entrada, individuo);
-
-            // < PASO 1 >
+            // < PASO 1 > [ + cambio por afines si es posible ]
             eliminarSectoresCerrados(entrada.getSlotMomentoActual(), entrada.getSectorizacion(),
                     entrada.getSectorizacionModificada(), entrada.getControladores(),
                     entrada.getListaNuevosSectoresAbiertosTrasMomentoActual(), individuo, entrada.getMapaAfinidad());
             // < PASO 2 >
-//            asignarTrabajoAControladoresExistentes(entrada, descanso);
             introducirPlantillasNuevosSectores(entrada, entrada.getListaNuevosSectoresAbiertosTrasMomentoActual(),
                     individuo, descanso, maxT, minT, minD);
         }
@@ -107,7 +104,7 @@ public class InicializarPoblacion {
         eliminarControladoresBaja(entrada, individuo);
         // < PASO 4 >
         anadirControladoresAlta(entrada, individuo);
-        // < PASO 5 >
+        // FUTURE: < PASO 5 >
 //        eliminarImaginariosSiEsPosible(...);
 
         // FASE 2
@@ -130,35 +127,6 @@ public class InicializarPoblacion {
         //FASE 4
 //        return individuo;
     }
-
-    private static void sustituirTrabajoEnSectoresAfines(Entrada entrada, Solucion individuo) {
-//        for( Sector sNuevo : entrada.getListaNuevosSectoresAbiertosTrasMomentoActual()){
-//
-//            for(Sector sCerrado:entrada.getDistribucionInicial())
-//        }
-
-        List<Set<String>> anterior = entrada.getSectorizacion();
-        List<Set<String>> nueva = entrada.getSectorizacionModificada();
-
-        for (int i = 0; i < anterior.size(); i++) {
-            if (!anterior.get(i).equals(nueva.get(i))) { // como son sets se comparan los elementos solo, el orden no importa
-
-            }
-        }
-
-    }
-
-//    private static void asignarTrabajoAControladoresExistentes(Entrada entrada, int descanso) {
-//        List<Sector> sectoresAbiertosTrasMomentoActual = entrada.getListaNuevosSectoresAbiertosTrasMomentoActual();
-//        List<Sector> sectoresNuevos = entrada.getListaSectoresAbiertos();
-//
-//        for (Sector sectorAbierto : sectoresAbiertosTrasMomentoActual) {
-//            for (Sector sectorNuevo : sectoresAbiertosTrasMomentoActual) {
-//                if (sectorAbierto.getId().equals(sectorNuevo.getId()))
-//
-//            }
-//        }
-//    }
 
     private static void anadirControladoresAlta(Entrada entrada, Solucion individuo) {
         ArrayList<Controlador> controladores = individuo.getControladores();
@@ -277,26 +245,32 @@ public class InicializarPoblacion {
 
             String stringParaSustituir = ""; // por defecto, si no hay afinidades, se cambia por descanso
             String afin = buscarSectorAfin(sectorCerrado, sectoresQueSeAbren, mapaAfinidad);
-            if (!afin.equals(""))
+            Sector sectorAfin=null;
+            if (!afin.equals("")) {
                 stringParaSustituir = afin;
+                sectorAfin = CridaUtils.findSectorById(sectores, afin);
+
+            }
 
             // para cada uno de los turnos de la distribucion inicial
             for (int j = 0; j < distribucionInicial.getTurnos().size(); j++) {
                 String s = distribucionInicial.getTurnos().get(j); // turno original
 
-                if (!s.contains(sectorCerrado) && checkAcreditaciones(sectores, controladores.get(j), afin, j)) // TODO: segurarse de que el check es necesario o no!!!!! FIXME !!!
+                if (!s.contains(sectorCerrado) && checkAcreditaciones(sectorAfin, controladores.get(j), afin, j)) // TODO: segurarse de que el check es necesario o no!!!!! FIXME: Pendiente de CRIDA !!!
                     continue;
 
                 String previo = s.substring(0, slotInicio * LONGITUD_CADENAS);
 
-                String medio = "";
+                String medio;
                 if (stringParaSustituir.equals(""))
                     medio = StringUtils.replaceIgnoreCase(
                             s.substring(slotInicio * LONGITUD_CADENAS, slotFin * LONGITUD_CADENAS), sectorCerrado, STRING_DESCANSO
                     ); // sustituimos todas las apariciones del sector (ya sea mayus o minus) por descansos
-                else
+                else {
                     medio = reemplazarPorAfin(s, slotInicio, LONGITUD_CADENAS, slotFin, sectorCerrado,
                             stringParaSustituir);
+                    sectores.remove(sectorAfin);
+                }
 
                 String posterior = s.substring(slotFin * LONGITUD_CADENAS);
                 distribucionInicial.getTurnos().set(j, previo + medio + posterior);  // recomponemos y actualizamos el turno
@@ -305,13 +279,12 @@ public class InicializarPoblacion {
     }
 
     /*
-     * TODO: ASEGURARSE DE SI ES REALMENTE NECESARIO ESTA COMPROBACIÓN O NO
+     * TODO: ASEGURARSE DE SI ES REALMENTE NECESARIO ESTA COMPROBACIÓN O NO (Preguntar a CRIDA)
      * FIXME: ES REALMENTE NECESARIO ESTA COMPROBACIÓN?!?!
      */
-    private static boolean checkAcreditaciones(List<Sector> sectores, Controlador controlador, String afin, int indice) {
-        Sector sector = CridaUtils.findSectorById(sectores, afin);
+    private static boolean checkAcreditaciones(Sector sectorAfin, Controlador controlador, String afin, int indice) {
         if (controlador.getTurnoAsignado() != indice) return false;
-        if (controlador.isCON() && !sector.isRuta()) return false;
+        if (controlador.isCON() && !sectorAfin.isRuta()) return false;
         return true;
     }
 
@@ -768,7 +741,6 @@ public class InicializarPoblacion {
     private static void introducirPlantillasNuevosSectores(Entrada entrada, List<Sector> sectoresNuevosAbiertosTrasMomentoActual,
                                                            Solucion distribucion, int descanso, int maxT,
                                                            int minT, int minD) {
-        ArrayList<Controlador> controladores = entrada.getControladores(); // individuo final a actualizar
         ArrayList<String> turnos = distribucion.getTurnos(); // esto es la matriz de trabajo
 
         ArrayList<Set<String>> sectorizacionPorSlots = entrada.getSectorizacionModificada();

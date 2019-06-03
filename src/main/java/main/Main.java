@@ -47,18 +47,32 @@ public class Main {
         // Carga de los parámetros del algoritmo
         ParametrosAlgoritmo parametrosAlgoritmo = new ParametrosAlgoritmo();
 
-        //////////////////////////////////////////////////////////////////////////////////////
-        parametrosAlgoritmo.sobreescribirParametrosViaExterna(propFileExternoParametros); // HACK: USAR PARA EL JAR DEPLOYMENT
-        //////////////////////////////////////////////////////////////////////////////////////
+        // HACK: USAR PARA EL JAR DEPLOYMENT /////////////////////////////////////////////////////////
+        parametrosAlgoritmo.sobreescribirParametrosViaExterna(propFileExternoParametros);
+        //////////////////////////////////////////////////////////////////////////////////////////////
         Entrada entrada = Entrada.leerEntrada(parametros, entradaPath, entradaId, entorno);
         Patrones patrones = new Patrones(entrada, parametros);
-
 
         carpetaSoluciones = "resultados/" + entradaPath + entradaId + "/" + parametrosAlgoritmo.getAlgoritmo() + "/Soluciones/";
         carpetaTrazas = "resultados/" + entradaPath + entradaId + "/" + parametrosAlgoritmo.getAlgoritmo() + "/Trazas/";
 
+        // OUTPUT ///////////////////////////////////////////////////////////////////////////////////////////////////
+        ArrayList<Solucion> solEntrada = new ArrayList<>();
+        solEntrada.add(entrada.getDistribucionInicial());
+
+        rwFiles.EscrituraExcel.EscrituraSoluciones("OutputTest", Main.carpetaSoluciones,
+                solEntrada, entrada, patrones, parametros, parametrosAlgoritmo);
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
         // la distribucion inicial está en "entrada"
         ArrayList<Solucion> poblacionInicial = InicializarPoblacion.inicializarPoblacion(entrada, parametros, patrones);
+
+        // OUTPUT ///////////////////////////////////////////////////////////////////////////////////////////////////
+        solEntrada.addAll(poblacionInicial);
+        rwFiles.EscrituraExcel.EscrituraSoluciones("OutputTest", Main.carpetaSoluciones, solEntrada,
+                entrada, patrones, parametros, parametrosAlgoritmo);
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         switch (parametrosAlgoritmo.getAlgoritmo()) {
             case "SA":
@@ -73,6 +87,13 @@ public class Main {
         }
 
         Patrones.nuc = new ArrayList<>();
+
+        // OUTPUT ///////////////////////////////////////////////////////////////////////////////////////////////////
+        solEntrada.addAll(poblacionInicial);
+        rwFiles.EscrituraExcel.EscrituraSoluciones("OutputTest", Main.carpetaSoluciones, solEntrada,
+                entrada, patrones, parametros, parametrosAlgoritmo);
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     }
 
     // HACK: usar solo en la fase JAR DEPLOYMENT

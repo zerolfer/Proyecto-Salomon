@@ -73,7 +73,7 @@ public class Entrada {
     /**
      * Carga de trabajo total representada en slots.
      */
-//    private int cargaTrabajo; TODO: es necesario? Nunca se usaba...
+//    private int cargaTrabajo;
     private ArrayList<Set<String>> sectorizacionModificada;
     private int slotMomentoActual;
 
