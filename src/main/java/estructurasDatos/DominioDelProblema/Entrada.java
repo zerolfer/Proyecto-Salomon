@@ -262,10 +262,10 @@ public class Entrada {
 
             }
             if (!existe) {
-                if (linea[5].equalsIgnoreCase("PTD")) {
+                if (linea[3].equalsIgnoreCase("PTD")) {
                     c = (new Controlador(lineaId, linea[5], linea[4], true, false,
                             false, Propiedades.ALTA, calcularSlot(turno, linea[2])));
-                } else if (linea[5].equalsIgnoreCase("CON")) {
+                } else if (linea[3].equalsIgnoreCase("CON")) {
                     c = (new Controlador(lineaId, linea[5], linea[4], false, true,
                             false, Propiedades.ALTA, calcularSlot(turno, linea[2])));
                 }

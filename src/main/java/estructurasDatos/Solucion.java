@@ -42,8 +42,10 @@ public class Solucion implements Cloneable {
      */
     @SuppressWarnings({"unchecked"})
     public Solucion clone() {
-        return new Solucion((ArrayList<String>) this.turnos.clone(),
-                (ArrayList<Controlador>) this.controladores.clone(), this.longdescansos);
+        ArrayList<String> turnos = (ArrayList<String>) this.getTurnos().clone();
+        ArrayList<Controlador> cnew = new ArrayList<>();
+        this.getControladores().forEach(c -> cnew.add(c.clone()));
+        return new Solucion(turnos, cnew, this.getLongdescansos());
     }
 
     /**

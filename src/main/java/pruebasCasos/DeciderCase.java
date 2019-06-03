@@ -43,6 +43,36 @@ public class DeciderCase {
                 Main.entradaId = "Id2m-01-01-2019";
                 Main.entorno = "Barcelona";
                 break;
+            case "Caso4":
+                Main.entradaPath = "Caso4";
+                Main.entradaId = "Id3t-16-01-2019";
+                Main.entorno = "Madrid";
+                break;
+            case "Caso5":
+                Main.entradaPath = "Caso5";
+                Main.entradaId = "Id5t-16-01-2019";
+                Main.entorno = "Madrid";
+                break;
+            case "Caso6":
+                Main.entradaPath = "Caso6";
+                Main.entradaId = "Id4t-14-01-2019";
+                Main.entorno = "Madrid";
+                break;
+            case "Caso7":
+                Main.entradaPath = "Caso7";
+                Main.entradaId = "Id6t-19-10-2018";
+                Main.entorno = "Barcelona";
+                break;
+            case "Caso8":
+                Main.entradaPath = "Caso8";
+                Main.entradaId = "Id0m-13-09-2018";
+                Main.entorno = "Palma";
+                break;
+            case "Caso9":
+                Main.entradaPath = "Caso9";
+                Main.entradaId = "Id1m-13-09-2018";
+                Main.entorno = "Palma";
+                break;
             default:
                 System.err.println("No es un caso predefinido, introducir ID y entorno");
                 break;
