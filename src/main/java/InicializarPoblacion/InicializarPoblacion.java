@@ -7,8 +7,6 @@ import estructurasDatos.Solucion;
 import herramientas.CridaUtils;
 import main.MainPruebas;
 import org.apache.commons.lang3.StringUtils;
-import org.checkerframework.checker.units.qual.C;
-
 import patrones.Patrones;
 
 import java.util.*;
@@ -180,6 +178,9 @@ public class InicializarPoblacion {
 
     }
 
+    /*
+     * Importante: modifica la lista de sectores ( entrada.getListaNuevosSectoresAbiertosTrasMomentoActual() )
+     */
     private static void eliminarSectoresCerrados(int slotMomentoActual, ArrayList<Set<String>> sectorizacion,
                                                  ArrayList<Set<String>> sectorizacionModificada,
                                                  List<Controlador> controladores, List<Sector> sectores,
@@ -229,14 +230,13 @@ public class InicializarPoblacion {
 
     /**
      * Actualiza el turno (el String) <b>de todos los controladores</b> dentro del intervalo de tiempo
-     * (en slots de 3 caracteres cada uno) fijado en los parámetros
+     * (en slots de 3 caracteres cada uno) fijado en los parámetros <br/>
      * Importante: este método MODIFICA LA <code>distribucionInicial<code/> pasada como argumento
+     * y la lista de sectores ( entrada.getListaNuevosSectoresAbiertosTrasMomentoActual() )
      *
-     * @param slotInicio                                   inicio del intervalo (numero de slot)
-     * @param slotFin                                      final del intervalo (numero de slot)
-     * @param sectoresCerrados                             lista de sectores cerrados en el intervalo
-     * @param listaNuevosSectoresAbiertosTrasMomentoActual
-     * @param distribucionInicial                          distribucion inicial a modificar
+     * @param slotInicio       inicio del intervalo (numero de slot)
+     * @param slotFin          final del intervalo (numero de slot)
+     * @param sectoresCerrados lista de sectores cerrados en el intervalo
      */
     private static void modificarTurno(int slotInicio, int slotFin, final Collection<String> sectoresCerrados,
                                        final Collection<String> sectoresQueSeAbren,
@@ -248,7 +248,7 @@ public class InicializarPoblacion {
 
             String stringParaSustituir = ""; // por defecto, si no hay afinidades, se cambia por descanso
             String afin = buscarSectorAfin(sectorCerrado, sectoresQueSeAbren, mapaAfinidad);
-            Sector sectorAfin=null;
+            Sector sectorAfin = null;
             if (!afin.equals("")) {
                 stringParaSustituir = afin;
                 sectorAfin = CridaUtils.findSectorById(sectores, afin);
@@ -714,7 +714,10 @@ public class InicializarPoblacion {
 
                             cadenasDeTurnos = ArreglarSoluciones.arregloTrabajoMinimo(entrada, p, cadenasDeTurnos, i,
                                     turno, l, ant, patrones);
-                            limit++;if (limit>100) {break;}
+                            limit++;
+                            if (limit > 100) {
+                                break;
+                            }
                             if (posible == false) {
                                 posible = true;
                                 return cadenasDeTurnos;
