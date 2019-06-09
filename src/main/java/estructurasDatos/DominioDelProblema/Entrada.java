@@ -36,7 +36,7 @@ public class Entrada {
      * Inicializado en {@link #crearListaNuevosSectoresAbiertos}
      * </p>
      */
-    private final List<Sector> listaNuevosSectoresAbiertosTrasMomentoActual;
+    private final ArrayList<Sector> listaNuevosSectoresAbiertosTrasMomentoActual;
     /**
      * Lista con los controladores disponibles y sus caracteristicas.
      */
@@ -750,7 +750,7 @@ public class Entrada {
     }
 
 
-    public List<Sector> getListaNuevosSectoresAbiertosTrasMomentoActual() {
+    public ArrayList<Sector> getListaNuevosSectoresAbiertosTrasMomentoActual() {
         return listaNuevosSectoresAbiertosTrasMomentoActual;
     }
 
