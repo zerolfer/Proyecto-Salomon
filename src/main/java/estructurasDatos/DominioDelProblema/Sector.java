@@ -55,9 +55,9 @@ public class Sector implements Cloneable {
 
     }
 
-    public Sector clone() {
-        return new Sector(this.nombre, this.id, this.pDT, this.ruta, this.noche, this.sectoresElementales);
-    }
+//    public Sector clone() {
+//        return new Sector(this.nombre, this.id, this.pDT, this.ruta, this.noche, this.sectoresElementales);
+//    }
 
     public ArrayList<String> getSectoresElementales() {
         return sectoresElementales;

@@ -154,7 +154,7 @@ public class Entrada {
         }
 
         ArrayList<Sector> listaSectoresAbiertos =
-                crearListaSectoresAbiertos(slotMomentoActual, sectorizacion, listaSectores);
+                crearListaSectoresAbiertos(slotMomentoActual, sectorizacion, sectorizacionModificada, listaSectores);
 
         HashMap<Sector, ArrayList<String>> volumnsOfSectors = crearHashMapSectoresVolumenes(listaSectoresAbiertos, fSectorizacionSectoresVolumenes);
 //        int cargaTrabajo = calcularCargaTrabajo(sectorizacion, controladores, listaNuevosSectoresAbiertosTrasMomentoActual);
@@ -163,11 +163,9 @@ public class Entrada {
 
         calcularCargaTrabajo(sectorizacion, controladores, listaSectoresAbiertos);
 
-        Entrada entrada = new Entrada(controladores, nucleos, turno, listaSectores, listaSectoresAbiertos, listaNuevosSectoresAbiertosTrasMomentoActual,
+        return new Entrada(controladores, nucleos, turno, listaSectores, listaSectoresAbiertos, listaNuevosSectoresAbiertosTrasMomentoActual,
                 sectorizacion, matrizAfinidad, mapaAfinidad,
                 volumnsOfSectors, sectorizacionModificada, distribucionInicial, slotMomentoActual);
-
-        return entrada;
     }
 
     private static int crearMomentoActual(Turno turno, ArrayList<String> fDistribucionInicial) {
@@ -315,18 +313,28 @@ public class Entrada {
         return volumnsOfSectors;
     }
 
-    private static ArrayList<Sector> crearListaSectoresAbiertos(int slotMomentoActual, ArrayList<Set<String>> sectorizacion, ArrayList<Sector> listaSectores) {
+    private static ArrayList<Sector> crearListaSectoresAbiertos(int slotMomentoActual, ArrayList<Set<String>> sectorizacion,
+                                                                ArrayList<Set<String>> sectorizacionModificada, ArrayList<Sector> listaSectores) {
         List<Sector> sectoresAbiertos = new ArrayList<>();
+        if (sectorizacionModificada == null) {
+            // si no hay cambio en la sectorización, utilizamos la original
+            recorrerSlotsAddAlSet(slotMomentoActual, sectorizacion, listaSectores, sectoresAbiertos);
+        } else {
+            // pero si hay cambio, utilizamos únicamente la nueva
+            recorrerSlotsAddAlSet(slotMomentoActual, sectorizacionModificada, listaSectores, sectoresAbiertos);
+        }
+        return new ArrayList<>(sectoresAbiertos);
+    }
 
+    private static void recorrerSlotsAddAlSet(int slotMomentoActual, ArrayList<Set<String>> sectorizacion, ArrayList<Sector> listaSectores, List<Sector> sectoresAbiertos) {
         // para cada slot
         for (int i = slotMomentoActual; i < sectorizacion.size(); i++) {
             Set<String> slot = sectorizacion.get(i);
 
             // para cada sector abierto en ese slot
-            for (String sct : slot) {
-
-                // Si aun no esta en la lista (lo ponemos primero para mayor eficiencia)
-                // No es necesario verificar la capitalización puesto que todos vienen con minúscula
+            for (String sct : slot)
+                // Si aun no esta en la lista (lo ponemos primero para mayor eficiencia)...
+                // [No es necesario verificar la capitalización puesto que todos vienen con minúscula]
                 if (!CridaUtils.containsSectorById/*IngoreCase*/(sectoresAbiertos, sct)) {
 
                     // buscamos el "Sector" de entre todos los sectores de la instancia del problema
@@ -337,12 +345,9 @@ public class Entrada {
                         throw new RuntimeException("No se encuentra el sector con id \"" + sct + "\"");
 
                         // pero si todo va bien, entonces lo añadimos a la lista
-                    else sectoresAbiertos.add(s.clone());
+                    else sectoresAbiertos.add(s);
                 }
-
-            }
         }
-        return new ArrayList<>(sectoresAbiertos);
     }
 
     private static ArrayList<Sector> crearListaNuevosSectoresAbiertos(int slotMomentoActual,
@@ -375,7 +380,7 @@ public class Entrada {
                         throw new RuntimeException("No se encuentra el sector con id \"" + sct + "\"");
 
                         // pero si todo va bien, entonces lo añadimos a la lista
-                    else sectoresAbiertos.add(s.clone());
+                    else sectoresAbiertos.add(s);
                 }
 
             }
@@ -575,7 +580,7 @@ public class Entrada {
                 if (linea.length > i && linea[i].equalsIgnoreCase("X")) {
                     for (int k = 0; k < listaSectores2.size(); k++) {
                         if (listaSectores2.get(k).getNombre().equalsIgnoreCase(linea[0])) {
-                            listaSectores.add((Sector) listaSectores2.get(k).clone());
+                            listaSectores.add((Sector) listaSectores2.get(k));
                             break;
                         }
                     }
