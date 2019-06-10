@@ -264,12 +264,15 @@ public class InicializarPoblacion {
                     continue;
 
                 String previo = s.substring(0, slotInicio * LONGITUD_CADENAS);
-
                 String medio;
+
+                // si no hay sector afín, lo sustituye por descansos
                 if (stringParaSustituir.equals(""))
                     medio = StringUtils.replaceIgnoreCase(
                             s.substring(slotInicio * LONGITUD_CADENAS, slotFin * LONGITUD_CADENAS), sectorCerrado, STRING_DESCANSO
                     ); // sustituimos todas las apariciones del sector (ya sea mayus o minus) por descansos
+
+                // pero si sí hay un afín aun no utilizado, se sustituye por ese
                 else {
                     medio = reemplazarPorAfin(s, slotInicio, LONGITUD_CADENAS, slotFin, sectorCerrado,
                             stringParaSustituir);
@@ -327,13 +330,13 @@ public class InicializarPoblacion {
          * modificados - iniciales = nuevos abiertos
          *  {a,c,d,e}  -   {a,b,c}     =     {d,e}
          */
-        return diferenciaConjuntos(modificados, iniciales)/*.stream().filter(id -> {
+        return diferenciaConjuntos(modificados, iniciales).stream().filter(id -> {
             for (Sector s : sectores) {
                 if (id.equals(s.getId()))
                     return true;
             }
             return false;
-        }).collect(Collectors.toSet())*/;
+        }).collect(Collectors.toSet());
     }
 
 //    private static List<List<String>> obtenerNuevosSectoresAbiertos(ArrayList<ArrayList<String>> sectorizacionInicial, ArrayList<ArrayList<String>> sectorizacionModificada) {
