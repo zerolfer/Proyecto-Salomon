@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import patrones.Patrones;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static herramientas.CridaUtils.*;
 
@@ -210,7 +211,7 @@ public class InicializarPoblacion {
 
                 // como hay un cambio, obtenemos los nuevos sectores cerrados, será una lista vacia o no
                 sectoresCerrados = obtenerSectoresCerrados(sectorizacion.get(slot), sectorizacionModificada.get(slot));
-                sectoresQueSeAbren = obtenerNuevosSectoresAbiertos(sectorizacion.get(slot), sectorizacionModificada.get(slot));
+                sectoresQueSeAbren = obtenerNuevosSectoresAbiertos(sectorizacion.get(slot), sectorizacionModificada.get(slot), sectores);
 
                 // como ha habido un cambio, lo marcamos en la baliza hayCambio,
                 // y guardamos la posicion (numero del slot) de dicho cambio para
@@ -240,7 +241,7 @@ public class InicializarPoblacion {
      */
     private static void modificarTurno(int slotInicio, int slotFin, final Collection<String> sectoresCerrados,
                                        final Collection<String> sectoresQueSeAbren,
-                                       List<Controlador> controladores, List<Sector> sectores,
+                                       List<Controlador> controladores, List<Sector> sectoresAbiertosTrasMomentoActual,
                                        Solucion distribucionInicial, Map<String, Set<String>> mapaAfinidad) {
         // para cada sector que se cierra
         for (String sectorCerrado : sectoresCerrados) {
@@ -250,9 +251,9 @@ public class InicializarPoblacion {
             String afin = buscarSectorAfin(sectorCerrado, sectoresQueSeAbren, mapaAfinidad);
             Sector sectorAfin = null;
             if (!afin.equals("")) {
-                stringParaSustituir = afin;
-                sectorAfin = CridaUtils.findSectorById(sectores, afin);
-
+                sectorAfin = CridaUtils.findSectorById(sectoresAbiertosTrasMomentoActual, afin);
+                if (sectoresAbiertosTrasMomentoActual.contains(sectorAfin))
+                    stringParaSustituir = afin;
             }
 
             // para cada uno de los turnos de la distribucion inicial
@@ -272,7 +273,8 @@ public class InicializarPoblacion {
                 else {
                     medio = reemplazarPorAfin(s, slotInicio, LONGITUD_CADENAS, slotFin, sectorCerrado,
                             stringParaSustituir);
-                    sectores.remove(sectorAfin);
+                    sectoresAbiertosTrasMomentoActual.remove(sectorAfin);
+                    sectoresQueSeAbren.remove(afin);
                 }
 
                 String posterior = s.substring(slotFin * LONGITUD_CADENAS);
@@ -320,12 +322,18 @@ public class InicializarPoblacion {
         return diferenciaConjuntos(iniciales, modificados);
     }
 
-    private static Set<String> obtenerNuevosSectoresAbiertos(Set<String> iniciales, Set<String> modificados) {
+    private static Set<String> obtenerNuevosSectoresAbiertos(Set<String> iniciales, Set<String> modificados, List<Sector> sectores) {
         /*
          * modificados - iniciales = nuevos abiertos
          *  {a,c,d,e}  -   {a,b,c}     =     {d,e}
          */
-        return diferenciaConjuntos(modificados, iniciales);
+        return diferenciaConjuntos(modificados, iniciales)/*.stream().filter(id -> {
+            for (Sector s : sectores) {
+                if (id.equals(s.getId()))
+                    return true;
+            }
+            return false;
+        }).collect(Collectors.toSet())*/;
     }
 
 //    private static List<List<String>> obtenerNuevosSectoresAbiertos(ArrayList<ArrayList<String>> sectorizacionInicial, ArrayList<ArrayList<String>> sectorizacionModificada) {
