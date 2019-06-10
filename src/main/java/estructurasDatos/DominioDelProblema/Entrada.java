@@ -328,7 +328,7 @@ public class Entrada {
 
     private static void recorrerSlotsAddAlSet(int slotMomentoActual, ArrayList<Set<String>> sectorizacion, ArrayList<Sector> listaSectores, List<Sector> sectoresAbiertos) {
         // para cada slot
-        for (int i = slotMomentoActual; i < sectorizacion.size(); i++) {
+        for (int i = 0; i < sectorizacion.size(); i++) {
             Set<String> slot = sectorizacion.get(i);
 
             // para cada sector abierto en ese slot
