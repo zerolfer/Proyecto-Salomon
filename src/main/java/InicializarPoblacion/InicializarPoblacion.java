@@ -110,7 +110,7 @@ public class InicializarPoblacion {
 //        eliminarImaginariosSiEsPosible(...);
 
         // FASE 2
-        individuo.setTurnos(reparacionSolucionesAdapter(entrada, p, individuo.getTurnos(), minT, patrones));
+        //individuo.setTurnos(reparacionSolucionesAdapter(entrada, p, individuo.getTurnos(), minT, patrones));
 
         return individuo;
 
