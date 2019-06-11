@@ -40,28 +40,6 @@ public class Main_VNS_pablo {
         trazas.Trazas.archivarYLimpiarTrazas(poblacionReducirControladores, Main.propFileOptions, parametrosAlgoritmo);
         trazas.Trazas.limpiarTrazas();
         /*FIN PRESENTACION DE RESULTADOS Y TRAZAS*/
-
-        /*OPTIMIZACION DE SOLUCIONES*/
-        parametrosAlgoritmo.setFuncionFitnessFase2(parametrosAlgoritmo.getFuncionFitnessFase3());
-        ArrayList<Solucion> poblacionOptimizada = VNS.bucleVNS(poblacionFactible, parametrosAlgoritmo, parametros,
-                patrones, entrada);
-
-        double[] fit;
-        for (int i = 0; i < poblacionOptimizada.size(); i++) {
-            fit = DeciderFitnessFunction.switchFitnessF(poblacionOptimizada.get(i), patrones, entrada, parametros,
-                    parametrosAlgoritmo);
-            System.out.print("Fitness inicial de " + i + "--> ");
-            for (int j = 0; j < fit.length; j++) {
-                System.out.print("fit" + j + " = " + fit[j] + " | ");
-            }
-            System.out.println("");
-        }
-
-        /*PRESENTACION DE RESULTADOS Y TRAZAS*/
-        rwFiles.EscrituraExcel.EscrituraSoluciones("PoblacionOptimizada", Main.carpetaSoluciones, poblacionOptimizada
-                , entrada, patrones, parametros, parametrosAlgoritmo);
-        trazas.Trazas.archivarYLimpiarTrazas(poblacionOptimizada, Main.propFileOptions, parametrosAlgoritmo);
-        /*FIN PRESENTACION DE RESULTADOS Y TRAZAS*/
         System.out.println("Done");
 
     }

@@ -30,10 +30,6 @@ public class ParametrosAlgoritmo {
      * Nombre de la funcion objetivo que se utiliza en la fase2 del algoritmo.
      */
     protected String funcionFitnessFase2;
-    /**
-     * Nombre de la funcion objetivo que se utiliza en la fase3 del algoritmo.
-     */
-    protected String funcionFitnessFase3;
 
     /**
      * <p>
@@ -95,7 +91,6 @@ public class ParametrosAlgoritmo {
         this.maxMilisecondsAllowed = getInteger("maxTimeAllowed") * 60 * 1000;
 
         this.funcionFitnessFase2 = getString("funcionFitnessFase2");
-        this.funcionFitnessFase3 = getString("funcionFitnessFase3");
 
         this.ponderacionFitness1 = getDouble("ponderacionFitness1");
         this.ponderacionFitness2 = getDouble("ponderacionFitness2");
@@ -124,14 +119,6 @@ public class ParametrosAlgoritmo {
 
     public void setFuncionFitnessFase2(String funcionFitnessFase2) {
         funcionFitnessFase2 = funcionFitnessFase2;
-    }
-
-    public String getFuncionFitnessFase3() {
-        return funcionFitnessFase3;
-    }
-
-    public void setFuncionFitnessFase3(String funcionFitnessFase3) {
-        this.funcionFitnessFase3 = funcionFitnessFase3;
     }
 
     /**

@@ -26,28 +26,33 @@ public class Main_SA {
 
         MainPruebas.problema += "Fase 2:" + "\n";
 
-        /*INICIALIZACION DE SOLUCIONES FACTIBLES*/
-//        ArrayList<Solucion> poblacionInicial = InicializarPoblacion.inicializarPoblacion(entrada, parametros, patrones);
-
-        //ArrayList<Solucion> poblacionInicial = new ArrayList<Solucion>();
-
-        ArrayList<Solucion> poblacionReducirControladores = new ArrayList<>();
-        poblacionReducirControladores = SimulatedAnnealing.bucleSA(poblacionInicial, parametrosAlgoritmo, parametros, patrones, entrada);
+        ArrayList<Solucion> poblacionSoluciones = new ArrayList<>();
+        poblacionSoluciones = SimulatedAnnealing.bucleSA(poblacionInicial, parametrosAlgoritmo, parametros, patrones, entrada);
 
         double res = 0;
+        double[] fit;
         MainPruebas.numFactibleAux = 0;
-        ArrayList<Solucion> poblacionFactible = new ArrayList<>();
-        for (int i = 0; i < poblacionReducirControladores.size(); i++) {
-            if ((res = Restricciones.penalizacionPorRestricciones(poblacionReducirControladores.get(i), patrones, entrada, parametros)) == 0) {
-                poblacionFactible.add(poblacionReducirControladores.get(i));
+        for (int i = 0; i < poblacionSoluciones.size(); i++) {
+            if ((res = Restricciones.penalizacionPorRestricciones(poblacionSoluciones.get(i), patrones, entrada, parametros)) == 0) {
+                //poblacionFactible.add(poblacionSoluciones.get(i));
                 MainPruebas.numFactibleAux++;
             }
             MainPruebas.problema += (i + "-Restricciones incumplidas: " + res + "\n");
             System.out.println(i + "-Restricciones incumplidas: " + res);
+            
+            fit = DeciderFitnessFunction.switchFitnessF(poblacionSoluciones.get(i), patrones, entrada, parametros, parametrosAlgoritmo);
+            String cadFitness = "Fitness inicial de " + i + "--> ";
+            for (int j = 0; j < fit.length; j++) {
+                cadFitness += "fit" + j + " = " + fit[j] + " | ";
+            }
+            MainPruebas.problema += (cadFitness + "\n");
+            System.out.println(cadFitness);
         }
+        
+        
         /*PRESENTACION DE RESULTADOS Y TRAZAS*/
-        rwFiles.EscrituraExcel.EscrituraSoluciones("PoblacionFactible", Main.carpetaSoluciones,
-                poblacionReducirControladores, entrada, patrones, parametros, parametrosAlgoritmo);
+        rwFiles.EscrituraExcel.EscrituraSoluciones("PoblacionSoluciones", Main.carpetaSoluciones,
+        		poblacionSoluciones, entrada, patrones, parametros, parametrosAlgoritmo);
         //	trazas.Trazas.archivarYLimpiarTrazas(poblacionReducirControladores, Main.propFileOptions,
         //	parametrosAlgoritmo);
         //	trazas.Trazas.limpiarTrazas();
@@ -66,32 +71,8 @@ public class Main_SA {
         MainPruebas.problema += "NumeroSolFactibles: " + MainPruebas.numFactibleAux + "; ";
 
         MainPruebas.problema += "\n";
-        MainPruebas.problema += ("Fase 3:" + "\n");
-
-        /*MainPruebas*/
-        parametrosAlgoritmo.setFuncionFitnessFase2(parametrosAlgoritmo.getFuncionFitnessFase3());
-        //parametrosAlgoritmo.setCondicionParadaNumeroMejoras(0);//Esto elimina esta condicion de parada para la fase 3 ya que no es necesaria.
-        parametrosAlgoritmo.SA.setCondicionParadaPorcent(0.1);//Modifica el porcentaje de mejora de la condicion de
-        // parada para la fase 3.
-
-        ArrayList<Solucion> poblacionOptimizada = new ArrayList<>();
-        poblacionOptimizada = SimulatedAnnealing.bucleSA(poblacionFactible, parametrosAlgoritmo, parametros, patrones, entrada);
-
-        double[] fit;
-        for (int i = 0; i < poblacionOptimizada.size(); i++) {
-            fit = DeciderFitnessFunction.switchFitnessF(poblacionOptimizada.get(i), patrones, entrada, parametros, parametrosAlgoritmo);
-            String cadFitness = "Fitness inicial de " + i + "--> ";
-            for (int j = 0; j < fit.length; j++) {
-                cadFitness += "fit" + j + " = " + fit[j] + " | ";
-            }
-            MainPruebas.problema += (cadFitness + "\n");
-            System.out.println(cadFitness);
-        }
-
-        /*PRESENTACION DE RESULTADOS Y TRAZAS*/
-        rwFiles.EscrituraExcel.EscrituraSoluciones("PoblacionOptimizada", Main.carpetaSoluciones, poblacionOptimizada, entrada, patrones, parametros, parametrosAlgoritmo);
-        //	trazas.Trazas.archivarYLimpiarTrazas(poblacionOptimizada, Main.propFileOptions, parametrosAlgoritmo);
-        /*FIN PRESENTACION DE RESULTADOS Y TRAZAS*/
+        
+       
         System.out.println("Done");
     }
 

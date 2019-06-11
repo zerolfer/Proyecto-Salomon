@@ -276,54 +276,6 @@ public class MainPruebas {
         System.out.println(m);
     }
 
-    /**
-     * Pruebas de inicializacion
-     *
-     * @param args Null
-     */
-    public static void mainInicializacion(String[] args) { //Inicializacion
-        /*INICIALIZACION DE DATOS*/
-        DeciderCase.switchCase("Caso3");
-        Parametros parametros = new Parametros(Main.propFileParameters, Main.propFileOptions);
-        ParametrosAlgoritmo parametrosAlg = new ParametrosAlgoritmo();
-        Entrada entrada = Entrada.leerEntrada(parametros, Main.entradaPath, Main.entradaId, Main.entorno);
-        Patrones patrones = new Patrones(entrada, parametros);
-        Main.carpetaSoluciones =
-                "resultados/" + Main.entradaPath + Main.entradaId + "/" + parametrosAlg.getAlgoritmo() + "/Soluciones/";
-        Main.carpetaTrazas =
-                "resultados/" + Main.entradaPath + Main.entradaId + "/" + parametrosAlg.getAlgoritmo() + "/Trazas/";
-        /*INICIALIZACION DE SOLUCIONES FACTIBLES*/
-        ArrayList<Solucion> poblacionInicial = InicializacionCasos.CrearIndFijoCaso3(entrada, parametros, patrones);
-        //ArrayList<Solucion> poblacionInicial = InicializarPoblacion.inicializarPoblacion(entrada, parametros,
-        // patrones);
-        //ArrayList<Solucion> poblacionReducir = new ArrayList<Solucion>();poblacionReducir.add(poblacionInicial.get
-        // (0));
-        double res = 0;
-        ArrayList<Solucion> poblacionFactible = new ArrayList<>();
-        for (int i = 0; i < poblacionInicial.size(); i++) {
-            if ((res = Restricciones.penalizacionPorRestricciones(poblacionInicial.get(i), patrones, entrada,
-                    parametros)) == 0) {
-                poblacionFactible.add(poblacionInicial.get(i));
-            }
-            System.out.println(i + "-Restricciones incumplidas: " + res);
-        }
-
-        rwFiles.EscrituraExcel.EscrituraSoluciones("Caso3Referencia", Main.carpetaSoluciones, poblacionInicial,
-                entrada, patrones, parametros, parametrosAlg);
-        parametrosAlg.setFuncionFitnessFase2(parametrosAlg.getFuncionFitnessFase3());
-        double[] fit;
-        for (int i = 0; i < poblacionInicial.size(); i++) {
-            fit = DeciderFitnessFunction.switchFitnessF(poblacionInicial.get(i), patrones, entrada, parametros,
-                    parametrosAlg);
-            System.out.print("Fitness inicial de " + i + "--> ");
-            for (int j = 0; j < fit.length; j++) {
-                System.out.print("fit" + j + " = " + fit[j] + " | ");
-            }
-            System.out.println("");
-        }
-
-        /*FIN PRESENTACION DE RESULTADOS Y TRAZAS*/
-    }
 
     /**
      * Pruebas con soluciones definidas.
@@ -350,30 +302,6 @@ public class MainPruebas {
         poblacion.add(s1);
         System.out.println("RES: " + Restricciones.penalizacionPorRestricciones(poblacion.get(0), patrones, entrada,
                 parametros));
-        parametrosAlg.setFuncionFitnessFase2(parametrosAlg.getFuncionFitnessFase3());
 
-	/*	double[] fit;
-		for (int i = 0; i < poblacion.size(); i++) {			
-			fit = DeciderFitnessFunction.switchFitnessF(poblacion.get(i), patrones, entrada, parametros,
-			parametrosAlg);
-			System.out.print("Fitness inicial de "+i+ "--> ");
-			for (int j = 0; j < fit.length; j++) {
-				System.out.print("fit"+j+" = "+fit[j]+" | ");
-			}System.out.println("");
-			FitnessFase3Info.fitGlobal(poblacion.get(i), entrada, patrones, parametros);
-		}
-		*/
-
-        //INICIO PROCESO DE  OPTIMIZACION
-        //ArrayList<Solucion> poblacionOptimizada = SimulatedAnnealing.bucleSA(poblacion,parametrosAlg,parametros,
-        // patrones,entrada);
-
-        //FIN PROCESO DE  OPTIMIZACION
-
-        //PRESENTACION DE RESULTADOS Y TRAZAS
-//		rwFiles.EscrituraExcel.EscrituraSoluciones("Solucion-Caso7-pablo", Main.carpetaSoluciones, poblacion, entrada,
-//		patrones, parametros);
-        //trazas.Trazas.archivarYLimpiarTrazas(poblacionOptimizada, propFileOptions, parametrosAlg);
-        ///FIN PRESENTACION DE RESULTADOS Y TRAZAS
     }
 }
