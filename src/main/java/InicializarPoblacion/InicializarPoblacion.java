@@ -103,14 +103,14 @@ public class InicializarPoblacion {
         }
 
         // < PASO 3 >
-//        eliminarControladoresBaja(entrada, individuo);
+        eliminarControladoresBaja(entrada, individuo);
         // < PASO 4 >
-//        anadirControladoresAlta(entrada, individuo);
+        anadirControladoresAlta(entrada, individuo);
         // FUTURE: < PASO 5 >
 //        eliminarImaginariosSiEsPosible(...);
 
         // FASE 2
-//        individuo.setTurnos(reparacionSolucionesAdapter(entrada, p, individuo.getTurnos(), minT, patrones));
+        individuo.setTurnos(reparacionSolucionesAdapter(entrada, p, individuo.getTurnos(), minT, patrones));
 
         return individuo;
 
