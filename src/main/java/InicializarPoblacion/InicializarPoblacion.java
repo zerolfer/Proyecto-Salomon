@@ -293,7 +293,9 @@ public class InicializarPoblacion {
     }
 
     private static boolean contains(String string, String sectorCerrado, int slotInicio, int slotFin) {
-        return string.substring(slotInicio * LONGITUD_CADENAS, slotFin * LONGITUD_CADENAS).contains(sectorCerrado);
+        return StringUtils.containsIgnoreCase(
+                string.substring(slotInicio * LONGITUD_CADENAS, slotFin * LONGITUD_CADENAS), sectorCerrado
+        );
     }
 
     /*
