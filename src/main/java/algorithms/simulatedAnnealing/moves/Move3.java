@@ -165,12 +165,6 @@ public class Move3 {
         dosInd.add(controladorVago2);
         dosInd.add(controladorP2);
 
-        if (!parametrosAlg.getFuncionFitnessFase2().equalsIgnoreCase("reduccionControladoresYRestricciones")) {
-            Solucion ind2 = DoChange1(dosInd, ind, mov, parametrosAlg);
-            if (Restricciones.comprobarRestriccionesOptimizado(ind2, patrones, entrada, parametros) != 0) {
-                return null;
-            }
-        }
         return dosInd;
     }
 
