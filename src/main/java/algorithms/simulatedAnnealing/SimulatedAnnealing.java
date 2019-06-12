@@ -119,7 +119,7 @@ public class SimulatedAnnealing {
                     parametrosAlg);
             val1 = fitIteraciones1[0];
             val2 = fitIteraciones2[0];
-
+            if(fitIteraciones2[2]==1) {individuo = individuo2;fitIteraciones1 = fitIteraciones2;bestFit = val2;bestSol = individuo2;break;}
             if (val1 >= val2) {
                 empeora = Math.exp((-(val1 - val2) / temperatura)); //Porcentaje de empeoramiento
                 if ((rand = Math.random()) < empeora) {
