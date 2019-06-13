@@ -180,7 +180,7 @@ public class SimulatedAnnealing {
         }
         long t2 = System.currentTimeMillis();
         //System.out.println("Soluciones con el mismo fitness: "+ tmpcnt + "/"+iteracionActual);
-        double res = Restricciones.penalizacionPorRestricciones(individuo, patrones, entrada, parametros);
+        double res = Restricciones.penalizacionPorRestricciones(bestSol, patrones, entrada, parametros);
         double tSol = (((t2 - t1) / 1000.0) / 60.0);
         MainPruebas.tiemposPorSolucionAux[n] = tSol;
         MainPruebas.problema += ("TIME: " + tSol + " | Restricciones: " + res + "\n");
