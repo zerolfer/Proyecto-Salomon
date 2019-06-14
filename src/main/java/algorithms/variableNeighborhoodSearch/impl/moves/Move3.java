@@ -17,8 +17,8 @@ import java.util.stream.IntStream;
 
 import static herramientas.CridaUtils.*;
 
-public class Move3_ extends AbstractNeighborStructure {
-    public Move3_(Entrada entrada, Patrones patrones, Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo) {
+public class Move3 extends AbstractNeighborStructure {
+    public Move3(Entrada entrada, Patrones patrones, Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo) {
         super(entrada, patrones, parametros, parametrosAlgoritmo);
     }
 
