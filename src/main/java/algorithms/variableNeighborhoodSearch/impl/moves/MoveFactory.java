@@ -16,7 +16,7 @@ public class MoveFactory {
 //            case "mov1":
 //                return new Move1(entrada, patrones, parametros, parametrosAlgoritmo);
             case "mov3":
-                return new Move3(entrada, patrones, parametros, parametrosAlgoritmo);
+                return new algorithms.variableNeighborhoodSearch.impl.moves.Move3(entrada, patrones, parametros, parametrosAlgoritmo);
 //            case "mov3":
 //                return new Move3();
                 // TODO: and so on...
