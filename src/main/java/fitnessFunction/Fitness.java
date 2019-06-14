@@ -241,14 +241,23 @@ public class Fitness {
         //System.out.println(maxRestricciones);
         ///if(tempR<r){tempR=r;System.out.println(tempR);}
         double cReq = entrada.getControladores().size();
-        if (cReq >= tmn) { // TODO: que es este if y en que afecta al valor fitness?
-            fit = (maxRestricciones - r) / maxRestricciones;
-            f2 = fit;
+        if (cReq >= tmn) { // Cuando se alcanza el numero de controladores requerido, se deja de utilizar la funcion fitness f1.
+            f2 = (maxRestricciones - r) / maxRestricciones;
+            f3 = continuidadMomentoCambio(individuo, entrada);
+            f4 = FitnessFase3.estadillos(individuo.getControladores().size(),
+                    individuo.getTurnos().get(0).length() / 3,
+                    individuo.getTurnos(),
+                    entrada.getSlotMomentoActual());
+            fit =   1 * paramAlg.getPonderacionFitness1() +
+                    f2 * paramAlg.getPonderacionFitness2() +
+                    f3 * paramAlg.getPonderacionFitness3() +
+                    f4 * paramAlg.getPonderacionFitness4();
+           
             if (fit < 0 || fit > 1) {
                 System.out.println("Error, el fitness deberia ser un valor entre 0 y 1: " + fit);
             }
         } else {
-            /*Inicio Normalizacion*/
+            /*Inicio Normalizacion f1*/
             double cMax = entrada.getListaSectoresAbiertos().size() * 3;
             double f1Max = 0;
             double f1Min = 0;
@@ -264,7 +273,7 @@ public class Fitness {
                 }
             }
             f1Max = f1Max / (cReq * cReq);
-            /*Fin Normalizacion*/
+            /*Fin Normalizacion f1*/
             for (int i = 0; i < tmn; i++) {
                 int[] sum = slotsClassification(individuo.getTurnos().get(i));
                 f1 += (sum[1] * ((i * 2) + 1));
@@ -302,7 +311,7 @@ public class Fitness {
         int actual = entrada.getSlotMomentoActual() * 3;
         ArrayList<String> turnos = solucion.getTurnos();
         double fit = 0;
-        double norm = 1 / turnos.size();
+        double norm = 1.0 / turnos.size();
         for (int i = 0; i < turnos.size(); i++) {
             String turno = turnos.get(i);
             if (turno.substring(actual - 3, actual).equals(turno.substring(actual, actual + 3))) {
