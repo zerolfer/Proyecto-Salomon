@@ -106,12 +106,12 @@ public class EscrituraExcel {
      * @param p         Parametros del problema.
      */
     private static void escribirSolucionesEnExcel(String titulo, String carpetaS, ArrayList<Solucion> poblacion, Entrada entrada, Patrones patrones, Parametros p) {
-        FileInputStream file;
+        InputStream file;
         //HSSFWorkbook
         XSSFWorkbook workbook = null;
 
         try {
-            file = new FileInputStream(new File("src/main/resources/PlantillaSoluciones.xlsx"));
+            file = EscrituraExcel.class.getResourceAsStream("/PlantillaSoluciones.xlsx");
             workbook = new XSSFWorkbook(file);
         } catch (FileNotFoundException e1) {
             System.out.println("FileNotFoundException");

@@ -3,6 +3,7 @@ package estructurasDatos;
 import estructurasDatos.DominioDelProblema.Controlador;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Objeto Solucion, este objeto contiene toda la informacion necesaria para la representacion de una solucion del problema.
@@ -80,4 +81,18 @@ public class Solucion implements Cloneable {
         this.turnos = turnos;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Solucion solucion = (Solucion) o;
+        return longdescansos == solucion.longdescansos &&
+                controladores.equals(solucion.controladores) &&
+                turnos.equals(solucion.turnos);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(controladores, turnos, longdescansos);
+    }
 }

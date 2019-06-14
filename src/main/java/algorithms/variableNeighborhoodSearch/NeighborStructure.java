@@ -10,5 +10,7 @@ public interface NeighborStructure {
 
     Solucion generarSolucionAleatoria(Solucion x);
 
-    Object[] busquedaLocal(Solucion x);
+    Solucion busquedaLocal(Solucion x);
+
+    double fitness(Solucion x);
 }

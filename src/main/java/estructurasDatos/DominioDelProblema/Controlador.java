@@ -1,5 +1,7 @@
 package estructurasDatos.DominioDelProblema;
 
+import java.util.Objects;
+
 /**
  * Objeto Controlador, el cual contiene toda la informacion de interes del mismo.
  *
@@ -161,5 +163,27 @@ public class Controlador implements Cloneable {
                 ", imaginario=" + imaginario +
                 ", turnoAsignado=" + turnoAsignado +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Controlador that = (Controlador) o;
+        return id == that.id &&
+                PTD == that.PTD &&
+                CON == that.CON &&
+                turnoAsignado == that.turnoAsignado &&
+                turnoNoche == that.turnoNoche &&
+                imaginario == that.imaginario &&
+                slotBajaAlta == that.slotBajaAlta &&
+                Objects.equals(turno, that.turno) &&
+                Objects.equals(nucleo, that.nucleo) &&
+                bajaAlta == that.bajaAlta;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, turno, nucleo, PTD, CON, turnoAsignado, turnoNoche, imaginario, bajaAlta, slotBajaAlta);
     }
 }

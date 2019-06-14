@@ -7,7 +7,11 @@ import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
 import fitnessFunction.DeciderFitnessFunction;
 import fitnessFunction.Fitness;
+import it.unimi.dsi.util.XoRoShiRo128PlusRandom;
 import patrones.Patrones;
+
+import java.util.HashMap;
+import java.util.Map;
 
 abstract class AbstractNeighborStructure implements NeighborStructure {
     private Entrada entrada;
@@ -15,19 +19,31 @@ abstract class AbstractNeighborStructure implements NeighborStructure {
     private Parametros parametros;
     private ParametrosAlgoritmo parametrosAlgoritmo;
 
+    /* Para mejorar la eficiencia general del metodo*/
+    Map<Solucion, Double> mapaSoluciones;
+
+
     AbstractNeighborStructure(Entrada entrada, Patrones patrones, Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo) {
         this.entrada = entrada;
         this.patrones = patrones;
         this.parametros = parametros;
         this.parametrosAlgoritmo = parametrosAlgoritmo;
+
+        mapaSoluciones = new HashMap<>(); // TODO: hacerlo estático para que todos los moviemientos puedan usar uno en comun
+
     }
 
-    double fitness(Solucion solucion) {
-        return DeciderFitnessFunction.switchFitnessF(solucion, patrones, entrada, parametros, parametrosAlgoritmo)[0];
+    public double fitness(Solucion x) {
+        double fit = mapaSoluciones.get(x);
+        if (mapaSoluciones.get(x) == null) {
+            fit = DeciderFitnessFunction.switchFitnessF(x, null, entrada, parametros, parametrosAlgoritmo)[0];
+            mapaSoluciones.put(x, fit);
+        }
+        return fit;
     }
 
     @Override
-    public Object[] busquedaLocal(Solucion solucionInicial) {
+    public Solucion busquedaLocal(Solucion solucionInicial) {
         Solucion x = solucionInicial.clone();
         Solucion x_prime = x;
         // En la busqueda local, iteramos repetidas veces hasta que no haya mejora
@@ -36,11 +52,17 @@ abstract class AbstractNeighborStructure implements NeighborStructure {
             double f_x = fitness(x);
             double f_x_prime = fitness(x_prime);
             if (f_x_prime < f_x) // si no es mejor... NOTE: maximización
-                return new Object[]{x, f_x};
+                return x;
             x = x_prime;
         }
     }
 
+    /**
+     * {ABSTRACT METHOD} utilizado para obtener una solución (aleatoria)
+     * dentro del entorno a partir de la solucion inicial x
+     * @param x solucion inicial
+     * @return solucion dentro del entrono actual N_k(x)
+     */
     protected abstract Solucion buscarSolucion(Solucion x);
 
     //    @Override
@@ -112,4 +134,6 @@ abstract class AbstractNeighborStructure implements NeighborStructure {
     protected boolean esMejorQue(Solucion x, Solucion solucionInicial) {
         return Fitness.esMejorQue(patrones, entrada, parametros, parametrosAlgoritmo, x, solucionInicial);
     }
+
+    XoRoShiRo128PlusRandom random = new XoRoShiRo128PlusRandom();
 }
