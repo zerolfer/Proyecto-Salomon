@@ -1,6 +1,5 @@
 package main;
 
-import InicializarPoblacion.InicializarPoblacion;
 import algorithms.simulatedAnnealing.SimulatedAnnealing;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
@@ -21,8 +20,8 @@ import java.util.List;
 public class Main_SA {
 
 
-    public static void main_sa(Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo, Entrada entrada,
-                               Patrones patrones, List<Solucion> poblacionInicial) {//Principal
+    public static ArrayList<Solucion> main_sa(Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo, Entrada entrada,
+                                              Patrones patrones, List<Solucion> poblacionInicial) {//Principal
 
         MainPruebas.problema += "Fase 2:" + "\n";
 
@@ -51,8 +50,6 @@ public class Main_SA {
         
         
         /*PRESENTACION DE RESULTADOS Y TRAZAS*/
-        rwFiles.EscrituraExcel.EscrituraSoluciones("PoblacionSoluciones", Main.carpetaSoluciones,
-        		poblacionSoluciones, entrada, patrones, parametros, parametrosAlgoritmo);
         //	trazas.Trazas.archivarYLimpiarTrazas(poblacionReducirControladores, Main.propFileOptions,
         //	parametrosAlgoritmo);
         //	trazas.Trazas.limpiarTrazas();
@@ -74,6 +71,7 @@ public class Main_SA {
         
        
         System.out.println("Done");
+        return poblacionSoluciones;
     }
 
     /**

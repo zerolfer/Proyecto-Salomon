@@ -1,6 +1,8 @@
 package algorithms;
 
 import estructurasDatos.DominioDelProblema.Controlador;
+import estructurasDatos.DominioDelProblema.Nucleo;
+import estructurasDatos.DominioDelProblema.Sector;
 import estructurasDatos.Solucion;
 import fitnessFunction.Fitness;
 
@@ -133,6 +135,21 @@ public class MetaheuristicUtil {
             if (!esTrabajo(str.substring(i, i + LONGITUD_CADENAS))) return false;
         }
         return true; // TODO: test this method
+    }
+
+    /*
+     * usa  el equals de Sector, que comprueba unicamente el ID del sector
+     */
+    public static Set<Nucleo> obtenerNucleosAlQuePerteneceUnSector(List<Nucleo> nucleos, String idSector) {
+        Set<Nucleo> res = new HashSet<>();
+        for (Nucleo nucleo : nucleos) {
+            if (nucleo.getSectores().contains(
+                    new Sector(null, "aee", false, false, 0, null))
+            ) res.add(nucleo);
+        }
+        if (res.isEmpty())
+            throw new RuntimeException("El sector con id " + idSector + " no pertenece a nigun núcleo!!");
+        return res;
     }
 
     // éste método puede ser usado para debuguear más cómodamente

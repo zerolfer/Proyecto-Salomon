@@ -8,12 +8,13 @@ import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
 import patrones.Patrones;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Main_VNS {
 
-    public static void main_vns(Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo, Entrada entrada,
-                                Patrones patrones, List<Solucion> poblacionInicial) {
+    public static List<Solucion> main_vns(Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo,
+                                          Entrada entrada, Patrones patrones, List<Solucion> poblacionInicial) {
 //
 //        /*PRESENTACION DE RESULTADOS Y TRAZAS*/
 //
@@ -35,9 +36,10 @@ public class Main_VNS {
         VariableNeighborhoodSearch vnd = new VariableNeighborhoodDescendent(parametros, patrones,
                 parametrosAlgoritmo, entrada);
 
+        List<Solucion> res = new ArrayList<>();
         for (Solucion solucion : poblacionInicial) {
-            vnd.startExecution(solucion);
+            res.add(vnd.startExecution(solucion));
         }
-
+        return res;
     }
 }

@@ -60,9 +60,9 @@ public class Main {
         // OUTPUT ///////////////////////////////////////////////////////////////////////////////////////////////////
         ArrayList<Solucion> solEntrada = new ArrayList<>();
         solEntrada.add(entrada.getDistribucionInicial());
-
-        rwFiles.EscrituraExcel.EscrituraSoluciones("OutputTest", Main.carpetaSoluciones,
-                solEntrada, entrada, patrones, parametros, parametrosAlgoritmo);
+        //
+        //  rwFiles.EscrituraExcel.EscrituraSoluciones("OutputInicial", Main.carpetaSoluciones,
+        //          solEntrada, entrada, patrones, parametros, parametrosAlgoritmo);
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -71,16 +71,20 @@ public class Main {
 
         // OUTPUT ///////////////////////////////////////////////////////////////////////////////////////////////////
         solEntrada.addAll(poblacionInicial);
-        rwFiles.EscrituraExcel.EscrituraSoluciones("OutputTest", Main.carpetaSoluciones, solEntrada,
+        rwFiles.EscrituraExcel.EscrituraSoluciones("Inicial+Fase1", Main.carpetaSoluciones, solEntrada,
                 entrada, patrones, parametros, parametrosAlgoritmo);
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         switch (parametrosAlgoritmo.getAlgoritmo()) {
             case "SA":
-                Main_SA.main_sa(parametros, parametrosAlgoritmo, entrada, patrones, poblacionInicial);
+                solEntrada.addAll(
+                        Main_SA.main_sa(parametros, parametrosAlgoritmo, entrada, patrones, poblacionInicial)
+                );
                 break;
             case "VNS":
-                Main_VNS.main_vns(parametros, parametrosAlgoritmo, entrada, patrones, poblacionInicial);
+                solEntrada.addAll(
+                        Main_VNS.main_vns(parametros, parametrosAlgoritmo, entrada, patrones, poblacionInicial)
+                );
                 break;
             default:
                 System.err.println("Algoritmo \"" + parametrosAlgoritmo.getAlgoritmo() + "\" no encontrado.");
@@ -91,7 +95,7 @@ public class Main {
 
         // OUTPUT ///////////////////////////////////////////////////////////////////////////////////////////////////
         solEntrada.addAll(poblacionInicial);
-        rwFiles.EscrituraExcel.EscrituraSoluciones("OutputTest", Main.carpetaSoluciones, solEntrada,
+        rwFiles.EscrituraExcel.EscrituraSoluciones("Inicial+Fase1+Fase2", Main.carpetaSoluciones, solEntrada,
                 entrada, patrones, parametros, parametrosAlgoritmo);
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

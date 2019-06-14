@@ -46,7 +46,7 @@ public class EscrituraExcel {
      * @param patrones  Clase donde se encuentran todos los patrones necesarios para la comprobacion de las restricciones.
      * @param p         Parametros del problema.
      */
-    public static void EscrituraSoluciones(String titulo, String carpetaS, ArrayList<Solucion> poblacion, Entrada entrada, Patrones patrones, Parametros p, ParametrosAlgoritmo pa) {
+    public static void EscrituraSoluciones(String titulo, String carpetaS, List<Solucion> poblacion, Entrada entrada, Patrones patrones, Parametros p, ParametrosAlgoritmo pa) {
         String c1 = "resultados/" + Main.entradaPath + Main.entradaId + "/";
         File f = new File(c1);
         f.mkdir();
@@ -68,7 +68,7 @@ public class EscrituraExcel {
      * @param poblacion Conjunto de soluciones.
      * @return Ruta donde se han guardado las soluciones.
      */
-    private static String escribirSolucionesEntxt(String titulo, String carpetaS, ArrayList<Solucion> poblacion) {
+    private static String escribirSolucionesEntxt(String titulo, String carpetaS, List<Solucion> poblacion) {
         DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss");
         Date date = new Date();
         String ruta = "";
@@ -105,7 +105,7 @@ public class EscrituraExcel {
      * @param patrones  Clase donde se encuentran todos los patrones necesarios para la comprobacion de las restricciones.
      * @param p         Parametros del problema.
      */
-    private static void escribirSolucionesEnExcel(String titulo, String carpetaS, ArrayList<Solucion> poblacion, Entrada entrada, Patrones patrones, Parametros p) {
+    private static void escribirSolucionesEnExcel(String titulo, String carpetaS, List<Solucion> poblacion, Entrada entrada, Patrones patrones, Parametros p) {
         InputStream file;
         //HSSFWorkbook
         XSSFWorkbook workbook = null;

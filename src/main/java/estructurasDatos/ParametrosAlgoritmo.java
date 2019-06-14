@@ -154,7 +154,7 @@ public class ParametrosAlgoritmo {
                     this.algoritmo = value;
                     break;
                 case "tiempoMaximo":
-                    this.maxMilisecondsAllowed = Integer.parseInt(value);
+                    this.maxMilisecondsAllowed = Integer.parseInt(value) * 60 * 1000;
                     break;
                 case "ponderacionFitness1":
                     this.ponderacionFitness1 = Double.parseDouble(value);
@@ -168,7 +168,8 @@ public class ParametrosAlgoritmo {
                 case "ponderacionFitness4":
                     this.ponderacionFitness4 = Double.parseDouble(value);
                     break;
-                case "numeroDelCasoParaResolver": break;
+                case "numeroDelCasoParaResolver":
+                    break;
                 default:
                     System.err.println("El parámetro \"" + key + "\" no se reconoce como parámetro interno del sistema.");
                     break;

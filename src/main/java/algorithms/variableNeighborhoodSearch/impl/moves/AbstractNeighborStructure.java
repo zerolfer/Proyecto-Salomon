@@ -2,6 +2,7 @@ package algorithms.variableNeighborhoodSearch.impl.moves;
 
 import algorithms.variableNeighborhoodSearch.NeighborStructure;
 import estructurasDatos.DominioDelProblema.Entrada;
+import estructurasDatos.DominioDelProblema.Nucleo;
 import estructurasDatos.Parametros;
 import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
@@ -11,9 +12,11 @@ import it.unimi.dsi.util.XoRoShiRo128PlusRandom;
 import patrones.Patrones;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 abstract class AbstractNeighborStructure implements NeighborStructure {
+    private static final int MAX_ITERACIONES_BUSQUEDA_LOCAL = 20; // TODO: tune parameter
     private Entrada entrada;
     private Patrones patrones;
     private Parametros parametros;
@@ -34,8 +37,8 @@ abstract class AbstractNeighborStructure implements NeighborStructure {
     }
 
     public double fitness(Solucion x) {
-        double fit = mapaSoluciones.get(x);
-        if (mapaSoluciones.get(x) == null) {
+        Double fit = mapaSoluciones.get(x);
+        if (fit == null) {
             fit = DeciderFitnessFunction.switchFitnessF(x, null, entrada, parametros, parametrosAlgoritmo)[0];
             mapaSoluciones.put(x, fit);
         }
@@ -46,20 +49,38 @@ abstract class AbstractNeighborStructure implements NeighborStructure {
     public Solucion busquedaLocal(Solucion solucionInicial) {
         Solucion x = solucionInicial.clone();
         Solucion x_prime = x;
+        int numIter = 0;
         // En la busqueda local, iteramos repetidas veces hasta que no haya mejora
-        while (true) {
+        while (numIter <= MAX_ITERACIONES_BUSQUEDA_LOCAL) {
             x_prime = buscarSolucion(x);
+
+
+            // OUTPUT /////////////////////////////////////////////////////////////////////////////////
+//
+//            List<Solucion> solArray = new ArrayList<>();
+//            solArray.add(x);
+//            rwFiles.EscrituraExcel.EscrituraSoluciones("Fase2-it" + numIter, Main.carpetaSoluciones, solArray,
+//                    entrada, patrones, parametros, parametrosAlgoritmo);
+//
+            //////////////////////////////////////////////////////////////////////////////////////////
+
+
             double f_x = fitness(x);
             double f_x_prime = fitness(x_prime);
-            if (f_x_prime < f_x) // si no es mejor... NOTE: maximización
-                return x;
-            x = x_prime;
+            if (f_x_prime > f_x) { // si es mejor...paramos NOTE: maximización
+//                return x;
+                x = x_prime;
+            }
+
+            numIter++;
         }
+        return x;
     }
 
     /**
      * {ABSTRACT METHOD} utilizado para obtener una solución (aleatoria)
      * dentro del entorno a partir de la solucion inicial x
+     *
      * @param x solucion inicial
      * @return solucion dentro del entrono actual N_k(x)
      */
@@ -136,4 +157,12 @@ abstract class AbstractNeighborStructure implements NeighborStructure {
     }
 
     XoRoShiRo128PlusRandom random = new XoRoShiRo128PlusRandom();
+
+    List<Nucleo> getNucleos() {
+        return this.entrada.getNucleos();
+    }
+
+    int getSlotMomentoActual(){
+        return entrada.getSlotMomentoActual();
+    }
 }

@@ -13,7 +13,7 @@ import java.util.List;
 
 public abstract class AbstractVariableNeighborhoodSearch implements VariableNeighborhoodSearch {
 
-    private static final int NUM_MAX_ITER_SIN_MEJORA = 10;
+    private static final int NUM_MAX_ITER_SIN_MEJORA = 100000000;
     /**
      * Parametros del dominio del problema
      */
@@ -88,6 +88,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
                 // se actualiza el tiempo (condición de parada)
             }
             t += System.currentTimeMillis() - initTime;
+            currentNeighborhoodIndex = 0;
         } while (t < maxTimeAllowed && numeroIteracionesSinMejora < NUM_MAX_ITER_SIN_MEJORA);
         return x;
     }
@@ -123,9 +124,9 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
     protected abstract Solucion vnsImplemetation(Solucion x);
 //    protected Solucion vnsImplemetation(Solucion x) {
 //
-        ///////////////////
-        //  localSearch  //
-        ///////////////////
+    ///////////////////
+    //  localSearch  //
+    ///////////////////
 
 //        Solucion x_prime;
 //        int numIteracionesSinMejora = 0;
@@ -137,18 +138,18 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
 //            x_prime = (Solucion) raw[0];
 //            f_x_prime = (double) raw[1];
 //
-            // si la solucion encontrada es mejor, se actualiza
+    // si la solucion encontrada es mejor, se actualiza
 //            if (f_x < f_x_prime) {
 //                x = x_prime;
 //                f_x = f_x_prime;
 //                numIteracionesSinMejora = 0;
 //
 //            } else {
-                // ... pero si no era mejor, se incrementa el numero de iteraciones sin mejoría
+    // ... pero si no era mejor, se incrementa el numero de iteraciones sin mejoría
 //                numIteracionesSinMejora++;
 //            }
 //        } while (numIteracionesSinMejora < NUM_MAX_ITER_SIN_MEJORA);
-        // y así hasta que se haya que la busqueda local deje de ser fructífera
+    // y así hasta que se haya que la busqueda local deje de ser fructífera
 
 //    }
 
