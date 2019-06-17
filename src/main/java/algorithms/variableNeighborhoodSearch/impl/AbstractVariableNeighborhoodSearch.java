@@ -89,9 +89,9 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
     @Override
     public Solucion startExecution(Solucion x) {
         initTime = System.currentTimeMillis();
-        long t = 0;
-        Solucion x_prime;
         contadorIteraciones = 0;
+        long t;
+        Solucion x_prime;
         do {
             while (getCurrentNeighborhoodIndex() < neighborStructures.size()) {
                 // dada la estructura de vecindad actual, se ejecuta la busqueda según la implementación concreta

@@ -24,6 +24,7 @@ public class InicializarPoblacion {
      * Variable auxiliar que indica si la reparacion de ciertas restricciones incumplidas por las soluciones es posible.
      */
     public static boolean posible = true;
+    public static final int descanso = 6; // {LEGACY: Ajustado experimentalmente}
 
     /**
      * Metodo de inicializacion principal.
@@ -40,7 +41,6 @@ public class InicializarPoblacion {
         int minD = p.getTiempoDesMin() / p.getTamanoSlots();
         int maxT = p.getTiempoTrabMax() / p.getTamanoSlots();
         int minT = p.getTiempoTrabMin() / p.getTamanoSlots();
-        int descanso = 6; // {LEGACY: Ajustado experimentalmente}
 
         Solucion individuo = inicializarIndividuo(descanso, maxT, minT, minD, entrada, p, patrones);
         poblacion = comprobarCondicionesEntorno(individuo, poblacion, entrada, patrones, p);

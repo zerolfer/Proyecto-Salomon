@@ -61,9 +61,10 @@ public class Move3 extends AbstractNeighborStructure {
 
                 // y la logitud
                 List<Integer> longitudesList = new ArrayList<>();
-                int maxLongIntervalo = (periodo[1] - periodo[0]) / LONGITUD_CADENAS;
+                int maxLongIntervalo = (periodo[1] - periodo[0]);
                 for (int i = 3; i <= maxLongIntervalo; i++)
-                    if (i % 3 == 0) longitudesList.add(i);
+//                    if (i % InicializarPoblacion.descanso == 0)  // NOTE si permitimos movimientos libres no solo de multiplos del tamaño de los descansos, hay mejoria en el fitness (descomentar linea para dejar de permitir movimientos de tamaño libre)
+                    longitudesList.add(i);
                 // intentamos mover la mayor carga posible
                 for (int idxLongitud = longitudesList.size() - 1; idxLongitud >= 0; idxLongitud--) {
 //                while (longitudesList.size() > 0) { // (NOTE: lo comentado es la version anterior)
@@ -87,8 +88,8 @@ public class Move3 extends AbstractNeighborStructure {
 //                            return x;
 //                        }
                         // sino, hay que comprobar que los nucleos sean compatibles con el controlador
-                        Set<String> sectoresC1 = obtenerSectores(x, c1, periodo[0], periodo[0] + longitud * LONGITUD_CADENAS);
-                        Set<String> sectoresC2 = obtenerSectores(x, c2, periodo[0], periodo[0] + longitud * LONGITUD_CADENAS);
+                        Set<String> sectoresC1 = obtenerSectores(x, c1, periodo[0], periodo[0] + longitud);
+                        Set<String> sectoresC2 = obtenerSectores(x, c2, periodo[0], periodo[0] + longitud);
                         if (sectoresC1 == null || sectoresC2 == null) continue;
 
                         if (comprobarNucleos(sectoresC1, sectoresC2,
