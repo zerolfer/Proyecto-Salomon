@@ -339,11 +339,11 @@ public class ParametrosAlgoritmo {
     public class VNS {
 
         private static final String NEIGHBOR_STRUCTURES = "neighborStructures";
-        //        // leido en minutos, lo pasamos a milisegundos
-//        private long maxMilisecondsAllowed = getInteger("maxTimeAllowed") * 60 * 1000;
-        private List<NeighborStructure> neighborStructures;
+        private static final String NUM_MAX_ITERACIONES_BUSQUEDA_LOCAL = "numMaxIteracionesBusquedaLocal";
 
-        // . . .
+        private List<NeighborStructure> neighborStructures;
+        private int numMaxIteracionesBusquedaLocal = getInteger("numMaxIteracionesBusquedaLocal");
+
 
         /**
          * Conjunto de estructuras de vecindad que serán empleadas por el VNS en el
@@ -352,6 +352,17 @@ public class ParametrosAlgoritmo {
         public List<NeighborStructure> getNeighborStructures() {
             return neighborStructures;
         }
+
+        /**
+         * Número maximo de iteraciones que pueden producirse en la busqueda local sin encontrar mejoría
+         * en la búsqueda.
+         *
+         * Este parametro se utiliza debido a que la Busqueda Local es estocástica, y no determinista
+         */
+        public int getNumMaxIteracionesBusquedaLocal() {
+            return numMaxIteracionesBusquedaLocal;
+        }
+
     }
 
 }

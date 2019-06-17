@@ -140,12 +140,12 @@ public class MetaheuristicUtil {
     /*
      * usa  el equals de Sector, que comprueba unicamente el ID del sector
      */
-    public static Set<Nucleo> obtenerNucleosAlQuePerteneceUnSector(List<Nucleo> nucleos, String idSector) {
-        Set<Nucleo> res = new HashSet<>();
+    public static Set<String> obtenerNucleosAlQuePerteneceUnSector(List<Nucleo> nucleos, String idSector) {
+        Set<String> res = new HashSet<>();
         for (Nucleo nucleo : nucleos) {
             if (nucleo.getSectores().contains(
-                    new Sector(null, "aee", false, false, 0, null))
-            ) res.add(nucleo);
+                    new Sector(null, idSector, false, false, 0, null))
+            ) res.add(nucleo.getNombre());
         }
         if (res.isEmpty())
             throw new RuntimeException("El sector con id " + idSector + " no pertenece a nigun núcleo!!");

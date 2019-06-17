@@ -1,16 +1,14 @@
 package algorithms.variableNeighborhoodSearch;
 
-import estructurasDatos.DominioDelProblema.Entrada;
-import estructurasDatos.Parametros;
-import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
-import patrones.Patrones;
 
 public interface NeighborStructure {
 
     Solucion generarSolucionAleatoria(Solucion x);
 
-    Solucion busquedaLocal(Solucion x);
+    Solucion bestImprovement(Solucion x);
+
+    Solucion firstImprovement(Solucion x);
 
     double fitness(Solucion x);
 }

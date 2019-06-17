@@ -1,11 +1,12 @@
 package algorithms.variableNeighborhoodSearch.impl.moves;
 
 import algorithms.MetaheuristicUtil;
+import estructurasDatos.DominioDelProblema.Controlador;
 import estructurasDatos.DominioDelProblema.Entrada;
-import estructurasDatos.DominioDelProblema.Nucleo;
 import estructurasDatos.Parametros;
 import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
+import herramientas.CridaUtils;
 import patrones.Patrones;
 
 import java.util.ArrayList;
@@ -39,14 +40,15 @@ public class Move3 extends AbstractNeighborStructure {
     @Override
     protected Solucion buscarSolucion(Solucion x_inicial) {
         Solucion x = x_inicial.clone();
-        Set<Integer> c1Indices = IntStream.range(0, x.getTurnos().size())
-                .boxed().collect(Collectors.toSet());
+        List<Integer> c1Indices = IntStream.range(0, x.getTurnos().size())
+                .boxed().collect(Collectors.toList());
 
 
         // paso 1: elegimos un controlador aleatoriamente
         while (c1Indices.size() > 0) {
-            int c1 = random.nextInt(c1Indices.size());
-            c1Indices.remove(c1); // para evitar repetidos
+            int idx1 = random.nextInt(c1Indices.size());
+            int c1 = c1Indices.get(idx1);
+            c1Indices.remove(idx1); // para evitar repetidos
 
             // paso 2 se elige un periodo de trabajo aleatoriamente
             List<int[]> trabajosC1 = getintervalos(x.getTurnos().get(c1));
@@ -59,8 +61,8 @@ public class Move3 extends AbstractNeighborStructure {
 
                 // y la logitud
                 List<Integer> longitudesList = new ArrayList<>();
-                int maxLongIntervalo = periodo[1] - periodo[0];
-                for (int i = 3; i <= maxLongIntervalo; i++) // FIXME: < o <= ??
+                int maxLongIntervalo = (periodo[1] - periodo[0]) / LONGITUD_CADENAS;
+                for (int i = 3; i <= maxLongIntervalo; i++)
                     if (i % 3 == 0) longitudesList.add(i);
                 // intentamos mover la mayor carga posible
                 for (int idxLongitud = longitudesList.size() - 1; idxLongitud >= 0; idxLongitud--) {
@@ -71,26 +73,32 @@ public class Move3 extends AbstractNeighborStructure {
 
 
                     // paso 3 elegimos un segundo controlador
-                    Set<Integer> c2Indices = IntStream.range(0, x.getTurnos().size())
-                            .boxed().collect(Collectors.toSet());
+                    List<Integer> c2Indices = IntStream.range(0, x.getTurnos().size())
+                            .boxed().collect(Collectors.toList());
                     c2Indices.remove(c1); // no hay que comparar consigo mismo
 
                     while (c2Indices.size() > 0) {
-                        int c2 = random.nextInt(c2Indices.size());
-                        c2Indices.remove(c2); // para evitar repetidos
+                        int idx2 = random.nextInt(c2Indices.size());
+                        int c2 = c2Indices.get(idx2);
+                        c2Indices.remove(idx2); // para evitar repetidos
 
 //                        if (!x.getControladores().contains(c2)) { // si es imaginario, puede aceptar la carga perfectamente
 //                            doChange();
 //                            return x;
 //                        }
                         // sino, hay que comprobar que los nucleos sean compatibles con el controlador
-                        Set<String> sectoresC1 = obtenerSectores(x, c1, periodo[0], periodo[0] + longitud);
-                        Set<String> sectoresC2 = obtenerSectores(x, c2, periodo[0], periodo[0] + longitud);
-                        if (comprobarNucleos(sectoresC1, sectoresC2)) {
+                        Set<String> sectoresC1 = obtenerSectores(x, c1, periodo[0], periodo[0] + longitud * LONGITUD_CADENAS);
+                        Set<String> sectoresC2 = obtenerSectores(x, c2, periodo[0], periodo[0] + longitud * LONGITUD_CADENAS);
+                        if (sectoresC1 == null || sectoresC2 == null) continue;
+
+                        if (comprobarNucleos(sectoresC1, sectoresC2,
+                                CridaUtils.obtenerControladorTurno(c1, x.getControladores()),
+                                CridaUtils.obtenerControladorTurno(c2, x.getControladores()))
+                        ) {
                             doChange(x, x.getTurnos().get(c1), x.getTurnos().get(c2),
                                     periodo[0], periodo[0] + longitud, c1, c2);
 
-                            return x;
+                            return MetaheuristicUtil.orderByLazyCriteria(x);
                         }
                     }
                 }
@@ -105,38 +113,61 @@ public class Move3 extends AbstractNeighborStructure {
         String turno = x.getTurnos().get(controlador).substring(desde, hasta);
         Set<String> sectores = new HashSet<>();
         for (int i = 0; i < turno.length(); i += LONGITUD_CADENAS) {
-            sectores.add(turno.substring(i, i + LONGITUD_CADENAS).toLowerCase()); // se añadira en caso de no estar ya
+//            if()
+            String sector = turno.substring(i, i + LONGITUD_CADENAS).toLowerCase();
+            if (sector.equals(STRING_NO_TURNO)) return null; // no se puede hacer el cambio
+            if (!sector.equals(STRING_DESCANSO))
+                sectores.add(sector); // se añadira en caso de no estar ya
         }
         return sectores;
 
     }
 
-    private boolean comprobarNucleos(Set<String> sectoresC1, Set<String> sectoresC2) {
+    private boolean comprobarNucleos(Set<String> sectoresC1, Set<String> sectoresC2, Controlador c1, Controlador c2) {
 
-        Set<Nucleo> nucleosC1 = new HashSet<>();
-        for (String sector : sectoresC1) {
-            nucleosC1.addAll(
-                    MetaheuristicUtil.obtenerNucleosAlQuePerteneceUnSector(super.getNucleos(), sector)
-            );
-        }
+        if (c1 == null && c2 == null) return true; // si los dos son imaginario, el cambio se puede hacer sin problemas
 
-        Set<Nucleo> nucleosC2 = new HashSet<>();
-        for (String sector : sectoresC2) {
-            nucleosC2.addAll(
-                    MetaheuristicUtil.obtenerNucleosAlQuePerteneceUnSector(super.getNucleos(), sector)
-            );
-            if (!nucleosC1.containsAll(
-                    MetaheuristicUtil.obtenerNucleosAlQuePerteneceUnSector(super.getNucleos(), sector))
-            ) return false;
-        }
+//        Set<String> nucleosC1 = new HashSet<>();
+//        for (String sector : sectoresC1) {
+//            nucleosC1.addAll(
+//                    MetaheuristicUtil.obtenerNucleosAlQuePerteneceUnSector(super.getNucleos(), sector)
+//            );
+//        }
+//
+//        Set<String> nucleosC2 = new HashSet<>();
+//        for (String sector : sectoresC2) {
+//            if (sector.equals(STRING_DESCANSO)) continue;
+//            nucleosC2.addAll(
+//                    MetaheuristicUtil.obtenerNucleosAlQuePerteneceUnSector(super.getNucleos(), sector)
+//            );
+//            if (!nucleosC1.containsAll(
+//                    MetaheuristicUtil.obtenerNucleosAlQuePerteneceUnSector(super.getNucleos(), sector))
+//            ) return false;
+//        }
+
+        // si no es imaginario, comprobamos si esta acreditado para los sectores
+        if (c1 != null)
+            for (String sector : sectoresC2) {
+                Set<String> nucleos =
+                        MetaheuristicUtil.obtenerNucleosAlQuePerteneceUnSector(super.getNucleos(), sector);
+                if (!nucleos.contains(c1.getNucleo())) return false;
+            }
+        if (c2 != null)
+            for (String sector : sectoresC1) {
+                Set<String> nucleos =
+                        MetaheuristicUtil.obtenerNucleosAlQuePerteneceUnSector(super.getNucleos(), sector);
+                if (!nucleos.contains(c2.getNucleo())) return false;
+            }
+
         return true;
+
     }
 
     private List<int[]> getintervalos(String turno) {
         List<int[]> res = new ArrayList<>();
 
         // recorremos el turno
-        int i = super.getSlotMomentoActual();
+        int i = super.getSlotMomentoActual() * LONGITUD_CADENAS;
         while (i + LONGITUD_CADENAS <= turno.length() && turno.substring(i, i + LONGITUD_CADENAS).equals(STRING_DESCANSO))
             i += 3; // saltamos los descansos
         for (int f = i; f + LONGITUD_CADENAS <= turno.length(); f += LONGITUD_CADENAS) {
@@ -149,7 +180,7 @@ public class Move3 extends AbstractNeighborStructure {
             }
         }
         if (!turno.substring(turno.length() - 3).equals(STRING_DESCANSO))
-            res.add(new int[]{i, turno.length()});
+            res.add(new int[]{i, turno.length() - LONGITUD_CADENAS});
 
         return res;
     }

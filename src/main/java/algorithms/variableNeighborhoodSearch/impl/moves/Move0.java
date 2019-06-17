@@ -52,7 +52,7 @@ public class Move0 extends AbstractNeighborStructure {
     }
 
     @Override
-    public Solucion busquedaLocal(Solucion solActual) {
+    public Solucion firstImprovement(Solucion solActual) {
         Solucion x = solActual.clone();
 //        int num1 = 0;
         int idx1, idx2;

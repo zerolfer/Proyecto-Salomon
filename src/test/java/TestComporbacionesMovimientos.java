@@ -31,7 +31,7 @@ public class TestComporbacionesMovimientos {
         controladores.add(new Controlador(1, "largo", "N", true, false, false, Propiedades.ALTA, -1));
         controladores.get(controladores.size() - 1).setTurnoAsignado(1);
 
-        Solucion x = mov.busquedaLocal(new Solucion(turnos, controladores, 3));
+        Solucion x = mov.firstImprovement(new Solucion(turnos, controladores, 3));
 
         assertEquals("111111111aaaaaaaaa111111111111aaaaaaaaa", x.getTurnos().get(0));
         assertEquals("111111111111aaaaaaaaaaaa111aaaaaaaaaaaa", x.getTurnos().get(1));

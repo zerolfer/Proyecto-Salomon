@@ -1,6 +1,7 @@
 package algorithms.variableNeighborhoodSearch.impl.moves;
 
 import algorithms.variableNeighborhoodSearch.NeighborStructure;
+import algorithms.variableNeighborhoodSearch.impl.AbstractVariableNeighborhoodSearch;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.DominioDelProblema.Nucleo;
 import estructurasDatos.Parametros;
@@ -46,12 +47,14 @@ abstract class AbstractNeighborStructure implements NeighborStructure {
     }
 
     @Override
-    public Solucion busquedaLocal(Solucion solucionInicial) {
+    public Solucion bestImprovement(Solucion solucionInicial) {
         Solucion x = solucionInicial.clone();
         Solucion x_prime = x;
         int numIter = 0;
         // En la busqueda local, iteramos repetidas veces hasta que no haya mejora
-        while (numIter <= MAX_ITERACIONES_BUSQUEDA_LOCAL) {
+        while (numIter <= MAX_ITERACIONES_BUSQUEDA_LOCAL &&
+                AbstractVariableNeighborhoodSearch.initTime - System.currentTimeMillis() < parametrosAlgoritmo.getMaxMilisecondsAllowed()) {
+            System.out.println("ejecutando BL");
             x_prime = buscarSolucion(x);
 
 
@@ -73,8 +76,27 @@ abstract class AbstractNeighborStructure implements NeighborStructure {
             }
 
             numIter++;
+            System.out.println("[BL] tiempo: " + (AbstractVariableNeighborhoodSearch.initTime - System.currentTimeMillis()) / 1000);
         }
         return x;
+    }
+
+    @Override
+    public Solucion firstImprovement(Solucion solucionInicial) {
+        Solucion x = solucionInicial.clone();
+        Solucion x_prime;
+
+        double f_x = fitness(x);
+        double f_x_prime;
+
+        int numIt = 1;
+        // Iteramos repetidas veces hasta que haya mejora
+        do {
+            x_prime = buscarSolucion(x);
+            f_x_prime = fitness(x_prime);
+            numIt++;
+        } while (f_x_prime <= f_x && numIt <= MAX_ITERACIONES_BUSQUEDA_LOCAL); // si es mejor...paramos NOTE: maximización
+        return x_prime;
     }
 
     /**
@@ -136,8 +158,8 @@ abstract class AbstractNeighborStructure implements NeighborStructure {
 
         // obtenemos el resto de trozos
         String previoB = turnoB.substring(0, desde);
-        String posteriorB = turnoB.substring(hasta);
         String medioB = turnoB.substring(desde, hasta);
+        String posteriorB = turnoB.substring(hasta);
 
         String previoA = turnoA.substring(0, desde);
         String medioA = turnoA.substring(desde, hasta);
@@ -162,7 +184,7 @@ abstract class AbstractNeighborStructure implements NeighborStructure {
         return this.entrada.getNucleos();
     }
 
-    int getSlotMomentoActual(){
+    int getSlotMomentoActual() {
         return entrada.getSlotMomentoActual();
     }
 }

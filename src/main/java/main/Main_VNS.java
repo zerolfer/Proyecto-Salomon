@@ -10,6 +10,8 @@ import patrones.Patrones;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Main_VNS {
 
@@ -37,9 +39,30 @@ public class Main_VNS {
                 parametrosAlgoritmo, entrada);
 
         List<Solucion> res = new ArrayList<>();
+        Logger.getLogger("ProyectoSalomon").info("[ Ejecutando VNS ]");
         for (Solucion solucion : poblacionInicial) {
-            res.add(vnd.startExecution(solucion));
+            /* try {*/
+            res.add(
+                    startExecution(vnd, solucion, parametrosAlgoritmo)
+            );
+           /* } catch (ExecutionException | TimeoutException | InterruptedException ignored) {
+            }*/
         }
         return res;
     }
+
+    private static Solucion startExecution(VariableNeighborhoodSearch vnd, Solucion solucion, ParametrosAlgoritmo p)/* throws ExecutionException, TimeoutException, InterruptedException */ {
+
+       /* Solucion res;
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        res = executor.submit(new Callable<Solucion>() {
+            @Override
+            public Solucion call() throws Exception {*/
+        return vnd.startExecution(solucion);
+         /*   }
+        }).get(p.getMaxMilisecondsAllowed(), TimeUnit.MILLISECONDS);
+        executor.shutdown();
+        return res;*/
+    }
+
 }

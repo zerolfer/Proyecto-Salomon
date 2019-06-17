@@ -15,6 +15,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Properties;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 public class Main {
     public static String propFileExternoParametros = "./parametros_algoritmo.properties";
@@ -30,17 +32,24 @@ public class Main {
     public static String carpetaTrazas = "";
     public static Date date = new Date();
 
+    static {
+        System.setProperty("java.util.logging.SimpleFormatter.format", "[%1$tF %1$tT] [%4$-7s] %5$s %n");
+//        Logger log = Logger.getLogger("ProyectoSalomon");
+//        log.setLevel(Level.INFO);
+//        LogManager.getLogManager().reset(); // descomentar para desabilitar logger
+    }
+
     public static void main(String[] args) {
         int nEjecucion = 1;
-        int[] casos = {1,3,4,5,6,7,8,9};
-        for (int i = 0; i < casos.length; i++) {			
-        	main1(nEjecucion, "Caso" + casos[i]);
-		}
+        int[] casos = {1, 3, 4, 5, 6, 7, 8, 9};
+//        for (int i = 0; i < casos.length; i++) {
+        main1(nEjecucion, "Caso" + /*casos[i]*/ loadCasoFromProperties());
+//		}
     }
 
     public static void main1(int ejecucion, String caso) {
         /*INICIALIZACION DE DATOS*/
-        DeciderCase.switchCase(/*caso*/"Caso" + loadCasoFromProperties());
+        DeciderCase.switchCase(caso);
 
         // Carga de los parámetros del dominio del problema:
         Parametros parametros = new Parametros(propFileParameters, propFileOptions);
@@ -71,8 +80,8 @@ public class Main {
 
         // OUTPUT ///////////////////////////////////////////////////////////////////////////////////////////////////
         solEntrada.addAll(poblacionInicial);
-        rwFiles.EscrituraExcel.EscrituraSoluciones("Inicial+Fase1", Main.carpetaSoluciones, solEntrada,
-                entrada, patrones, parametros, parametrosAlgoritmo);
+//        rwFiles.EscrituraExcel.EscrituraSoluciones("Inicial+Fase1", Main.carpetaSoluciones, solEntrada,
+//                entrada, patrones, parametros, parametrosAlgoritmo);
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         switch (parametrosAlgoritmo.getAlgoritmo()) {
@@ -94,9 +103,14 @@ public class Main {
         Patrones.nuc = new ArrayList<>();
 
         // OUTPUT ///////////////////////////////////////////////////////////////////////////////////////////////////
-        solEntrada.addAll(poblacionInicial);
-        rwFiles.EscrituraExcel.EscrituraSoluciones("Inicial+Fase1+Fase2", Main.carpetaSoluciones, solEntrada,
-                entrada, patrones, parametros, parametrosAlgoritmo);
+        StringBuilder sb = new StringBuilder();
+        sb.append(caso);
+        sb.append("-");
+        sb.append(ejecucion);
+//        sb.append("-Inicial+Fase1+Fase2");
+
+        rwFiles.EscrituraExcel.EscrituraSoluciones(sb.toString()/*caso + "-" /*+ ejecucion*/ /*+ "-Inicial+Fase1+Fase2"*/,
+                Main.carpetaSoluciones, solEntrada, entrada, patrones, parametros, parametrosAlgoritmo);
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     }
@@ -115,4 +129,5 @@ public class Main {
         return parametrosExternos.getProperty("numeroDelCasoParaResolver");
 
     }
+
 }

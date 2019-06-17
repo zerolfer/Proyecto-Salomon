@@ -1,5 +1,6 @@
 package herramientas;
 
+import estructurasDatos.DominioDelProblema.Controlador;
 import estructurasDatos.DominioDelProblema.Sector;
 
 import java.util.Collection;
@@ -69,6 +70,19 @@ public class CridaUtils {
                 return sector;
         }
         throw new RuntimeException("MATRIZ DE AFINIDAD INCORRECTA: NO EXISTE SECTOR DE NOMBRE '" + nombre + "'");
+    }
+
+    /**
+     *
+     * @param idxTurno
+     * @param controladores
+     * @return null si el controlador es imaginario, el objeto Controlador en caso de no serlo
+     */
+    public static Controlador obtenerControladorTurno(int idxTurno, List<Controlador> controladores) {
+        for (Controlador controlador : controladores) {
+            if (controlador.getTurnoAsignado() == idxTurno) return controlador;
+        }
+        return null;
     }
 
 }
