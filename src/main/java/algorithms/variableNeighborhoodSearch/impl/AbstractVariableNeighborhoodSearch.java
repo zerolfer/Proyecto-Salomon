@@ -51,7 +51,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
     /**
      * Véase {@link ParametrosAlgoritmo.VNS#getNumMaxIteracionesBusquedaLocal()}
      */
-    private int numMaxIteracionesBusquedaLocal;
+    private int numMaxIteracionesSinMejora;
 
     /**
      * <p>The index of the current neighborhood of the
@@ -62,6 +62,13 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
     private int numeroIteracionesSinMejora = 0;
     public static long initTime;
 
+    ///////////////
+    ///  DEBUG  ///
+    ///////////////
+
+    private int contadorIteraciones;
+    private int trazaCadaTantasIteraciones = 100;
+
     protected AbstractVariableNeighborhoodSearch(Parametros parametros, Patrones patrones,
                                                  ParametrosAlgoritmo parametrosAlgoritmo, Entrada entrada) {
         this.parametros = parametros;
@@ -71,7 +78,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
 
         this.maxTimeAllowed = parametrosAlgoritmo.getMaxMilisecondsAllowed();
         this.neighborStructures = parametrosAlgoritmo.VNS.getNeighborStructures();
-        this.numMaxIteracionesBusquedaLocal = parametrosAlgoritmo.VNS.getNumMaxIteracionesBusquedaLocal();
+        this.numMaxIteracionesSinMejora = parametrosAlgoritmo.VNS.getNumMaxIteracionesSinMejora();
 
     }
 
@@ -84,22 +91,27 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
         initTime = System.currentTimeMillis();
         long t = 0;
         Solucion x_prime;
+        contadorIteraciones = 0;
         do {
             while (getCurrentNeighborhoodIndex() < neighborStructures.size()) {
-                LOGGER.info("Ejecutando implementacion");
                 // dada la estructura de vecindad actual, se ejecuta la busqueda según la implementación concreta
                 x_prime = vnsImplemetation(x);
+
+                if (contadorIteraciones % trazaCadaTantasIteraciones == 0) {
+                    LOGGER.info("tiempo: " + (System.currentTimeMillis() - initTime) / 1000 + "s");
+                    LOGGER.info("Fitness actual: " + fitness(x));
+                }
 
                 // se decide si seguir en esa estructura de vecindad u otra,
                 // y se actualiza la solución actual a aquella con mejor valor objetivo de entre la anterior y la nueva
                 x = neighborhoodChange(x, x_prime);
 
-                // se actualiza el tiempo (condición de parada)
+                contadorIteraciones++;
             }
+            // se actualiza el tiempo (condición de parada)
             t = System.currentTimeMillis() - initTime;
-            LOGGER.info("tiempo: " + t / 1000);
             currentNeighborhoodIndex = 0;
-        } while (t < maxTimeAllowed && numeroIteracionesSinMejora < numMaxIteracionesBusquedaLocal);
+        } while (t < maxTimeAllowed && numeroIteracionesSinMejora < numMaxIteracionesSinMejora);
         return x;
     }
 
@@ -113,8 +125,10 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
             currentNeighborhoodIndex++;   // Next neighborhood of the list
             numeroIteracionesSinMejora++;
         }
-        LOGGER.info("se produce cambio de vecindad, al indice " + currentNeighborhoodIndex);
-        LOGGER.info("numero de iteraciones sin mejora: " + numeroIteracionesSinMejora);
+        if (contadorIteraciones % trazaCadaTantasIteraciones == 0) {
+            LOGGER.info("se produce cambio de vecindad, al indice " + currentNeighborhoodIndex);
+            LOGGER.info("numero de iteraciones sin mejora: " + numeroIteracionesSinMejora);
+        }
         return x;
     }
 

@@ -68,15 +68,16 @@ public class MetaheuristicUtil {
             }
             order.set(r, 300);
             individuo2.add(individuo.get(r));
-            for (int i = 0; i < controladores.size(); i++) {
-                if (r == controladores.get(i).getTurnoAsignado()) {
-                    numControladores.add(controladores.get(i).getId());
-                    break;
+            if (lAnt >= 0) // solo si no es imaginario
+                for (int i = 0; i < controladores.size(); i++) {
+                    if (r == controladores.get(i).getTurnoAsignado()) {
+                        numControladores.add(controladores.get(i).getId());
+                        break;
+                    }
                 }
-            }
         }
         for (int i = 0; i < numControladores.size(); i++)
-            buscarControladorPorId(numControladores.get(i), controladores).setTurnoAsignado(i);
+            buscarControladorPorId(numControladores.get(i), controladores).setTurnoAsignado(i + indices.size());
 
         ind.setTurnos(individuo2);
         ind.setControladores(controladores);

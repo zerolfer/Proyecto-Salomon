@@ -24,7 +24,12 @@ abstract class AbstractNeighborStructure implements NeighborStructure {
     private ParametrosAlgoritmo parametrosAlgoritmo;
 
     /* Para mejorar la eficiencia general del metodo*/
-    Map<Solucion, Double> mapaSoluciones;
+    static Map<Solucion, Double> mapaSoluciones;
+
+    /**
+     * Véase {@link ParametrosAlgoritmo.VNS#getNumMaxIteracionesBusquedaLocal()}
+     */
+    private int numMaxIteracionesBusquedaLocal;
 
 
     AbstractNeighborStructure(Entrada entrada, Patrones patrones, Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo) {
@@ -33,7 +38,8 @@ abstract class AbstractNeighborStructure implements NeighborStructure {
         this.parametros = parametros;
         this.parametrosAlgoritmo = parametrosAlgoritmo;
 
-        mapaSoluciones = new HashMap<>(); // TODO: hacerlo estático para que todos los moviemientos puedan usar uno en comun
+        this.mapaSoluciones = new HashMap<>();
+        this.numMaxIteracionesBusquedaLocal=parametrosAlgoritmo.VNS.getNumMaxIteracionesBusquedaLocal();
 
     }
 

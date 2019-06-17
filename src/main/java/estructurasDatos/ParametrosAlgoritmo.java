@@ -343,6 +343,7 @@ public class ParametrosAlgoritmo {
 
         private List<NeighborStructure> neighborStructures;
         private int numMaxIteracionesBusquedaLocal = getInteger("numMaxIteracionesBusquedaLocal");
+        private int numMaxIteracionesSinMejora = getInteger("numMaxIteracionesSinMejora");
 
 
         /**
@@ -363,6 +364,9 @@ public class ParametrosAlgoritmo {
             return numMaxIteracionesBusquedaLocal;
         }
 
+        public int getNumMaxIteracionesSinMejora() {
+            return numMaxIteracionesSinMejora;
+        }
     }
 
 }
