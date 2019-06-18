@@ -1,17 +1,16 @@
 package main;
 
 import algorithms.variableNeighborhoodSearch.VariableNeighborhoodSearch;
-import algorithms.variableNeighborhoodSearch.impl.VariableNeighborhoodDescendent;
+import algorithms.variableNeighborhoodSearch.impl.VariableNeighborhoodBasic;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
 import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
+import herramientas.Log;
 import patrones.Patrones;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Main_VNS {
 
@@ -35,11 +34,11 @@ public class Main_VNS {
 //        System.out.println("Done");
 //
         parametrosAlgoritmo.initializeNeighborStructures(entrada, patrones, parametros, parametrosAlgoritmo);
-        VariableNeighborhoodSearch vnd = new VariableNeighborhoodDescendent(parametros, patrones,
+        VariableNeighborhoodSearch vnd = new VariableNeighborhoodBasic(parametros, patrones,
                 parametrosAlgoritmo, entrada);
 
         List<Solucion> res = new ArrayList<>();
-        Logger.getLogger("ProyectoSalomon").info("[ Ejecutando VNS ]");
+        Log.info("[ Ejecutando VNS ]");
         for (Solucion solucion : poblacionInicial) {
             /* try {*/
             res.add(

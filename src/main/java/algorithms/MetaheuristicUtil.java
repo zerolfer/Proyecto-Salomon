@@ -138,6 +138,17 @@ public class MetaheuristicUtil {
         return true; // TODO: test this method
     }
 
+    public static boolean esDescanso(String str) {
+
+        // caso base: longitud = 3
+        if (str.length() == LONGITUD_CADENAS)
+            return str.equals(STRING_DESCANSO);
+        for (int i = 0; i < str.length(); i += 3) {
+            if (!esDescanso(str.substring(i, i + LONGITUD_CADENAS))) return false;
+        }
+        return true; // TODO: test this method
+    }
+
     /*
      * usa  el equals de Sector, que comprueba unicamente el ID del sector
      */

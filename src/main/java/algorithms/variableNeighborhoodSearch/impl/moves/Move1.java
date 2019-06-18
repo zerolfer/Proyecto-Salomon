@@ -9,8 +9,9 @@ import patrones.Patrones;
 
 import java.util.ArrayList;
 
+import static algorithms.MetaheuristicUtil.esDescanso;
 import static algorithms.MetaheuristicUtil.esTrabajo;
-import static herramientas.CridaUtils.LONGITUD_CADENAS;
+import static herramientas.CridaUtils.*;
 
 public class Move1 extends AbstractNeighborStructure {
 
@@ -53,16 +54,18 @@ public class Move1 extends AbstractNeighborStructure {
         return x;
     }
 
-    // TODO: testar todo ésto.......
+    /**
+     * @return true si se produce el intercambio, false en caso contrario
+     */
     private boolean doMovement(Solucion x, ArrayList<String> turnos, int idx1, int idx2) {
         String turnoA = turnos.get(idx1);
         String turnoB = turnos.get(idx2);
 
         // Calculamos la longitud
-        for (int desde = 0; desde < turnos.get(idx1).length(); desde += LONGITUD_CADENAS) {
+        for (int desde = getSlotMomentoActual() * LONGITUD_CADENAS; desde <= turnos.get(idx1).length() - LONGITUD_CADENAS; desde += LONGITUD_CADENAS) {
             int hasta = desde + LONGITUD_CADENAS;
-            while (esTrabajo(turnoA.substring(desde, hasta))
-                    && !esTrabajo(turnoB.substring(desde, hasta)) && hasta - desde < LIMITE_LONGITUD_INTERVALO)
+            while (hasta < turnos.get(idx1).length() && esTrabajo(turnoA.substring(desde, hasta))
+                    && esDescanso(turnoB.substring(desde, hasta)) && hasta - desde < LIMITE_LONGITUD_INTERVALO)
                 hasta += LONGITUD_CADENAS;
 
             // en este punto ya tenemos calculado el inicio y fin del intervalo
@@ -81,6 +84,9 @@ public class Move1 extends AbstractNeighborStructure {
 
         String sector = turnoA.substring(desde, desde + LONGITUD_CADENAS);
 
+        if (sector.equals(STRING_NO_TURNO)) return false;
+        if (sector.equals(STRING_DESCANSO)) return false;
+
         // si estamos al principio, solo podemos mirar el final
         if (desde < LONGITUD_CADENAS)
             return checkFinal(turnoB, hasta, sector);
@@ -98,7 +104,7 @@ public class Move1 extends AbstractNeighborStructure {
     }
 
     private boolean checkFinal(String turnoB, int hasta, String sector) {
-        return turnoB.substring(hasta, hasta * LONGITUD_CADENAS).equals(sector);
+        return turnoB.substring(hasta, hasta + LONGITUD_CADENAS).equals(sector);
     }
 
 }

@@ -9,6 +9,7 @@ import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
 import fitnessFunction.DeciderFitnessFunction;
 import fitnessFunction.Fitness;
+import herramientas.Log;
 import it.unimi.dsi.util.XoRoShiRo128PlusRandom;
 import patrones.Patrones;
 
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 abstract class AbstractNeighborStructure implements NeighborStructure {
-    private static final int MAX_ITERACIONES_BUSQUEDA_LOCAL = 20; // TODO: tune parameter
+
     private Entrada entrada;
     private Patrones patrones;
     private Parametros parametros;
@@ -27,9 +28,9 @@ abstract class AbstractNeighborStructure implements NeighborStructure {
     static Map<Solucion, Double> mapaSoluciones;
 
     /**
-     * Véase {@link ParametrosAlgoritmo.VNS#getNumMaxIteracionesBusquedaLocal()}
+     * Véase {@link ParametrosAlgoritmo.VNS#getNumMaxIteracionesSinMejoraBusquedaLocal()}
      */
-    private int numMaxIteracionesBusquedaLocal;
+    private int numMaxIteracionesSinMejoraBusquedaLocal;
 
 
     AbstractNeighborStructure(Entrada entrada, Patrones patrones, Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo) {
@@ -39,14 +40,14 @@ abstract class AbstractNeighborStructure implements NeighborStructure {
         this.parametrosAlgoritmo = parametrosAlgoritmo;
 
         this.mapaSoluciones = new HashMap<>();
-        this.numMaxIteracionesBusquedaLocal=parametrosAlgoritmo.VNS.getNumMaxIteracionesBusquedaLocal();
+        this.numMaxIteracionesSinMejoraBusquedaLocal = parametrosAlgoritmo.VNS.getNumMaxIteracionesSinMejoraBusquedaLocal();
 
     }
 
     public double fitness(Solucion x) {
         Double fit = mapaSoluciones.get(x);
         if (fit == null) {
-            fit = DeciderFitnessFunction.switchFitnessF(x, null, entrada, parametros, parametrosAlgoritmo)[0];
+            fit = DeciderFitnessFunction.switchFitnessF(x, patrones, entrada, parametros, parametrosAlgoritmo)[0];
             mapaSoluciones.put(x, fit);
         }
         return fit;
@@ -54,37 +55,33 @@ abstract class AbstractNeighborStructure implements NeighborStructure {
 
     @Override
     public Solucion bestImprovement(Solucion solucionInicial) {
+
         Solucion x = solucionInicial.clone();
-        Solucion x_prime = x;
+        Solucion x_prime;
         int numIter = 0;
+        int numIteracionesSinMejora = 0;
+
         // En la busqueda local, iteramos repetidas veces hasta que no haya mejora
-        while (numIter <= MAX_ITERACIONES_BUSQUEDA_LOCAL &&
-                AbstractVariableNeighborhoodSearch.initTime - System.currentTimeMillis() < parametrosAlgoritmo.getMaxMilisecondsAllowed()) {
-            System.out.println("ejecutando BL");
+        while (numIteracionesSinMejora <= numMaxIteracionesSinMejoraBusquedaLocal &&
+                System.currentTimeMillis() - AbstractVariableNeighborhoodSearch.initTime < parametrosAlgoritmo.getMaxMilisecondsAllowed()) {
             x_prime = buscarSolucion(x);
-
-
-            // OUTPUT /////////////////////////////////////////////////////////////////////////////////
-//
-//            List<Solucion> solArray = new ArrayList<>();
-//            solArray.add(x);
-//            rwFiles.EscrituraExcel.EscrituraSoluciones("Fase2-it" + numIter, Main.carpetaSoluciones, solArray,
-//                    entrada, patrones, parametros, parametrosAlgoritmo);
-//
-            //////////////////////////////////////////////////////////////////////////////////////////
-
 
             double f_x = fitness(x);
             double f_x_prime = fitness(x_prime);
-            if (f_x_prime > f_x) { // si es mejor...paramos NOTE: maximización
-//                return x;
+            if (f_x_prime > f_x) // si es mejor... NOTE: maximización
                 x = x_prime;
-            }
+            else
+                numIteracionesSinMejora++;
 
             numIter++;
-            System.out.println("[BL] tiempo: " + (AbstractVariableNeighborhoodSearch.initTime - System.currentTimeMillis()) / 1000);
+//            if (Log.isOn() /*&& Log.checkIter(numIter)*/) {
+//                Log.info("[BL] tiempo: " + (System.currentTimeMillis() - AbstractVariableNeighborhoodSearch.initTime) / 1000);
+//                Log.info("[BL] fitness: " + fitness(x));
+//                Log.info("[BL] iter sin mejora: " + numIteracionesSinMejora);
+//            }
         }
         return x;
+
     }
 
     @Override
@@ -101,7 +98,7 @@ abstract class AbstractNeighborStructure implements NeighborStructure {
             x_prime = buscarSolucion(x);
             f_x_prime = fitness(x_prime);
             numIt++;
-        } while (f_x_prime <= f_x && numIt <= MAX_ITERACIONES_BUSQUEDA_LOCAL); // si es mejor...paramos NOTE: maximización
+        } while (f_x_prime <= f_x && numIt <= numMaxIteracionesSinMejoraBusquedaLocal); // si es mejor...paramos NOTE: maximización
         return x_prime;
     }
 

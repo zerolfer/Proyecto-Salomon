@@ -342,8 +342,8 @@ public class ParametrosAlgoritmo {
         private static final String NUM_MAX_ITERACIONES_BUSQUEDA_LOCAL = "numMaxIteracionesBusquedaLocal";
 
         private List<NeighborStructure> neighborStructures;
-        private int numMaxIteracionesBusquedaLocal = getInteger("numMaxIteracionesBusquedaLocal");
-        private int numMaxIteracionesSinMejora = getInteger("numMaxIteracionesSinMejora");
+        private int numMaxIteracionesSinMejoraBusquedaLocal = getInteger("numMaxIteracionesSinMejoraBusquedaLocal");
+        private int numMaxIteracionesSinMejoraVNS = getInteger("numMaxIteracionesSinMejoraVNS");
 
 
         /**
@@ -360,12 +360,12 @@ public class ParametrosAlgoritmo {
          *
          * Este parametro se utiliza debido a que la Busqueda Local es estocástica, y no determinista
          */
-        public int getNumMaxIteracionesBusquedaLocal() {
-            return numMaxIteracionesBusquedaLocal;
+        public int getNumMaxIteracionesSinMejoraBusquedaLocal() {
+            return numMaxIteracionesSinMejoraBusquedaLocal;
         }
 
-        public int getNumMaxIteracionesSinMejora() {
-            return numMaxIteracionesSinMejora;
+        public int getNumMaxIteracionesSinMejoraVNS() {
+            return numMaxIteracionesSinMejoraVNS;
         }
     }
 

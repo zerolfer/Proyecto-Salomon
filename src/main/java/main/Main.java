@@ -1,6 +1,7 @@
 package main;
 
 import InicializarPoblacion.InicializarPoblacion;
+import algorithms.MetaheuristicUtil;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
 import estructurasDatos.ParametrosAlgoritmo;
@@ -31,13 +32,6 @@ public class Main {
     public static String carpetaSoluciones = "";
     public static String carpetaTrazas = "";
     public static Date date = new Date();
-
-    static {
-        System.setProperty("java.util.logging.SimpleFormatter.format", "[%1$tF %1$tT] [%4$-7s] %5$s %n");
-//        Logger log = Logger.getLogger("ProyectoSalomon");
-//        log.setLevel(Level.INFO);
-//        LogManager.getLogManager().reset(); // descomentar para desabilitar logger
-    }
 
     public static void main(String[] args) {
         int nEjecucion = 1;
@@ -79,6 +73,7 @@ public class Main {
         ArrayList<Solucion> poblacionInicial = InicializarPoblacion.inicializarPoblacion(entrada, parametros, patrones);
 
         // OUTPUT ///////////////////////////////////////////////////////////////////////////////////////////////////
+//        poblacionInicial.forEach(MetaheuristicUtil::orderByLazyCriteria);
         solEntrada.addAll(poblacionInicial);
 //        rwFiles.EscrituraExcel.EscrituraSoluciones("Inicial+Fase1", Main.carpetaSoluciones, solEntrada,
 //                entrada, patrones, parametros, parametrosAlgoritmo);

@@ -16,6 +16,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static algorithms.MetaheuristicUtil.esTrabajo;
 import static herramientas.CridaUtils.*;
 
 public class Move3 extends AbstractNeighborStructure {
@@ -113,8 +114,7 @@ public class Move3 extends AbstractNeighborStructure {
     private Set<String> obtenerSectores(Solucion x, int controlador, int desde, int hasta) {
         String turno = x.getTurnos().get(controlador).substring(desde, hasta);
         Set<String> sectores = new HashSet<>();
-        for (int i = 0; i < turno.length(); i += LONGITUD_CADENAS) {
-//            if()
+        for (int i = 0; i <= turno.length() - LONGITUD_CADENAS; i += LONGITUD_CADENAS) {
             String sector = turno.substring(i, i + LONGITUD_CADENAS).toLowerCase();
             if (sector.equals(STRING_NO_TURNO)) return null; // no se puede hacer el cambio
             if (!sector.equals(STRING_DESCANSO))
@@ -169,19 +169,24 @@ public class Move3 extends AbstractNeighborStructure {
 
         // recorremos el turno
         int i = super.getSlotMomentoActual() * LONGITUD_CADENAS;
-        while (i + LONGITUD_CADENAS <= turno.length() && turno.substring(i, i + LONGITUD_CADENAS).equals(STRING_DESCANSO))
+
+        while (i + LONGITUD_CADENAS <= turno.length() &&
+                !esTrabajo(turno.substring(i, i + LONGITUD_CADENAS)))
             i += 3; // saltamos los descansos
+
         for (int f = i; f + LONGITUD_CADENAS <= turno.length(); f += LONGITUD_CADENAS) {
-            if (esDescanso(turno.substring(f, f + LONGITUD_CADENAS))) {
+            if (!esTrabajo(turno.substring(f, f + LONGITUD_CADENAS))) {
                 res.add(new int[]{i, f});
                 i = f;
-                while (i + LONGITUD_CADENAS < turno.length() && esDescanso(turno.substring(i, i + LONGITUD_CADENAS)))
+
+                while (i + LONGITUD_CADENAS <= turno.length() && !esTrabajo(turno.substring(i, i + LONGITUD_CADENAS)))
                     i += 3; // saltamos los descansos
+
                 f = i;
             }
         }
-        if (!turno.substring(turno.length() - 3).equals(STRING_DESCANSO))
-            res.add(new int[]{i, turno.length() - LONGITUD_CADENAS});
+        if (i < turno.length() - LONGITUD_CADENAS && esTrabajo(turno.substring(turno.length() - 3)))
+            res.add(new int[]{i, turno.length()});
 
         return res;
     }
@@ -193,7 +198,11 @@ public class Move3 extends AbstractNeighborStructure {
 
     @Override
     public Solucion generarSolucionAleatoria(Solucion x) {
-        return null;
+        return buscarSolucion(x);
     }
 
+    @Override
+    public String toString() {
+        return "Move3";
+    }
 }
