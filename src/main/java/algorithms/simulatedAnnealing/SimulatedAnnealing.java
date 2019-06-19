@@ -8,12 +8,15 @@ import estructurasDatos.Parametros;
 import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
 import fitnessFunction.DeciderFitnessFunction;
+import main.Main;
 import main.MainPruebas;
 import patrones.Patrones;
 import patrones.Restricciones;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.checkerframework.checker.units.qual.A;
 
 
 /**
@@ -192,6 +195,9 @@ public class SimulatedAnnealing {
                         (((System.currentTimeMillis() - MainPruebas.TiemposResultadosproblema[0]) / 1000.0) / 60.0);
             }
         }
+        ArrayList<Solucion> sols = new ArrayList<Solucion>(); sols.add(individuo);
+        rwFiles.EscrituraExcel.EscrituraSoluciones("prueba individuo algoritmo "+ Main.entradaPath,
+        		Main.carpetaSoluciones, sols, entrada, patrones, parametros, parametrosAlg);
         return bestSol;
     }
 

@@ -94,10 +94,19 @@ public class Move3 {
                 cs.add((Controlador) c.clone());
             }
             if (descanso) {
+            	boolean noAsignado = true;
                 for (int i = 0; i < cs.size(); i++) {
                     if (cs.get(i).getTurnoAsignado() == mov.getDador()) {
                         cs = asignarControlador(i, mov.getDador(), cs);
+                        noAsignado = false;
                         break;
+                    }
+                }
+                if(noAsignado) {
+                	for (int i = 0; i < cs.size(); i++) {
+                        if (cs.get(i).getTurnoAsignado() > mov.getDador()) {
+                            cs.get(i).setTurnoAsignado(cs.get(i).getTurnoAsignado() - 1);
+                        }
                     }
                 }
                 turnos.remove(mov.getDador());

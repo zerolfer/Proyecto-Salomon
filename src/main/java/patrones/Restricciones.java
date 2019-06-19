@@ -752,6 +752,9 @@ public class Restricciones {
                 for (int j = 0; j < nuc.size(); j++) {
                     if (controladores.get(i).getNucleo().equalsIgnoreCase(nuc.get(j))) {
                         String posibles[] = patrones.getArray()[5 + j].toString().split(";");
+                        if (numTurno >= turnos.size()) {
+							System.out.println("ERROR:"+ " el controlador "+controladores.get(i).getId()+" tiene un turno asignado que no existe - "+numTurno);
+						}
                         String t = turnos.get(numTurno);
 
                         for (int l = 0; l < t.length(); l += 3) {
