@@ -165,13 +165,15 @@ public class InicializarPoblacion {
                 for (int j = momentoBaja * LONGITUD_CADENAS; j < t.length(); j += LONGITUD_CADENAS) {
                     cadIni.append(STRING_NO_TURNO);
                 }
+                String tmp = "";
                 for (int j = 0; j < momentoBaja * LONGITUD_CADENAS; j += LONGITUD_CADENAS) {
                     if (entrada.getSlotMomentoActual() * LONGITUD_CADENAS > j) {
-                        cadFin = STRING_NO_TURNO + cadFin;
+                        tmp += STRING_NO_TURNO;
                     } else {
-                        cadFin = STRING_DESCANSO + cadFin;
+                        tmp += STRING_DESCANSO;
                     }
                 }
+                cadFin = tmp + cadFin;
                 turnos.set(c.getTurnoAsignado(), cadIni.toString());
                 turnos.add(cadFin);
             }
