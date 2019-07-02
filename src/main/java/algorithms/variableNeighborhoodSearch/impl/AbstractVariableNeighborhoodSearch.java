@@ -99,9 +99,8 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
                 // y se actualiza la solución actual a aquella con mejor valor objetivo de entre la anterior y la nueva
                 x = neighborhoodChange(x, x_prime);
 
-                Log.csvLog(contadorIteraciones, t, fitness((x)));
+                Log.csvLog(contadorIteraciones++, t, fitness((x)));
 
-                contadorIteraciones++;
             }
             // se actualiza el tiempo (condición de parada)
             t = System.currentTimeMillis() - initTime;

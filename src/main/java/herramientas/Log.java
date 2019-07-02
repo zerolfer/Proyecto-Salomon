@@ -64,8 +64,6 @@ public class Log {
                                 "fitness"
 
                 );
-                fh.close();
-
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -134,7 +132,7 @@ public class Log {
     }
 
     public static void close() {
-        fh.close();
+        if (fh != null) fh.close();
     }
 //    public static boolean isCsv() {
 //        return CSV;
