@@ -1,7 +1,9 @@
 package algorithms.variableNeighborhoodSearch.impl.moves;
 
+import algorithms.MetaheuristicUtil;
 import algorithms.variableNeighborhoodSearch.NeighborStructure;
 import algorithms.variableNeighborhoodSearch.impl.AbstractVariableNeighborhoodSearch;
+import estructurasDatos.DominioDelProblema.Controlador;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.DominioDelProblema.Nucleo;
 import estructurasDatos.Parametros;
@@ -13,16 +15,18 @@ import herramientas.Log;
 import it.unimi.dsi.util.XoRoShiRo128PlusRandom;
 import patrones.Patrones;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-abstract class AbstractNeighborStructure implements NeighborStructure {
+import static algorithms.MetaheuristicUtil.esTrabajo;
+import static herramientas.CridaUtils.*;
+import static herramientas.CridaUtils.STRING_NO_TURNO;
 
-    private Entrada entrada;
-    private Patrones patrones;
-    private Parametros parametros;
-    private ParametrosAlgoritmo parametrosAlgoritmo;
+public abstract class AbstractNeighborStructure implements NeighborStructure {
+
+    protected Entrada entrada;
+    protected Patrones patrones;
+    protected Parametros parametros;
+    protected ParametrosAlgoritmo parametrosAlgoritmo;
 
     /* Para mejorar la eficiencia general del metodo*/
     static Map<Solucion, Double> mapaSoluciones;
@@ -33,7 +37,7 @@ abstract class AbstractNeighborStructure implements NeighborStructure {
     private int numMaxIteracionesSinMejoraBusquedaLocal;
 
 
-    AbstractNeighborStructure(Entrada entrada, Patrones patrones, Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo) {
+    protected AbstractNeighborStructure(Entrada entrada, Patrones patrones, Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo) {
         this.entrada = entrada;
         this.patrones = patrones;
         this.parametros = parametros;
@@ -181,7 +185,7 @@ abstract class AbstractNeighborStructure implements NeighborStructure {
         return Fitness.esMejorQue(patrones, entrada, parametros, parametrosAlgoritmo, x, solucionInicial);
     }
 
-    XoRoShiRo128PlusRandom random = new XoRoShiRo128PlusRandom();
+    protected XoRoShiRo128PlusRandom random = new XoRoShiRo128PlusRandom();
 
     List<Nucleo> getNucleos() {
         return this.entrada.getNucleos();
@@ -189,5 +193,118 @@ abstract class AbstractNeighborStructure implements NeighborStructure {
 
     int getSlotMomentoActual() {
         return entrada.getSlotMomentoActual();
+    }
+
+    /**
+     * Obtiene los sectores en los que el controlador trabaja dentro de un intervalo de la matriz de trabajo
+     */
+    Set<String> obtenerSectores(Solucion x, int controlador, int desde, int hasta) {
+        String turno = x.getTurnos().get(controlador).substring(desde, hasta);
+        Set<String> sectores = new HashSet<>();
+        for (int i = getSlotMomentoActual() * LONGITUD_CADENAS; i <= turno.length() - LONGITUD_CADENAS; i += LONGITUD_CADENAS) {
+            String sector = turno.substring(i, i + LONGITUD_CADENAS).toLowerCase();
+            if (sector.equals(STRING_NO_TURNO)) return null; // no se puede hacer el cambio
+            if (!sector.equals(STRING_DESCANSO))
+                sectores.add(sector); // se añadira en caso de no estar ya
+        }
+        return sectores;
+
+    }
+
+    boolean comprobarNucleos(Set<String> sectoresC1, Set<String> sectoresC2, Controlador c1, Controlador c2) {
+
+        if (c1 == null && c2 == null) return true; // si los dos son imaginario, el cambio se puede hacer sin problemas
+
+//        Set<String> nucleosC1 = new HashSet<>();
+//        for (String sector : sectoresC1) {
+//            nucleosC1.addAll(
+//                    MetaheuristicUtil.obtenerNucleosAlQuePerteneceUnSector(super.getNucleos(), sector)
+//            );
+//        }
+//
+//        Set<String> nucleosC2 = new HashSet<>();
+//        for (String sector : sectoresC2) {
+//            if (sector.equals(STRING_DESCANSO)) continue;
+//            nucleosC2.addAll(
+//                    MetaheuristicUtil.obtenerNucleosAlQuePerteneceUnSector(super.getNucleos(), sector)
+//            );
+//            if (!nucleosC1.containsAll(
+//                    MetaheuristicUtil.obtenerNucleosAlQuePerteneceUnSector(super.getNucleos(), sector))
+//            ) return false;
+//        }
+
+        // si no es imaginario, comprobamos si esta acreditado para los sectores
+        if (c1 != null)
+            for (String sector : sectoresC2) {
+                Set<String> nucleos =
+                        MetaheuristicUtil.obtenerNucleosAlQuePerteneceUnSector(getNucleos(), sector);
+                if (!nucleos.contains(c1.getNucleo())) return false;
+            }
+        if (c2 != null)
+            for (String sector : sectoresC1) {
+                Set<String> nucleos =
+                        MetaheuristicUtil.obtenerNucleosAlQuePerteneceUnSector(getNucleos(), sector);
+                if (!nucleos.contains(c2.getNucleo())) return false;
+            }
+
+        return true;
+
+    }
+
+    List<int[]> getintervalos(String turno) {
+        List<int[]> res = new ArrayList<>();
+
+        // recorremos el turno
+        int i = getSlotMomentoActual() * LONGITUD_CADENAS;
+
+        while (i + LONGITUD_CADENAS <= turno.length() &&
+                !esTrabajo(turno.substring(i, i + LONGITUD_CADENAS)))
+            i += 3; // saltamos los descansos
+
+        for (int f = i; f + LONGITUD_CADENAS <= turno.length(); f += LONGITUD_CADENAS) {
+            if (!esTrabajo(turno.substring(f, f + LONGITUD_CADENAS))) {
+                res.add(new int[]{i, f});
+                i = f;
+
+                while (i + LONGITUD_CADENAS <= turno.length() && !esTrabajo(turno.substring(i, i + LONGITUD_CADENAS)))
+                    i += 3; // saltamos los descansos
+
+                f = i;
+            }
+        }
+        if (i < turno.length() - LONGITUD_CADENAS && esTrabajo(turno.substring(turno.length() - 3)))
+            res.add(new int[]{i, turno.length()});
+
+        return res;
+    }
+
+    private boolean esDescanso(String string) {
+        return string.equals(STRING_DESCANSO) || string.equals(STRING_NO_TURNO);
+    }
+
+    /**
+     * @return lista enteros de tamaño 2 con los índices de inicio y de fin no inclusive a nivel de string
+     * sobre los que la matriz se divide en rejillas.
+     */
+    protected List<int[]> getRejillas(ArrayList<String> turnos, int c1) {
+        List<int[]> resultado = new ArrayList<>();
+        int desde = getSlotMomentoActual() * LONGITUD_CADENAS;
+
+        for (int hasta = getSlotMomentoActual() * LONGITUD_CADENAS + LONGITUD_CADENAS;
+             hasta <= turnos.get(0).length() - LONGITUD_CADENAS; hasta += LONGITUD_CADENAS) {
+
+            for (String turno : turnos) {
+                // si hay un cambio, hay rejilla
+                if (!turno.substring(hasta - LONGITUD_CADENAS, hasta).equals(turno.substring(hasta, hasta + LONGITUD_CADENAS))) {
+                    resultado.add(new int[]{desde, hasta});
+                    desde = hasta;
+                }
+            }
+
+        }
+//        if (desde >= turnos.get(0).length()-LONGITUD_CADENAS)
+        // hay que computar el último
+        resultado.add(new int[]{desde, turnos.get(0).length()});
+        return resultado;
     }
 }

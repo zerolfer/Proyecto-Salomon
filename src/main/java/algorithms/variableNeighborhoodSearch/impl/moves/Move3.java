@@ -20,6 +20,7 @@ import static algorithms.MetaheuristicUtil.esTrabajo;
 import static herramientas.CridaUtils.*;
 
 public class Move3 extends AbstractNeighborStructure {
+
     public Move3(Entrada entrada, Patrones patrones, Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo) {
         super(entrada, patrones, parametros, parametrosAlgoritmo);
     }
@@ -63,7 +64,7 @@ public class Move3 extends AbstractNeighborStructure {
                 // y la logitud
                 List<Integer> longitudesList = new ArrayList<>();
                 int maxLongIntervalo = (periodo[1] - periodo[0]);
-                for (int i = 3; i <= maxLongIntervalo; i++)
+                for (int i = LONGITUD_CADENAS; i <= maxLongIntervalo; i += LONGITUD_CADENAS)
 //                    if (i % InicializarPoblacion.descanso == 0)  // NOTE si permitimos movimientos libres no solo de multiplos del tamaño de los descansos, hay mejoria en el fitness (descomentar linea para dejar de permitir movimientos de tamaño libre)
                     longitudesList.add(i);
                 // intentamos mover la mayor carga posible
@@ -109,90 +110,6 @@ public class Move3 extends AbstractNeighborStructure {
 
         }
         return x_inicial;
-    }
-
-    private Set<String> obtenerSectores(Solucion x, int controlador, int desde, int hasta) {
-        String turno = x.getTurnos().get(controlador).substring(desde, hasta);
-        Set<String> sectores = new HashSet<>();
-        for (int i = 0; i <= turno.length() - LONGITUD_CADENAS; i += LONGITUD_CADENAS) {
-            String sector = turno.substring(i, i + LONGITUD_CADENAS).toLowerCase();
-            if (sector.equals(STRING_NO_TURNO)) return null; // no se puede hacer el cambio
-            if (!sector.equals(STRING_DESCANSO))
-                sectores.add(sector); // se añadira en caso de no estar ya
-        }
-        return sectores;
-
-    }
-
-    private boolean comprobarNucleos(Set<String> sectoresC1, Set<String> sectoresC2, Controlador c1, Controlador c2) {
-
-        if (c1 == null && c2 == null) return true; // si los dos son imaginario, el cambio se puede hacer sin problemas
-
-//        Set<String> nucleosC1 = new HashSet<>();
-//        for (String sector : sectoresC1) {
-//            nucleosC1.addAll(
-//                    MetaheuristicUtil.obtenerNucleosAlQuePerteneceUnSector(super.getNucleos(), sector)
-//            );
-//        }
-//
-//        Set<String> nucleosC2 = new HashSet<>();
-//        for (String sector : sectoresC2) {
-//            if (sector.equals(STRING_DESCANSO)) continue;
-//            nucleosC2.addAll(
-//                    MetaheuristicUtil.obtenerNucleosAlQuePerteneceUnSector(super.getNucleos(), sector)
-//            );
-//            if (!nucleosC1.containsAll(
-//                    MetaheuristicUtil.obtenerNucleosAlQuePerteneceUnSector(super.getNucleos(), sector))
-//            ) return false;
-//        }
-
-        // si no es imaginario, comprobamos si esta acreditado para los sectores
-        if (c1 != null)
-            for (String sector : sectoresC2) {
-                Set<String> nucleos =
-                        MetaheuristicUtil.obtenerNucleosAlQuePerteneceUnSector(super.getNucleos(), sector);
-                if (!nucleos.contains(c1.getNucleo())) return false;
-            }
-        if (c2 != null)
-            for (String sector : sectoresC1) {
-                Set<String> nucleos =
-                        MetaheuristicUtil.obtenerNucleosAlQuePerteneceUnSector(super.getNucleos(), sector);
-                if (!nucleos.contains(c2.getNucleo())) return false;
-            }
-
-        return true;
-
-    }
-
-    private List<int[]> getintervalos(String turno) {
-        List<int[]> res = new ArrayList<>();
-
-        // recorremos el turno
-        int i = super.getSlotMomentoActual() * LONGITUD_CADENAS;
-
-        while (i + LONGITUD_CADENAS <= turno.length() &&
-                !esTrabajo(turno.substring(i, i + LONGITUD_CADENAS)))
-            i += 3; // saltamos los descansos
-
-        for (int f = i; f + LONGITUD_CADENAS <= turno.length(); f += LONGITUD_CADENAS) {
-            if (!esTrabajo(turno.substring(f, f + LONGITUD_CADENAS))) {
-                res.add(new int[]{i, f});
-                i = f;
-
-                while (i + LONGITUD_CADENAS <= turno.length() && !esTrabajo(turno.substring(i, i + LONGITUD_CADENAS)))
-                    i += 3; // saltamos los descansos
-
-                f = i;
-            }
-        }
-        if (i < turno.length() - LONGITUD_CADENAS && esTrabajo(turno.substring(turno.length() - 3)))
-            res.add(new int[]{i, turno.length()});
-
-        return res;
-    }
-
-    private boolean esDescanso(String string) {
-        return string.equals(STRING_DESCANSO) || string.equals(STRING_NO_TURNO);
     }
 
 
