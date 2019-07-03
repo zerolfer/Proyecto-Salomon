@@ -242,7 +242,22 @@ public class ParametrosAlgoritmo {
         private double porcentajeEleccionMov = getDouble("porcentajeEleccionMov");
 
         private String movimientosEntornoGreedy = getString("movimientosEntornoGreedy");
+    	private double maxMinMethod_min = Double.parseDouble(propParametrosAlgoritmo.getProperty("maxMinMethod_min"));;
+    	private double maxMinMethod_max = Double.parseDouble(propParametrosAlgoritmo.getProperty("maxMinMethod_max"));;
+    	/**
+    	 * Mínimo y máximo para los movimientos 15, 16 y 17
+    	 */
+    	private int move15_min = Integer.parseInt((String) propParametrosAlgoritmo.getOrDefault("move15_min", "1"));
+    	private int move15_max = Integer.parseInt(propParametrosAlgoritmo.getProperty("move15_max"));
+    	/**
+    	 * Readaptar el parámetro move15_max tras cada refinamiento o tras la inicialización
+    	 */
+    	private boolean move17_adapt_max = Boolean.parseBoolean((String) propParametrosAlgoritmo.getOrDefault("move17_adapt_max", "false"));
 
+    	/**
+    	 * Número de iteraciones tras los cuales se refinará la grid
+    	 */
+    	private int cicloRefinarGrid = Integer.parseInt((String)propParametrosAlgoritmo.getOrDefault("cicloRefinarGrid", "0"));
         {
             Trazas.setnTmnsIntervalos(((tamañoMaxMov - tamañoMinMov) / 3));
         }
@@ -334,6 +349,55 @@ public class ParametrosAlgoritmo {
         public void setMovimientosEntornoGreedy(String movimientosEntornoGreedy) {
             this.movimientosEntornoGreedy = movimientosEntornoGreedy;
         }
+
+		public double getMaxMinMethod_min() {
+			return maxMinMethod_min;
+		}
+
+		public void setMaxMinMethod_min(double maxMinMethod_min) {
+			this.maxMinMethod_min = maxMinMethod_min;
+		}
+
+		public double getMaxMinMethod_max() {
+			return maxMinMethod_max;
+		}
+
+		public void setMaxMinMethod_max(double maxMinMethod_max) {
+			this.maxMinMethod_max = maxMinMethod_max;
+		}
+
+		public int getMove15_min() {
+			return move15_min;
+		}
+
+		public void setMove15_min(int move15_min) {
+			this.move15_min = move15_min;
+		}
+
+		public int getMove15_max() {
+			return move15_max;
+		}
+
+		public void setMove15_max(int move15_max) {
+			this.move15_max = move15_max;
+		}
+
+		public boolean isMove17_adapt_max() {
+			return move17_adapt_max;
+		}
+
+		public void setMove17_adapt_max(boolean move17_adapt_max) {
+			this.move17_adapt_max = move17_adapt_max;
+		}
+
+		public int getCicloRefinarGrid() {
+			return cicloRefinarGrid;
+		}
+
+		public void setCicloRefinarGrid(int cicloRefinarGrid) {
+			this.cicloRefinarGrid = cicloRefinarGrid;
+		}
+        
     }
 
     public class VNS {

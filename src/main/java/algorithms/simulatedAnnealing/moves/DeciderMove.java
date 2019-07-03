@@ -112,7 +112,64 @@ public class DeciderMove {
                 mov = Move8.doblemovimiento(individuo, gMax, gMin, patrones, entrada, parametros, parametrosAlg,
                         iteracion);
                 break;
+			case "movimiento12":
+				/*
+				 * Crea una retícula y los movimientos se hacen dentro de ella.
+				 */
+				mov = Move12.movimiento(individuo, gMax, gMin, patrones, entrada, parametros, parametrosAlg);
+			break;
+			
+			case "movimiento15"://Es el movimiento 4 pero con una nueva forma de calcular si los sectores pertenecen al mismo nucleo y no realiza cruce hasta que alzance el numero de controladores requerido.
+				mov = Move15.movimiento(individuo,gMax,gMin, patrones, entrada, parametros, parametrosAlg);
+			break;
+			case "movimiento17":
+				/*
+				 * Combinación de los movimientos 15 y 21
+				 */
+				mov = Move17.movimiento(individuo, gMax, gMin, patrones, entrada, parametros, parametrosAlg);
+			break;
+			case "movimiento25":
+				/*
+				 * Movimiento 17 con el parámetro gMax readaptable
+				 */
+				mov = Move17.movimiento(individuo, gMax, gMin, patrones, entrada, parametros, parametrosAlg);
+			break;
         }
         return mov;
     }
+public static void init_move(Solucion sol, Parametros par, ParametrosAlgoritmo parametrosAlg, Entrada entrada) {
+		
+		// inicializar la grid que corresponda
+		
+		// Ajuste de parámetros propios de cada movimiento
+		switch (parametrosAlg.SA.getMovimientosEntorno()) {
+		case "movimiento12":
+			Move12.init_grid(sol, par, parametrosAlg, entrada);
+			break;
+			
+			// MOVIMIENTOS 15 Y 16 
+		case "movimiento15":
+			parametrosAlg.SA.setMove17_adapt_max(false);
+			Move15.init_grid(sol, par, parametrosAlg, entrada);
+			break;
+
+			
+		case "movimiento17":
+			parametrosAlg.SA.setMove17_adapt_max(false);
+			Move17.iteracion = 0;
+			Move17.puede_refinarse = true;
+
+			Move17.init_grid(sol, par, parametrosAlg, entrada);
+			break;
+		
+		case "movimiento25":
+			parametrosAlg.SA.setMove17_adapt_max(true);
+			Move17.iteracion = 0;
+			Move17.puede_refinarse = true;
+			Move17.init_grid(sol, par, parametrosAlg, entrada);
+			break;
+		default:
+		}
+
+	}
 }

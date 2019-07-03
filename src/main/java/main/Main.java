@@ -35,10 +35,10 @@ public class Main {
 
     public static void main(String[] args) {
         int nEjecucion = 1;
-        int[] casos = {1, 3, 4, 5, 6, 7, 8, 9};
-//        for (int i = 0; i < casos.length; i++) {
-        main1(nEjecucion, "Caso" + /*casos[i]*/ loadCasoFromProperties());
-//		}
+        int[] casos = {1,3,4,5,6,7,8,9};
+        for (int i = 0; i < casos.length; i++) {
+        main1(nEjecucion, "Caso" + casos[i]);// loadCasoFromProperties());
+		}
     }
 
     public static void main1(int ejecucion, String caso) {
@@ -52,7 +52,7 @@ public class Main {
         ParametrosAlgoritmo parametrosAlgoritmo = new ParametrosAlgoritmo();
 
         // HACK: USAR PARA EL JAR DEPLOYMENT /////////////////////////////////////////////////////////
-        parametrosAlgoritmo.sobreescribirParametrosViaExterna(propFileExternoParametros);
+    //    parametrosAlgoritmo.sobreescribirParametrosViaExterna(propFileExternoParametros);
         //////////////////////////////////////////////////////////////////////////////////////////////
         Entrada entrada = Entrada.leerEntrada(parametros, entradaPath, entradaId, entorno);
         Patrones patrones = new Patrones(entrada, parametros);
@@ -104,7 +104,7 @@ public class Main {
         sb.append(ejecucion);
 //        sb.append("-Inicial+Fase1+Fase2");
 
-        rwFiles.EscrituraExcel.EscrituraSoluciones(sb.toString()/*caso + "-" /*+ ejecucion*/ /*+ "-Inicial+Fase1+Fase2"*/,
+        rwFiles.EscrituraExcel.EscrituraSoluciones(caso + "-" /*+ ejecucion*/ + "-DistribuciónInicial+SolucionInicial+Final",
                 Main.carpetaSoluciones, solEntrada, entrada, patrones, parametros, parametrosAlgoritmo);
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

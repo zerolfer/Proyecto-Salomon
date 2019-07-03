@@ -6,6 +6,7 @@ import estructurasDatos.Parametros;
 import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
 import fitnessFunction.DeciderFitnessFunction;
+import herramientas.random.SplitRnd;
 import patrones.Patrones;
 import patrones.Restricciones;
 
@@ -24,7 +25,8 @@ public class Main_SA {
                                               Patrones patrones, List<Solucion> poblacionInicial) {//Principal
 
         MainPruebas.problema += "Fase 2:" + "\n";
-
+        long seed = System.currentTimeMillis();
+		SplitRnd.init(seed);
         ArrayList<Solucion> poblacionSoluciones = new ArrayList<>();
         poblacionSoluciones = SimulatedAnnealing.bucleSA(poblacionInicial, parametrosAlgoritmo, parametros, patrones, entrada);
 

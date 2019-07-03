@@ -43,6 +43,7 @@ public class SimulatedAnnealing {
         ArrayList<Solucion> poblacionMejorada = new ArrayList<>();
         Solucion individuo = null;
         for (int i = 0; i < poblacionInicial.size(); i++) {
+        	DeciderMove.init_move(poblacionInicial.get(i), p, pa, entrada);
             individuo = simulatedAnnealing(poblacionInicial.get(i), i, pa, p, patrones, entrada);
             if (individuo != null) {
                 poblacionMejorada.add(individuo);
