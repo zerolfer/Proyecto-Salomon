@@ -28,7 +28,7 @@ public abstract class Move2 extends AbstractNeighborStructure {
 
         // paso 1: elegimos un controlador aleatoriamente
         while (c1Indices.size() > 0) {
-            int idx1 = random.nextInt(c1Indices.size());
+            int idx1 =0;//= random.nextInt(c1Indices.size());
             int c1 = c1Indices.get(idx1);
             c1Indices.remove(idx1); // para evitar repetidos
 

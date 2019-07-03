@@ -2,7 +2,9 @@ package herramientas;
 
 import main.Main;
 
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -35,7 +37,7 @@ public class Log {
 
 //    private static final boolean CSV = true;
 
-    private static FileHandler fh;
+    private static BufferedWriter fh;
 
     static {
         System.setProperty("java.util.logging.SimpleFormatter.format", "[%1$tF %1$tT] [%4$-7s] %5$s %n");
@@ -44,25 +46,30 @@ public class Log {
         if (FICHERO) {
             Date date = new Date();
             DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss");
+//                logFile.setUseParentHandlers(false);
+//                logFile.setLevel(Level.INFO);
             try {
-                fh = new FileHandler(Main.carpetaTrazas + dateFormat.format(date) + ".csv");
+                String name = Main.carpetaTrazas + dateFormat.format(date) + ".csv";
+                File f = new File(name);
+                f.getParentFile().mkdirs();
+                f.createNewFile();
+                fh = new BufferedWriter(new FileWriter(f));
+//                fh = new FileHandler(name);
 //                fh.setFormatter(new SimpleFormatter());
-                fh.setFormatter(new SimpleFormatter() {
-                    @Override
-                    public String format(LogRecord record) {
-                        return String.format("%s %n", formatMessage(record));
-                    }
-                });
-                logFile.setLevel(Level.INFO);
-                logFile.addHandler(fh);
-                logFile.setUseParentHandlers(false);
+//                fh.setFormatter(new SimpleFormatter() {
+//                    @Override
+//                    public String format(LogRecord record) {
+//                        return String.format("%s %n", formatMessage(record));
+//                    }
+//                });
+//                logFile.addHandler(fh);
 
-                logFile.info(
+                fh.write(
 //                         cabecera del CSV
                         "iteracion" + STRING_SEPARADOR_CSV +
                                 "tiempo (ms)" + STRING_SEPARADOR_CSV +
-                                "fitness"
-
+                                "fitness" + STRING_SEPARADOR_CSV +
+                                "tamaño" + "\n"
                 );
 
             } catch (IOException e) {
@@ -103,13 +110,21 @@ public class Log {
         return iter % trazaCadaTantasIteraciones == 0;
     }
 
-    public static void csvLog(int iteracion, long tiempo, double fitness) {
-        if (FICHERO && checkIter(iteracion))
-            logFile.info(
-                    iteracion + STRING_SEPARADOR_CSV
-                            + tiempo + STRING_SEPARADOR_CSV +
-                            fitness
-            );
+    public static void csvLog(int iteracion, long tiempo, double fitness, int size, int numeroIteracionesSinMejora) {
+        if (FICHERO && checkIter(iteracion)) {
+            try {
+                fh.write(
+                        iteracion + STRING_SEPARADOR_CSV
+                                + tiempo + STRING_SEPARADOR_CSV
+                                + fitness + STRING_SEPARADOR_CSV
+                                + size + STRING_SEPARADOR_CSV
+                                + numeroIteracionesSinMejora
+                                + "\n"
+                );
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public static void info(String str) {
@@ -132,7 +147,13 @@ public class Log {
     }
 
     public static void close() {
-        if (fh != null) fh.close();
+        if (fh != null) {
+            try {
+                fh.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 //    public static boolean isCsv() {
 //        return CSV;

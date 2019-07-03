@@ -1,5 +1,6 @@
 package algorithms.variableNeighborhoodSearch.impl;
 
+import algorithms.MetaheuristicUtil;
 import algorithms.variableNeighborhoodSearch.NeighborStructure;
 import algorithms.variableNeighborhoodSearch.VariableNeighborhoodSearch;
 import estructurasDatos.DominioDelProblema.Entrada;
@@ -86,6 +87,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
      */
     @Override
     public Solucion startExecution(Solucion x) {
+        MetaheuristicUtil.orderByLazyCriteria(x);
         initTime = System.currentTimeMillis();
         contadorIteraciones = 0;
         long t = 0;
@@ -99,7 +101,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
                 // y se actualiza la solución actual a aquella con mejor valor objetivo de entre la anterior y la nueva
                 x = neighborhoodChange(x, x_prime);
 
-                Log.csvLog(contadorIteraciones++, t, fitness((x)));
+                Log.csvLog(contadorIteraciones++, t, fitness((x)), x.getTurnos().size(), numeroIteracionesSinMejora);
 
             }
             // se actualiza el tiempo (condición de parada)
@@ -107,20 +109,21 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
             currentNeighborhoodIndex = 0;
         } while (t < maxTimeAllowed && numeroIteracionesSinMejora < numMaxIteracionesSinMejora);
 
-        Log.info("[Fin VNS] Fitness final: " + fitness(x));
-        Log.info("[Fin VNS] numeroIteracionesSinMejora: " + numeroIteracionesSinMejora + " de " + numMaxIteracionesSinMejora);
-        Log.info("[Fin VNS] tiempo: " + (System.currentTimeMillis() - initTime) / 1000 + "s de " + maxTimeAllowed / 1000 + "s");
+        Log.info("[Fin VNS] Fitness final: " + fitness(x) + "\t" +
+                "numeroIteracionesSinMejora: " + numeroIteracionesSinMejora + " de " + numMaxIteracionesSinMejora + "\t" +
+                "tiempo: " + (System.currentTimeMillis() - initTime) / 1000 + "s de " + maxTimeAllowed / 1000 + "s");
 
         return x;
     }
 
     // neighborhood change
     Solucion neighborhoodChange(Solucion x, Solucion x_prime) {
-
+        StringBuilder sb = new StringBuilder();
         if (Log.isOn() && Log.checkIter(contadorIteraciones)) {
-            Log.info("[VNS] tiempo: " + (System.currentTimeMillis() - initTime) / 1000 + "s");
-            Log.info("[VNS] Fitness actual: " + (fitness(x_prime) > fitness(x) ? fitness(x_prime) : fitness(x)));
-            Log.info("");
+            sb.append("[VNS] tiempo: ")
+                    .append((System.currentTimeMillis() - initTime) / 1000)
+                    .append("s").append("\t").append("Fitness actual: ")
+                    .append(fitness(x_prime) > fitness(x) ? fitness(x_prime) : fitness(x));
         }
 
 
@@ -133,11 +136,14 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
             numeroIteracionesSinMejora++;
 
             if (Log.isOn() && Log.checkIter(contadorIteraciones)) {
-                Log.info("[VNS] vecindad actual: " + getCurrentNeighborhoodIndex());
-                Log.info("[VNS] numero de iteraciones sin mejora: " + numeroIteracionesSinMejora);
-                Log.info("");
+                sb.append("vecindad actual: ")
+                        .append(getCurrentNeighborhoodIndex())
+                        .append("\t").append("numero de iteraciones sin mejora: ")
+                        .append(numeroIteracionesSinMejora);
             }
         }
+        if (Log.isOn() && Log.checkIter(contadorIteraciones))
+            Log.info(sb.toString());
         return x;
     }
 

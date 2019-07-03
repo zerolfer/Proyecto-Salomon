@@ -296,8 +296,11 @@ public abstract class AbstractNeighborStructure implements NeighborStructure {
             for (String turno : turnos) {
                 // si hay un cambio, hay rejilla
                 if (!turno.substring(hasta - LONGITUD_CADENAS, hasta).equals(turno.substring(hasta, hasta + LONGITUD_CADENAS))) {
-                    resultado.add(new int[]{desde, hasta});
+                    int[] r = {desde, hasta};
+                    /*if (!resultado.contains(r))*/
+                    resultado.add(r);
                     desde = hasta;
+                    break;
                 }
             }
 
