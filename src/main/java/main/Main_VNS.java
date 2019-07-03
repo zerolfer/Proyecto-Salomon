@@ -38,14 +38,16 @@ public class Main_VNS {
                 parametrosAlgoritmo, entrada);
 
         List<Solucion> res = new ArrayList<>();
-//        while (true) {
+
+        Log.open();
         Log.info("[ Ejecutando VNS ]");
+
         for (Solucion solucion : poblacionInicial) {
             res.add(
                     startExecution(vnd, solucion, parametrosAlgoritmo)
             );
         }
-//        }
+
         Log.close();
         return res;
     }

@@ -33,7 +33,7 @@ public class Log {
     /**
      * Decide si el log por fichero está habilitado o no
      */
-    private static final boolean FICHERO = true;
+    private static final boolean FICHERO = false;
 
 //    private static final boolean CSV = true;
 
@@ -42,13 +42,13 @@ public class Log {
     static {
         System.setProperty("java.util.logging.SimpleFormatter.format", "[%1$tF %1$tT] [%4$-7s] %5$s %n");
         log.setLevel(Level.INFO);
+    }
 
-        if (FICHERO) {
-            Date date = new Date();
-            DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss");
-//                logFile.setUseParentHandlers(false);
-//                logFile.setLevel(Level.INFO);
+    public static void open() {
+        if (FICHERO)
             try {
+                Date date = new Date();
+                DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss");
                 String name = Main.carpetaTrazas + dateFormat.format(date) + ".csv";
                 File f = new File(name);
                 f.getParentFile().mkdirs();
@@ -75,30 +75,6 @@ public class Log {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-//            try {
-//                fh = new FileHandler(Main.carpetaTrazas + dateFormat.format(date) + ".csv");
-//                fh.setFormatter(new SimpleFormatter() {
-//                    @Override
-//                    public String format(LogRecord record) {
-//                        return String.format("%s %n", formatMessage(record));
-//                    }
-//                });
-//
-//                logCsv.addHandler(fh);
-//                logCsv.setUseParentHandlers(false);
-//                logCsv.setLevel(Level.INFO);
-//                logCsv.info(
-//                         cabecera del CSV
-//                        "iteracion" + STRING_SEPARADOR_CSV +
-//                                "tiempo (ms)" + STRING_SEPARADOR_CSV +
-//                                "fitness"
-//
-//                );
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-
-        }
     }
 
 

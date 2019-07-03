@@ -109,9 +109,10 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
             currentNeighborhoodIndex = 0;
         } while (t < maxTimeAllowed && numeroIteracionesSinMejora < numMaxIteracionesSinMejora);
 
-        Log.info("[Fin VNS] Fitness final: " + fitness(x) + "\t" +
-                "numeroIteracionesSinMejora: " + numeroIteracionesSinMejora + " de " + numMaxIteracionesSinMejora + "\t" +
-                "tiempo: " + (System.currentTimeMillis() - initTime) / 1000 + "s de " + maxTimeAllowed / 1000 + "s");
+        Log.info("[Fin VNS] Fitness final: " + fitness(x) + " | \t" +
+                "numeroIteracionesSinMejora: " + numeroIteracionesSinMejora + " de " + numMaxIteracionesSinMejora + " | \t" +
+                "tiempo: " + (System.currentTimeMillis() - initTime) / 1000 + "s de " + maxTimeAllowed / 1000 + "s | \t" +
+                "tamaño: " + x.getTurnos().size());
 
         return x;
     }
@@ -122,7 +123,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
         if (Log.isOn() && Log.checkIter(contadorIteraciones)) {
             sb.append("[VNS] tiempo: ")
                     .append((System.currentTimeMillis() - initTime) / 1000)
-                    .append("s").append("\t").append("Fitness actual: ")
+                    .append("s").append(" | \t").append("Fitness actual: ")
                     .append(fitness(x_prime) > fitness(x) ? fitness(x_prime) : fitness(x));
         }
 
@@ -136,9 +137,9 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
             numeroIteracionesSinMejora++;
 
             if (Log.isOn() && Log.checkIter(contadorIteraciones)) {
-                sb.append("vecindad actual: ")
+                sb.append(" | \tvecindad actual: ")
                         .append(getCurrentNeighborhoodIndex())
-                        .append("\t").append("numero de iteraciones sin mejora: ")
+                        .append(" | \t").append("numero de iteraciones sin mejora: ")
                         .append(numeroIteracionesSinMejora);
             }
         }

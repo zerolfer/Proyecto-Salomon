@@ -195,7 +195,7 @@ public class MetaheuristicUtil {
          * Este orden se usa para saber cual es el controlador que menos trabaja.
          */
         ArrayList<Controlador> controladores = ind.getControladores();
-        ArrayList<Integer> numControladores = new ArrayList<>();
+        ArrayList<Controlador> numControladores = new ArrayList<>();
         ArrayList<String> individuo2 = new ArrayList<>();
         ArrayList<String> individuo = ind.getTurnos();
         ArrayList<Integer> order = new ArrayList<>();
@@ -212,11 +212,18 @@ public class MetaheuristicUtil {
         }
 
         Set<Integer> indices = getIndicesTurnosControladoresImaginarios(controladores, individuo.size());
+        Set<Integer> idicesAEliminar=new HashSet<>();
         for (int i : indices) {
-            if (order.get(i) <= 0)
-                eliminarControladorImaginario(i, ind); // TODO: Test
+            if (order.get(i) <= 0) {
+                eliminarControladorImaginario(i, ind);
+                idicesAEliminar.add(i);
+            }
             else order.set(i, order.get(i) - mayor);
         }
+
+        idicesAEliminar.forEach(indices::remove);
+        idicesAEliminar.forEach(order::remove);
+
 //        for (int i = 0; i < order.size(); i++) {
 //            if (controladores.get(i).isImaginario())
 //                order.set(i, order.get(i) - mayor);
@@ -238,13 +245,13 @@ public class MetaheuristicUtil {
             if (lAnt >= 0) // solo si no es imaginario
                 for (Controlador controlador : controladores) {
                     if (r == controlador.getTurnoAsignado()) {
-                        numControladores.add(controlador.getId());
+                        numControladores.add(controlador);
                         break;
                     }
                 }
         }
         for (int i = 0; i < numControladores.size(); i++)
-            buscarControladorPorId(numControladores.get(i), controladores).setTurnoAsignado(i + indices.size());
+            numControladores.get(i).setTurnoAsignado(i + indices.size());
 
         ind.setTurnos(individuo2);
         ind.setControladores(controladores);
