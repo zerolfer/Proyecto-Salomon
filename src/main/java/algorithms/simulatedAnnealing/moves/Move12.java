@@ -82,11 +82,11 @@ public class Move12 {
 	public static ArrayList<Integer> init_grid(Solucion sol, Parametros par, ParametrosAlgoritmo par_alg, Entrada entrada) {
 		
 		ArrayList<Integer> aux = new ArrayList<Integer>();
-		aux.add(entrada.getSlotMomentoActual());
+		aux.add(entrada.getSlotMomentoActual()*3);
 		aux.add(sol.getTurnos().get(0).length());
 		
 		for (String s : sol.getTurnos()) {
-			for (int i = entrada.getSlotMomentoActual()+3; i < s.length() - 1; i += 3) {
+			for (int i = (entrada.getSlotMomentoActual()*3)+3; i < s.length() - 1; i += 3) {
 				if (!s.substring(i - 3, i).equals(s.substring(i, i + 3))) {
 					if (!aux.contains(i)) {
 						aux.add(i);
