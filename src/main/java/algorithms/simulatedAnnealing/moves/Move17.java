@@ -47,7 +47,7 @@ public class Move17 {
 		iteracion = iteracion + 1;
 		if (iteracion == par_alg.SA.getCicloRefinarGrid()) {
 			iteracion = 0;
-			refine_grid(par, par_alg);
+			refine_grid(par, par_alg, entrada);
 		}
 		
 		gMin = par_alg.SA.getMove15_min();
@@ -86,6 +86,9 @@ public class Move17 {
 					exc_ctrl2 = append(exc_ctrl2, ctrl2);
 
 					Movimiento mov = new Movimiento(ctrl1, ctrl2, intervalo[0], intervalo[1]);
+					if (intervalo[0]<entrada.getSlotMomentoActual()) {
+						System.out.println("Error: "+ ctrl1 +", "+ ctrl2 +", "+ intervalo[0]+", "+ intervalo[1]);
+					}
 					// comprueba que sea factible (devuelve 2 string cambiados o null)
 					ArrayList<String> dosInd = ChangeCont(sol, mov, patrones, entrada, par, par_alg);
 					if (dosInd != null) {
@@ -104,11 +107,11 @@ public class Move17 {
 	public static ArrayList<Integer> init_grid(Solucion sol, Parametros par, ParametrosAlgoritmo par_alg, Entrada entrada) {
 		
 		ArrayList<Integer> aux = new ArrayList<Integer>();
-		aux.add(entrada.getSlotMomentoActual());
+		aux.add(entrada.getSlotMomentoActual()*3);
 		aux.add(sol.getTurnos().get(0).length());
 		
 		for (String s : sol.getTurnos()) {
-			for (int i = entrada.getSlotMomentoActual()+3; i < s.length() - 1; i += 3) {
+			for (int i = (entrada.getSlotMomentoActual()*3)+3; i < s.length() - 1; i += 3) {
 				if (!s.substring(i - 3, i).equals(s.substring(i, i + 3))) {
 					if (!aux.contains(i)) {
 						aux.add(i);
@@ -126,7 +129,7 @@ public class Move17 {
 		return grid;
 	}
 
-	public static ArrayList<Integer> refine_grid(Parametros par, ParametrosAlgoritmo par_alg) {
+	public static ArrayList<Integer> refine_grid(Parametros par, ParametrosAlgoritmo par_alg, Entrada entrada) {
 		
 		if (!puede_refinarse)
 			return grid;
@@ -153,7 +156,7 @@ public class Move17 {
 		}
 
 		// Comprobamos que quedan puntos que se puedan escoger
-		if (exclusions_set.size() >= fin + 1) {
+		if (exclusions_set.size() >= fin + 1 -ini) {
 			// Ya no se puede refinar m�s
 			puede_refinarse = false;
 			return grid;
@@ -167,7 +170,8 @@ public class Move17 {
 			exclusions[i++] = it.next().intValue();
 		
 		// Seleccionamos un nuevo punto
-		int new_point = SplitRnd.nextInt(fin, exclusions);
+		int new_point = SplitRnd.nextInt(ini,fin, exclusions); //TODO: entrada.getSlotMomentoActual() pero bien
+		
 		
 		ArrayList<Integer> aux = grid;
 		aux.add(new_point * 3);
