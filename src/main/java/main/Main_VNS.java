@@ -14,7 +14,7 @@ import java.util.List;
 
 public class Main_VNS {
 
-    public static List<Solucion> main_vns(Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo,
+    public static List<Solucion> main_vns(String caso, Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo,
                                           Entrada entrada, Patrones patrones, List<Solucion> poblacionInicial) {
 //
 //        /*PRESENTACION DE RESULTADOS Y TRAZAS*/
@@ -40,7 +40,7 @@ public class Main_VNS {
         List<Solucion> res = new ArrayList<>();
 
         Log.open();
-        Log.info("[ Ejecutando VNS ]");
+        Log.info("[ Ejecutando VNS ] [" + caso + "]");
 
         for (Solucion solucion : poblacionInicial) {
             res.add(

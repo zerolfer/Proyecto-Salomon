@@ -33,7 +33,7 @@ public class Log {
     /**
      * Decide si el log por fichero está habilitado o no
      */
-    private static final boolean FICHERO = false;
+    private static final boolean FICHERO = true;
 
 //    private static final boolean CSV = true;
 

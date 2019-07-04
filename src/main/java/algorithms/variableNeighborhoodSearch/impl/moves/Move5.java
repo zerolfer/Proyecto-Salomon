@@ -13,9 +13,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public abstract class Move2 extends AbstractNeighborStructure {
+public abstract class Move5 extends AbstractNeighborStructure {
 
-    protected Move2(Entrada entrada, Patrones patrones, Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo) {
+    protected Move5(Entrada entrada, Patrones patrones, Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo) {
         super(entrada, patrones, parametros, parametrosAlgoritmo);
     }
 
@@ -26,11 +26,10 @@ public abstract class Move2 extends AbstractNeighborStructure {
                 .boxed().collect(Collectors.toList());
 
 
-        // paso 1: elegimos un controlador aleatoriamente
+        // paso 1: elegimos un controlador EN ORDEN
         while (c1Indices.size() > 0) {
-            int idx1 =0;//= random.nextInt(c1Indices.size());
-            int c1 = c1Indices.get(idx1);
-            c1Indices.remove(idx1); // para evitar repetidos
+            int c1 = c1Indices.get(0);
+            c1Indices.remove(0); // para evitar repetidos
 
             // paso 2 se elige un periodo de trabajo aleatoriamente
 //            List<int[]> trabajosC1 = getintervalos(x.getTurnos().get(c1)); // NOTE: para usar intervalos de trabajo
