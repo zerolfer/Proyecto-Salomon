@@ -1,7 +1,6 @@
 package algorithms.variableNeighborhoodSearch.impl.moves;
 
 import algorithms.MetaheuristicUtil;
-import estructurasDatos.DominioDelProblema.Controlador;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
 import estructurasDatos.ParametrosAlgoritmo;
@@ -10,13 +9,11 @@ import herramientas.CridaUtils;
 import patrones.Patrones;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static algorithms.MetaheuristicUtil.esTrabajo;
 import static herramientas.CridaUtils.*;
 
 public class Move3 extends AbstractNeighborStructure {
@@ -53,7 +50,7 @@ public class Move3 extends AbstractNeighborStructure {
             c1Indices.remove(idx1); // para evitar repetidos
 
             // paso 2 se elige un periodo de trabajo aleatoriamente
-            List<int[]> trabajosC1 = getintervalos(x.getTurnos().get(c1));
+            List<int[]> trabajosC1 = getIntervalos(x.getTurnos().get(c1));
             Set<Integer> trabajoC1Indices = IntStream.range(0, trabajosC1.size())
                     .boxed().collect(Collectors.toSet());
             while (trabajoC1Indices.size() > 0) {

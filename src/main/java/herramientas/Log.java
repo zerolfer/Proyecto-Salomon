@@ -3,6 +3,8 @@ package herramientas;
 import main.Main;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
@@ -53,8 +55,9 @@ public class Log {
                 File f = new File(name);
                 f.getParentFile().mkdirs();
                 f.createNewFile();
-                fh = new BufferedWriter(new FileWriter(f));
-//                fh = new FileHandler(name);
+                fh = new BufferedWriter((new OutputStreamWriter(new FileOutputStream(f), StandardCharsets.UTF_8)));
+
+                //                fh = new FileHandler(name);
 //                fh.setFormatter(new SimpleFormatter());
 //                fh.setFormatter(new SimpleFormatter() {
 //                    @Override
@@ -69,7 +72,8 @@ public class Log {
                         "iteracion" + STRING_SEPARADOR_CSV +
                                 "tiempo (ms)" + STRING_SEPARADOR_CSV +
                                 "fitness" + STRING_SEPARADOR_CSV +
-                                "tamaño" + "\n"
+                                "tamaño" + STRING_SEPARADOR_CSV +
+                                "numIterSinMejora." + "\n"
                 );
 
             } catch (IOException e) {
@@ -87,7 +91,7 @@ public class Log {
     }
 
     public static void csvLog(int iteracion, long tiempo, double fitness, int size, int numeroIteracionesSinMejora) {
-        if (FICHERO && checkIter(iteracion)) {
+        if (FICHERO /*&& checkIter(iteracion)*/) {
             try {
                 fh.write(
                         iteracion + STRING_SEPARADOR_CSV

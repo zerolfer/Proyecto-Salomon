@@ -8,14 +8,15 @@ import estructurasDatos.Solucion;
 import herramientas.CridaUtils;
 import patrones.Patrones;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public abstract class Move5 extends AbstractNeighborStructure {
+public abstract class MoveTemplate extends AbstractNeighborStructure {
 
-    protected Move5(Entrada entrada, Patrones patrones, Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo) {
+    protected MoveTemplate(Entrada entrada, Patrones patrones, Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo) {
         super(entrada, patrones, parametros, parametrosAlgoritmo);
     }
 
@@ -26,14 +27,12 @@ public abstract class Move5 extends AbstractNeighborStructure {
                 .boxed().collect(Collectors.toList());
 
 
-        // paso 1: elegimos un controlador EN ORDEN
+        // paso 1: elegimos un controlador aleatoriamente
         while (c1Indices.size() > 0) {
-            int c1 = c1Indices.get(0);
-            c1Indices.remove(0); // para evitar repetidos
+            int c1 = obtenerIndiceControlador1(c1Indices);
 
             // paso 2 se elige un periodo de trabajo aleatoriamente
-//            List<int[]> trabajosC1 = getintervalos(x.getTurnos().get(c1)); // NOTE: para usar intervalos de trabajo
-            List<int[]> trabajosC1 = super.getRejillas(x.getTurnos(), c1);
+            List<int[]> trabajosC1 = obtenerTrabajosControlador1(x.getTurnos(), c1);
             Set<Integer> trabajoC1Indices = IntStream.range(0, trabajosC1.size())
                     .boxed().collect(Collectors.toSet());
             while (trabajoC1Indices.size() > 0) {
@@ -52,7 +51,7 @@ public abstract class Move5 extends AbstractNeighborStructure {
                     c2Indices.remove(idx2); // para evitar repetidos
 
                     if (!comprobarRestriccionesMovimiento(x, c1, c2, periodo[0], periodo[1]))
-                        continue; // NOTE o ´return x´, segun si queremos o no que se prueben todos
+                        continue; // NOTE: o ´return x´, si queremos que no se prueben todos
 
                     // sino, hay que comprobar que los nucleos sean compatibles con el controlador
                     Set<String> sectoresC1 = obtenerSectores(x, c1, periodo[0], periodo[1]);
@@ -75,6 +74,40 @@ public abstract class Move5 extends AbstractNeighborStructure {
         return x_inicial;
 
     }
+
+
+    /**
+     * Forma de obtener los indices del controlador 1.
+     * dos alternativas: aleatoriamente ({@link #obtenerIndiceControlador1Aleatoriamente(List)})
+     * y en orden ({@link #obtenerIndiceControlador1EnOrden(List)})
+     */
+    protected abstract int obtenerIndiceControlador1(List<Integer> c1Indices);
+
+    private int obtenerIndiceControlador1Aleatoriamente(List<Integer> c1Indices) {
+        int idx1 = random.nextInt(c1Indices.size());
+        int c1 = c1Indices.get(idx1);
+        c1Indices.remove(idx1); // para evitar repetidos
+        return c1;
+    }
+
+    int obtenerIndiceControlador1EnOrden(List<Integer> c1Indices) {
+        int c1 = c1Indices.get(0);
+        c1Indices.remove(0); // para evitar repetidos
+        return c1;
+    }
+
+    /**
+     * Formas de obtener los trabajos del controlador 1.
+     * Dos opciones:
+     * <p>
+     * mediante intervalos de trabajo:     getIntervalos(x.getTurnos().get(c1)); </br>
+     * </p>
+     * <p>
+     * mediante rejillas:                  super.getRejillas(x.getTurnos());
+     * </p>
+     */
+    protected abstract List<int[]> obtenerTrabajosControlador1(ArrayList<String> turnos, int c1);
+
 
     /**
      * cada subtipo de movimiento tendrá sus restricciones concretas

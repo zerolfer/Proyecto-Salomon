@@ -251,7 +251,7 @@ public abstract class AbstractNeighborStructure implements NeighborStructure {
 
     }
 
-    List<int[]> getintervalos(String turno) {
+    List<int[]> getIntervalos(String turno) {
         List<int[]> res = new ArrayList<>();
 
         // recorremos el turno
@@ -286,7 +286,7 @@ public abstract class AbstractNeighborStructure implements NeighborStructure {
      * @return lista enteros de tamaño 2 con los índices de inicio y de fin no inclusive a nivel de string
      * sobre los que la matriz se divide en rejillas.
      */
-    protected List<int[]> getRejillas(ArrayList<String> turnos, int c1) {
+    protected List<int[]> getRejillas(ArrayList<String> turnos) {
         List<int[]> resultado = new ArrayList<>();
         int desde = getSlotMomentoActual() * LONGITUD_CADENAS;
 
