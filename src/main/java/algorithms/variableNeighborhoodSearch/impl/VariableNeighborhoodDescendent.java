@@ -28,8 +28,8 @@ public class VariableNeighborhoodDescendent extends AbstractVariableNeighborhood
     @Override
     protected Solucion vnsImplemetation(Solucion x) {
 
-//        Solucion x_prime = super.getCurrentNeighborHood().generarSolucionAleatoria(x);
-        return super.getCurrentNeighborHood().bestImprovement(x);
+//        Solucion x_prime = super.getCurrentNeighborhood().generarSolucionAleatoria(x);
+        return super.getCurrentNeighborhood().bestImprovement(x);
 
 
 //         dada la estructura de vecindad actual, se ejecuta la busqueda según la implementación concreta
@@ -41,7 +41,7 @@ public class VariableNeighborhoodDescendent extends AbstractVariableNeighborhood
 //
 //        if (super.fitness(solucion)>)
 //
-//        return super.getCurrentNeighborHood().bestImprovement(solucion, super.getEntrada(),
+//        return super.getCurrentNeighborhood().bestImprovement(solucion, super.getEntrada(),
 //                super.getPatrones(), super.getParametros(), super.getParametrosAlgoritmo());
 //
 //    return null;

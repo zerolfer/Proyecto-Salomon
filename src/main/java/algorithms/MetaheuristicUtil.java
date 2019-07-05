@@ -174,13 +174,13 @@ public class MetaheuristicUtil {
 
     }
 
-//    public static boolean esImaginario(int idxControlador, Solucion x) {
-//        for (Controlador controlador : x.getControladores()) {
-//            if (controlador.getTurnoAsignado() == idxControlador)
-//                return false;
-//        }
-//        return true;
-//    }
+    public static boolean esImaginario(int idxControlador, Solucion x) {
+        for (Controlador controlador : x.getControladores()) {
+            if (controlador.getTurnoAsignado() == idxControlador)
+                return false;
+        }
+        return true;
+    }
 
 
     /**
@@ -212,17 +212,16 @@ public class MetaheuristicUtil {
         }
 
         Set<Integer> indices = getIndicesTurnosControladoresImaginarios(controladores, individuo.size());
-        Set<Integer> idicesAEliminar=new HashSet<>();
+        Set<Integer> indicesAEliminar = new HashSet<>();
         for (int i : indices) {
             if (order.get(i) <= 0) {
                 eliminarControladorImaginario(i, ind);
-                idicesAEliminar.add(i);
-            }
-            else order.set(i, order.get(i) - mayor);
+                indicesAEliminar.add(i);
+            } else order.set(i, order.get(i) - mayor);
         }
 
-        idicesAEliminar.forEach(indices::remove);
-        idicesAEliminar.forEach(order::remove);
+        indicesAEliminar.forEach(indices::remove); // eliminar el objeto en sí
+        indicesAEliminar.forEach(e -> order.remove((int) (e))); // eliminar por indice
 
 //        for (int i = 0; i < order.size(); i++) {
 //            if (controladores.get(i).isImaginario())

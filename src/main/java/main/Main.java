@@ -35,9 +35,9 @@ public class Main {
 
     public static void main(String[] args) {
         int nEjecucion = 1;
-        int[] casos = {/*1, 3, 4, 5, 6, 7, 8, 9*/8};
-        for (int i = 0; i < casos.length; i++)
-            main1(nEjecucion, "Caso" + casos[i] /*loadCasoFromProperties()*/);
+        int[] casos = {/*1, 3, 4, 5, 6, 7, 8, 9*/ 7};
+//        for (int i = 0; i < casos.length; i++)
+            main1(nEjecucion, "Caso" + /*casos[i] */loadCasoFromProperties());
     }
 
     public static void main1(int ejecucion, String caso) {

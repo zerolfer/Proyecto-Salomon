@@ -21,7 +21,7 @@ public class MoveFactory {
             case "mov1":
                 return new Move1(entrada, patrones, parametros, parametrosAlgoritmo);
             case "mov3":
-                return new Move3(entrada, patrones, parametros, parametrosAlgoritmo);
+                return new MoveLibre(entrada, patrones, parametros, parametrosAlgoritmo);
 
             case "movRejilla.1":
                 return new MoveRejilla_1(entrada, patrones, parametros, parametrosAlgoritmo);
@@ -40,7 +40,7 @@ public class MoveFactory {
                 return new MoveMaxCarga(entrada, patrones, parametros, parametrosAlgoritmo);
 
             case "movLibre":
-//                return new MoveMaxCarga(entrada, patrones, parametros, parametrosAlgoritmo); // TODO
+                return new MoveLibre(entrada, patrones, parametros, parametrosAlgoritmo);
 
             default:
                 throw new RuntimeException("Movimiento \"" + id + "\" no encontrado." +

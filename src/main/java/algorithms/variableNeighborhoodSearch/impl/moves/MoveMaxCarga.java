@@ -29,4 +29,10 @@ public class MoveMaxCarga extends MoveTemplate {
     protected boolean comprobarRestriccionesMovimiento(Solucion x, int c1, int c2, int i, int i1) {
         return true; // no hay restricciones de movimiento salvo las del dominio del problema
     }
+
+    @Override
+    public String toString() {
+        return "MoveMaxCarga";
+    }
+
 }

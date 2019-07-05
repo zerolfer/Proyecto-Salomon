@@ -107,4 +107,8 @@ public class Move1 extends AbstractNeighborStructure {
         return turnoB.substring(hasta, hasta + LONGITUD_CADENAS).equals(sector);
     }
 
+    @Override
+    public String toString() {
+        return "move1";
+    }
 }

@@ -40,13 +40,17 @@ public class Main_VNS {
         List<Solucion> res = new ArrayList<>();
 
         Log.open();
-        Log.info("[ Ejecutando VNS ] [" + caso + "]");
 
+//        while (true) {
+        Log.info("[ Ejecutando VNS ] " +
+                "[ " + caso + " ] " +
+                "[ Por " + parametrosAlgoritmo.getMaxMilisecondsAllowed() / 1000 + " segundos ]");
         for (Solucion solucion : poblacionInicial) {
             res.add(
                     startExecution(vnd, solucion, parametrosAlgoritmo)
             );
         }
+//        }
 
         Log.close();
         return res;

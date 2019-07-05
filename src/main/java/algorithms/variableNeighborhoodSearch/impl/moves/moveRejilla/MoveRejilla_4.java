@@ -27,4 +27,9 @@ public class MoveRejilla_4 extends MoveRejilla {
                 && substring1.equalsIgnoreCase(substring2);
     }
 
+    @Override
+    public String toString() {
+        return "MoveRejilla_4";
+    }
+
 }

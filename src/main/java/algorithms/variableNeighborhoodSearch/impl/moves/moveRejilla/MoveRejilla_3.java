@@ -25,4 +25,9 @@ public class MoveRejilla_3 extends MoveRejilla {
         return MetaheuristicUtil.esTrabajo(substring1) && MetaheuristicUtil.esDescanso(substring2);
     }
 
+    @Override
+    public String toString() {
+        return "MoveRejilla_3";
+    }
+
 }

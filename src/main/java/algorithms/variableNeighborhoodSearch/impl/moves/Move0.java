@@ -121,4 +121,10 @@ public class Move0 extends AbstractNeighborStructure {
     @Override
     void doChange(Solucion x, String turnoA, String turnoB, int desde, int hasta, int idx1, int idx2) {
     }
+
+    @Override
+    public String toString() {
+        return "Move0";
+    }
+
 }

@@ -30,7 +30,7 @@ public class Log {
     /**
      * Decide si el log por consola está habilitado o no
      */
-    private static final boolean ON = true;
+    private static final boolean ON = false;
 
     /**
      * Decide si el log por fichero está habilitado o no
@@ -73,7 +73,8 @@ public class Log {
                                 "tiempo (ms)" + STRING_SEPARADOR_CSV +
                                 "fitness" + STRING_SEPARADOR_CSV +
                                 "tamaño" + STRING_SEPARADOR_CSV +
-                                "numIterSinMejora." + "\n"
+                                "numIterSinMejora" + STRING_SEPARADOR_CSV +
+                                "vecindad." + "\n"
                 );
 
             } catch (IOException e) {
@@ -90,7 +91,8 @@ public class Log {
         return iter % trazaCadaTantasIteraciones == 0;
     }
 
-    public static void csvLog(int iteracion, long tiempo, double fitness, int size, int numeroIteracionesSinMejora) {
+    public static void csvLog(int iteracion, long tiempo, double fitness, int size, int numeroIteracionesSinMejora,
+                              int vecindad) {
         if (FICHERO /*&& checkIter(iteracion)*/) {
             try {
                 fh.write(
@@ -98,8 +100,8 @@ public class Log {
                                 + tiempo + STRING_SEPARADOR_CSV
                                 + fitness + STRING_SEPARADOR_CSV
                                 + size + STRING_SEPARADOR_CSV
-                                + numeroIteracionesSinMejora
-                                + "\n"
+                                + numeroIteracionesSinMejora + STRING_SEPARADOR_CSV
+                                + vecindad + "\n"
                 );
             } catch (IOException e) {
                 e.printStackTrace();

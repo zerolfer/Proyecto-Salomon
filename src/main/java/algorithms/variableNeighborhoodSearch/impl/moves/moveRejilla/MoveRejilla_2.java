@@ -27,4 +27,9 @@ public class MoveRejilla_2 extends MoveRejilla {
                 && substring1.equals(substring2);
     }
 
+    @Override
+    public String toString() {
+        return "MoveRejilla_2";
+    }
+
 }
