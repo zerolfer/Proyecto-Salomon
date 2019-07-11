@@ -29,8 +29,9 @@ public class VariableNeighborhoodBasic extends AbstractVariableNeighborhoodSearc
     @Override
     protected Solucion vnsImplemetation(Solucion x) {
 
-        Solucion x_prime = super.getCurrentNeighborhood().generarSolucionAleatoria(x);
-        Solucion x_prime_2 = super.getCurrentNeighborhood().bestImprovement(x_prime);
+        Object[] temp = super.getCurrentNeighborhood().generarSolucionAleatoria(x);
+        Solucion x_prime = (Solucion) temp[0];
+        Solucion x_prime_2 = (Solucion) super.getCurrentNeighborhood().bestImprovement(x_prime, (int) temp[1], (int) temp[2])[0];
 
         if (Log.isOn() && Log.checkIter(super.contadorIteraciones)) {
             Log.info("[BVNS] fitness inicial: " + fitness(x) + " | \t" +

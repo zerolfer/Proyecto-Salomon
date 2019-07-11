@@ -1,16 +1,16 @@
-package algorithms.variableNeighborhoodSearch.impl.moves.moveRejilla;
+package algorithms.variableNeighborhoodSearch.impl.moves.moveMaxCarga;
 
 import algorithms.MetaheuristicUtil;
-import algorithms.variableNeighborhoodSearch.impl.moves.MoveRejilla;
+import algorithms.variableNeighborhoodSearch.impl.moves.MoveMaxCarga;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
 import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
 import patrones.Patrones;
 
-public class MoveRejilla_1 extends MoveRejilla {
+public class MoveMaxCarga_1 extends MoveMaxCarga {
 
-    public MoveRejilla_1(Entrada entrada, Patrones patrones, Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo) {
+    public MoveMaxCarga_1(Entrada entrada, Patrones patrones, Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo) {
         super(entrada, patrones, parametros, parametrosAlgoritmo);
     }
 
@@ -27,6 +27,6 @@ public class MoveRejilla_1 extends MoveRejilla {
 
     @Override
     public String toString() {
-        return "MoveRejilla_1";
+        return "MoveMaxCarga_1";
     }
 }

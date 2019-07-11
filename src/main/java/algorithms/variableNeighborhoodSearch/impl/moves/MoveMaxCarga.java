@@ -15,10 +15,10 @@ public class MoveMaxCarga extends MoveTemplate {
         super(entrada, patrones, parametros, parametrosAlgoritmo);
     }
 
-    @Override
-    protected int obtenerIndiceControlador1(List<Integer> c1Indices) {
-        return obtenerIndiceControlador1EnOrden(c1Indices);
-    }
+//    @Override
+//    protected int obtenerIndiceControlador1(List<Integer> c1Indices) {
+//        return obtenerIndiceControlador1EnOrden(c1Indices);
+//    }
 
     @Override
     protected List<int[]> obtenerTrabajosControlador1(ArrayList<String> turnos, int c1) {

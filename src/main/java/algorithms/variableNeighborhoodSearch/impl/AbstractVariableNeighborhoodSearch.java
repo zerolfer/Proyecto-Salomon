@@ -44,7 +44,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
     /**
      * Véase {@link ParametrosAlgoritmo.VNS#getNeighborStructures}
      */
-    private List<NeighborStructure> neighborStructures;
+    List<NeighborStructure> neighborStructures;
 
     /**
      * Véase {@link ParametrosAlgoritmo.VNS#getNumMaxIteracionesSinMejoraBusquedaLocal()}
@@ -120,7 +120,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
             currentNeighborhoodIndex = 0;
         } while (t < maxTimeAllowed && numeroIteracionesSinMejora < numMaxIteracionesSinMejora);
 
-        Log.info("[Fin VNS] Fitness final: " + fitness(x) +
+        Log.debug("[Fin VNS] Fitness final: " + fitness(x) +
                 "    |    " + "numeroIteracionesSinMejora: " + numeroIteracionesSinMejora + " de " + numMaxIteracionesSinMejora +
                 "    |    " + "tiempo: " + (System.currentTimeMillis() - initTime) / 1000 + "s de " + maxTimeAllowed / 1000 + "s" +
                 "    |    " + "tamaño: " + x.getTurnos().size());

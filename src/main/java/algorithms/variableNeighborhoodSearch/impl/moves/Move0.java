@@ -17,7 +17,7 @@ public class Move0 extends AbstractNeighborStructure {
     }
 
     @Override
-    public Solucion generarSolucionAleatoria(Solucion solActual) {
+    public Object[] generarSolucionAleatoria(Solucion solActual) {
         Solucion x = solActual.clone();
         XoRoShiRo128PlusRandom r = new XoRoShiRo128PlusRandom();
         int idx1, idx2, num1 = 0, num2 = 0;
@@ -33,7 +33,8 @@ public class Move0 extends AbstractNeighborStructure {
 
         int idx;
         String previoB, posteriorB;
-        if (num1 >= numMax) return x;
+        if (num1 >= numMax) return new Object[]{x, -1, -1};
+        ;
         do {
             idx2 = r.nextInt(numMax);
             turnoB = x.getTurnos().get(idx2);
@@ -43,16 +44,17 @@ public class Move0 extends AbstractNeighborStructure {
             posteriorB = turnoB.substring(idx + numSlotsNecesarios[0] * LONGITUD_CADENAS);
         } while (idx1 == idx2 || !esPosibleAsignacion(previoB, posteriorB) || num2 < numMax);
 
-        if (num2 >= numMax) return x;
+        if (num2 >= numMax) return new Object[]{x, -1, -1};
+        ;
 
         doChange(x, turnoA, turnoB, previoB, posteriorB, idx, numSlotsNecesarios, idx1, idx2);
 
-        return x;
+        return new Object[]{x, idx1, idx2};
 
     }
 
     @Override
-    public Solucion firstImprovement(Solucion solActual) {
+    public Object[] firstImprovement(Solucion solActual, int c1, int c2) {
         Solucion x = solActual.clone();
 //        int num1 = 0;
         int idx1, idx2;
@@ -82,15 +84,15 @@ public class Move0 extends AbstractNeighborStructure {
 
                 doChange(x, turnoA, turnoB, previoB, posteriorB, idx, numSlotsNecesarios, idx1, idx2);
 
-                return x;
+                return new Object[]{x, idx1, idx2};
 
             }
         }
-        return x;
+        return new Object[]{x, -1, -1};
     }
 
     @Override
-    protected Solucion buscarSolucion(Solucion x) {
+    protected Object[] buscarSolucion(Solucion x, int c1, int c2) {
         return null;
     }
 

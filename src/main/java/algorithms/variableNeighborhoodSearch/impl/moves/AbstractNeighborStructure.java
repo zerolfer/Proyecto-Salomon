@@ -57,23 +57,29 @@ public abstract class AbstractNeighborStructure implements NeighborStructure {
     }
 
     @Override
-    public Solucion bestImprovement(Solucion solucionInicial) {
+    public Object[] bestImprovement(Solucion solucionInicial, int c1, int c2) {
 
         Solucion x = solucionInicial.clone();
         Solucion x_prime;
         int numIter = 0;
         int numIteracionesSinMejora = 0;
 
+        Object c1_final = c1, c2_final = c2;
+
         // En la busqueda local, iteramos repetidas veces hasta que no haya mejora
         while (numIteracionesSinMejora <= numMaxIteracionesSinMejoraBusquedaLocal &&
                 System.currentTimeMillis() - AbstractVariableNeighborhoodSearch.initTime < parametrosAlgoritmo.getMaxMilisecondsAllowed()) {
-            x_prime = buscarSolucion(x);
+
+            Object[] temp = buscarSolucion(x, c1, c2);
+            x_prime = (Solucion) temp[0];
 
             double f_x = fitness(x);
             double f_x_prime = fitness(x_prime);
-            if (f_x_prime > f_x) // si es mejor... NOTE: maximización
+            if (f_x_prime > f_x) {  // si es mejor... NOTE: maximización
                 x = x_prime;
-            else
+                c1_final = temp[1];
+                c2_final = temp[2];
+            } else
                 numIteracionesSinMejora++;
 
             numIter++;
@@ -83,12 +89,12 @@ public abstract class AbstractNeighborStructure implements NeighborStructure {
 //                Log.info("[BL] iter sin mejora: " + numIteracionesSinMejora);
 //            }
         }
-        return x;
+        return new Object[]{x, c1_final, c2_final};
 
     }
 
     @Override
-    public Solucion firstImprovement(Solucion solucionInicial) {
+    public Object[] firstImprovement(Solucion solucionInicial, int c1, int c2) {
         Solucion x = solucionInicial.clone();
         Solucion x_prime;
 
@@ -96,13 +102,17 @@ public abstract class AbstractNeighborStructure implements NeighborStructure {
         double f_x_prime;
 
         int numIt = 1;
+
+        Object[] temp;
+
         // Iteramos repetidas veces hasta que haya mejora
         do {
-            x_prime = buscarSolucion(x);
+            temp = buscarSolucion(x, c1, c2);
+            x_prime = (Solucion) temp[0];
             f_x_prime = fitness(x_prime);
             numIt++;
         } while (f_x_prime <= f_x && numIt <= numMaxIteracionesSinMejoraBusquedaLocal); // si es mejor...paramos NOTE: maximización
-        return x_prime;
+        return new Object[]{x_prime, temp[1], temp[2]};
     }
 
     /**
@@ -112,7 +122,7 @@ public abstract class AbstractNeighborStructure implements NeighborStructure {
      * @param x solucion inicial
      * @return solucion dentro del entrono actual N_k(x)
      */
-    protected abstract Solucion buscarSolucion(Solucion x);
+    protected abstract Object[] buscarSolucion(Solucion x, int c1, int c2);
 
     //    @Override
 //    public Solucion buscarSolucion(Solucion solActual, Entrada e, Patrones pt, Parametros p, ParametrosAlgoritmo pa) {

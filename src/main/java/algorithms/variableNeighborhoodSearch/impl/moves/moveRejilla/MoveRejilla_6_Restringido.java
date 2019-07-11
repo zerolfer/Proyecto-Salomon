@@ -8,10 +8,17 @@ import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
 import patrones.Patrones;
 
-public class MoveRejilla_6 extends MoveRejilla {
+import java.util.List;
 
-    public MoveRejilla_6(Entrada entrada, Patrones patrones, Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo) {
+public class MoveRejilla_6_Restringido extends MoveRejilla {
+
+    private final int c1;
+    private final int c2;
+
+    public MoveRejilla_6_Restringido(Entrada entrada, Patrones patrones, Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo, int c1, int c2) {
         super(entrada, patrones, parametros, parametrosAlgoritmo);
+        this.c1 = c1;
+        this.c2 = c2;
     }
 
     /**
@@ -24,6 +31,16 @@ public class MoveRejilla_6 extends MoveRejilla {
         String substring1 = x.getTurnos().get(c1).substring(desde, hasta);
         String substring2 = x.getTurnos().get(c2).substring(desde, hasta);
         return MetaheuristicUtil.esTrabajo(substring1) && MetaheuristicUtil.esTrabajo(substring2);
+    }
+
+    @Override
+    protected int obtenerIndiceControlador1(List<Integer> c1Indices, Solucion x) {
+        return c1;
+    }
+
+    @Override
+    protected int obtenerIndiceControlador2(List<Integer> c2Indices) {
+        return c2;
     }
 
     @Override

@@ -30,12 +30,12 @@ public class Log {
     /**
      * Decide si el log por consola está habilitado o no
      */
-    private static final boolean ON = true;
+    private static final boolean ON = false;
 
     /**
      * Decide si el log por fichero está habilitado o no
      */
-    private static final boolean FICHERO = true;
+    private static final boolean FICHERO = false;
 
 //    private static final boolean CSV = true;
 
@@ -136,6 +136,10 @@ public class Log {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static void debug(String s) {
+        log.info(s);
     }
 //    public static boolean isCsv() {
 //        return CSV;

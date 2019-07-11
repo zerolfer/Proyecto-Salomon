@@ -23,7 +23,7 @@ public class Move1 extends AbstractNeighborStructure {
     }
 
     @Override
-    public Solucion generarSolucionAleatoria(Solucion solucionInicial) {
+    public Object[] generarSolucionAleatoria(Solucion solucionInicial) {
         Solucion x = solucionInicial.clone();
         XoRoShiRo128PlusRandom random = new XoRoShiRo128PlusRandom();
         ArrayList<String> turnos = x.getTurnos();
@@ -35,11 +35,11 @@ public class Move1 extends AbstractNeighborStructure {
         } while (!doMovement(x, turnos, idx1, idx2)); //TODO: probar que el movimiento se hace
 
 
-        return x;
+        return new Object[]{x, idx1, idx2};
     }
 
     @Override
-    public Solucion buscarSolucion(Solucion x) {
+    public Object[] buscarSolucion(Solucion x, int c1, int c2) {
 //        Solucion x = solucionInicial.clone();
         ArrayList<String> turnos = x.getTurnos();
 
@@ -48,10 +48,10 @@ public class Move1 extends AbstractNeighborStructure {
 //
         for (int idx1 = 0; idx1 < turnos.size(); idx1++) // TODO probar que esto funciona
             for (int idx2 = idx1 + 1; idx2 < turnos.size(); idx2++) // debe estar por debajo
-                if (doMovement(x, turnos, idx1, idx2)) return x;
+                if (doMovement(x, turnos, idx1, idx2)) return new Object[]{x, idx1, idx2};
 
 //        }
-        return x;
+        return new Object[]{x, -1, -1};
     }
 
     /**

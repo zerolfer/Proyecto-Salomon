@@ -10,13 +10,15 @@ import patrones.Patrones;
 
 import java.util.List;
 
-public class MoveRejilla_2_Restingido extends MoveRejilla {
+public class MoveRejilla_2_Restringido extends MoveRejilla {
 
     private int c1;
     private int c2;
 
-    public MoveRejilla_2_Restingido(Entrada entrada, Patrones patrones, Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo) {
+    public MoveRejilla_2_Restringido(Entrada entrada, Patrones patrones, Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo, int c1, int c2) {
         super(entrada, patrones, parametros, parametrosAlgoritmo);
+        this.c1 = c1;
+        this.c2 = c2;
     }
 
     public void setC1(int c1) {
