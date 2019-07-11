@@ -14,7 +14,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static herramientas.CridaUtils.*;
+import static herramientas.CridaUtils.LONGITUD_CADENAS;
 
 public class MoveLibre extends AbstractNeighborStructure {
 

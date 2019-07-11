@@ -25,12 +25,12 @@ public class Log {
      * En caso de utilizarse como pomparacion, permite elegir cada cuantas iteraciones
      * se hace el log
      */
-    private static final int trazaCadaTantasIteraciones = 10;
+    private static final int trazaCadaTantasIteraciones = 1000;
 
     /**
      * Decide si el log por consola está habilitado o no
      */
-    private static final boolean ON = false;
+    private static final boolean ON = true;
 
     /**
      * Decide si el log por fichero está habilitado o no

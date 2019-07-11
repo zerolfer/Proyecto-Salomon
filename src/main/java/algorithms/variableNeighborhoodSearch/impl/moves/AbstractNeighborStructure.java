@@ -11,7 +11,6 @@ import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
 import fitnessFunction.DeciderFitnessFunction;
 import fitnessFunction.Fitness;
-import herramientas.Log;
 import it.unimi.dsi.util.XoRoShiRo128PlusRandom;
 import patrones.Patrones;
 
@@ -19,7 +18,6 @@ import java.util.*;
 
 import static algorithms.MetaheuristicUtil.esTrabajo;
 import static herramientas.CridaUtils.*;
-import static herramientas.CridaUtils.STRING_NO_TURNO;
 
 public abstract class AbstractNeighborStructure implements NeighborStructure {
 
@@ -27,6 +25,8 @@ public abstract class AbstractNeighborStructure implements NeighborStructure {
     protected Patrones patrones;
     protected Parametros parametros;
     protected ParametrosAlgoritmo parametrosAlgoritmo;
+
+    public static List<int[]> rejilla;
 
     /* Para mejorar la eficiencia general del metodo*/
     static Map<Solucion, Double> mapaSoluciones;
@@ -43,9 +43,8 @@ public abstract class AbstractNeighborStructure implements NeighborStructure {
         this.parametros = parametros;
         this.parametrosAlgoritmo = parametrosAlgoritmo;
 
-        this.mapaSoluciones = new HashMap<>();
+        mapaSoluciones = new HashMap<>();
         this.numMaxIteracionesSinMejoraBusquedaLocal = parametrosAlgoritmo.VNS.getNumMaxIteracionesSinMejoraBusquedaLocal();
-
     }
 
     public double fitness(Solucion x) {

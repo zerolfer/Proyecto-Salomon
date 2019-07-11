@@ -2,7 +2,6 @@ package algorithms.variableNeighborhoodSearch.impl.moves;
 
 import algorithms.variableNeighborhoodSearch.NeighborStructure;
 import algorithms.variableNeighborhoodSearch.impl.moves.moveRejilla.*;
-import algorithms.variableNeighborhoodSearch.impl.moves.moveRejilla.MoveRejilla_4;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
 import estructurasDatos.ParametrosAlgoritmo;

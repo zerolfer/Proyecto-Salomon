@@ -431,6 +431,14 @@ public class ParametrosAlgoritmo {
         public int getNumMaxIteracionesSinMejoraVNS() {
             return numMaxIteracionesSinMejoraVNS;
         }
+
+        public void setNumMaxIteracionesSinMejoraBusquedaLocal(int numMaxIteracionesSinMejoraBusquedaLocal) {
+            this.numMaxIteracionesSinMejoraBusquedaLocal = numMaxIteracionesSinMejoraBusquedaLocal;
+        }
+
+        public void setNumMaxIteracionesSinMejoraVNS(int numMaxIteracionesSinMejoraVNS) {
+            this.numMaxIteracionesSinMejoraBusquedaLocal = numMaxIteracionesSinMejoraVNS;
+        }
     }
 
 }
