@@ -1,6 +1,7 @@
 package main;
 
 import algorithms.simulatedAnnealing.SimulatedAnnealing;
+import estructurasDatos.DominioDelProblema.Controlador;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
 import estructurasDatos.ParametrosAlgoritmo;
@@ -73,8 +74,43 @@ public class Main_SA {
         
        
         System.out.println("Done");
-        return poblacionSoluciones;
-    }
+        return poblacionSoluciones;//reordenarSoluciones(poblacionSoluciones);
+        }
+        
+        public static ArrayList<Solucion> reordenarSoluciones(ArrayList<Solucion> poblacionSoluciones){
+        	
+        	for (int i = 0; i < poblacionSoluciones.size(); i++) {
+    			Solucion s = poblacionSoluciones.get(i);
+    			ArrayList<String> turnos = s.getTurnos();
+    			ArrayList<Controlador> cnt = s.getControladores();
+    			for (int j = 0; j < cnt.size(); j++) {
+    				Controlador cnt1 = cnt.get(j);
+    				int id =cnt1.getId();
+    				int pos = cnt1.getTurnoAsignado();
+    				String t1  =turnos.get(pos);
+    				String t2 = turnos.get(id-1);
+    				if(id-1 != pos) {
+    	 				for (int k = 0; k < cnt.size(); k++) {
+    						if(k!=j) {
+    							Controlador cnt2 = cnt.get(k);
+    							if(cnt2.getTurnoAsignado()==id-1) {
+    								turnos.set(pos, t2);
+    								turnos.set(id-1, t1);
+    								cnt2.setTurnoAsignado(pos);
+    								cnt.set(k, cnt2);
+    								Controlador cnt1clone = cnt1.clone();
+    								cnt2.setTurnoAsignado(id-1);
+    								cnt.set(j, cnt2);
+    								
+    							}
+    						}
+    					}
+     				}
+    				
+    			}
+        	}
+    		return poblacionSoluciones;
+        }
 
     /**
      * Main secundario para la realización de pruebas

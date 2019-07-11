@@ -234,7 +234,7 @@ public class Move15 {
 		if (individuo.getControladores().size() != individuo.getTurnos().size()) {
 			boolean descanso = true;
 			for (int i = 0; i < dosInd.get(0).length(); i++) {
-				if (dosInd.get(0).charAt(i) != '1') {
+				if (dosInd.get(0).charAt(i) != '1' && dosInd.get(0).charAt(i) != '0') {
 					descanso = false;
 				}
 			}
