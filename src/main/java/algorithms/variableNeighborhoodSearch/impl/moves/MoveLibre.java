@@ -37,21 +37,18 @@ public class MoveLibre extends AbstractNeighborStructure {
      * Cuando se consigue hacer un intercambio, se retorna la nueva solucion
      */
     @Override
-    protected Object[] buscarSolucion(Solucion x_inicial, int c1, int c2) {
+    protected Solucion buscarSolucion(Solucion x_inicial) {
         Solucion x = x_inicial.clone();
-        int c1_inicial = c1, c2_inicial = c2;
-
         List<Integer> c1Indices = IntStream.range(0, x.getTurnos().size())
                 .boxed().collect(Collectors.toList());
 
 
         // paso 1: elegimos un controlador aleatoriamente
         while (c1Indices.size() > 0) {
-            if (c1_inicial == -1) {
-                int idx1 = random.nextInt(c1Indices.size());
-                c1 = c1Indices.get(idx1);
-                c1Indices.remove(idx1); // para evitar repetidos
-            }
+            int idx1 = random.nextInt(c1Indices.size());
+            int c1 = c1Indices.get(idx1);
+            c1Indices.remove(idx1); // para evitar repetidos
+
             // paso 2 se elige un periodo de trabajo aleatoriamente
             List<int[]> trabajosC1 = getIntervalos(x.getTurnos().get(c1));
             Set<Integer> trabajoC1Indices = IntStream.range(0, trabajosC1.size())
@@ -81,11 +78,10 @@ public class MoveLibre extends AbstractNeighborStructure {
                     c2Indices.remove(c1); // no hay que comparar consigo mismo
 
                     while (c2Indices.size() > 0) {
-                        if (c2_inicial == -1) {
-                            int idx2 = random.nextInt(c2Indices.size());
-                            c2 = c2Indices.get(idx2);
-                            c2Indices.remove(idx2); // para evitar repetidos
-                        }
+                        int idx2 = random.nextInt(c2Indices.size());
+                        int c2 = c2Indices.get(idx2);
+                        c2Indices.remove(idx2); // para evitar repetidos
+
 //                        if (!x.getControladores().contains(c2)) { // si es imaginario, puede aceptar la carga perfectamente
 //                            doChange();
 //                            return x;
@@ -102,24 +98,21 @@ public class MoveLibre extends AbstractNeighborStructure {
                             doChange(x, x.getTurnos().get(c1), x.getTurnos().get(c2),
                                     periodo[0], periodo[0] + longitud, c1, c2);
 
-                            return new Object[]{
-                                    MetaheuristicUtil.orderByLazyCriteria(x),
-                                    c1, c2
-                            };
-                        } else if (c2_inicial != -1) return new Object[]{x_inicial, -1, -1};
+                            return MetaheuristicUtil.orderByLazyCriteria(x);
+                        }
                     }
                 }
             }
 
 
         }
-        return new Object[]{x_inicial, -1, -1};
+        return x_inicial;
     }
 
 
     @Override
-    public Object[] generarSolucionAleatoria(Solucion x) {
-        return buscarSolucion(x, -1, -1);
+    public Solucion generarSolucionAleatoria(Solucion x) {
+        return buscarSolucion(x);
     }
 
     @Override

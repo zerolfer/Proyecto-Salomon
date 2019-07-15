@@ -16,7 +16,7 @@ public class MoveMaxCarga extends MoveTemplate {
     }
 
 //    @Override
-//    protected int obtenerIndiceControlador1(List<Integer> c1Indices) {
+//    protected int obtenerIndiceControlador1(List<Integer> c1Indices, Solucion x) {
 //        return obtenerIndiceControlador1EnOrden(c1Indices);
 //    }
 

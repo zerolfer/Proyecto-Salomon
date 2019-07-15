@@ -21,22 +21,20 @@ public abstract class MoveTemplate extends AbstractNeighborStructure {
     }
 
     @Override
-    protected Object[] buscarSolucion(Solucion x_inicial, int c1, int c2) {
+    protected Solucion buscarSolucion(Solucion x_inicial) {
         Solucion x = x_inicial.clone();
-        int c1_inicial = c1, c2_inicial = c2;
         List<Integer> c1Indices = IntStream.range(0, x.getTurnos().size())
                 .boxed().collect(Collectors.toList());
 
 
         // paso 1: elegimos un controlador aleatoriamente
         while (c1Indices.size() > 0) {
-            if (c1_inicial == -1) c1 = obtenerIndiceControlador1(c1Indices, x);
+            int c1 = obtenerIndiceControlador1(c1Indices, x);
 
             // paso 2 se elige un periodo de trabajo aleatoriamente
             List<int[]> trabajosC1 = obtenerTrabajosControlador1(x.getTurnos(), c1);
             Set<Integer> trabajoC1Indices = IntStream.range(0, trabajosC1.size())
                     .boxed().collect(Collectors.toSet());
-            if (trabajoC1Indices.size() == 0 && c1_inicial != -1) return new Object[]{x_inicial, -1, -1};
             while (trabajoC1Indices.size() > 0) {
                 int intervaloIdx = random.nextInt(trabajosC1.size());
                 int[] periodo = trabajosC1.get(intervaloIdx);
@@ -51,11 +49,10 @@ public abstract class MoveTemplate extends AbstractNeighborStructure {
 //                    int idx2 = random.nextInt(c2Indices.size());
 //                    int c2 = c2Indices.get(idx2);
 //                    c2Indices.remove(idx2); // para evitar repetidos
-                    if (c2_inicial == -1) c2 = obtenerIndiceControlador2(c2Indices);
+                    int c2 = obtenerIndiceControlador2(c2Indices);
 
                     if (!comprobarRestriccionesMovimiento(x, c1, c2, periodo[0], periodo[1]))
-                        if (c2_inicial != -1) return new Object[]{x_inicial, -1, -1};
-                        else continue; // NOTE: o ´return x´, si queremos que no se prueben todos
+                        continue; // NOTE: o ´return x´, si queremos que no se prueben todos
 
                     // sino, hay que comprobar que los nucleos sean compatibles con el controlador
                     Set<String> sectoresC1 = obtenerSectores(x, c1, periodo[0], periodo[1]);
@@ -70,13 +67,12 @@ public abstract class MoveTemplate extends AbstractNeighborStructure {
                         doChange(x, x.getTurnos().get(c1), x.getTurnos().get(c2),
                                 periodo[0], periodo[1], c1, c2);
 
-                        return new Object[]{MetaheuristicUtil.reordenarYEliminarTurnos(x),
-                                c1, c2};
-                    } else if (c2_inicial != -1) return new Object[]{x_inicial, -1, -1};
+                        return MetaheuristicUtil.reordenarYEliminarTurnos(x);
+                    }
                 }
             }
         }
-        return new Object[]{x_inicial, -1, -1};
+        return x_inicial;
 
     }
 
@@ -115,7 +111,7 @@ public abstract class MoveTemplate extends AbstractNeighborStructure {
      * Formas de obtener los trabajos del controlador 1.
      * Dos opciones:
      * <p>
-     * mediante intervalos de trabajo:     getIntervalos(turnos.get(c1)); </br>
+     * mediante intervalos de trabajo:     getIntervalos(x.getTurnos().get(c1)); </br>
      * </p>
      * <p>
      * mediante rejillas:                  super.getRejillas(x.getTurnos());
@@ -136,8 +132,8 @@ public abstract class MoveTemplate extends AbstractNeighborStructure {
     protected abstract boolean comprobarRestriccionesMovimiento(Solucion x, int c1, int c2, int i, int i1);
 
     @Override
-    public Object[] generarSolucionAleatoria(Solucion x) {
-        return buscarSolucion(x, -1, -1);
+    public Solucion generarSolucionAleatoria(Solucion x) {
+        return buscarSolucion(x);
     }
 
 }

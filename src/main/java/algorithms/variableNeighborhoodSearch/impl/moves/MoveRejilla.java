@@ -33,4 +33,9 @@ public class MoveRejilla extends MoveTemplate {
     protected boolean comprobarRestriccionesMovimiento(Solucion x, int c1, int c2, int i, int i1) {
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "MoveRejilla";
+    }
 }

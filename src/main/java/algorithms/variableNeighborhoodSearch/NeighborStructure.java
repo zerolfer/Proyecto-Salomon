@@ -4,12 +4,11 @@ import estructurasDatos.Solucion;
 
 public interface NeighborStructure {
 
-    Object[] generarSolucionAleatoria(Solucion x);
+    Solucion generarSolucionAleatoria(Solucion x);
 
-    Object[] bestImprovement(Solucion x, int c1, int c2);
+    Solucion bestImprovement(Solucion x);
 
-    Object[] firstImprovement(Solucion x, int c1, int c2);
+    Solucion firstImprovement(Solucion x);
 
     double fitness(Solucion x);
-
 }

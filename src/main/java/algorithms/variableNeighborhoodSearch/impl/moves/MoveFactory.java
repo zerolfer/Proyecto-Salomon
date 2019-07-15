@@ -66,28 +66,4 @@ public class MoveFactory {
 
         }
     }
-
-    public static NeighborStructure createNeighborhoodRestringido(String id, Entrada entrada, Patrones patrones,
-                                                                  Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo, int c1, int c2) {
-        switch (id) {
-
-            case "movRejilla.1.Restringido":
-                return new MoveRejilla_1_Restringido(entrada, patrones, parametros, parametrosAlgoritmo, c1, c2);
-            case "movRejilla.2.Restringido":
-                return new MoveRejilla_2_Restringido(entrada, patrones, parametros, parametrosAlgoritmo, c1, c2);
-            case "movRejilla.3.Restringido":
-                return new MoveRejilla_3_Restringido(entrada, patrones, parametros, parametrosAlgoritmo, c1, c2);
-            case "movRejilla.4.Restringido":
-                return new MoveRejilla_4_Restringido(entrada, patrones, parametros, parametrosAlgoritmo, c1, c2);
-            case "movRejilla.5.Restringido":
-                return new MoveRejilla_5_Restringido(entrada, patrones, parametros, parametrosAlgoritmo, c1, c2);
-            case "movRejilla.6.Restringido":
-                return new MoveRejilla_6_Restringido(entrada, patrones, parametros, parametrosAlgoritmo, c1, c2);
-
-            default:
-                throw new RuntimeException("Movimiento \"" + id + "\" no encontrado." +
-                        "Por favor, revisar fichero src/resources/algorithm.properties");
-        }
-
-    }
 }
