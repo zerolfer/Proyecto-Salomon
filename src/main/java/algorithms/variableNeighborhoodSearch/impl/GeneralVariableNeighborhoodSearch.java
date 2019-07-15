@@ -16,15 +16,15 @@ public class GeneralVariableNeighborhoodSearch extends AbstractVariableNeighborh
 
     private VariableNeighborhoodDescendent vnd;
 
-    GeneralVariableNeighborhoodSearch(Parametros parametros, Patrones patrones, ParametrosAlgoritmo parametrosAlgoritmo, Entrada entrada) {
+    public GeneralVariableNeighborhoodSearch(Parametros parametros, Patrones patrones, ParametrosAlgoritmo parametrosAlgoritmo, Entrada entrada) {
         super(parametros, patrones, parametrosAlgoritmo, entrada);
         this.vnd = new VariableNeighborhoodDescendent(parametros, patrones, parametrosAlgoritmo, entrada);
 
         List<NeighborStructure> result = new ArrayList<>();
 
-        for (String id : new String[]{"movRejilla.1.Restringido", "movRejilla.2.Restringido",
-                "movRejilla.3.Restringido", "movRejilla.4.Restringido",
-                "movRejilla.5.Restringido", "movRejilla.6.Restringido"}
+        for (String id : new String[]{"movRejilla.1", "movRejilla.2",
+                "movRejilla.3", "movRejilla.4",
+                "movRejilla.5", "movRejilla.6"}
         )
             result.add(MoveFactory.createNeighborhood(id, entrada, patrones, parametros, parametrosAlgoritmo));
 

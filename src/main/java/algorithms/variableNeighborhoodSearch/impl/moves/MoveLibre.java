@@ -106,7 +106,7 @@ public class MoveLibre extends AbstractNeighborStructure {
                                     MetaheuristicUtil.orderByLazyCriteria(x),
                                     c1, c2
                             };
-                        }
+                        } else if (c2_inicial != -1) return new Object[]{x_inicial, -1, -1};
                     }
                 }
             }

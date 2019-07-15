@@ -88,7 +88,7 @@ public class ParametrosAlgoritmo {
 
     private void ininicializarResto() {
         this.algoritmo = getString("algoritmo");
-        this.maxMilisecondsAllowed = getInteger("maxTimeAllowed") * 60 * 1000;
+        this.maxMilisecondsAllowed = inicializarTiempo();
 
         this.funcionFitnessFase2 = getString("funcionFitnessFase2");
 
@@ -99,6 +99,12 @@ public class ParametrosAlgoritmo {
 
         this.SA = new SA(); // inicializar variables de cada metaheuristica
         this.VNS = new VNS();
+    }
+
+    private long inicializarTiempo() {
+        String s = getString("maxTimeAllowed");
+        if(s.equalsIgnoreCase("inf")) return Long.MAX_VALUE;
+        else return Integer.parseInt(s) * 60 * 1000;
     }
 
     private double getDouble(String propertie) {

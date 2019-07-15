@@ -36,6 +36,7 @@ public abstract class MoveTemplate extends AbstractNeighborStructure {
             List<int[]> trabajosC1 = obtenerTrabajosControlador1(x.getTurnos(), c1);
             Set<Integer> trabajoC1Indices = IntStream.range(0, trabajosC1.size())
                     .boxed().collect(Collectors.toSet());
+            if (trabajoC1Indices.size() == 0 && c1_inicial != -1) return new Object[]{x_inicial, -1, -1};
             while (trabajoC1Indices.size() > 0) {
                 int intervaloIdx = random.nextInt(trabajosC1.size());
                 int[] periodo = trabajosC1.get(intervaloIdx);
@@ -53,7 +54,8 @@ public abstract class MoveTemplate extends AbstractNeighborStructure {
                     if (c2_inicial == -1) c2 = obtenerIndiceControlador2(c2Indices);
 
                     if (!comprobarRestriccionesMovimiento(x, c1, c2, periodo[0], periodo[1]))
-                        continue; // NOTE: o ´return x´, si queremos que no se prueben todos
+                        if (c2_inicial != -1) return new Object[]{x_inicial, -1, -1};
+                        else continue; // NOTE: o ´return x´, si queremos que no se prueben todos
 
                     // sino, hay que comprobar que los nucleos sean compatibles con el controlador
                     Set<String> sectoresC1 = obtenerSectores(x, c1, periodo[0], periodo[1]);
@@ -70,7 +72,7 @@ public abstract class MoveTemplate extends AbstractNeighborStructure {
 
                         return new Object[]{MetaheuristicUtil.reordenarYEliminarTurnos(x),
                                 c1, c2};
-                    }
+                    } else if (c2_inicial != -1) return new Object[]{x_inicial, -1, -1};
                 }
             }
         }
