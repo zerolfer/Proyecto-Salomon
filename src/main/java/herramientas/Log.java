@@ -4,13 +4,12 @@ import main.Main;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 import static herramientas.CridaUtils.STRING_SEPARADOR_CSV;
 
@@ -25,7 +24,7 @@ public class Log {
      * En caso de utilizarse como pomparacion, permite elegir cada cuantas iteraciones
      * se hace el log
      */
-    private static final int trazaCadaTantasIteraciones = 1000;
+    private static final int trazaCadaTantasIteraciones = 100;
 
     /**
      * Decide si el log por consola está habilitado o no
@@ -35,7 +34,7 @@ public class Log {
     /**
      * Decide si el log por fichero está habilitado o no
      */
-    private static final boolean FICHERO = false;
+    private static final boolean FICHERO = true;
 
 //    private static final boolean CSV = true;
 
@@ -51,7 +50,15 @@ public class Log {
             try {
                 Date date = new Date();
                 DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss");
-                String name = Main.carpetaTrazas + dateFormat.format(date) + ".csv";
+
+                String[] nameFiles = new File(Main.carpetaTrazas).list();
+                int number;
+                if (nameFiles == null)
+                    number = 1;
+                else
+                    number = nameFiles.length + 1;
+
+                String name = Main.carpetaTrazas +/* dateFormat.format(date) */"output" + number + ".csv";
                 File f = new File(name);
                 f.getParentFile().mkdirs();
                 f.createNewFile();
@@ -91,17 +98,22 @@ public class Log {
         return iter % trazaCadaTantasIteraciones == 0;
     }
 
-    public static void csvLog(int iteracion, long tiempo, double fitness, int size, int numeroIteracionesSinMejora,
-                              int vecindad) {
+    public static void csvLog(Object... elem) {
         if (FICHERO /*&& checkIter(iteracion)*/) {
+            StringBuilder s = new StringBuilder();
+            for (int i = 0; i < elem.length; i++) {
+                s.append(elem[i]);
+                if (i < elem.length - 1) s.append(STRING_SEPARADOR_CSV);
+            }
+            s.append("\n");
             try {
-                fh.write(
-                        iteracion + STRING_SEPARADOR_CSV
+                fh.write(s.toString()
+                        /*iteracion + STRING_SEPARADOR_CSV
                                 + tiempo + STRING_SEPARADOR_CSV
                                 + fitness + STRING_SEPARADOR_CSV
                                 + size + STRING_SEPARADOR_CSV
                                 + numeroIteracionesSinMejora + STRING_SEPARADOR_CSV
-                                + vecindad + "\n"
+                                + vecindad + "\n"*/
                 );
             } catch (IOException e) {
                 e.printStackTrace();

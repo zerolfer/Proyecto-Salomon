@@ -41,4 +41,9 @@ public class VariableNeighborhoodBasic extends AbstractVariableNeighborhoodSearc
         return x_prime_2;
 
     }
+
+    @Override
+    public String toString() {
+        return "BVNS";
+    }
 }

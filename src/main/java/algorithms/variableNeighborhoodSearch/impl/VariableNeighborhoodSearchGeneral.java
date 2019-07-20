@@ -12,11 +12,11 @@ import patrones.Patrones;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GeneralVariableNeighborhoodSearch extends AbstractVariableNeighborhoodSearch {
+public class VariableNeighborhoodSearchGeneral extends AbstractVariableNeighborhoodSearch {
 
     private VariableNeighborhoodDescendent vnd;
 
-    GeneralVariableNeighborhoodSearch(Parametros parametros, Patrones patrones, ParametrosAlgoritmo parametrosAlgoritmo, Entrada entrada) {
+    VariableNeighborhoodSearchGeneral(Parametros parametros, Patrones patrones, ParametrosAlgoritmo parametrosAlgoritmo, Entrada entrada) {
         super(parametros, patrones, parametrosAlgoritmo, entrada);
         this.vnd = new VariableNeighborhoodDescendent(parametros, patrones, parametrosAlgoritmo, entrada);
 
@@ -57,5 +57,10 @@ public class GeneralVariableNeighborhoodSearch extends AbstractVariableNeighborh
         return x_prime_2;
 
 
+    }
+
+    @Override
+    public String toString() {
+        return "GVNS";
     }
 }

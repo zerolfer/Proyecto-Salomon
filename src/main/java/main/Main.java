@@ -86,7 +86,7 @@ public class Main {
                 break;
             case "VNS":
                 solEntrada.addAll(
-                        Main_VNS.main_vns(caso, parametros, parametrosAlgoritmo, entrada, patrones, poblacionInicial)
+                        Main_VNS.main_vns(caso, parametros, parametrosAlgoritmo, entrada, patrones, poblacionInicial, "")
                 );
                 break;
             default:

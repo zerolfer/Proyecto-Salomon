@@ -31,4 +31,9 @@ public class VariableNeighborhoodDescendent extends AbstractVariableNeighborhood
 //        Solucion x_prime = super.getCurrentNeighborhood().generarSolucionAleatoria(x);
         return super.getCurrentNeighborhood().bestImprovement(x);
     }
+
+    @Override
+    public String toString() {
+        return "VND";
+    }
 }

@@ -45,6 +45,7 @@ public class ParametrosAlgoritmo {
     private double ponderacionFitness2;
     private double ponderacionFitness3;
     private double ponderacionFitness4;
+    private double alpha;
 
 
     public ParametrosAlgoritmo(String propFileParametersAlgorithm) {
@@ -61,11 +62,12 @@ public class ParametrosAlgoritmo {
         return propParametrosAlgoritmo.getProperty(propertie);
     }
 
+    @SuppressWarnings("AccessStaticViaInstance")
     public void initializeNeighborStructures(Entrada entrada, Patrones patrones,
                                              Parametros parametros,
-                                             ParametrosAlgoritmo parametrosAlgoritmo) {
+                                             ParametrosAlgoritmo parametrosAlgoritmo, String str) {
 
-        String texto = getString(VNS.NEIGHBOR_STRUCTURES);
+        String texto = str == "" ? getString(VNS.NEIGHBOR_STRUCTURES) : str;
         String[] nombresMovimientos = texto.split(",");
 
         List<NeighborStructure> result = new ArrayList<>();
@@ -103,7 +105,7 @@ public class ParametrosAlgoritmo {
 
     private long inicializarTiempo() {
         String s = getString("maxTimeAllowed");
-        if(s.equalsIgnoreCase("inf")) return Long.MAX_VALUE;
+        if (s.equalsIgnoreCase("inf")) return Long.MAX_VALUE;
         else return Integer.parseInt(s) * 60 * 1000;
     }
 
@@ -199,8 +201,12 @@ public class ParametrosAlgoritmo {
         return ponderacionFitness4;
     }
 
-    public void setMaxMilisecondsAllowed(int maxMilisecondsAllowed) {
+    public void setMaxMilisecondsAllowed(long maxMilisecondsAllowed) {
         this.maxMilisecondsAllowed = maxMilisecondsAllowed;
+    }
+
+    public void setAlpha(double alpha) {
+        this.alpha = alpha;
     }
 
     public class SA {
@@ -415,12 +421,15 @@ public class ParametrosAlgoritmo {
 
     public class VNS {
 
-        private static final String NEIGHBOR_STRUCTURES = "neighborStructures";
+        public static final String NEIGHBOR_STRUCTURES = "neighborStructures";
         private static final String NUM_MAX_ITERACIONES_BUSQUEDA_LOCAL = "numMaxIteracionesBusquedaLocal";
 
         private List<NeighborStructure> neighborStructures;
         private int numMaxIteracionesSinMejoraBusquedaLocal = getInteger("numMaxIteracionesSinMejoraBusquedaLocal");
         private int numMaxIteracionesSinMejoraVNS = inicializarIteracionesMax();
+        private String tipoVNS = getString("tipoVNS");
+
+        public double alpha = getDouble("skewed.alpha");
 
         private int inicializarIteracionesMax() {
             String property = getString("numMaxIteracionesSinMejoraVNS");
@@ -457,6 +466,18 @@ public class ParametrosAlgoritmo {
 
         public void setNumMaxIteracionesSinMejoraVNS(int numMaxIteracionesSinMejoraVNS) {
             this.numMaxIteracionesSinMejoraVNS = numMaxIteracionesSinMejoraVNS;
+        }
+
+        public void setNeighborStructures(List<NeighborStructure> neighborStructures) {
+            this.neighborStructures = neighborStructures;
+        }
+
+        public double getAlpha() {
+            return alpha;
+        }
+
+        public String getTipoVNS() {
+            return tipoVNS;
         }
     }
 

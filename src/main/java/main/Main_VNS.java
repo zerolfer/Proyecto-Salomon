@@ -1,7 +1,7 @@
 package main;
 
 import algorithms.variableNeighborhoodSearch.VariableNeighborhoodSearch;
-import algorithms.variableNeighborhoodSearch.impl.VariableNeighborhoodBasic;
+import algorithms.variableNeighborhoodSearch.impl.VnsFactory;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
 import estructurasDatos.ParametrosAlgoritmo;
@@ -15,7 +15,7 @@ import java.util.List;
 public class Main_VNS {
 
     public static List<Solucion> main_vns(String caso, Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo,
-                                          Entrada entrada, Patrones patrones, List<Solucion> poblacionInicial) {
+                                          Entrada entrada, Patrones patrones, List<Solucion> poblacionInicial, String str) {
 //
 //        /*PRESENTACION DE RESULTADOS Y TRAZAS*/
 //
@@ -33,19 +33,20 @@ public class Main_VNS {
 //        /*FIN PRESENTACION DE RESULTADOS Y TRAZAS*/
 //        System.out.println("Done");
 //
-        parametrosAlgoritmo.initializeNeighborStructures(entrada, patrones, parametros, parametrosAlgoritmo);
-        VariableNeighborhoodSearch vnd = new VariableNeighborhoodBasic(parametros, patrones, parametrosAlgoritmo, entrada);
+        parametrosAlgoritmo.initializeNeighborStructures(entrada, patrones, parametros, parametrosAlgoritmo, str);
+
+        VariableNeighborhoodSearch vns = VnsFactory.setVNS(entrada, patrones, parametros, parametrosAlgoritmo);
 
         List<Solucion> res = new ArrayList<>();
 
         Log.open();
-        Log.info("[ Ejecutando VNS ] " +
+        Log.debug("[ Ejecutando " + vns + " ] " +
                 "[ " + caso + " ] " +
                 "[ Por " + parametrosAlgoritmo.getMaxMilisecondsAllowed() / 1000 + " segundos ]");
 
         for (Solucion solucion : poblacionInicial) {
             res.add(
-                    startExecution(vnd, solucion, parametrosAlgoritmo)
+                    startExecution(vns, solucion, parametrosAlgoritmo)
             );
         }
 

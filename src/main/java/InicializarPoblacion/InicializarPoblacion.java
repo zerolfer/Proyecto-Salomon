@@ -45,8 +45,8 @@ public class InicializarPoblacion {
         Solucion individuo = inicializarIndividuo(descanso, maxT, minT, minD, entrada, p, patrones);
         poblacion = comprobarCondicionesEntorno(individuo, poblacion, entrada, patrones, p);
 
-        System.out.println("La poblacion inicial es de: " + poblacion.size() + " individuos");
-        MainPruebas.problema += ("La poblacion inicial es de: " + poblacion.size() + " individuos" + "\n");
+        System.out.println("La poblacion inicial es de: " + poblacion.size() + " individuo(s)");
+        MainPruebas.problema += ("La poblacion inicial es de: " + poblacion.size() + " individuo(s)" + "\n");
         return poblacion;
     }
 

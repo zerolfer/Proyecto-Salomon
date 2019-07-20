@@ -91,7 +91,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
         long t = 0;
         Solucion x_prime;
         do {
-            while (currentNeighborhoodIndex < neighborStructures.size()) {
+            while (currentNeighborhoodIndex < neighborStructures.size() && numeroIteracionesSinMejora < numMaxIteracionesSinMejora) {
 
                 if (Log.isOn() && Log.checkIter(contadorIteraciones)) {
                     String s = "[VNS] tiempo: " + (System.currentTimeMillis() - initTime) / 1000 + "s" +
@@ -111,7 +111,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
 
                 // se decide si seguir en esa estructura de vecindad u otra,
                 // y se actualiza la solución actual a aquella con mejor valor objetivo de entre la anterior y la nueva
-                x = neighborhoodChange(x, x_prime);
+                return neighborhoodChange(x, x_prime);
 
 
             }
@@ -131,18 +131,21 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
     }
 
     // neighborhood change
-    private Solucion neighborhoodChange(Solucion x, Solucion x_prime) {
+    Solucion neighborhoodChange(Solucion x, Solucion x_prime) {
 
-        if (fitness(x_prime) > fitness(x)) { // si es mejor... NOTE: maximización
+        if (checkCondicionReiniciarVecindad(x, x_prime)) { // si es mejor... NOTE: maximización
             x = x_prime; // Make a move
             currentNeighborhoodIndex = 0; // reset the neighborhood iteration
             numeroIteracionesSinMejora = 0;
         } else {
             currentNeighborhoodIndex++;   // Next neighborhood of the list
             numeroIteracionesSinMejora++;
-
         }
         return x;
+    }
+
+    boolean checkCondicionReiniciarVecindad(Solucion x, Solucion x_prime) {
+        return fitness(x_prime) > fitness(x);
     }
 
 
@@ -161,36 +164,6 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
      * @return Siguiente solcuíon <code>x_prime</code> a evaluar para continuar el *bucle* VNS
      */
     protected abstract Solucion vnsImplemetation(Solucion x);
-//    protected Solucion vnsImplemetation(Solucion x) {
-//
-    ///////////////////
-    //  localSearch  //
-    ///////////////////
-
-//        Solucion x_prime;
-//        int numIteracionesSinMejora = 0;
-//        double f_x = getCurrentNeighborhood().fitness(x);
-//        double f_x_prime;
-//
-//        do {
-//            Object[] raw = encontrarSolucionEntornoActual(x);
-//            x_prime = (Solucion) raw[0];
-//            f_x_prime = (double) raw[1];
-//
-    // si la solucion encontrada es mejor, se actualiza
-//            if (f_x < f_x_prime) {
-//                x = x_prime;
-//                f_x = f_x_prime;
-//                numIteracionesSinMejora = 0;
-//
-//            } else {
-    // ... pero si no era mejor, se incrementa el numero de iteraciones sin mejoría
-//                numIteracionesSinMejora++;
-//            }
-//        } while (numIteracionesSinMejora < NUM_MAX_ITER_SIN_MEJORA);
-    // y así hasta que se haya que la busqueda local deje de ser fructífera
-
-//    }
 
     /**
      * Método ADAPTER que retorna el valor de la función objetivo
@@ -225,6 +198,26 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
 
     public Patrones getPatrones() {
         return patrones;
+    }
+
+    int getCurrentNeighborhoodIndex() {
+        return currentNeighborhoodIndex;
+    }
+
+    public int getNumeroIteracionesSinMejora() {
+        return numeroIteracionesSinMejora;
+    }
+
+    public int getNumMaxIteracionesSinMejora() {
+        return numMaxIteracionesSinMejora;
+    }
+
+    public void setCurrentNeighborhoodIndex(int currentNeighborhoodIndex) {
+        this.currentNeighborhoodIndex = currentNeighborhoodIndex;
+    }
+
+    public long getMaxTimeAllowed() {
+        return maxTimeAllowed;
     }
 
 }
