@@ -429,7 +429,8 @@ public class ParametrosAlgoritmo {
         private int numMaxIteracionesSinMejoraVNS = inicializarIteracionesMax();
         private String tipoVNS = getString("tipoVNS");
 
-        public double alpha = getDouble("skewed.alpha");
+        private double alpha = getDouble("skewed.alpha");
+        private String funcionDistancia = getString("skewed.funcionDistancia");
 
         private int inicializarIteracionesMax() {
             String property = getString("numMaxIteracionesSinMejoraVNS");
@@ -478,6 +479,10 @@ public class ParametrosAlgoritmo {
 
         public String getTipoVNS() {
             return tipoVNS;
+        }
+
+        public String getFuncionDistancia() {
+            return funcionDistancia;
         }
     }
 

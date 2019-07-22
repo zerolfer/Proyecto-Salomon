@@ -16,6 +16,8 @@ public class VariableNeighborhoodSkewed extends AbstractVariableNeighborhoodSear
 
 
     private final double alpha;
+    private final String funcionDistancia;
+
     private Solucion x_best;
 
     private double distancia;
@@ -23,7 +25,8 @@ public class VariableNeighborhoodSkewed extends AbstractVariableNeighborhoodSear
     public VariableNeighborhoodSkewed(Parametros parametros, Patrones patrones,
                                       ParametrosAlgoritmo parametrosAlgoritmo, Entrada entrada) {
         super(parametros, patrones, parametrosAlgoritmo, entrada);
-        this.alpha = parametrosAlgoritmo.VNS.alpha;
+        this.alpha = parametrosAlgoritmo.VNS.getAlpha();
+        this.funcionDistancia = parametrosAlgoritmo.VNS.getFuncionDistancia();
     }
 
 
@@ -48,7 +51,7 @@ public class VariableNeighborhoodSkewed extends AbstractVariableNeighborhoodSear
 
 
                 Solucion x_prime_2 = vnsImplemetation(x);
-                distancia = distanceFunctionA(x, x_prime_2);
+                distancia = ((funcionDistancia.equals("fitness")) ? distanceFunctionA(x, x_prime_2) : distanceFunctionB(x, x_prime_2));
                 Solucion x_anterior = x;
                 x = neighborhoodChange(x, x_prime_2);
 
