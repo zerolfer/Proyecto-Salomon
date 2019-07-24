@@ -27,7 +27,7 @@ public class MoveMaxCarga_5 extends MoveMaxCarga {
 
     @Override
     public String toString() {
-        return "MoveMaxCarga_5";
+        return "MoveRejilla_5";
     }
 
 }

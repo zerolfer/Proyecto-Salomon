@@ -26,7 +26,7 @@ public class MoveRejilla extends MoveTemplate {
 
     @Override
     protected List<int[]> obtenerTrabajosControlador1(ArrayList<String> turnos, int c1) {
-        return super.getIntervalos(turnos.get(c1));
+        return super.getRejillas(turnos);
     }
 
     @Override

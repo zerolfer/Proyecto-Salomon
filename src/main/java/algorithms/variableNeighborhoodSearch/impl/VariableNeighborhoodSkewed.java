@@ -139,13 +139,8 @@ public class VariableNeighborhoodSkewed extends AbstractVariableNeighborhoodSear
             String slotB = turnoB.substring(length - LONGITUD_CADENAS);
             if (!slotA.equals(slotB)) distancia++;
         }
-        return distancia / (x.getTurnos().
-
-                get(0).
-
-                length() / LONGITUD_CADENAS * x.getTurnos().
-
-                size()); // normalizada
+        if(Log.retrieveValue()<distancia) Log.saveValue(distancia);
+        return distancia / (x.getTurnos().get(0).length() / LONGITUD_CADENAS * x.getTurnos().size()); // normalizada
     }
 
     private Solucion keepBest(Solucion x, Solucion x_prime, Solucion x_prime_2) {

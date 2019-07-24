@@ -8,7 +8,6 @@ import estructurasDatos.Solucion;
 import herramientas.CridaUtils;
 import patrones.Patrones;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -59,16 +58,16 @@ public class MoveLibre extends AbstractNeighborStructure {
                 trabajoC1Indices.remove(intervaloIdx);
 
                 // y la logitud
-                List<Integer> longitudesList = new ArrayList<>();
+//                List<Integer> longitudesList = new ArrayList<>();
                 int maxLongIntervalo = (periodo[1] - periodo[0]);
-                for (int i = LONGITUD_CADENAS; i <= maxLongIntervalo; i += LONGITUD_CADENAS)
+//                for (int i = LONGITUD_CADENAS; i <= maxLongIntervalo; i += LONGITUD_CADENAS)
 //                    if (i % InicializarPoblacion.descanso == 0)  // NOTE si permitimos movimientos libres no solo de multiplos del tamaño de los descansos, hay mejoria en el fitness (descomentar linea para dejar de permitir movimientos de tamaño libre)
-                    longitudesList.add(i);
+//                    longitudesList.add(i);
                 // intentamos mover la mayor carga posible
-                for (int idxLongitud = longitudesList.size() - 1; idxLongitud >= 0; idxLongitud--) {
+                for (int longitud = maxLongIntervalo; longitud > 0; longitud -= LONGITUD_CADENAS) { // TODO verificar que este cambio es correcto
 //                while (longitudesList.size() > 0) { // (NOTE: lo comentado es la version anterior)
 //                    int idxLongitud = random.nextInt(longitudesList.size()); // NOTE: esto podria ser otro movimiento, que en lugar de optar por el mayor cambio de carga, lo haga aleatoriamente!!
-                    int longitud = longitudesList.get(idxLongitud);
+//                    int longitud = longitudesList.get(idxLongitud);
 //                    longitudesList.remove(idxLongitud);
 
 

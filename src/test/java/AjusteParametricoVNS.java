@@ -70,12 +70,13 @@ public class AjusteParametricoVNS {
     }
 
     private static void testarAlphas(String caso, Entrada entrada, Patrones patrones, ArrayList<Solucion> poblacionInicial, ArrayList<Solucion> solEntrada) {
-        double[] alphas = new double[]{15, 15.5, 16, 16.5, 17, 17.5, 18, 18.5, 19, 19.5, 20};
+//        double[] alphas = new double[]{15, 15.5, 16, 16.5, 17, 17.5, 18, 18.5, 19, 19.5, 20};
+        double[] alphas = new double[]{0.5, 1, 2, 5, 10, 15, 20, 30, 40, 50};
         double inicial = parametrosAlgoritmo.VNS.getAlpha();
         for (double alpha : alphas) {
             parametrosAlgoritmo.setAlpha(alpha);
             executeXTimesVNS(1, caso, entrada, patrones, poblacionInicial, solEntrada);
-            System.err.println("x--------------------------------------------------------------------------------x");
+//            System.err.println("x--------------------------------------------------------------------------------x");
         }
         parametrosAlgoritmo.setAlpha(inicial);
 

@@ -153,6 +153,16 @@ public class Log {
     public static void debug(String s) {
         log.info(s);
     }
+
+    private static Integer value = -1;
+
+    public static Integer retrieveValue() {
+        return value;
+    }
+
+    public static void saveValue(Integer val) {
+        value = val;
+    }
 //    public static boolean isCsv() {
 //        return CSV;
 //    }
