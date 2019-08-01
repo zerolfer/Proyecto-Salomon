@@ -57,7 +57,8 @@ public class VariableNeighborhoodSkewed extends AbstractVariableNeighborhoodSear
 
                 x_best = keepBest(x_best, x, x_prime_2);
 
-                Log.csvLog(contadorIteraciones++, t, fitness(x_best), x_best.getTurnos().size(), getNumeroIteracionesSinMejora(),
+                Log.csvLog(contadorIteraciones++, System.currentTimeMillis() - initTime, fitness(x_best),
+                        x_best.getTurnos().size(), getNumeroIteracionesSinMejora(),
                         getCurrentNeighborhoodIndex(), fitness(x_anterior), fitness(x_prime_2), distancia);
 
                 if (Log.isOn() && Log.checkIter(contadorIteraciones)) {
@@ -77,7 +78,8 @@ public class VariableNeighborhoodSkewed extends AbstractVariableNeighborhoodSear
             x = x_best;
         } while (t < getMaxTimeAllowed() && getNumeroIteracionesSinMejora() < getNumMaxIteracionesSinMejora());
 
-        Log.debug("[Fin VNS] Fitness final: " + fitness(x) +
+//        Log.debug
+        Log.info("[Fin VNS] Fitness final: " + fitness(x) +
                 "    |    " + "numeroIteracionesSinMejora: " + getNumeroIteracionesSinMejora() + " de " + getNumMaxIteracionesSinMejora() +
                 "    |    " + "tiempo: " + (System.currentTimeMillis() - initTime) / 1000 + "s de " + getMaxTimeAllowed() / 1000 + "s" +
                 "    |    " + "tamaño: " + x.getTurnos().size());

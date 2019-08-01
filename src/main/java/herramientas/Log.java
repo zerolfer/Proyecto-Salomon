@@ -46,7 +46,7 @@ public class Log {
     }
 
     public static void open() {
-        if (FICHERO)
+//        if (FICHERO)
             try {
                 Date date = new Date();
                 DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss");
@@ -74,15 +74,16 @@ public class Log {
 //                });
 //                logFile.addHandler(fh);
 
-                fh.write(
-//                         cabecera del CSV
-                        "iteracion" + STRING_SEPARADOR_CSV +
-                                "tiempo (ms)" + STRING_SEPARADOR_CSV +
-                                "fitness" + STRING_SEPARADOR_CSV +
-                                "tamaño" + STRING_SEPARADOR_CSV +
-                                "numIterSinMejora" + STRING_SEPARADOR_CSV +
-                                "vecindad." + "\n"
-                );
+                if (FICHERO)
+                    fh.write(
+                            // cabecera del CSV
+                            "iteracion" + STRING_SEPARADOR_CSV +
+                                    "tiempo (ms)" + STRING_SEPARADOR_CSV +
+                                    "fitness" + STRING_SEPARADOR_CSV +
+                                    "tamaño" + STRING_SEPARADOR_CSV +
+                                    "numIterSinMejora" + STRING_SEPARADOR_CSV +
+                                    "vecindad." + "\n"
+                    );
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -100,24 +101,7 @@ public class Log {
 
     public static void csvLog(Object... elem) {
         if (FICHERO /*&& checkIter(iteracion)*/) {
-            StringBuilder s = new StringBuilder();
-            for (int i = 0; i < elem.length; i++) {
-                s.append(elem[i]);
-                if (i < elem.length - 1) s.append(STRING_SEPARADOR_CSV);
-            }
-            s.append("\n");
-            try {
-                fh.write(s.toString()
-                        /*iteracion + STRING_SEPARADOR_CSV
-                                + tiempo + STRING_SEPARADOR_CSV
-                                + fitness + STRING_SEPARADOR_CSV
-                                + size + STRING_SEPARADOR_CSV
-                                + numeroIteracionesSinMejora + STRING_SEPARADOR_CSV
-                                + vecindad + "\n"*/
-                );
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            csvWriter(elem);
         }
     }
 
@@ -150,9 +134,41 @@ public class Log {
         }
     }
 
+    /**
+     * Imprime por consola esté activo o no el Logger
+     */
     public static void debug(String s) {
         log.info(s);
     }
+
+    /**
+     * Imprime por fichero esté activo o no el csv
+     */
+    public static void csvDebug(Object...elem){
+        csvWriter(elem);
+    }
+
+    private static void csvWriter(Object... elem) {
+        StringBuilder s = new StringBuilder();
+        for (int i = 0; i < elem.length; i++) {
+            s.append(elem[i]);
+            if (i < elem.length - 1) s.append(STRING_SEPARADOR_CSV);
+        }
+        s.append("\n");
+        try {
+            fh.write(s.toString()
+                        /*iteracion + STRING_SEPARADOR_CSV
+                                + tiempo + STRING_SEPARADOR_CSV
+                                + fitness + STRING_SEPARADOR_CSV
+                                + size + STRING_SEPARADOR_CSV
+                                + numeroIteracionesSinMejora + STRING_SEPARADOR_CSV
+                                + vecindad + "\n"*/
+            );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private static Integer value = -1;
 

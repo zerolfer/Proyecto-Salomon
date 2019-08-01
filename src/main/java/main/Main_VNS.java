@@ -15,7 +15,8 @@ import java.util.List;
 public class Main_VNS {
 
     public static List<Solucion> main_vns(String caso, Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo,
-                                          Entrada entrada, Patrones patrones, List<Solucion> poblacionInicial, String str) {
+                                          Entrada entrada, Patrones patrones, List<Solucion> poblacionInicial,
+                                          String estrucVecindad) {
 //
 //        /*PRESENTACION DE RESULTADOS Y TRAZAS*/
 //
@@ -33,14 +34,15 @@ public class Main_VNS {
 //        /*FIN PRESENTACION DE RESULTADOS Y TRAZAS*/
 //        System.out.println("Done");
 //
-        parametrosAlgoritmo.initializeNeighborStructures(entrada, patrones, parametros, parametrosAlgoritmo, str);
+        parametrosAlgoritmo.initializeNeighborStructures(entrada, patrones, parametros, parametrosAlgoritmo, estrucVecindad);
 
         VariableNeighborhoodSearch vns = VnsFactory.setVNS(entrada, patrones, parametros, parametrosAlgoritmo);
 
         List<Solucion> res = new ArrayList<>();
 
         Log.open();
-        Log.debug("[ Ejecutando " + vns + " ] " +
+//        Log.debug
+        Log.info("[ Ejecutando " + vns + " ] " +
                 "[ " + caso + " ] " +
                 "[ Por " + parametrosAlgoritmo.getMaxMilisecondsAllowed() / 1000 + " segundos ]");
 
@@ -50,6 +52,7 @@ public class Main_VNS {
             );
         }
 
+        Log.debug(Log.retrieveValue().toString());
         Log.close();
         return res;
     }

@@ -42,7 +42,7 @@ public class ObtenerDistanciaMaxima {
         ArrayList<Solucion> poblacionInicial = InicializarPoblacion.inicializarPoblacion(entrada, parametros, patrones);
 
         parametrosAlgoritmo.VNS.setTipoVNS("SVNS");
-        for (int i = 0; i < 1000; i++)
+//        for (int i = 0; i < 1000; i++) TODO
             Main_VNS.main_vns(caso, parametros, parametrosAlgoritmo, entrada, patrones, poblacionInicial, "");
 
 
