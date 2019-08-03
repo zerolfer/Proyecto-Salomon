@@ -35,17 +35,19 @@ public class VariableNeighborhoodSkewed extends AbstractVariableNeighborhoodSear
         MetaheuristicUtil.orderByLazyCriteria(x);
         initTime = System.currentTimeMillis();
         contadorIteraciones = 1;
+        double fitnessAnterior = -1;
         long t = 0;
 
         do {
-            while (super.getCurrentNeighborhoodIndex() < neighborStructures.size() && super.getNumeroIteracionesSinMejora() < getNumMaxIteracionesSinMejora()) {
+            while (super.getCurrentNeighborhoodIndex() < neighborStructures.size() &&
+                    (contadorIteraciones % getNumIteracionesCiclo() != 0 || porcentajeMejora > getPorcentajeMinimoMejoria())) {
 
                 if (Log.isOn() && Log.checkIter(contadorIteraciones)) {
                     String s = "[VNS] tiempo: " + (System.currentTimeMillis() - initTime) / 1000 + "s" +
                             "    |    " + "#Iteracion: " + contadorIteraciones +
                             "    |    " + "Fitness actual: " + fitness(x) +
                             "    |    vecindad actual: " + getCurrentNeighborhood() +
-                            "    |    " + "numero de iteraciones sin mejora: " + getNumeroIteracionesSinMejora();
+                            "    |    " + "numero de iteraciones sin mejora: " + porcentajeMejora;
                     Log.info(s);
                 }
 
@@ -58,7 +60,7 @@ public class VariableNeighborhoodSkewed extends AbstractVariableNeighborhoodSear
                 x_best = keepBest(x_best, x, x_prime_2);
 
                 Log.csvLog(contadorIteraciones++, System.currentTimeMillis() - initTime, fitness(x_best),
-                        x_best.getTurnos().size(), getNumeroIteracionesSinMejora(),
+                        x_best.getTurnos().size(), porcentajeMejora,
                         getCurrentNeighborhoodIndex(), fitness(x_anterior), fitness(x_prime_2), distancia);
 
                 if (Log.isOn() && Log.checkIter(contadorIteraciones)) {
@@ -72,18 +74,32 @@ public class VariableNeighborhoodSkewed extends AbstractVariableNeighborhoodSear
 
 
             }
+
+            if (contadorIteraciones % super.getNumIteracionesCiclo() != 0) {
+                // calcular porcentaje mejora
+                if (fitnessAnterior == -1)
+                    super.porcentajeMejora = 0;
+                super.porcentajeMejora = (fitness(x) * 100 / fitnessAnterior) - 100;
+
+                // actualizar fitness anterior
+                if (fitness(x) > fitnessAnterior) // NOTE: Maximizacion
+                    fitnessAnterior = fitness(x);
+            }
+
+
             // se actualiza el tiempo (condición de parada)
             t = System.currentTimeMillis() - initTime;
             setCurrentNeighborhoodIndex(0);
             x = x_best;
-        } while (t < getMaxTimeAllowed() && getNumeroIteracionesSinMejora() < getNumMaxIteracionesSinMejora());
+        } while (t < getMaxTimeAllowed() &&
+                (contadorIteraciones % getNumIteracionesCiclo() != 0 || porcentajeMejora > getPorcentajeMinimoMejoria()));
 
 //        Log.debug
         Log.info("[Fin VNS] Fitness final: " + fitness(x) +
-                "    |    " + "numeroIteracionesSinMejora: " + getNumeroIteracionesSinMejora() + " de " + getNumMaxIteracionesSinMejora() +
+                "    |    " + "numeroIteracionesSinMejora: " + porcentajeMejora + " de " + getPorcentajeMinimoMejoria() +
                 "    |    " + "tiempo: " + (System.currentTimeMillis() - initTime) / 1000 + "s de " + getMaxTimeAllowed() / 1000 + "s" +
                 "    |    " + "tamaño: " + x.getTurnos().size());
-        Log.csvLog(contadorIteraciones, t, fitness((x_best)), x_best.getTurnos().size(), getNumeroIteracionesSinMejora(),
+        Log.csvLog(contadorIteraciones, t, fitness((x_best)), x_best.getTurnos().size(), porcentajeMejora,
                 getCurrentNeighborhoodIndex());
 
         return x_best;
@@ -141,7 +157,7 @@ public class VariableNeighborhoodSkewed extends AbstractVariableNeighborhoodSear
             String slotB = turnoB.substring(length - LONGITUD_CADENAS);
             if (!slotA.equals(slotB)) distancia++;
         }
-        if(Log.retrieveValue()<distancia) Log.saveValue(distancia);
+        if (Log.retrieveValue() < distancia) Log.saveValue(distancia);
         return distancia / (x.getTurnos().get(0).length() / LONGITUD_CADENAS * x.getTurnos().size()); // normalizada
     }
 

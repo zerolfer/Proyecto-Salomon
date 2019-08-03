@@ -426,16 +426,17 @@ public class ParametrosAlgoritmo {
 
         private List<NeighborStructure> neighborStructures;
         private int numMaxIteracionesSinMejoraBusquedaLocal = getInteger("numMaxIteracionesSinMejoraBusquedaLocal");
-        private int numMaxIteracionesSinMejoraVNS = inicializarIteracionesMax();
+        private double porcentajeMinimoMejoria = inicializarIteracionesMax();
+        private int numIteracionesParaComprobarCondicionParadaPorcentaje = getInteger("numIteracionesParaComprobarCondicionParadaPorcentaje");
         private String tipoVNS = getString("tipoVNS");
 
         private double alpha = getDouble("skewed.alpha");
         private String funcionDistancia = getString("skewed.funcionDistancia");
 
-        private int inicializarIteracionesMax() {
-            String property = getString("numMaxIteracionesSinMejoraVNS");
-            if (property.equalsIgnoreCase("inf")) return Integer.MAX_VALUE;
-            else return Integer.parseInt(property);
+        private double inicializarIteracionesMax() {
+            String property = getString("porcentajeMinimoMejoria");
+            if (property.equalsIgnoreCase("inf")) return Double.MAX_VALUE;
+            else return Double.parseDouble(property);
         }
 
 
@@ -457,16 +458,16 @@ public class ParametrosAlgoritmo {
             return numMaxIteracionesSinMejoraBusquedaLocal;
         }
 
-        public int getNumMaxIteracionesSinMejoraVNS() {
-            return numMaxIteracionesSinMejoraVNS;
+        public double getPorcentajeMinimoMejoria() {
+            return porcentajeMinimoMejoria;
         }
 
         public void setNumMaxIteracionesSinMejoraBusquedaLocal(int numMaxIteracionesSinMejoraBusquedaLocal) {
             this.numMaxIteracionesSinMejoraBusquedaLocal = numMaxIteracionesSinMejoraBusquedaLocal;
         }
 
-        public void setNumMaxIteracionesSinMejoraVNS(int numMaxIteracionesSinMejoraVNS) {
-            this.numMaxIteracionesSinMejoraVNS = numMaxIteracionesSinMejoraVNS;
+        public void setPorcentajeMinimoMejoria(double porcentajeMinimoMejoria) {
+            this.porcentajeMinimoMejoria = porcentajeMinimoMejoria;
         }
 
         public void setNeighborStructures(List<NeighborStructure> neighborStructures) {
@@ -486,7 +487,15 @@ public class ParametrosAlgoritmo {
         }
 
         public void setTipoVNS(String tipo) {
-            this.tipoVNS=tipo;
+            this.tipoVNS = tipo;
+        }
+
+        public int getNumIteracionesParaComprobarCondicionParadaPorcentaje() {
+            return numIteracionesParaComprobarCondicionParadaPorcentaje;
+        }
+
+        public void setNumIteracionesParaComprobarCondicionParadaPorcentaje(int numIteracionesParaComprobarCondicionParadaPorcentaje) {
+            this.numIteracionesParaComprobarCondicionParadaPorcentaje = numIteracionesParaComprobarCondicionParadaPorcentaje;
         }
     }
 
