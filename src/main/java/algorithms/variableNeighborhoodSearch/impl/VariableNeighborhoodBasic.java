@@ -33,9 +33,9 @@ public class VariableNeighborhoodBasic extends AbstractVariableNeighborhoodSearc
         Solucion x_prime_2 = super.getCurrentNeighborhood().bestImprovement(x_prime);
 
         if (Log.isOn() && Log.checkIter(super.contadorIteraciones)) {
-            Log.info("[BVNS] fitness inicial: " + fitness(x) + " | \t" +
-                    "fitness sol aleatoria: " + fitness(x_prime) + " | \t" +
-                    "fitness sol aleatoria tras BL: " + fitness(x_prime_2));
+            Log.info("[BVNS] fitness inicial: " + fitness(x)[0] + " | \t" +
+                    "fitness sol aleatoria: " + fitness(x_prime)[0] + " | \t" +
+                    "fitness sol aleatoria tras BL: " + fitness(x_prime_2)[0]);
         }
 
         return x_prime_2;

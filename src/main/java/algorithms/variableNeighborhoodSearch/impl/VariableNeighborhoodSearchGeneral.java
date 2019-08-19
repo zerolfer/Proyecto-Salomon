@@ -49,9 +49,9 @@ public class VariableNeighborhoodSearchGeneral extends AbstractVariableNeighborh
         Solucion x_prime_2 = vnd.vnsImplemetation(x_prime/*, c1, c2*/);
 
         if (Log.isOn() && Log.checkIter(super.contadorIteraciones)) {
-            Log.info("[GVNS] fitness inicial: " + fitness(x) + " | \t" +
-                    "fitness sol aleatoria: " + fitness(x_prime) + " | \t" +
-                    "fitness sol aleatoria tras VND: " + fitness(x_prime_2));
+            Log.info("[GVNS] fitness inicial: " + fitness(x)[0] + " | \t" +
+                    "fitness sol aleatoria: " + fitness(x_prime)[0] + " | \t" +
+                    "fitness sol aleatoria tras VND: " + fitness(x_prime_2)[0]);
         }
 
         return x_prime_2;

@@ -11,7 +11,7 @@ public class VnsFactory {
     /**
      * FACTORY METHOD, {@link ParametrosAlgoritmo.VNS}
      */
-    public static VariableNeighborhoodSearch setVNS(Entrada entrada, Patrones patrones, Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo) {
+    public static VariableNeighborhoodSearch getVNS(Entrada entrada, Patrones patrones, Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo) {
         String id = parametrosAlgoritmo.VNS.getTipoVNS();
         switch (id) {
 

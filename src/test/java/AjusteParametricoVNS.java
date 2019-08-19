@@ -73,6 +73,7 @@ public class AjusteParametricoVNS {
 //        double[] alphas = new double[]{15, 15.5, 16, 16.5, 17, 17.5, 18, 18.5, 19, 19.5, 20};
         double[] alphas = new double[]{0.5, 1, 2, 5, 10, 15, 20, 30, 40, 50};
         double inicial = parametrosAlgoritmo.VNS.getAlpha();
+        parametrosAlgoritmo.VNS.setTipoVNS("SVNS");
         for (double alpha : alphas) {
             parametrosAlgoritmo.setAlpha(alpha);
             executeXTimesVNS(1, caso, entrada, patrones, poblacionInicial, solEntrada);

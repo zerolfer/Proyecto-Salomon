@@ -9,6 +9,7 @@ import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
 import herramientas.Log;
 import patrones.Patrones;
+import patrones.Restricciones;
 
 import java.util.List;
 
@@ -88,26 +89,25 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
     public Solucion startExecution(Solucion x) {
         MetaheuristicUtil.orderByLazyCriteria(x);
         initTime = System.currentTimeMillis();
-        contadorIteraciones = 1;
+        contadorIteraciones = 0;
         long t = 0;
+        int contadorReinicios = 0;
         Solucion x_prime;
         double fitnessAnterior = -1;
+        double fitnessMejor = -1;
         do {
-            while (currentNeighborhoodIndex < neighborStructures.size() &&
-                    (contadorIteraciones % numIteracionesCiclo != 0 || porcentajeMejora > porcentajeMinimoMejoria)) {
+            while (/*t < maxTimeAllowed && FIXME CONDICION PARADA SESGADA*/currentNeighborhoodIndex < neighborStructures.size() &&
+                    porcentajeMejora > porcentajeMinimoMejoria) {
 
                 if (Log.isOn() && Log.checkIter(contadorIteraciones)) {
                     String s = "[VNS] tiempo: " + (System.currentTimeMillis() - initTime) / 1000 + "s" +
                             "    |    " + "#Iteracion: " + contadorIteraciones +
-                            "    |    " + "Fitness actual: " + fitness(x) +
+                            "    |    " + "Fitness actual: " + fitness(x)[0] +
                             "    |    vecindad actual: " + getCurrentNeighborhood() +
-                            "    |    " + "porcentaje de mejora: " + porcentajeMejora +
-                            "\n";
+                            "    |    " + "porcentaje de mejora: " + porcentajeMejora;
                     Log.info(s);
                 }
 
-                Log.csvLog(contadorIteraciones++, t, fitness((x)), x.getTurnos().size(), porcentajeMejora,
-                        currentNeighborhoodIndex);
 
                 // dada la estructura de vecindad actual, se ejecuta la busqueda según la implementación concreta
                 x_prime = vnsImplemetation(x);
@@ -116,30 +116,49 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
                 // y se actualiza la solución actual a aquella con mejor valor objetivo de entre la anterior y la nueva
                 x = neighborhoodChange(x, x_prime);
 
-                if (contadorIteraciones % numIteracionesCiclo != 0) {
+                // se actualiza el tiempo (condición de parada)
+                t = System.currentTimeMillis() - initTime;
+
+                double[] fit = fitness(x);
+                Log.csvLog(contadorIteraciones, t, fit[0],
+                        fit[1], fit[2], fit[3], fit[4],
+                        x.getTurnos().size(), porcentajeMejora,
+                        currentNeighborhoodIndex);
+
+                if (contadorIteraciones % numIteracionesCiclo == 0) {
                     // calcular porcentaje mejora
                     if (fitnessAnterior == -1)
+                        porcentajeMejora = 100;
+                    else if (fitnessMejor == -1)
                         porcentajeMejora = 0;
-                    porcentajeMejora = (fitness(x) * 100 / fitnessAnterior) - 100;
+                    else
+                        porcentajeMejora = Math.abs(fitnessMejor - fitnessAnterior) * 100; //(fitness(x)[0] * 100 / fitnessAnterior) - 100;
 
-                    // actualizar fitness anterior
-                    if (fitness(x) > fitnessAnterior) // NOTE: Maximizacion
-                        fitnessAnterior = fitness(x);
+                    // actualizar fitness anterior por el actual
+                    fitnessAnterior = fit[0];
                 }
+                // actualizar fitness mejor
+                if (fit[0] > fitnessMejor) // NOTE: Maximizacion
+                    fitnessMejor = fit[0];
 
+                contadorIteraciones++;
+
+                Log.info("");
             }
-            // se actualiza el tiempo (condición de parada)
-            t = System.currentTimeMillis() - initTime;
             currentNeighborhoodIndex = 0;
-        } while (t < maxTimeAllowed &&
-                (contadorIteraciones % numIteracionesCiclo != 0 || porcentajeMejora > porcentajeMinimoMejoria));
+            contadorReinicios++;
+        } while (/*t < maxTimeAllowed FIXME CONDICION PARADA SESGADA &&*/ porcentajeMejora > porcentajeMinimoMejoria);
 
-//        Log.debug
-        Log.info("[Fin VNS] Fitness final: " + fitness(x) +
-                "    |    " + "numeroIteracionesSinMejora: " + porcentajeMejora + " de " + porcentajeMinimoMejoria +
+        double[] fit = fitness(x);
+        Log.debug("[Fin VNS] Fitness final: " + fit[0] +
+                "    |    " + "Fitness desglosado: [" + fit[1] + ", " + fit[2] + ", " + fit[3] + ", " + fit[4] + "]" +
+                "    |    " + "iteraciones totales: " + contadorIteraciones +
+                "    |    " + "porcentajeMejora: " + porcentajeMejora + " de " + porcentajeMinimoMejoria +
                 "    |    " + "tiempo: " + (System.currentTimeMillis() - initTime) / 1000 + "s de " + maxTimeAllowed / 1000 + "s" +
-                "    |    " + "tamaño: " + x.getTurnos().size());
-        Log.csvLog(contadorIteraciones, t, fitness((x)), x.getTurnos().size(), porcentajeMejora,
+                "    |    " + "tamaño: " + x.getTurnos().size() +
+                "    |    " + "Numero de reinicios: " + contadorReinicios +
+                "    |    " + "Restricciones: " + Restricciones.penalizacionPorRestricciones(x, getPatrones(), getEntrada(), getParametros()) + "\n");
+        Log.csvLog(contadorIteraciones, t, fit[0], fit[1], fit[2], fit[3], fit[4], x.getTurnos().size(), porcentajeMejora,
                 currentNeighborhoodIndex);
 
         return x;
@@ -158,7 +177,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
     }
 
     boolean checkCondicionReiniciarVecindad(Solucion x, Solucion x_prime) {
-        return fitness(x_prime) > fitness(x);
+        return fitness(x_prime)[0] > fitness(x)[0];
     }
 
 
@@ -184,7 +203,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
      * @param x solucion incial
      * @return valor total ponderado de la funcion objetivo para la solucion x
      */
-    double fitness(Solucion x) {
+    double[] fitness(Solucion x) {
         return getCurrentNeighborhood().fitness(x);
     }
 

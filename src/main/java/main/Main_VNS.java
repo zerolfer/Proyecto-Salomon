@@ -36,13 +36,13 @@ public class Main_VNS {
 //
         parametrosAlgoritmo.initializeNeighborStructures(entrada, patrones, parametros, parametrosAlgoritmo, estrucVecindad);
 
-        VariableNeighborhoodSearch vns = VnsFactory.setVNS(entrada, patrones, parametros, parametrosAlgoritmo);
+        VariableNeighborhoodSearch vns = VnsFactory.getVNS(entrada, patrones, parametros, parametrosAlgoritmo);
 
         List<Solucion> res = new ArrayList<>();
 
         Log.open();
 //        Log.debug
-        Log.info("[ Ejecutando " + vns + " ] " +
+        Log.debug("[ Ejecutando " + vns + " ] " +
                 "[ " + caso + " ] " +
                 "[ Por " + parametrosAlgoritmo.getMaxMilisecondsAllowed() / 1000 + " segundos ]");
 
@@ -52,7 +52,7 @@ public class Main_VNS {
             );
         }
 
-        Log.debug(Log.retrieveValue().toString());
+//        Log.debug(Log.retrieveValue().toString()); FIXME
         Log.close();
         return res;
     }

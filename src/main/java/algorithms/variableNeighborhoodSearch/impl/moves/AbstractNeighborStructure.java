@@ -29,7 +29,7 @@ public abstract class AbstractNeighborStructure implements NeighborStructure {
     public static List<int[]> rejilla;
 
     /* Para mejorar la eficiencia general del metodo*/
-    static Map<Solucion, Double> mapaSoluciones;
+    static Map<Solucion, double[]> mapaSoluciones;
 
     /**
      * Véase {@link ParametrosAlgoritmo.VNS#getNumMaxIteracionesSinMejoraBusquedaLocal()}
@@ -47,10 +47,10 @@ public abstract class AbstractNeighborStructure implements NeighborStructure {
         this.numMaxIteracionesSinMejoraBusquedaLocal = parametrosAlgoritmo.VNS.getNumMaxIteracionesSinMejoraBusquedaLocal();
     }
 
-    public double fitness(Solucion x) {
-        Double fit = mapaSoluciones.get(x);
+    public double[] fitness(Solucion x) {
+        double[] fit = mapaSoluciones.get(x);
         if (fit == null) {
-            fit = DeciderFitnessFunction.switchFitnessF(x, patrones, entrada, parametros, parametrosAlgoritmo)[0];
+            fit = DeciderFitnessFunction.switchFitnessF(x, patrones, entrada, parametros, parametrosAlgoritmo);
             mapaSoluciones.put(x, fit);
         }
         return fit;
@@ -62,19 +62,45 @@ public abstract class AbstractNeighborStructure implements NeighborStructure {
         Solucion x = solucionInicial.clone();
         Solucion x_prime;
         int numIter = 0;
-        int numIteracionesSinMejora = 0;
+        double porcentajeMejora = 100;
+        int cadaTantasIteraciones = parametrosAlgoritmo.VNS.getNumMaxIteracionesSinMejoraBusquedaLocal();
+        double fitAnterior = -1;
+        double fitActual = -1;
 
         // En la busqueda local, iteramos repetidas veces hasta que no haya mejora
-        while (numIteracionesSinMejora <= numMaxIteracionesSinMejoraBusquedaLocal &&
-                System.currentTimeMillis() - AbstractVariableNeighborhoodSearch.initTime < parametrosAlgoritmo.getMaxMilisecondsAllowed()) {
+        while (porcentajeMejora > parametrosAlgoritmo.VNS.getPorcentajeMinimoMejoria()
+                && System.currentTimeMillis() - AbstractVariableNeighborhoodSearch.initTime < parametrosAlgoritmo.getMaxMilisecondsAllowed()) {
+
             x_prime = buscarSolucion(x);
 
-            double f_x = fitness(x);
-            double f_x_prime = fitness(x_prime);
-            if (f_x_prime > f_x) // si es mejor... NOTE: maximización
+            double f_x = fitness(x)[0];
+            double f_x_prime = fitness(x_prime)[0];
+            if (f_x_prime > f_x) { // si es mejor... NOTE: maximización
                 x = x_prime;
-            else
-                numIteracionesSinMejora++;
+                fitActual = f_x_prime;
+                if (numIter % cadaTantasIteraciones == 0) {
+                    if (fitAnterior == -1)
+                        porcentajeMejora = 100;
+                    else if (fitActual == -1)
+                        porcentajeMejora = 0;
+                    else
+                        porcentajeMejora = Math.abs(fitAnterior - fitActual) * 100;
+
+                    fitAnterior = f_x_prime;
+                }
+            } else if (numIter % cadaTantasIteraciones == 0) {
+                if (fitAnterior == -1)
+                    porcentajeMejora = 100;
+                else if (fitActual == -1)
+                    porcentajeMejora = 0;
+                else
+                    porcentajeMejora = Math.abs(fitAnterior - fitActual) * 100;
+
+                fitAnterior = f_x;
+            }
+
+//            else
+//                numIteracionesSinMejora++;
 
             numIter++;
 //            if (Log.isOn() /*&& Log.checkIter(numIter)*/) {
@@ -84,7 +110,6 @@ public abstract class AbstractNeighborStructure implements NeighborStructure {
 //            }
         }
         return x;
-
     }
 
     @Override
@@ -92,14 +117,14 @@ public abstract class AbstractNeighborStructure implements NeighborStructure {
         Solucion x = solucionInicial.clone();
         Solucion x_prime;
 
-        double f_x = fitness(x);
+        double f_x = fitness(x)[0];
         double f_x_prime;
 
         int numIt = 1;
         // Iteramos repetidas veces hasta que haya mejora
         do {
             x_prime = buscarSolucion(x);
-            f_x_prime = fitness(x_prime);
+            f_x_prime = fitness(x_prime)[0];
             numIt++;
         } while (f_x_prime <= f_x && numIt <= numMaxIteracionesSinMejoraBusquedaLocal); // si es mejor...paramos NOTE: maximización
         return x_prime;

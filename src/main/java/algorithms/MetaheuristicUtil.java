@@ -135,7 +135,7 @@ public class MetaheuristicUtil {
         for (int i = 0; i < str.length(); i += 3) {
             if (!esTrabajo(str.substring(i, i + LONGITUD_CADENAS))) return false;
         }
-        return true; // TODO: test this method
+        return true;
     }
 
     public static boolean esDescanso(String str) {
@@ -146,7 +146,7 @@ public class MetaheuristicUtil {
         for (int i = 0; i < str.length(); i += 3) {
             if (!esDescanso(str.substring(i, i + LONGITUD_CADENAS))) return false;
         }
-        return true; // TODO: test this method
+        return true;
     }
 
     /*

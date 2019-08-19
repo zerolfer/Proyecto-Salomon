@@ -24,7 +24,7 @@ public class Log {
      * En caso de utilizarse como pomparacion, permite elegir cada cuantas iteraciones
      * se hace el log
      */
-    private static final int trazaCadaTantasIteraciones = 100;
+    private static final int trazaCadaTantasIteraciones = 60;
 
     /**
      * Decide si el log por consola está habilitado o no
@@ -79,9 +79,13 @@ public class Log {
                             // cabecera del CSV
                             "iteracion" + STRING_SEPARADOR_CSV +
                                     "tiempo (ms)" + STRING_SEPARADOR_CSV +
-                                    "fitness" + STRING_SEPARADOR_CSV +
+                                    "fitness total" + STRING_SEPARADOR_CSV +
+                                    "fitness 1" + STRING_SEPARADOR_CSV +
+                                    "fitness 2" + STRING_SEPARADOR_CSV +
+                                    "fitness 3" + STRING_SEPARADOR_CSV +
+                                    "fitness 4" + STRING_SEPARADOR_CSV +
                                     "tamaño" + STRING_SEPARADOR_CSV +
-                                    "numIterSinMejora" + STRING_SEPARADOR_CSV +
+                                    "porcentajeMejora" + STRING_SEPARADOR_CSV +
                                     "vecindad." + "\n"
                     );
 

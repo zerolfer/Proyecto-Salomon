@@ -1,7 +1,6 @@
 package main;
 
 import InicializarPoblacion.InicializarPoblacion;
-import algorithms.MetaheuristicUtil;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
 import estructurasDatos.ParametrosAlgoritmo;
@@ -16,8 +15,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Properties;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
 
 public class Main {
     public static String propFileExternoParametros = "./parametros_algoritmo.properties";
@@ -35,12 +32,13 @@ public class Main {
 
     public static void main(String[] args) {
         int nEjecucion = 1;
-        int[] casos = {/*1, 3, 4, 5, 6, 7, 8, 9*/ 7};
-//        for (int i = 0; i < casos.length; i++)
-            main1(nEjecucion, "Caso" + /*casos[i] */loadCasoFromProperties());
+        int[] casos = {1, 3, 4, 5, 6, 7, 8, 9};
+        for (int i = 0; i < casos.length; i++)
+            for (String tipoVNS : new String[]{"VND", "BVNS", "SVNS"})
+                main1(nEjecucion, "Caso" + casos[i] /*loadCasoFromProperties()*/, tipoVNS);
     }
 
-    public static void main1(int ejecucion, String caso) {
+    public static void main1(int ejecucion, String caso, String tipoVNS) {
         /*INICIALIZACION DE DATOS*/
         DeciderCase.switchCase(caso);
 
@@ -72,10 +70,7 @@ public class Main {
         ArrayList<Solucion> poblacionInicial = InicializarPoblacion.inicializarPoblacion(entrada, parametros, patrones);
 
         // OUTPUT ///////////////////////////////////////////////////////////////////////////////////////////////////
-//        poblacionInicial.forEach(MetaheuristicUtil::orderByLazyCriteria);
-        solEntrada.addAll(poblacionInicial);
-//        rwFiles.EscrituraExcel.EscrituraSoluciones("Inicial+Fase1", Main.carpetaSoluciones, solEntrada,
-//                entrada, patrones, parametros, parametrosAlgoritmo);
+//        solEntrada.addAll(poblacionInicial);
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         switch (parametrosAlgoritmo.getAlgoritmo()) {
@@ -85,6 +80,7 @@ public class Main {
                 );
                 break;
             case "VNS":
+                parametrosAlgoritmo.VNS.setTipoVNS(tipoVNS);
                 solEntrada.addAll(
                         Main_VNS.main_vns(caso, parametros, parametrosAlgoritmo, entrada, patrones, poblacionInicial, "")
                 );

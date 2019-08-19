@@ -9,6 +9,7 @@ import estructurasDatos.Solucion;
 import herramientas.CridaUtils;
 import herramientas.Log;
 import patrones.Patrones;
+import patrones.Restricciones;
 
 import static herramientas.CridaUtils.LONGITUD_CADENAS;
 
@@ -34,72 +35,91 @@ public class VariableNeighborhoodSkewed extends AbstractVariableNeighborhoodSear
     public Solucion startExecution(Solucion x) {
         MetaheuristicUtil.orderByLazyCriteria(x);
         initTime = System.currentTimeMillis();
-        contadorIteraciones = 1;
+        contadorIteraciones = 0;
+        int contadorReinicios = 0;
         double fitnessAnterior = -1;
+        double fitnessMejor = -1;
         long t = 0;
 
         do {
-            while (super.getCurrentNeighborhoodIndex() < neighborStructures.size() &&
-                    (contadorIteraciones % getNumIteracionesCiclo() != 0 || porcentajeMejora > getPorcentajeMinimoMejoria())) {
+            while (/*t < getMaxTimeAllowed() FIXME CONDICION PARADA SESGADA &&*/ super.getCurrentNeighborhoodIndex() < neighborStructures.size() &&
+                    porcentajeMejora > getPorcentajeMinimoMejoria()) {
 
                 if (Log.isOn() && Log.checkIter(contadorIteraciones)) {
                     String s = "[VNS] tiempo: " + (System.currentTimeMillis() - initTime) / 1000 + "s" +
                             "    |    " + "#Iteracion: " + contadorIteraciones +
-                            "    |    " + "Fitness actual: " + fitness(x) +
+                            "    |    " + "Fitness actual: " + fitness(x)[0] +
                             "    |    vecindad actual: " + getCurrentNeighborhood() +
-                            "    |    " + "numero de iteraciones sin mejora: " + porcentajeMejora;
+                            "    |    " + "porcentaje de mejora: " + porcentajeMejora;
                     Log.info(s);
                 }
 
 
                 Solucion x_prime_2 = vnsImplemetation(x);
                 distancia = ((funcionDistancia.equals("fitness")) ? distanceFunctionA(x, x_prime_2) : distanceFunctionB(x, x_prime_2));
+
+                // System.out.println("Funcion: " + funcionDistancia + "| valor: " + distancia);
+
                 Solucion x_anterior = x;
                 x = neighborhoodChange(x, x_prime_2);
 
                 x_best = keepBest(x_best, x, x_prime_2);
 
-                Log.csvLog(contadorIteraciones++, System.currentTimeMillis() - initTime, fitness(x_best),
-                        x_best.getTurnos().size(), porcentajeMejora,
-                        getCurrentNeighborhoodIndex(), fitness(x_anterior), fitness(x_prime_2), distancia);
 
                 if (Log.isOn() && Log.checkIter(contadorIteraciones)) {
-                    String s = "[SVNS] x_best: " + fitness(x_best) +
-                            "    |    x anterior: " + fitness(x_anterior) +
-                            "    |    x nueva: " + fitness(x) +
-                            "    |    x tras BL: " + fitness(x_prime_2) +
-                            "    |    distancia: " + distancia + "\n";
+                    String s = "[SVNS] x_best: " + fitness(x_best)[0] +
+                            "    |    x anterior: " + fitness(x_anterior)[0] +
+                            "    |    x nueva: " + fitness(x)[0] +
+                            "    |    x tras BL: " + fitness(x_prime_2)[0] +
+                            "    |    distancia: " + distancia;
                     Log.info(s);
                 }
 
+                // se actualiza el tiempo (condición de parada)
+                t = System.currentTimeMillis() - initTime;
 
-            }
+                double[] fit = fitness(x_best);
+                Log.csvLog(contadorIteraciones, System.currentTimeMillis() - initTime, fit[0],
+                        fit[1], fit[2], fit[3], fit[4],
+                        x_best.getTurnos().size(), porcentajeMejora,
+                        getCurrentNeighborhoodIndex(), fitness(x_anterior)[0], fitness(x_prime_2)[0], distancia);
 
-            if (contadorIteraciones % super.getNumIteracionesCiclo() != 0) {
-                // calcular porcentaje mejora
-                if (fitnessAnterior == -1)
-                    super.porcentajeMejora = 0;
-                super.porcentajeMejora = (fitness(x) * 100 / fitnessAnterior) - 100;
+                // solo se recalcula cada getNumIteracionesCiclo() iteraciones
+                if (contadorIteraciones % super.getNumIteracionesCiclo() == 0) {
+                    // calcular porcentaje mejora
+                    if (fitnessAnterior == -1)
+                        super.porcentajeMejora = 100;
+                    else
+                        super.porcentajeMejora = Math.abs(fitnessMejor - fitnessAnterior) * 100; //(fitness(x)[0] * 100 / fitnessAnterior) - 100;
 
+                    // actualizar fitness anterior por el actual
+                    fitnessAnterior = fit[0];
+
+                }
                 // actualizar fitness anterior
-                if (fitness(x) > fitnessAnterior) // NOTE: Maximizacion
-                    fitnessAnterior = fitness(x);
+                if (fitness(x)[0] > fitnessMejor) // NOTE: Maximizacion
+                    fitnessMejor = fit[0];
+
+                contadorIteraciones++;
+                Log.info("");
             }
 
-
-            // se actualiza el tiempo (condición de parada)
-            t = System.currentTimeMillis() - initTime;
             setCurrentNeighborhoodIndex(0);
+            contadorReinicios++;
             x = x_best;
-        } while (t < getMaxTimeAllowed() &&
-                (contadorIteraciones % getNumIteracionesCiclo() != 0 || porcentajeMejora > getPorcentajeMinimoMejoria()));
+        } while (/*t < getMaxTimeAllowed() && FIXME CONDICION PARADA SESGADA*/ porcentajeMejora > getPorcentajeMinimoMejoria());
 
 //        Log.debug
-        Log.info("[Fin VNS] Fitness final: " + fitness(x) +
-                "    |    " + "numeroIteracionesSinMejora: " + porcentajeMejora + " de " + getPorcentajeMinimoMejoria() +
+        double[] fit = fitness(x_best);
+        Log.debug("[Fin VNS] Fitness final: " + fit[0] +
+                "    |    " + "Fitness desglosado: [" + fit[1] + ", " + fit[2] + ", " + fit[3] + ", " + fit[4] + "]" +
+                "    |    " + "iteraciones totales: " + contadorIteraciones +
+                "    |    " + "porcentajeMejora: " + porcentajeMejora + " de " + getPorcentajeMinimoMejoria() +
                 "    |    " + "tiempo: " + (System.currentTimeMillis() - initTime) / 1000 + "s de " + getMaxTimeAllowed() / 1000 + "s" +
-                "    |    " + "tamaño: " + x.getTurnos().size());
-        Log.csvLog(contadorIteraciones, t, fitness((x_best)), x_best.getTurnos().size(), porcentajeMejora,
+                "    |    " + "tamaño: " + x.getTurnos().size() +
+                "    |    " + "Numero de reinicios: " + contadorReinicios +
+                "    |    " + "Restricciones: " + Restricciones.penalizacionPorRestricciones(x_best, getPatrones(), getEntrada(), getParametros()) + "\n");
+        Log.csvLog(contadorIteraciones, t, fit[0], fit[1], fit[2], fit[3], fit[4], x_best.getTurnos().size(), porcentajeMejora,
                 getCurrentNeighborhoodIndex());
 
         return x_best;
@@ -108,7 +128,7 @@ public class VariableNeighborhoodSkewed extends AbstractVariableNeighborhoodSear
     @Override
     boolean checkCondicionReiniciarVecindad(Solucion x, Solucion x_prime) {
 
-        return fitness(x_prime) + alpha * distancia > fitness(x);
+        return fitness(x_prime)[0] + alpha * distancia > fitness(x)[0];
     }
 
     @Override
@@ -117,20 +137,20 @@ public class VariableNeighborhoodSkewed extends AbstractVariableNeighborhoodSear
         Solucion x_prime_2 = super.getCurrentNeighborhood().bestImprovement(x_prime);
 
         if (Log.isOn() && Log.checkIter(super.contadorIteraciones)) {
-            Log.info("[SVNS impl] fitness inicial: " + fitness(x) + " | \t" +
-                    "fitness sol aleatoria: " + fitness(x_prime) + " | \t" +
-                    "fitness sol aleatoria tras BL: " + fitness(x_prime_2));
+            Log.info("[SVNS impl] fitness inicial: " + fitness(x)[0] + " | \t" +
+                    "fitness sol aleatoria: " + fitness(x_prime)[0] + " | \t" +
+                    "fitness sol aleatoria tras BL: " + fitness(x_prime_2)[0]);
         }
 
         return x_prime_2;
     }
 
     private double distanceFunctionA(Solucion x, Solucion x_prime) {
-        return Math.abs(fitness(x) - fitness(x_prime));
+        return Math.abs(fitness(x)[0] - fitness(x_prime)[0]);
     }
 
     private double distanceFunctionB(Solucion x, Solucion x_prime) {
-        int distancia = 0;
+        double distancia = 0;
         for (int i = 0; i < x.getTurnos().size(); i++) {
             Controlador cA = CridaUtils.obtenerControladorTurno(i, x.getControladores());
             if (cA == null) continue;
@@ -157,18 +177,18 @@ public class VariableNeighborhoodSkewed extends AbstractVariableNeighborhoodSear
             String slotB = turnoB.substring(length - LONGITUD_CADENAS);
             if (!slotA.equals(slotB)) distancia++;
         }
-        if (Log.retrieveValue() < distancia) Log.saveValue(distancia);
-        return distancia / (x.getTurnos().get(0).length() / LONGITUD_CADENAS * x.getTurnos().size()); // normalizada
+//        if (Log.retrieveValue() < distancia) Log.saveValue(distancia); FIXME
+        return distancia / 870; // NOTE: numero estimado de el conjunto de instancias disponibles (normalización)
+//         return distancia / ((float) x.getTurnos().get(0).length() / LONGITUD_CADENAS * x.getTurnos().size()); // normalizada
     }
 
     private Solucion keepBest(Solucion x, Solucion x_prime, Solucion x_prime_2) {
 
-        double f_x = x == null ? -1 : fitness(x), f_x_p = fitness(x_prime), f_x_p_2 = fitness(x_prime_2);
+        double f_x = x == null ? -1 : fitness(x)[0], f_x_p = fitness(x_prime)[0], f_x_p_2 = fitness(x_prime_2)[0];
 
-        Solucion res = f_x >= f_x_p && f_x >= f_x_p_2 ?
+        return f_x >= f_x_p && f_x >= f_x_p_2 ?
                 x : f_x_p >= f_x && f_x_p >= f_x_p_2 ?
                 x_prime : x_prime_2;
-        return res;
 //
 //
 //

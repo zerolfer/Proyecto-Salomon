@@ -10,5 +10,5 @@ public interface NeighborStructure {
 
     Solucion firstImprovement(Solucion x);
 
-    double fitness(Solucion x);
+    double[] fitness(Solucion x);
 }
