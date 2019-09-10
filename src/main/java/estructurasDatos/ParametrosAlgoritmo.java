@@ -45,7 +45,6 @@ public class ParametrosAlgoritmo {
     private double ponderacionFitness2;
     private double ponderacionFitness3;
     private double ponderacionFitness4;
-    private double alpha;
 
 
     public ParametrosAlgoritmo(String propFileParametersAlgorithm) {
@@ -203,10 +202,6 @@ public class ParametrosAlgoritmo {
 
     public void setMaxMilisecondsAllowed(long maxMilisecondsAllowed) {
         this.maxMilisecondsAllowed = maxMilisecondsAllowed;
-    }
-
-    public void setAlpha(double alpha) {
-        this.alpha = alpha;
     }
 
     public class SA {
@@ -476,6 +471,10 @@ public class ParametrosAlgoritmo {
 
         public double getAlpha() {
             return alpha;
+        }
+
+        public void setAlpha(double alpha) {
+            this.alpha = alpha;
         }
 
         public String getTipoVNS() {
