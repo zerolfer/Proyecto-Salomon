@@ -159,7 +159,8 @@ public class Entrada {
         HashMap<Sector, ArrayList<String>> volumnsOfSectors = crearHashMapSectoresVolumenes(listaSectoresAbiertos, fSectorizacionSectoresVolumenes);
 //        int cargaTrabajo = calcularCargaTrabajo(sectorizacion, controladores, listaNuevosSectoresAbiertosTrasMomentoActual);
 
-        Solucion distribucionInicial = crearSolucionInicial(fDistribucionInicial, listaSectores, controladores, parametros);
+        Solucion distribucionInicial = crearSolucionInicial(fDistribucionInicial, listaSectores, controladores, parametros,
+                nucleos);
 
         calcularCargaTrabajo(sectorizacion, controladores, listaSectoresAbiertos);
 
@@ -174,7 +175,8 @@ public class Entrada {
     }
 
     private static Solucion crearSolucionInicial(List<String> entrada, ArrayList<Sector> listaSectores,
-                                                 ArrayList<Controlador> controladores, Parametros parametros) {
+                                                 ArrayList<Controlador> controladores, Parametros parametros,
+                                                 List<Nucleo> nucleos) {
         ArrayList<String> turnos = new ArrayList<>();
         List<Integer> intervalos = new ArrayList<>();
         for (int i = 1; i < entrada.size(); i++) {
@@ -183,7 +185,22 @@ public class Entrada {
                 intervalos = actualizarIntervalos(columnas);
             else { // en caso contrario, creamos el turno y lo asignamos al controlador de la primera columna
                 String turno = crearDistribucionDelTurno(intervalos, columnas, listaSectores, parametros);
-                asignarControlador(Integer.parseInt(columnas[0].substring(1)), turnos.size(), controladores);
+                Controlador cAsignado = asignarControlador(Integer.parseInt(columnas[0].substring(1)), turnos.size(), controladores);
+
+                /* 
+                    NOTE esto es para comprobar que la distribucion inicial es consistente con los controladores:
+
+                List<Sector> sectores = new ArrayList<>();
+                for (int j = 0; j < turno.length(); j += 3) {
+                    if (!turno.substring(j, j + 3).equals("111"))
+                        sectores.add(CridaUtils.findSectorById(listaSectores, turno.substring(j, j + 3).toLowerCase()));
+                }
+                for (Sector sector : sectores)
+
+                    assert (!cAsignado.isCON() || sector.isRuta()) &&
+                            MetaheuristicUtil.obtenerNucleosAlQuePerteneceUnSector(nucleos, sector.getId())
+                                    .contains(cAsignado.getNucleo());
+                */
                 turnos.add(turno);
             }
         }
@@ -224,13 +241,14 @@ public class Entrada {
         throw new RuntimeException("No encontrado Sector con nombre " + nombreSector);
     }
 
-    private static void asignarControlador(int idControlador, int indice, List<Controlador> controladores) {
+    private static Controlador asignarControlador(int idControlador, int indice, List<Controlador> controladores) {
         for (Controlador controlador : controladores) {
             if (controlador.getId() == idControlador) {
                 controlador.setTurnoAsignado(indice);
-                return;
+                return controlador;
             }
         }
+        return null;
     }
 
     private static List<Integer> actualizarIntervalos(String[] columnas) {

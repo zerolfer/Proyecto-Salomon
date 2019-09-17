@@ -126,10 +126,10 @@ public abstract class MoveTemplate extends AbstractNeighborStructure {
      * @param x
      * @param c1
      * @param c2
-     * @param i
-     * @param i1
+     * @param desde
+     * @param hasta
      */
-    protected abstract boolean comprobarRestriccionesMovimiento(Solucion x, int c1, int c2, int i, int i1);
+    protected abstract boolean comprobarRestriccionesMovimiento(Solucion x, int c1, int c2, int desde, int hasta);
 
     @Override
     public Solucion generarSolucionAleatoria(Solucion x) {

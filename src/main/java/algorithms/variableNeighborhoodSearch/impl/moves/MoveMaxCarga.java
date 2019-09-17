@@ -9,6 +9,8 @@ import patrones.Patrones;
 import java.util.ArrayList;
 import java.util.List;
 
+import static herramientas.CridaUtils.STRING_NO_TURNO;
+
 public class MoveMaxCarga extends MoveTemplate {
 
     protected MoveMaxCarga(Entrada entrada, Patrones patrones, Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo) {
@@ -26,8 +28,11 @@ public class MoveMaxCarga extends MoveTemplate {
     }
 
     @Override
-    protected boolean comprobarRestriccionesMovimiento(Solucion x, int c1, int c2, int i, int i1) {
-        return true; // no hay restricciones de movimiento salvo las del dominio del problema
+    protected boolean comprobarRestriccionesMovimiento(Solucion x, int c1, int c2, int desde, int hasta) {
+        return !x.getTurnos().get(c1).substring(desde, hasta).contains(STRING_NO_TURNO)
+                && !x.getTurnos().get(c2).substring(desde, hasta).contains(STRING_NO_TURNO);
+        // no hay restricciones de movimiento salvo las del dominio del problema
+        // (en este caso, que no se hagan movimientos sin hay un slot '000' de no turno)
     }
 
     @Override

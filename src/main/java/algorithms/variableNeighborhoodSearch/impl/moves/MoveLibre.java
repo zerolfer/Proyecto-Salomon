@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static herramientas.CridaUtils.LONGITUD_CADENAS;
+import static herramientas.CridaUtils.STRING_NO_TURNO;
 
 public class MoveLibre extends AbstractNeighborStructure {
 
@@ -85,6 +86,11 @@ public class MoveLibre extends AbstractNeighborStructure {
 //                            doChange();
 //                            return x;
 //                        }
+
+                        if (x.getTurnos().get(c1).substring(periodo[0], periodo[0] + longitud).contains(STRING_NO_TURNO)
+                                || x.getTurnos().get(c2).substring(periodo[0], periodo[0] + longitud).contains(STRING_NO_TURNO))
+                            continue; // NOTE: o ´return x´, si queremos que no se prueben todos
+
                         // sino, hay que comprobar que los nucleos sean compatibles con el controlador
                         Set<String> sectoresC1 = obtenerSectores(x, c1, periodo[0], periodo[0] + longitud);
                         Set<String> sectoresC2 = obtenerSectores(x, c2, periodo[0], periodo[0] + longitud);
