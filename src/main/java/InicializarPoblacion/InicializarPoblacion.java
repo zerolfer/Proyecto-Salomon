@@ -243,13 +243,13 @@ public class InicializarPoblacion {
      * @param slotInicio                                     inicio del intervalo (numero de slot)
      * @param slotFin                                        final del intervalo (numero de slot)
      * @param sectoresCerrados                               lista de sectores cerrados en el intervalo
-     * @param nuevosSectoresQueYaHanSidoAsignadosPorAfinidad
+     * @param nuevosSectoresQueNoHanSidoAsignadosPorAfinidad
      */
     private static void modificarTurno(int slotInicio, int slotFin, final Collection<String> sectoresCerrados,
                                        final Collection<String> sectoresQueSeAbren,
                                        List<Controlador> controladores, List<Sector> sectoresAbiertosTrasMomentoActual,
                                        Solucion distribucionInicial, Map<String, Set<String>> mapaAfinidad,
-                                       Set<Sector> nuevosSectoresQueYaHanSidoAsignadosPorAfinidad) {
+                                       Set<Sector> nuevosSectoresQueNoHanSidoAsignadosPorAfinidad) {
         // para cada sector que se cierra
         for (String sectorCerrado : sectoresCerrados) {
 //            Pattern patron = Pattern.compile("(?i)" + sectorCerrado);
@@ -268,7 +268,7 @@ public class InicializarPoblacion {
                 String s = distribucionInicial.getTurnos().get(j); // turno original
 
                 if (!contains(s, sectorCerrado, slotInicio, slotFin)
-                        && checkAcreditaciones(sectorAfin, controladores.get(j), afin, j)) // TODO: segurarse de que el check es necesario o no!!!!! FIXME: Pendiente de CRIDA !!!
+                        || checkAcreditaciones(sectorAfin, controladores.get(j), afin, j)) // TODO: segurarse de que el check es necesario o no!!!!! FIXME: Pendiente de CRIDA !!!
                     continue;
 
                 String previo = s.substring(0, slotInicio * LONGITUD_CADENAS);
@@ -282,9 +282,9 @@ public class InicializarPoblacion {
 
                     // pero si sí hay un afín aun no utilizado, se sustituye por ese
                 else {
-                    medio = reemplazarPorAfin(s, slotInicio, LONGITUD_CADENAS, slotFin, sectorCerrado,
+                    medio = reemplazarPorAfin(s, slotInicio, slotFin, sectorCerrado,
                             stringParaSustituir);
-                    nuevosSectoresQueYaHanSidoAsignadosPorAfinidad.remove(sectorAfin);
+                    nuevosSectoresQueNoHanSidoAsignadosPorAfinidad.remove(sectorAfin);
                     sectoresQueSeAbren.remove(afin);
                 }
 
@@ -310,7 +310,7 @@ public class InicializarPoblacion {
         return true;
     }
 
-    private static String reemplazarPorAfin(String s, int slotInicio, int longitudCadenas, int slotFin,
+    private static String reemplazarPorAfin(String s, int slotInicio, int slotFin,
                                             String sectorCerrado, String stringParaSustituir) {
 
         String medio = s.substring(slotInicio * LONGITUD_CADENAS, slotFin * LONGITUD_CADENAS);

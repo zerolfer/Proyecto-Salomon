@@ -154,7 +154,7 @@ public class Entrada {
         }
 
         ArrayList<Sector> listaSectoresAbiertos =
-                crearListaSectoresAbiertos(slotMomentoActual, sectorizacion, sectorizacionModificada, listaSectores);
+                crearListaSectoresAbiertos(sectorizacion, sectorizacionModificada, listaSectores);
 
         HashMap<Sector, ArrayList<String>> volumnsOfSectors = crearHashMapSectoresVolumenes(listaSectoresAbiertos, fSectorizacionSectoresVolumenes);
 //        int cargaTrabajo = calcularCargaTrabajo(sectorizacion, controladores, listaNuevosSectoresAbiertosTrasMomentoActual);
@@ -331,20 +331,20 @@ public class Entrada {
         return volumnsOfSectors;
     }
 
-    private static ArrayList<Sector> crearListaSectoresAbiertos(int slotMomentoActual, ArrayList<Set<String>> sectorizacion,
+    private static ArrayList<Sector> crearListaSectoresAbiertos(ArrayList<Set<String>> sectorizacion,
                                                                 ArrayList<Set<String>> sectorizacionModificada, ArrayList<Sector> listaSectores) {
         List<Sector> sectoresAbiertos = new ArrayList<>();
         if (sectorizacionModificada == null) {
             // si no hay cambio en la sectorización, utilizamos la original
-            recorrerSlotsAddAlSet(slotMomentoActual, sectorizacion, listaSectores, sectoresAbiertos);
+            recorrerSlotsAddAlSet(sectorizacion, listaSectores, sectoresAbiertos);
         } else {
             // pero si hay cambio, utilizamos únicamente la nueva
-            recorrerSlotsAddAlSet(slotMomentoActual, sectorizacionModificada, listaSectores, sectoresAbiertos);
+            recorrerSlotsAddAlSet(sectorizacionModificada, listaSectores, sectoresAbiertos);
         }
         return new ArrayList<>(sectoresAbiertos);
     }
 
-    private static void recorrerSlotsAddAlSet(int slotMomentoActual, ArrayList<Set<String>> sectorizacion, ArrayList<Sector> listaSectores, List<Sector> sectoresAbiertos) {
+    private static void recorrerSlotsAddAlSet(ArrayList<Set<String>> sectorizacion, ArrayList<Sector> listaSectores, List<Sector> sectoresAbiertos) {
         // para cada slot
         for (int i = 0; i < sectorizacion.size(); i++) {
             Set<String> slot = sectorizacion.get(i);
@@ -639,7 +639,7 @@ public class Entrada {
             } else if (linea[1].equalsIgnoreCase("APP")) {
                 listaSectores.add(new Sector(linea[0], idS[cnt], true, false, 0, elementales));
             }
-            elementales = new ArrayList<>();
+            elementales.clear();
             cnt++;
         }
         Fitness.setSectoresElementalesTotales(elementalesT.size());
