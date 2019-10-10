@@ -17,6 +17,8 @@ public class VnsFactory {
 
             case "VND":
                 return new VariableNeighborhoodDescendent(parametros, patrones, parametrosAlgoritmo, entrada);
+            case "RVNS":
+                return new VariableNeighborhoodReduced(parametros, patrones, parametrosAlgoritmo, entrada);
             case "BVNS":
                 return new VariableNeighborhoodBasic(parametros, patrones, parametrosAlgoritmo, entrada);
             case "GVNS":

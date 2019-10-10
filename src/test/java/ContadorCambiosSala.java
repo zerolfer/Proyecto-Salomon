@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import static herramientas.lecturaSoluciones.LecturaSoluciones.leerSoluciones;
 import static main.Main.*;
 
 public class ContadorCambiosSala {
@@ -45,9 +46,7 @@ public class ContadorCambiosSala {
 
         String[] directories = new File(carpetaSoluciones).list();
         for (String dir : Objects.requireNonNull(directories)) {
-            Solucion sol = new Solucion(
-                    parseEntrada(carpetaSoluciones + dir + "/solucion" + 3 + ".txt"),
-                    entrada.getControladores(), 0);
+            Solucion sol = leerSoluciones(carpetaSoluciones + dir + "/solucion" + 3 + ".txt", entrada);
             Object[] aux = contarCambiosSala(sol, entrada);
             System.out.printf("Cambios sala %s:  %d de %d (Normalizado: %.5f)\n",
                     carpetaSoluciones + dir, aux[0], sol.getTurnos().size(), aux[1]);
@@ -70,39 +69,8 @@ public class ContadorCambiosSala {
         return new Object[]{contador_cambios_sala, fit};
     }
 
-    private static Solucion obtenerSolucionFichero(String path, Entrada entrada) {
-        return new Solucion(parseEntrada(path), entrada.getControladores(), 0);
-    }
-
-    private static ArrayList<String> parseEntrada(String path) {
-        BufferedReader br = null;
-        ArrayList<String> f1 = new ArrayList<>();
-        try {
-            File archivo = new File(path);
-            br = new BufferedReader(new FileReader(archivo));
-
-            // Lectura del fichero
-            String linea;
-            linea = br.readLine();
-            String[] rend = linea.split(",");
-            f1.addAll(Arrays.asList(rend));
-
-            return f1;
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            // En el finally cerramos el fichero, para asegurarnos
-            // que se cierra tanto si todo va bien como si salta
-            // una excepcion.
-            try {
-                if (null != br)
-                    br.close();
-            } catch (Exception e2) {
-                e2.printStackTrace();
-            }
-        }
-        return null;
-
-    }
+//    private static Solucion obtenerSolucionFichero(String path, Entrada entrada) {
+//        return new Solucion(parseEntrada(path), entrada.getControladores(), 0);
+//    }
 
 }

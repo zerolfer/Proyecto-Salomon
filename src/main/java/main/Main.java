@@ -34,7 +34,7 @@ public class Main {
         int nEjecucion = 1;
         int[] casos = {1, 3, 4, 5, 6, 7, 8, 9};
         for (int i = 0; i < casos.length; i++)
-            for (String tipoVNS : new String[]{"VND", "BVNS", "SVNS"})
+            for (String tipoVNS : new String[]{"VND", "RVNS", "BVNS", "GVNS", "SVNS"})
                 main1(nEjecucion, "Caso" + casos[i] /*loadCasoFromProperties()*/, tipoVNS);
     }
 

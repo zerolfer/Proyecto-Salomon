@@ -20,15 +20,15 @@ public class VariableNeighborhoodSearchGeneral extends AbstractVariableNeighborh
         super(parametros, patrones, parametrosAlgoritmo, entrada);
         this.vnd = new VariableNeighborhoodDescendent(parametros, patrones, parametrosAlgoritmo, entrada);
 
-        List<NeighborStructure> result = new ArrayList<>();
+//        List<NeighborStructure> result = new ArrayList<>();
 
-        for (String id : new String[]{"movRejilla.1.Restringido", "movRejilla.2.Restringido",
-                "movRejilla.3.Restringido", "movRejilla.4.Restringido",
-                "movRejilla.5.Restringido", "movRejilla.6.Restringido"}
-        )
-            result.add(MoveFactory.createNeighborhood(id, entrada, patrones, parametros, parametrosAlgoritmo));
+//        for (String id : new String[]{"movRejilla.1.Restringido", "movRejilla.2.Restringido",
+//                "movRejilla.3.Restringido", "movRejilla.4.Restringido",
+//                "movRejilla.5.Restringido", "movRejilla.6.Restringido"}
+//        )
+//            result.add(MoveFactory.createNeighborhood(id, entrada, patrones, parametros, parametrosAlgoritmo));
 
-        this.vnd.neighborStructures = result;
+        this.vnd.neighborStructures = this.neighborStructures;
     }
 
     @Override
@@ -37,14 +37,14 @@ public class VariableNeighborhoodSearchGeneral extends AbstractVariableNeighborh
         Solucion x_prime = super.getCurrentNeighborhood().generarSolucionAleatoria(x);
 //        int c1 = (int) temp[1], c2 = (int) temp[2];
 
-        List<NeighborStructure> result = new ArrayList<>();
-        for (String id : new String[]{"movRejilla.1.Restringido", "movRejilla.2.Restringido",
-                "movRejilla.3.Restringido", "movRejilla.4.Restringido",
-                "movRejilla.5.Restringido", "movRejilla.6.Restringido"}
-        )
-            /*result.add(MoveFactory.createNeighborhoodRestringido(id, getEntrada(), getPatrones(), getParametros(), getParametrosAlgoritmo(), c1, c2));*/
+//        List<NeighborStructure> result = new ArrayList<>();
+//        for (String id : new String[]{"movRejilla.1.Restringido", "movRejilla.2.Restringido",
+//                "movRejilla.3.Restringido", "movRejilla.4.Restringido",
+//                "movRejilla.5.Restringido", "movRejilla.6.Restringido"}
+//        )
+//            /*result.add(MoveFactory.createNeighborhoodRestringido(id, getEntrada(), getPatrones(), getParametros(), getParametrosAlgoritmo(), c1, c2));*/
 
-        this.vnd.neighborStructures = result;
+//        this.vnd.neighborStructures = result;
 
         Solucion x_prime_2 = vnd.vnsImplemetation(x_prime/*, c1, c2*/);
 
