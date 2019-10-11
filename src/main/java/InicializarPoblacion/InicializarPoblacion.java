@@ -267,8 +267,8 @@ public class InicializarPoblacion {
             for (int j = 0; j < distribucionInicial.getTurnos().size(); j++) {
                 String s = distribucionInicial.getTurnos().get(j); // turno original
 
-                if (!contains(s, sectorCerrado, slotInicio, slotFin)
-                        || checkAcreditaciones(sectorAfin, controladores.get(j), afin, j)) // TODO: segurarse de que el check es necesario o no!!!!! FIXME: Pendiente de CRIDA !!!
+                if (!(contains(s, sectorCerrado, slotInicio, slotFin)
+                        && checkAcreditaciones(sectorAfin, controladores.get(j), afin, j))) // TODO: segurarse de que el check es necesario o no!!!!! FIXME: Pendiente de CRIDA !!!
                     continue;
 
                 String previo = s.substring(0, slotInicio * LONGITUD_CADENAS);
