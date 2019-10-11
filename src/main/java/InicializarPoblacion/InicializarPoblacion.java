@@ -268,7 +268,7 @@ public class InicializarPoblacion {
                 String s = distribucionInicial.getTurnos().get(j); // turno original
 
                 if (!(contains(s, sectorCerrado, slotInicio, slotFin)
-                        && checkAcreditaciones(sectorAfin, controladores.get(j), afin, j))) // TODO: segurarse de que el check es necesario o no!!!!! FIXME: Pendiente de CRIDA !!!
+                        && checkAcreditaciones(sectorAfin, controladores, afin, j))) // TODO: segurarse de que el check es necesario o no!!!!! FIXME: Pendiente de CRIDA !!!
                     continue;
 
                 String previo = s.substring(0, slotInicio * LONGITUD_CADENAS);
@@ -304,9 +304,14 @@ public class InicializarPoblacion {
      * TODO: ASEGURARSE DE SI ES REALMENTE NECESARIO ESTA COMPROBACIÓN O NO (Preguntar a CRIDA)
      * FIXME: ES REALMENTE NECESARIO ESTA COMPROBACIÓN?!?!
      */
-    private static boolean checkAcreditaciones(Sector sectorAfin, Controlador controlador, String afin, int indice) {
-        if (controlador.getTurnoAsignado() != indice) return false;
-        if (controlador.isCON() && !sectorAfin.isRuta()) return false;
+    private static boolean checkAcreditaciones(Sector sectorAfin, List<Controlador> controladores, String afin, int indice) {
+
+        Controlador controlador = controladores.get(indice);
+        if (controlador.getTurnoAsignado() != indice) // esto ahorra tiempo de cómputo innecesario en algunos casos 
+            controlador = CridaUtils.obtenerControladorTurno(indice, controladores);
+
+        if (controlador != null && controlador.isCON() && !sectorAfin.isRuta())
+            return false;
         return true;
     }
 
