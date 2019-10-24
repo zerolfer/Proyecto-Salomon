@@ -34,9 +34,13 @@ public class Main {
         int nEjecucion = 1;
         int[] casos = {1, 3, 4, 5, 6, 7, 8, 9};
         double[] alphas = {5, 0.5, 5, 30, 30, 5, 20, 15};
-        for (int i = 0; i < casos.length; i++)
-            for (String tipoVNS : new String[]{"VND", "RVNS", "BVNS", "GVNS", "SVNS"})
+        for (int i = 0; i < casos.length; i++) {
+            for (String tipoVNS : new String[]{"VND", "RVNS", "BVNS", "GVNS", "SVNS"}) {
                 main1(nEjecucion, "Caso" + casos[i] /*loadCasoFromProperties()*/, tipoVNS, alphas[i]);
+                nEjecucion++;
+            }
+            nEjecucion = 1;
+        }
     }
 
     public static void main1(int ejecucion, String caso, String tipoVNS, double alpha) {

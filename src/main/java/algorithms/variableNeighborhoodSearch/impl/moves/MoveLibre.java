@@ -87,6 +87,7 @@ public class MoveLibre extends AbstractNeighborStructure {
 //                            return x;
 //                        }
 
+                        // Aquí se comprueban las restricciones de dominio
                         if (x.getTurnos().get(c1).substring(periodo[0], periodo[0] + longitud).contains(STRING_NO_TURNO)
                                 || x.getTurnos().get(c2).substring(periodo[0], periodo[0] + longitud).contains(STRING_NO_TURNO))
                             continue; // NOTE: o ´return x´, si queremos que no se prueben todos
