@@ -68,8 +68,8 @@ public abstract class AbstractNeighborStructure implements NeighborStructure {
         double fitActual = -1;
 
         // En la busqueda local, iteramos repetidas veces hasta que no haya mejora
-        while (porcentajeMejora > parametrosAlgoritmo.VNS.getPorcentajeMinimoMejoria()
-                && System.currentTimeMillis() - AbstractVariableNeighborhoodSearch.initTime < parametrosAlgoritmo.getMaxMilisecondsAllowed()) {
+        while (porcentajeMejora > parametrosAlgoritmo.VNS.getPorcentajeMinimoMejoria()/* FIXME CONDICION PARADA SESGADA
+                && System.currentTimeMillis() - AbstractVariableNeighborhoodSearch.initTime < parametrosAlgoritmo.getMaxMilisecondsAllowed()*/) {
 
             x_prime = buscarSolucion(x);
 

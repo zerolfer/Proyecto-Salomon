@@ -42,8 +42,8 @@ public class VariableNeighborhoodSkewed extends AbstractVariableNeighborhoodSear
         long t = 0;
 
         do {
-            while (/*t < getMaxTimeAllowed() FIXME CONDICION PARADA SESGADA &&*/ super.getCurrentNeighborhoodIndex() < neighborStructures.size() &&
-                    porcentajeMejora > getPorcentajeMinimoMejoria()) {
+            while (t < getMaxTimeAllowed() /*FIXME CONDICION PARADA SESGADA */ && super.getCurrentNeighborhoodIndex() < neighborStructures.size() /*&&
+                    porcentajeMejora > getPorcentajeMinimoMejoria()*/) {
 
                 if (Log.isOn() && Log.checkIter(contadorIteraciones)) {
                     String s = "[VNS] tiempo: " + (System.currentTimeMillis() - initTime) / 1000 + "s" +
@@ -101,13 +101,13 @@ public class VariableNeighborhoodSkewed extends AbstractVariableNeighborhoodSear
                     fitnessMejor = fit[0];
 
                 contadorIteraciones++;
-                Log.info("");
+                Log.info("", contadorIteraciones);
             }
 
             setCurrentNeighborhoodIndex(0);
             contadorReinicios++;
             x = x_best;
-        } while (/*t < getMaxTimeAllowed() && FIXME CONDICION PARADA SESGADA*/ porcentajeMejora > getPorcentajeMinimoMejoria());
+        } while (t < getMaxTimeAllowed()/* && FIXME CONDICION PARADA SESGADA*//* porcentajeMejora > getPorcentajeMinimoMejoria()*/);
 
 //        Log.debug
         double[] fit = fitness(x_best);

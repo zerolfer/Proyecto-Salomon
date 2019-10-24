@@ -96,8 +96,8 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
         double fitnessAnterior = -1;
         double fitnessMejor = -1;
         do {
-            while (/*t < maxTimeAllowed && FIXME CONDICION PARADA SESGADA*/currentNeighborhoodIndex < neighborStructures.size() &&
-                    porcentajeMejora > porcentajeMinimoMejoria) {
+            while (t < maxTimeAllowed && /*FIXME CONDICION PARADA SESGADA*/currentNeighborhoodIndex < neighborStructures.size()/* &&
+                    porcentajeMejora > porcentajeMinimoMejoria*/) {
 
                 if (Log.isOn() && Log.checkIter(contadorIteraciones)) {
                     String s = "[VNS] tiempo: " + (System.currentTimeMillis() - initTime) / 1000 + "s" +
@@ -147,7 +147,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
             }
             currentNeighborhoodIndex = 0;
             contadorReinicios++;
-        } while (/*t < maxTimeAllowed FIXME CONDICION PARADA SESGADA &&*/ porcentajeMejora > porcentajeMinimoMejoria);
+        } while (t < maxTimeAllowed /*FIXME CONDICION PARADA SESGADA && *//*porcentajeMejora > porcentajeMinimoMejoria*/);
 
         double[] fit = fitness(x);
         Log.debug("[Fin VNS] Fitness final: " + fit[0] +

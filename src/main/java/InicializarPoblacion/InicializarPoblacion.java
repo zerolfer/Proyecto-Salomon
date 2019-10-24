@@ -307,7 +307,7 @@ public class InicializarPoblacion {
     private static boolean checkAcreditaciones(Sector sectorAfin, List<Controlador> controladores, String afin, int indice) {
 
         Controlador controlador = controladores.get(indice);
-        if (controlador.getTurnoAsignado() != indice) // esto ahorra tiempo de cómputo innecesario en algunos casos 
+        if (controlador.getTurnoAsignado() != indice) // esto ahorra tiempo de cómputo innecesario en algunos casos
             controlador = CridaUtils.obtenerControladorTurno(indice, controladores);
 
         if (controlador != null && controlador.isCON() && !sectorAfin.isRuta())

@@ -33,12 +33,13 @@ public class Main {
     public static void main(String[] args) {
         int nEjecucion = 1;
         int[] casos = {1, 3, 4, 5, 6, 7, 8, 9};
+        double[] alphas = {5, 0.5, 5, 30, 30, 5, 20, 15};
         for (int i = 0; i < casos.length; i++)
             for (String tipoVNS : new String[]{"VND", "RVNS", "BVNS", "GVNS", "SVNS"})
-                main1(nEjecucion, "Caso" + casos[i] /*loadCasoFromProperties()*/, tipoVNS);
+                main1(nEjecucion, "Caso" + casos[i] /*loadCasoFromProperties()*/, tipoVNS, alphas[i]);
     }
 
-    public static void main1(int ejecucion, String caso, String tipoVNS) {
+    public static void main1(int ejecucion, String caso, String tipoVNS, double alpha) {
         /*INICIALIZACION DE DATOS*/
         DeciderCase.switchCase(caso);
 
@@ -70,7 +71,7 @@ public class Main {
         ArrayList<Solucion> poblacionInicial = InicializarPoblacion.inicializarPoblacion(entrada, parametros, patrones);
 
         // OUTPUT ///////////////////////////////////////////////////////////////////////////////////////////////////
-//        solEntrada.addAll(poblacionInicial);
+        solEntrada.addAll(poblacionInicial);
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         switch (parametrosAlgoritmo.getAlgoritmo()) {
@@ -93,13 +94,7 @@ public class Main {
         Patrones.nuc = new ArrayList<>();
 
         // OUTPUT ///////////////////////////////////////////////////////////////////////////////////////////////////
-        StringBuilder sb = new StringBuilder();
-        sb.append(caso);
-        sb.append("-");
-        sb.append(ejecucion);
-//        sb.append("-Inicial+Fase1+Fase2");
-
-        rwFiles.EscrituraExcel.EscrituraSoluciones(sb.toString()/*caso + "-" /*+ ejecucion*/ /*+ "-Inicial+Fase1+Fase2"*/,
+        rwFiles.EscrituraExcel.EscrituraSoluciones(caso + "-" + ejecucion /*+ "-Inicial+Fase1+Fase2"*/,
                 Main.carpetaSoluciones, solEntrada, entrada, patrones, parametros, parametrosAlgoritmo);
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
