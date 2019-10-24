@@ -25,6 +25,7 @@ public class Solucion implements Cloneable {
      */
     private int longdescansos = 0;
 
+    private boolean yaOrdenado = true;
     /**
      * Constructor
      *
@@ -46,7 +47,7 @@ public class Solucion implements Cloneable {
         ArrayList<String> turnos = (ArrayList<String>) this.getTurnos().clone();
         ArrayList<Controlador> cnew = new ArrayList<>();
         this.getControladores().forEach(c -> cnew.add(c.clone()));
-        return new Solucion(turnos, cnew, this.getLongdescansos());
+        return new Solucion(turnos, cnew, this.getLongdescansos()).setYaOrdenado(this.yaOrdenado);
     }
 
     /**
@@ -94,5 +95,14 @@ public class Solucion implements Cloneable {
     @Override
     public int hashCode() {
         return Objects.hash(controladores, turnos, longdescansos);
+    }
+
+    public boolean isYaOrdenado() {
+        return yaOrdenado;
+    }
+
+    public Solucion setYaOrdenado(boolean yaOrdenado) {
+        this.yaOrdenado = yaOrdenado;
+        return this;
     }
 }

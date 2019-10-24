@@ -143,7 +143,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
 
                 contadorIteraciones++;
 
-                Log.info("");
+                Log.info("", contadorIteraciones);
             }
             currentNeighborhoodIndex = 0;
             contadorReinicios++;
