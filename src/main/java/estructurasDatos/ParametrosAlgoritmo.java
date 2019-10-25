@@ -1,6 +1,8 @@
 package estructurasDatos;
 
 import algorithms.variableNeighborhoodSearch.NeighborStructure;
+import algorithms.variableNeighborhoodSearch.NeighborhoodStructure;
+import algorithms.variableNeighborhoodSearch.impl.NeighborhoodStructureDeterminista;
 import algorithms.variableNeighborhoodSearch.impl.moves.MoveFactory;
 import estructurasDatos.DominioDelProblema.Entrada;
 import patrones.Patrones;
@@ -61,22 +63,6 @@ public class ParametrosAlgoritmo {
         return propParametrosAlgoritmo.getProperty(propertie);
     }
 
-    @SuppressWarnings("AccessStaticViaInstance")
-    public void initializeNeighborStructures(Entrada entrada, Patrones patrones,
-                                             Parametros parametros,
-                                             ParametrosAlgoritmo parametrosAlgoritmo, String str) {
-
-        String texto = str == "" ? getString(VNS.NEIGHBOR_STRUCTURES) : str;
-        String[] nombresMovimientos = texto.split(",");
-
-        List<NeighborStructure> result = new ArrayList<>();
-        for (String id : nombresMovimientos) {
-            // FACTORY METHOD
-            result.add(MoveFactory.createNeighborhood(id, entrada, patrones, parametros, parametrosAlgoritmo));
-        }
-        VNS.neighborStructures = result;
-    }
-
     private void loadProperties(String resourcePath) {
         try {
             propParametrosAlgoritmo.load(
@@ -114,6 +100,10 @@ public class ParametrosAlgoritmo {
 
     private int getInteger(String propertie) {
         return Integer.parseInt(propParametrosAlgoritmo.getProperty(propertie));
+    }
+
+    private boolean getBoolean(String propertie) {
+        return Boolean.parseBoolean(propParametrosAlgoritmo.getProperty(propertie));
     }
 
     public String getAlgoritmo() {
@@ -419,7 +409,7 @@ public class ParametrosAlgoritmo {
         public static final String NEIGHBOR_STRUCTURES = "neighborStructures";
         private static final String NUM_MAX_ITERACIONES_BUSQUEDA_LOCAL = "numMaxIteracionesBusquedaLocal";
 
-        private List<NeighborStructure> neighborStructures;
+        private NeighborhoodStructure neighborStructures;
         private int numMaxIteracionesSinMejoraBusquedaLocal = getInteger("numMaxIteracionesSinMejoraBusquedaLocal");
         private double porcentajeMinimoMejoria = inicializarIteracionesMax();
         private int numIteracionesParaComprobarCondicionParadaPorcentaje = getInteger("numIteracionesParaComprobarCondicionParadaPorcentaje");
@@ -434,12 +424,26 @@ public class ParametrosAlgoritmo {
             else return Double.parseDouble(property);
         }
 
+//        @SuppressWarnings("AccessStaticViaInstance")
+        public void initializeNeighborStructures(Entrada entrada, Patrones patrones,
+                                                 Parametros parametros,
+                                                 ParametrosAlgoritmo parametrosAlgoritmo, String str) {
+
+            String texto = str.equals("") ? getString(VNS.NEIGHBOR_STRUCTURES) : str;
+            String[] nombresMovimientos = texto.split(",");
+
+            boolean variacionProbabilistica = getBoolean("neighborStructures.probabilistico");
+            VNS.neighborStructures = variacionProbabilistica?
+                    null
+                    :
+                    new NeighborhoodStructureDeterminista(nombresMovimientos, entrada, patrones, parametros, parametrosAlgoritmo);
+        }
 
         /**
          * Conjunto de estructuras de vecindad que serán empleadas por el VNS en el
          * orden estricto en el que se encuentran en la lista.
          */
-        public List<NeighborStructure> getNeighborStructures() {
+        public NeighborhoodStructure getNeighborStructures() {
             return neighborStructures;
         }
 
@@ -465,7 +469,7 @@ public class ParametrosAlgoritmo {
             this.porcentajeMinimoMejoria = porcentajeMinimoMejoria;
         }
 
-        public void setNeighborStructures(List<NeighborStructure> neighborStructures) {
+        public void setNeighborStructures(NeighborhoodStructure neighborStructures) {
             this.neighborStructures = neighborStructures;
         }
 

@@ -34,7 +34,7 @@ public class Main_VNS {
 //        /*FIN PRESENTACION DE RESULTADOS Y TRAZAS*/
 //        System.out.println("Done");
 //
-        parametrosAlgoritmo.initializeNeighborStructures(entrada, patrones, parametros, parametrosAlgoritmo, estrucVecindad);
+        parametrosAlgoritmo.VNS.initializeNeighborStructures(entrada, patrones, parametros, parametrosAlgoritmo, estrucVecindad);
 
         VariableNeighborhoodSearch vns = VnsFactory.getVNS(entrada, patrones, parametros, parametrosAlgoritmo);
 
