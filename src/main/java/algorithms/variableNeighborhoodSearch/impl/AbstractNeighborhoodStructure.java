@@ -1,4 +1,4 @@
-package algorithms.variableNeighborhoodSearch.impl.moves;
+package algorithms.variableNeighborhoodSearch.impl;
 
 import algorithms.MetaheuristicUtil;
 import algorithms.variableNeighborhoodSearch.NeighborhoodStructure;
@@ -183,7 +183,7 @@ public abstract class AbstractNeighborhoodStructure implements NeighborhoodStruc
 //        return null;
 //    }
 
-    void doChange(Solucion x, String turnoA, String turnoB,
+    protected void doChange(Solucion x, String turnoA, String turnoB,
                   int desde, int hasta, int idx1, int idx2) {
 
         // obtenemos el resto de trozos
@@ -214,14 +214,14 @@ public abstract class AbstractNeighborhoodStructure implements NeighborhoodStruc
         return this.entrada.getNucleos();
     }
 
-    int getSlotMomentoActual() {
+    protected int getSlotMomentoActual() {
         return entrada.getSlotMomentoActual();
     }
 
     /**
      * Obtiene los sectores en los que el controlador trabaja dentro de un intervalo de la matriz de trabajo
      */
-    Set<String> obtenerSectores(Solucion x, int controlador, int desde, int hasta) {
+    protected Set<String> obtenerSectores(Solucion x, int controlador, int desde, int hasta) {
         String turno = x.getTurnos().get(controlador).substring(desde, hasta);
         Set<String> sectores = new HashSet<>();
         for (int i = getSlotMomentoActual() * LONGITUD_CADENAS; i <= turno.length() - LONGITUD_CADENAS; i += LONGITUD_CADENAS) {
@@ -234,7 +234,7 @@ public abstract class AbstractNeighborhoodStructure implements NeighborhoodStruc
 
     }
 
-    boolean comprobarNucleos(Set<String> sectoresC1, Set<String> sectoresC2, Controlador c1, Controlador c2) {
+    protected boolean comprobarNucleos(Set<String> sectoresC1, Set<String> sectoresC2, Controlador c1, Controlador c2) {
 
         if (c1 == null && c2 == null) return true; // si los dos son imaginario, el cambio se puede hacer sin problemas
 
@@ -274,7 +274,7 @@ public abstract class AbstractNeighborhoodStructure implements NeighborhoodStruc
 
     }
 
-    List<int[]> getIntervalos(String turno) {
+    protected List<int[]> getIntervalos(String turno) {
         List<int[]> res = new ArrayList<>();
 
         // recorremos el turno

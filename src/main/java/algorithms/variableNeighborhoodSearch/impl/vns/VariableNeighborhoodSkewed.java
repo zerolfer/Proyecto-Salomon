@@ -1,6 +1,7 @@
-package algorithms.variableNeighborhoodSearch.impl;
+package algorithms.variableNeighborhoodSearch.impl.vns;
 
 import algorithms.MetaheuristicUtil;
+import algorithms.variableNeighborhoodSearch.impl.AbstractVariableNeighborhoodSearch;
 import estructurasDatos.DominioDelProblema.Controlador;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
@@ -23,7 +24,7 @@ public class VariableNeighborhoodSkewed extends AbstractVariableNeighborhoodSear
 
     private double distancia;
 
-    public VariableNeighborhoodSkewed(Parametros parametros, Patrones patrones,
+    VariableNeighborhoodSkewed(Parametros parametros, Patrones patrones,
                                       ParametrosAlgoritmo parametrosAlgoritmo, Entrada entrada) {
         super(parametros, patrones, parametrosAlgoritmo, entrada);
         this.alpha = parametrosAlgoritmo.VNS.getAlpha();
@@ -126,7 +127,7 @@ public class VariableNeighborhoodSkewed extends AbstractVariableNeighborhoodSear
     }
 
     @Override
-    boolean checkCondicionReiniciarVecindad(Solucion x, Solucion x_prime) {
+    protected boolean checkCondicionReiniciarVecindad(Solucion x, Solucion x_prime) {
 
         return fitness(x_prime)[0] + alpha * distancia > fitness(x)[0];
     }

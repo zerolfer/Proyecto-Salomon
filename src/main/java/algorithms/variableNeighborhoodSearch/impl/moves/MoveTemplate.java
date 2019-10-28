@@ -1,6 +1,7 @@
 package algorithms.variableNeighborhoodSearch.impl.moves;
 
 import algorithms.MetaheuristicUtil;
+import algorithms.variableNeighborhoodSearch.impl.AbstractNeighborhoodStructure;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
 import estructurasDatos.ParametrosAlgoritmo;

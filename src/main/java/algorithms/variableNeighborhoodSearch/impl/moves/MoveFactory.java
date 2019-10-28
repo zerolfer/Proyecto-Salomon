@@ -13,15 +13,16 @@ public class MoveFactory {
     /**
      * FACTORY METHOD, {@link ParametrosAlgoritmo.VNS}
      */
-    public static NeighborhoodStructure createNeighborhood(String id, Entrada entrada, Patrones patrones, Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo) {
+    public static NeighborhoodStructure createNeighborhood(String id, Entrada entrada, Patrones patrones,
+                                                           Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo) {
         switch (id) {
 
-            case "mov0":
-                return new Move0(entrada, patrones, parametros, parametrosAlgoritmo);
-            case "mov1":
-                return new Move1(entrada, patrones, parametros, parametrosAlgoritmo);
-            case "mov3":
-                return new MoveLibre(entrada, patrones, parametros, parametrosAlgoritmo);
+//            case "mov0":
+//                return new Move0(entrada, patrones, parametros, parametrosAlgoritmo);
+//            case "mov1":
+//                return new Move1(entrada, patrones, parametros, parametrosAlgoritmo);
+//            case "mov3":
+//                return new MoveLibre(entrada, patrones, parametros, parametrosAlgoritmo);
 
             case "movRejilla":
                 return new MoveRejilla(entrada, patrones, parametros, parametrosAlgoritmo);

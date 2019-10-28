@@ -45,23 +45,23 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
     /**
      * Véase {@link ParametrosAlgoritmo.VNS#getNeighborSet}
      */
-    NeighborhoodSet neighborhoodSet;
+    protected NeighborhoodSet neighborhoodSet;
 
     /**
      * Véase {@link ParametrosAlgoritmo.VNS#getNumMaxIteracionesSinMejoraBusquedaLocal()}
      */
     private double porcentajeMinimoMejoria;
 
-    double porcentajeMejora = 100;
+    protected double porcentajeMejora = 100;
     public static long initTime;
 
     ///////////////
     ///  DEBUG  ///
     ///////////////
 
-    int contadorIteraciones;
+    protected int contadorIteraciones;
 
-    AbstractVariableNeighborhoodSearch(Parametros parametros, Patrones patrones,
+    protected AbstractVariableNeighborhoodSearch(Parametros parametros, Patrones patrones,
                                        ParametrosAlgoritmo parametrosAlgoritmo, Entrada entrada) {
         this.parametros = parametros;
         this.patrones = patrones;
@@ -158,7 +158,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
     }
 
     // neighborhood change
-    Solucion neighborhoodChange(Solucion x, Solucion x_prime) {
+    protected Solucion neighborhoodChange(Solucion x, Solucion x_prime) {
 
         if (checkCondicionReiniciarVecindad(x, x_prime)) { // si es mejor... NOTE: maximización
             x = x_prime; // Make a move
@@ -169,7 +169,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
         return x;
     }
 
-    boolean checkCondicionReiniciarVecindad(Solucion x, Solucion x_prime) {
+    protected boolean checkCondicionReiniciarVecindad(Solucion x, Solucion x_prime) {
         return fitness(x_prime)[0] > fitness(x)[0];
     }
 
@@ -196,38 +196,38 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
      * @param x solucion incial
      * @return valor total ponderado de la funcion objetivo para la solucion x
      */
-    double[] fitness(Solucion x) {
+    protected double[] fitness(Solucion x) {
         return getCurrentNeighborhood().fitness(x);
     }
 
     /*
      * (used by the subclases)
      */
-    NeighborhoodSet getNeighborSet() {
+    protected NeighborhoodSet getNeighborSet() {
         return neighborhoodSet;
     }
 
     /*
      * (used by the subclases)
      */
-    NeighborhoodStructure getCurrentNeighborhood() {
+    protected NeighborhoodStructure getCurrentNeighborhood() {
         return neighborhoodSet.getCurrentNeighborhood();
     }
 
 
-    public Entrada getEntrada() {
+    protected Entrada getEntrada() {
         return entrada;
     }
 
-    public Parametros getParametros() {
+    protected Parametros getParametros() {
         return parametros;
     }
 
-    public ParametrosAlgoritmo getParametrosAlgoritmo() {
+    protected ParametrosAlgoritmo getParametrosAlgoritmo() {
         return parametrosAlgoritmo;
     }
 
-    public Patrones getPatrones() {
+    protected Patrones getPatrones() {
         return patrones;
     }
 
@@ -235,7 +235,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
 //        return currentNeighborhoodIndex;
 //    }
 
-    public double getPorcentajeMinimoMejoria() {
+    protected double getPorcentajeMinimoMejoria() {
         return porcentajeMinimoMejoria;
     }
 
@@ -243,11 +243,19 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
 //        neighborStructures.reset();
 //    }
 
-    public long getMaxTimeAllowed() {
+    protected long getMaxTimeAllowed() {
         return maxTimeAllowed;
     }
 
-    public int getNumIteracionesCiclo() {
+    protected int getNumIteracionesCiclo() {
         return numIteracionesCiclo;
+    }
+
+    protected NeighborhoodSet getNeighborhoodSet() {
+        return neighborhoodSet;
+    }
+
+    protected void setNeighborhoodSet(NeighborhoodSet neighborhoodSet) {
+        this.neighborhoodSet = neighborhoodSet;
     }
 }

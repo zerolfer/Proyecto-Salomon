@@ -1,5 +1,7 @@
-package algorithms.variableNeighborhoodSearch.impl;
+package algorithms.variableNeighborhoodSearch.impl.vns;
 
+import algorithms.variableNeighborhoodSearch.NeighborhoodSet;
+import algorithms.variableNeighborhoodSearch.impl.AbstractVariableNeighborhoodSearch;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
 import estructurasDatos.ParametrosAlgoritmo;
@@ -15,7 +17,7 @@ public class VariableNeighborhoodDescendent extends AbstractVariableNeighborhood
      * @param parametrosAlgoritmo
      * @param entrada
      */
-    public VariableNeighborhoodDescendent(Parametros parametros, Patrones patrones,
+    VariableNeighborhoodDescendent(Parametros parametros, Patrones patrones,
                                           ParametrosAlgoritmo parametrosAlgoritmo, Entrada entrada) {
         super(parametros, patrones, parametrosAlgoritmo, entrada);
     }
@@ -35,5 +37,10 @@ public class VariableNeighborhoodDescendent extends AbstractVariableNeighborhood
     @Override
     public String toString() {
         return "VND";
+    }
+
+    @Override
+    public void setNeighborhoodSet(NeighborhoodSet neighborhoodSet) {
+        super.setNeighborhoodSet(neighborhoodSet);
     }
 }

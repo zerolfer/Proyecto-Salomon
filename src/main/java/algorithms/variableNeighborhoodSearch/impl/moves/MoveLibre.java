@@ -1,6 +1,7 @@
 package algorithms.variableNeighborhoodSearch.impl.moves;
 
 import algorithms.MetaheuristicUtil;
+import algorithms.variableNeighborhoodSearch.impl.AbstractNeighborhoodStructure;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
 import estructurasDatos.ParametrosAlgoritmo;
@@ -18,7 +19,7 @@ import static herramientas.CridaUtils.STRING_NO_TURNO;
 
 public class MoveLibre extends AbstractNeighborhoodStructure {
 
-    public MoveLibre(Entrada entrada, Patrones patrones, Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo) {
+    MoveLibre(Entrada entrada, Patrones patrones, Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo) {
         super(entrada, patrones, parametros, parametrosAlgoritmo);
     }
 

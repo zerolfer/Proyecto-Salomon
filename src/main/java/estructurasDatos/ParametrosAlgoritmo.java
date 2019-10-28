@@ -430,7 +430,7 @@ public class ParametrosAlgoritmo {
 
             boolean variacionProbabilistica = getBoolean("neighborStructures.probabilistico");
             VNS.neighborSet = variacionProbabilistica?
-                    null
+                    new NeighborhoodSetProbabilistico(nombresMovimientos, entrada, patrones, parametros, parametrosAlgoritmo)
                     :
                     new NeighborhoodSetDeterminista(nombresMovimientos, entrada, patrones, parametros, parametrosAlgoritmo);
         }
