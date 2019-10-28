@@ -1,7 +1,7 @@
 package algorithms.variableNeighborhoodSearch.impl.neighborhood;
 
-import algorithms.variableNeighborhoodSearch.NeighborhoodStructure;
 import algorithms.variableNeighborhoodSearch.NeighborhoodSet;
+import algorithms.variableNeighborhoodSearch.NeighborhoodStructure;
 import algorithms.variableNeighborhoodSearch.impl.moves.MoveFactory;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;

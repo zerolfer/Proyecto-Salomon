@@ -73,7 +73,6 @@ public class CridaUtils {
     }
 
     /**
-     *
      * @param idxTurno
      * @param controladores
      * @return null si el controlador es imaginario, el objeto Controlador en caso de no serlo

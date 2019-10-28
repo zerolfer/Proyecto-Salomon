@@ -18,7 +18,7 @@ public class VariableNeighborhoodReduced extends AbstractVariableNeighborhoodSea
      * @param entrada
      */
     VariableNeighborhoodReduced(Parametros parametros, Patrones patrones,
-                                       ParametrosAlgoritmo parametrosAlgoritmo, Entrada entrada) {
+                                ParametrosAlgoritmo parametrosAlgoritmo, Entrada entrada) {
         super(parametros, patrones, parametrosAlgoritmo, entrada);
     }
 

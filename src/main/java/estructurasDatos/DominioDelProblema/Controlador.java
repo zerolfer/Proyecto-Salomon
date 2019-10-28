@@ -41,14 +41,15 @@ public class Controlador implements Cloneable {
      * Parametro para marcar cuando se utilizan mas controladores de los disponibles. "Fase pruebas"
      */
     private boolean imaginario;
-    
+
     private Propiedades bajaAlta;
-    
+
     private int slotBajaAlta;
 
     /**
      * Constructor
-     *  @param id         ID asignado a un controlador para su identificacion.
+     *
+     * @param id         ID asignado a un controlador para su identificacion.
      * @param turno      Turno de trabajo en el que el controlador realiza su jornada (Mañana Largo, Tarde Corto, Noche...).
      * @param nucleo     Nucleo que el controldor tiene asignado para realizar su trabajo.
      * @param pTD        Acreditacion del controlador (Si el controlador tiene esta acreditacion su valor sera true).
@@ -70,21 +71,21 @@ public class Controlador implements Cloneable {
     }
 
     public Controlador clone() {
-        Controlador con = new Controlador(this.id, this.turno, this.nucleo, this.PTD, this.CON, this.imaginario,this.bajaAlta,this.slotBajaAlta);
+        Controlador con = new Controlador(this.id, this.turno, this.nucleo, this.PTD, this.CON, this.imaginario, this.bajaAlta, this.slotBajaAlta);
         con.setTurnoAsignado(this.turnoAsignado);
         con.setTurnoNoche(this.turnoNoche);
         return con;
     }
 
     public int getSlotBajaAlta() {
-		return slotBajaAlta;
-	}
+        return slotBajaAlta;
+    }
 
-	public void setSlotBajaAlta(int slotBajaAlta) {
-		this.slotBajaAlta = slotBajaAlta;
-	}
+    public void setSlotBajaAlta(int slotBajaAlta) {
+        this.slotBajaAlta = slotBajaAlta;
+    }
 
-	public boolean isImaginario() {
+    public boolean isImaginario() {
         return imaginario;
     }
 
@@ -148,13 +149,13 @@ public class Controlador implements Cloneable {
         this.turnoNoche = turnoNoche;
     }
 
-	public Propiedades getBajaAlta() {
-		return bajaAlta;
-	}
+    public Propiedades getBajaAlta() {
+        return bajaAlta;
+    }
 
-	public void setBajaAlta(Propiedades bajaAlta) {
-		this.bajaAlta = bajaAlta;
-	}
+    public void setBajaAlta(Propiedades bajaAlta) {
+        this.bajaAlta = bajaAlta;
+    }
 
     @Override
     public String toString() {

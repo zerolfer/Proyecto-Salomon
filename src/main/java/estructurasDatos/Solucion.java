@@ -26,6 +26,7 @@ public class Solucion implements Cloneable {
     private int longdescansos = 0;
 
     private boolean yaOrdenado = true;
+
     /**
      * Constructor
      *

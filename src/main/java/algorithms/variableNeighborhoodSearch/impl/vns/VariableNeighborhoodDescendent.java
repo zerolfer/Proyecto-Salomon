@@ -18,7 +18,7 @@ public class VariableNeighborhoodDescendent extends AbstractVariableNeighborhood
      * @param entrada
      */
     VariableNeighborhoodDescendent(Parametros parametros, Patrones patrones,
-                                          ParametrosAlgoritmo parametrosAlgoritmo, Entrada entrada) {
+                                   ParametrosAlgoritmo parametrosAlgoritmo, Entrada entrada) {
         super(parametros, patrones, parametrosAlgoritmo, entrada);
     }
 

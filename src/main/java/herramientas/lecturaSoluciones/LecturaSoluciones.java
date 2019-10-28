@@ -40,7 +40,7 @@ public class LecturaSoluciones {
         ArrayList<Controlador> c = new ArrayList<>();
         for (int i = 0; i < entrada.getControladores().size(); i++) {
             Controlador cntl = entrada.getControladores().get(i);
-            c.add(new Controlador(cntl.getId(), cntl.getTurno(), cntl.getNucleo(), cntl.isPTD(), cntl.isCON(), cntl.isImaginario(),cntl.getBajaAlta(),cntl.getSlotBajaAlta()));
+            c.add(new Controlador(cntl.getId(), cntl.getTurno(), cntl.getNucleo(), cntl.isPTD(), cntl.isCON(), cntl.isImaginario(), cntl.getBajaAlta(), cntl.getSlotBajaAlta()));
         }
         c.get(0).setTurnoAsignado(6);
         c.get(1).setTurnoAsignado(1);

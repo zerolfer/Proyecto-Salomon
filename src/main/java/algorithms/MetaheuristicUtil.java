@@ -1,12 +1,10 @@
 package algorithms;
 
 import estructurasDatos.DominioDelProblema.Controlador;
-import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.DominioDelProblema.Nucleo;
 import estructurasDatos.DominioDelProblema.Sector;
 import estructurasDatos.Solucion;
 import fitnessFunction.Fitness;
-import org.apache.commons.lang3.mutable.MutableBoolean;
 
 import java.util.ArrayList;
 import java.util.HashSet;

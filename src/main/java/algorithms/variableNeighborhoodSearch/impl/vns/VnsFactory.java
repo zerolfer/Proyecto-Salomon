@@ -1,7 +1,6 @@
 package algorithms.variableNeighborhoodSearch.impl.vns;
 
 import algorithms.variableNeighborhoodSearch.VariableNeighborhoodSearch;
-import algorithms.variableNeighborhoodSearch.impl.vns.*;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
 import estructurasDatos.ParametrosAlgoritmo;

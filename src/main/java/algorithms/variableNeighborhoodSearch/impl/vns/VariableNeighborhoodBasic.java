@@ -18,7 +18,7 @@ public class VariableNeighborhoodBasic extends AbstractVariableNeighborhoodSearc
      * @param entrada
      */
     VariableNeighborhoodBasic(Parametros parametros, Patrones patrones,
-                                     ParametrosAlgoritmo parametrosAlgoritmo, Entrada entrada) {
+                              ParametrosAlgoritmo parametrosAlgoritmo, Entrada entrada) {
         super(parametros, patrones, parametrosAlgoritmo, entrada);
     }
 

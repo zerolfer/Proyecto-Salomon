@@ -184,7 +184,7 @@ public abstract class AbstractNeighborhoodStructure implements NeighborhoodStruc
 //    }
 
     protected void doChange(Solucion x, String turnoA, String turnoB,
-                  int desde, int hasta, int idx1, int idx2) {
+                            int desde, int hasta, int idx1, int idx2) {
 
         // obtenemos el resto de trozos
         String previoB = turnoB.substring(0, desde);

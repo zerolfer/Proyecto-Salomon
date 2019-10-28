@@ -174,7 +174,7 @@ public class FitnessFase3 {
      * @param tabla                 Lista de turnos de trabajo.
      * @return Valor de la funcion objetivo normalizado.
      */
-    public static double estadillos(int numeroControladores, int numeroFranjasHorarias, ArrayList<String> tabla,int momentoActual) {
+    public static double estadillos(int numeroControladores, int numeroFranjasHorarias, ArrayList<String> tabla, int momentoActual) {
         int count = 0;
         for (int i = 0; i < numeroControladores; i++) {
             for (int j = momentoActual; j < numeroFranjasHorarias; j++) {
@@ -193,7 +193,7 @@ public class FitnessFase3 {
                 }
             }
         }
-        double max = (numeroControladores - 1) * ((numeroFranjasHorarias - momentoActual)- 1) * 2;
+        double max = (numeroControladores - 1) * ((numeroFranjasHorarias - momentoActual) - 1) * 2;
         double normalizado = 1 - ((max - count) / max);
         return normalizado;
     }

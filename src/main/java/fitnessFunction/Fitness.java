@@ -291,7 +291,7 @@ public class Fitness {
                     f3 * paramAlg.getPonderacionFitness3() +
                     f4 * paramAlg.getPonderacionFitness4();
             if (fit < 0 || fit > 1) {
-                System.out.println("Error, el fitness deberia ser un valor entre 0 y 1: " + fit + " (" + f1 + ", " + f2+ ", " + f3 + ", " + f4+")");
+                System.out.println("Error, el fitness deberia ser un valor entre 0 y 1: " + fit + " (" + f1 + ", " + f2 + ", " + f3 + ", " + f4 + ")");
             }
         }
 

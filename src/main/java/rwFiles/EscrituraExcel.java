@@ -121,12 +121,12 @@ public class EscrituraExcel {
             e.printStackTrace();
         }
         ArrayList<Set<String>> sect = entrada.getSectorizacion();
-        if(entrada.getSectorizacionModificada()!=null) {
+        if (entrada.getSectorizacionModificada() != null) {
             sect = entrada.getSectorizacionModificada();//.getSectorizacion();        	
         }
         ArrayList<List<String>> sectFinal = new ArrayList<>();
         ArrayList<Sector> sectAbiertos = entrada.getListaSectoresAbiertos();
-        
+
         /*MODIFICO LA SECTORIZACION PARA PASAR DE ID A NOMBRE*/
         for (Set<String> strings : sect) {
             List<String> slot = new ArrayList<>(strings);

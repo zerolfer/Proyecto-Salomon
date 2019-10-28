@@ -1,8 +1,8 @@
 package algorithms.variableNeighborhoodSearch.impl;
 
 import algorithms.MetaheuristicUtil;
-import algorithms.variableNeighborhoodSearch.NeighborhoodStructure;
 import algorithms.variableNeighborhoodSearch.NeighborhoodSet;
+import algorithms.variableNeighborhoodSearch.NeighborhoodStructure;
 import algorithms.variableNeighborhoodSearch.VariableNeighborhoodSearch;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
@@ -62,7 +62,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
     protected int contadorIteraciones;
 
     protected AbstractVariableNeighborhoodSearch(Parametros parametros, Patrones patrones,
-                                       ParametrosAlgoritmo parametrosAlgoritmo, Entrada entrada) {
+                                                 ParametrosAlgoritmo parametrosAlgoritmo, Entrada entrada) {
         this.parametros = parametros;
         this.patrones = patrones;
         this.parametrosAlgoritmo = parametrosAlgoritmo;

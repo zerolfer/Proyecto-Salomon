@@ -2,6 +2,7 @@ package estructurasDatos;
 
 import algorithms.variableNeighborhoodSearch.NeighborhoodSet;
 import algorithms.variableNeighborhoodSearch.impl.neighborhood.NeighborhoodSetDeterminista;
+import algorithms.variableNeighborhoodSearch.impl.neighborhood.NeighborhoodSetProbabilistico;
 import estructurasDatos.DominioDelProblema.Entrada;
 import patrones.Patrones;
 import trazas.Trazas;
@@ -402,7 +403,7 @@ public class ParametrosAlgoritmo {
 
     public class VNS {
 
-        public static final String NEIGHBOR_STRUCTURES = "neighborStructures";
+        static final String NEIGHBOR_STRUCTURES = "neighborStructures";
         private static final String NUM_MAX_ITERACIONES_BUSQUEDA_LOCAL = "numMaxIteracionesBusquedaLocal";
 
         private NeighborhoodSet neighborSet;
@@ -420,7 +421,7 @@ public class ParametrosAlgoritmo {
             else return Double.parseDouble(property);
         }
 
-//        @SuppressWarnings("AccessStaticViaInstance")
+        @SuppressWarnings("AccessStaticViaInstance")
         public void initializeNeighborStructures(Entrada entrada, Patrones patrones,
                                                  Parametros parametros,
                                                  ParametrosAlgoritmo parametrosAlgoritmo, String str) {
@@ -429,7 +430,7 @@ public class ParametrosAlgoritmo {
             String[] nombresMovimientos = texto.split(",");
 
             boolean variacionProbabilistica = getBoolean("neighborStructures.probabilistico");
-            VNS.neighborSet = variacionProbabilistica?
+            VNS.neighborSet = variacionProbabilistica ?
                     new NeighborhoodSetProbabilistico(nombresMovimientos, entrada, patrones, parametros, parametrosAlgoritmo)
                     :
                     new NeighborhoodSetDeterminista(nombresMovimientos, entrada, patrones, parametros, parametrosAlgoritmo);

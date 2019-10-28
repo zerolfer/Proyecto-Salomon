@@ -25,7 +25,7 @@ public class VariableNeighborhoodSkewed extends AbstractVariableNeighborhoodSear
     private double distancia;
 
     VariableNeighborhoodSkewed(Parametros parametros, Patrones patrones,
-                                      ParametrosAlgoritmo parametrosAlgoritmo, Entrada entrada) {
+                               ParametrosAlgoritmo parametrosAlgoritmo, Entrada entrada) {
         super(parametros, patrones, parametrosAlgoritmo, entrada);
         this.alpha = parametrosAlgoritmo.VNS.getAlpha();
         this.funcionDistancia = parametrosAlgoritmo.VNS.getFuncionDistancia();

@@ -47,24 +47,24 @@ public class Log {
 
     public static void open() {
 //        if (FICHERO)
-            try {
-                Date date = new Date();
-                DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss");
+        try {
+            Date date = new Date();
+            DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss");
 
-                String[] nameFiles = new File(Main.carpetaTrazas).list();
-                int number;
-                if (nameFiles == null)
-                    number = 1;
-                else
-                    number = nameFiles.length + 1;
+            String[] nameFiles = new File(Main.carpetaTrazas).list();
+            int number;
+            if (nameFiles == null)
+                number = 1;
+            else
+                number = nameFiles.length + 1;
 
-                String name = Main.carpetaTrazas +/* dateFormat.format(date) */"output" + number + ".csv";
-                File f = new File(name);
-                f.getParentFile().mkdirs();
-                f.createNewFile();
-                fh = new BufferedWriter((new OutputStreamWriter(new FileOutputStream(f), StandardCharsets.UTF_8)));
+            String name = Main.carpetaTrazas +/* dateFormat.format(date) */"output" + number + ".csv";
+            File f = new File(name);
+            f.getParentFile().mkdirs();
+            f.createNewFile();
+            fh = new BufferedWriter((new OutputStreamWriter(new FileOutputStream(f), StandardCharsets.UTF_8)));
 
-                //                fh = new FileHandler(name);
+            //                fh = new FileHandler(name);
 //                fh.setFormatter(new SimpleFormatter());
 //                fh.setFormatter(new SimpleFormatter() {
 //                    @Override
@@ -74,24 +74,24 @@ public class Log {
 //                });
 //                logFile.addHandler(fh);
 
-                if (FICHERO)
-                    fh.write(
-                            // cabecera del CSV
-                            "iteracion" + STRING_SEPARADOR_CSV +
-                                    "tiempo (ms)" + STRING_SEPARADOR_CSV +
-                                    "fitness total" + STRING_SEPARADOR_CSV +
-                                    "fitness 1" + STRING_SEPARADOR_CSV +
-                                    "fitness 2" + STRING_SEPARADOR_CSV +
-                                    "fitness 3" + STRING_SEPARADOR_CSV +
-                                    "fitness 4" + STRING_SEPARADOR_CSV +
-                                    "tamaño" + STRING_SEPARADOR_CSV +
-                                    "porcentajeMejora" + STRING_SEPARADOR_CSV +
-                                    "vecindad." + "\n"
-                    );
+            if (FICHERO)
+                fh.write(
+                        // cabecera del CSV
+                        "iteracion" + STRING_SEPARADOR_CSV +
+                                "tiempo (ms)" + STRING_SEPARADOR_CSV +
+                                "fitness total" + STRING_SEPARADOR_CSV +
+                                "fitness 1" + STRING_SEPARADOR_CSV +
+                                "fitness 2" + STRING_SEPARADOR_CSV +
+                                "fitness 3" + STRING_SEPARADOR_CSV +
+                                "fitness 4" + STRING_SEPARADOR_CSV +
+                                "tamaño" + STRING_SEPARADOR_CSV +
+                                "porcentajeMejora" + STRING_SEPARADOR_CSV +
+                                "vecindad." + "\n"
+                );
 
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -148,7 +148,7 @@ public class Log {
     /**
      * Imprime por fichero esté activo o no el csv
      */
-    public static void csvDebug(Object...elem){
+    public static void csvDebug(Object... elem) {
         csvWriter(elem);
     }
 
