@@ -2,6 +2,7 @@ package algorithms.variableNeighborhoodSearch.impl.moves;
 
 import algorithms.MetaheuristicUtil;
 import algorithms.variableNeighborhoodSearch.impl.AbstractNeighborhoodStructure;
+import estructurasDatos.Auxiliares.Random;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
 import estructurasDatos.ParametrosAlgoritmo;
@@ -46,7 +47,7 @@ public class MoveLibre extends AbstractNeighborhoodStructure {
 
         // paso 1: elegimos un controlador aleatoriamente
         while (c1Indices.size() > 0) {
-            int idx1 = random.nextInt(c1Indices.size());
+            int idx1 = Random.nextInt(c1Indices.size());
             int c1 = c1Indices.get(idx1);
             c1Indices.remove(idx1); // para evitar repetidos
 
@@ -55,7 +56,7 @@ public class MoveLibre extends AbstractNeighborhoodStructure {
             Set<Integer> trabajoC1Indices = IntStream.range(0, trabajosC1.size())
                     .boxed().collect(Collectors.toSet());
             while (trabajoC1Indices.size() > 0) {
-                int intervaloIdx = random.nextInt(trabajosC1.size());
+                int intervaloIdx = Random.nextInt(trabajosC1.size());
                 int[] periodo = trabajosC1.get(intervaloIdx);
                 trabajoC1Indices.remove(intervaloIdx);
 
@@ -68,7 +69,7 @@ public class MoveLibre extends AbstractNeighborhoodStructure {
                 // intentamos mover la mayor carga posible
                 for (int longitud = maxLongIntervalo; longitud > 0; longitud -= LONGITUD_CADENAS) { // TODO verificar que este cambio es correcto
 //                while (longitudesList.size() > 0) { // (NOTE: lo comentado es la version anterior)
-//                    int idxLongitud = random.nextInt(longitudesList.size()); // NOTE: esto podria ser otro movimiento, que en lugar de optar por el mayor cambio de carga, lo haga aleatoriamente!!
+//                    int idxLongitud = Random.nextInt(longitudesList.size()); // NOTE: esto podria ser otro movimiento, que en lugar de optar por el mayor cambio de carga, lo haga aleatoriamente!!
 //                    int longitud = longitudesList.get(idxLongitud);
 //                    longitudesList.remove(idxLongitud);
 
@@ -79,7 +80,7 @@ public class MoveLibre extends AbstractNeighborhoodStructure {
                     c2Indices.remove(c1); // no hay que comparar consigo mismo
 
                     while (c2Indices.size() > 0) {
-                        int idx2 = random.nextInt(c2Indices.size());
+                        int idx2 = Random.nextInt(c2Indices.size());
                         int c2 = c2Indices.get(idx2);
                         c2Indices.remove(idx2); // para evitar repetidos
 

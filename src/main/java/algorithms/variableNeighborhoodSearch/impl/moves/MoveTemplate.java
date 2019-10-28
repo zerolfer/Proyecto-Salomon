@@ -2,6 +2,7 @@ package algorithms.variableNeighborhoodSearch.impl.moves;
 
 import algorithms.MetaheuristicUtil;
 import algorithms.variableNeighborhoodSearch.impl.AbstractNeighborhoodStructure;
+import estructurasDatos.Auxiliares.Random;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
 import estructurasDatos.ParametrosAlgoritmo;
@@ -37,7 +38,7 @@ public abstract class MoveTemplate extends AbstractNeighborhoodStructure {
             Set<Integer> trabajoC1Indices = IntStream.range(0, trabajosC1.size())
                     .boxed().collect(Collectors.toSet());
             while (trabajoC1Indices.size() > 0) {
-                int intervaloIdx = random.nextInt(trabajosC1.size());
+                int intervaloIdx = Random.nextInt(trabajosC1.size());
                 int[] periodo = trabajosC1.get(intervaloIdx);
                 trabajoC1Indices.remove(intervaloIdx);
 
@@ -47,7 +48,7 @@ public abstract class MoveTemplate extends AbstractNeighborhoodStructure {
                 c2Indices.remove(c1); // no hay que comparar consigo mismo
 
                 while (c2Indices.size() > 0) {
-//                    int idx2 = random.nextInt(c2Indices.size());
+//                    int idx2 = Random.nextInt(c2Indices.size());
 //                    int c2 = c2Indices.get(idx2);
 //                    c2Indices.remove(idx2); // para evitar repetidos
                     int c2 = obtenerIndiceControlador2(c2Indices);
@@ -91,7 +92,7 @@ public abstract class MoveTemplate extends AbstractNeighborhoodStructure {
     }
 
     protected int obtenerIndiceControlador1Aleatoriamente(List<Integer> c1Indices) {
-        int idx1 = random.nextInt(c1Indices.size());
+        int idx1 = Random.nextInt(c1Indices.size());
         int c1 = c1Indices.get(idx1);
         c1Indices.remove(idx1); // para evitar repetidos
         return c1;

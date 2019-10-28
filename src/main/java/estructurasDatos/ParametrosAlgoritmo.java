@@ -430,10 +430,12 @@ public class ParametrosAlgoritmo {
             String[] nombresMovimientos = texto.split(",");
 
             boolean variacionProbabilistica = getBoolean("neighborStructures.probabilistico");
+            long init = System.currentTimeMillis();
             VNS.neighborSet = variacionProbabilistica ?
                     new NeighborhoodSetProbabilistico(nombresMovimientos, entrada, patrones, parametros, parametrosAlgoritmo)
                     :
                     new NeighborhoodSetDeterminista(nombresMovimientos, entrada, patrones, parametros, parametrosAlgoritmo);
+            System.out.println("init time: " + (System.currentTimeMillis() - init));
         }
 
         /**

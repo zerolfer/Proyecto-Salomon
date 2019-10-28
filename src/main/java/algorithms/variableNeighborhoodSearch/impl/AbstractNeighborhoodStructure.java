@@ -10,7 +10,6 @@ import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
 import fitnessFunction.DeciderFitnessFunction;
 import fitnessFunction.Fitness;
-import it.unimi.dsi.util.XoRoShiRo128PlusRandom;
 import patrones.Patrones;
 
 import java.util.*;
@@ -142,7 +141,6 @@ public abstract class AbstractNeighborhoodStructure implements NeighborhoodStruc
 //    public Solucion buscarSolucion(Solucion solActual, Entrada e, Patrones pt, Parametros p, ParametrosAlgoritmo pa) {
 //        Solucion x = solActual.clone();
 //
-//        XoRoShiRo128PlusRandom r = new XoRoShiRo128PlusRandom();
 //
 //        int idx1, idx2, num1 = 0, num2 = 0;
 //
@@ -150,7 +148,7 @@ public abstract class AbstractNeighborhoodStructure implements NeighborhoodStruc
 //        int numMax = x.getTurnos().size();
 //        String turnoA, turnoB;
 //        do {
-//            idx1 = r.nextInt(numMax);
+//            idx1 = Random.nextInt(numMax);
 //            turnoA = x.getTurnos().get(idx1);
 //            numSlotsNecesarios = MetaheuristicUtil.comprobarTrabajoMinimo(turnoA);
 //            num1++;
@@ -160,7 +158,7 @@ public abstract class AbstractNeighborhoodStructure implements NeighborhoodStruc
 //        String previoB, posteriorB;
 //        if (num1 >= numMax) return x;
 //        do {
-//            idx2 = r.nextInt(numMax);
+//            idx2 = Random.nextInt(numMax);
 //            turnoB = x.getTurnos().get(idx2);
 //            num2++;
 //            idx = numSlotsNecesarios[1];
@@ -207,8 +205,6 @@ public abstract class AbstractNeighborhoodStructure implements NeighborhoodStruc
     protected boolean esMejorQue(Solucion x, Solucion solucionInicial) {
         return Fitness.esMejorQue(patrones, entrada, parametros, parametrosAlgoritmo, x, solucionInicial);
     }
-
-    protected XoRoShiRo128PlusRandom random = new XoRoShiRo128PlusRandom();
 
     List<Nucleo> getNucleos() {
         return this.entrada.getNucleos();

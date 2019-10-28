@@ -37,11 +37,6 @@ public class NeighborhoodSetDeterminista implements NeighborhoodSet {
     }
 
     @Override
-    public NeighborhoodStructure getEntorno() {
-        return null;
-    }
-
-    @Override
     public boolean hayEntornosSinUsar() {
         return currentNeighborhoodIndex < neighborhoodStructures.size();
     }
