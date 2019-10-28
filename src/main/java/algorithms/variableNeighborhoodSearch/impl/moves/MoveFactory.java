@@ -1,6 +1,6 @@
 package algorithms.variableNeighborhoodSearch.impl.moves;
 
-import algorithms.variableNeighborhoodSearch.NeighborStructure;
+import algorithms.variableNeighborhoodSearch.NeighborhoodStructure;
 import algorithms.variableNeighborhoodSearch.impl.moves.moveMaxCarga.*;
 import algorithms.variableNeighborhoodSearch.impl.moves.moveRejilla.*;
 import estructurasDatos.DominioDelProblema.Entrada;
@@ -13,7 +13,7 @@ public class MoveFactory {
     /**
      * FACTORY METHOD, {@link ParametrosAlgoritmo.VNS}
      */
-    public static NeighborStructure createNeighborhood(String id, Entrada entrada, Patrones patrones, Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo) {
+    public static NeighborhoodStructure createNeighborhood(String id, Entrada entrada, Patrones patrones, Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo) {
         switch (id) {
 
             case "mov0":

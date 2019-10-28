@@ -14,7 +14,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public abstract class MoveTemplate extends AbstractNeighborStructure {
+public abstract class MoveTemplate extends AbstractNeighborhoodStructure {
 
     protected MoveTemplate(Entrada entrada, Patrones patrones, Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo) {
         super(entrada, patrones, parametros, parametrosAlgoritmo);

@@ -13,7 +13,7 @@ import static algorithms.MetaheuristicUtil.esDescanso;
 import static algorithms.MetaheuristicUtil.esTrabajo;
 import static herramientas.CridaUtils.*;
 
-public class Move1 extends AbstractNeighborStructure {
+public class Move1 extends AbstractNeighborhoodStructure {
 
 
     private static final int LIMITE_LONGITUD_INTERVALO = 18;

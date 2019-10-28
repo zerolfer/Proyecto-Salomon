@@ -1,8 +1,8 @@
 package algorithms.variableNeighborhoodSearch.impl;
 
 import algorithms.MetaheuristicUtil;
-import algorithms.variableNeighborhoodSearch.NeighborStructure;
 import algorithms.variableNeighborhoodSearch.NeighborhoodStructure;
+import algorithms.variableNeighborhoodSearch.NeighborhoodSet;
 import algorithms.variableNeighborhoodSearch.VariableNeighborhoodSearch;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
@@ -43,9 +43,9 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
     private long maxTimeAllowed;
 
     /**
-     * Véase {@link ParametrosAlgoritmo.VNS#getNeighborStructures}
+     * Véase {@link ParametrosAlgoritmo.VNS#getNeighborSet}
      */
-    NeighborhoodStructure neighborStructures;
+    NeighborhoodSet neighborhoodSet;
 
     /**
      * Véase {@link ParametrosAlgoritmo.VNS#getNumMaxIteracionesSinMejoraBusquedaLocal()}
@@ -69,7 +69,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
         this.entrada = entrada;
 
         this.maxTimeAllowed = parametrosAlgoritmo.getMaxMilisecondsAllowed();
-        this.neighborStructures = parametrosAlgoritmo.VNS.getNeighborStructures();
+        this.neighborhoodSet = parametrosAlgoritmo.VNS.getNeighborSet();
         this.porcentajeMinimoMejoria = parametrosAlgoritmo.VNS.getPorcentajeMinimoMejoria();
         this.numIteracionesCiclo = parametrosAlgoritmo.VNS.getNumIteracionesParaComprobarCondicionParadaPorcentaje();
     }
@@ -89,7 +89,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
         double fitnessAnterior = -1;
         double fitnessMejor = -1;
         do {
-            while (t < maxTimeAllowed && /*FIXME CONDICION PARADA SESGADA*/neighborStructures.hayEntornosSinUsar()/* &&
+            while (t < maxTimeAllowed && /*FIXME CONDICION PARADA SESGADA*/neighborhoodSet.hayEntornosSinUsar()/* &&
                     porcentajeMejora > porcentajeMinimoMejoria*/) {
 
                 if (Log.isOn() && Log.checkIter(contadorIteraciones)) {
@@ -138,7 +138,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
 
                 Log.info("", contadorIteraciones);
             }
-            neighborStructures.reset();
+            neighborhoodSet.reset();
             contadorReinicios++;
         } while (t < maxTimeAllowed /*FIXME CONDICION PARADA SESGADA && *//*porcentajeMejora > porcentajeMinimoMejoria*/);
 
@@ -162,9 +162,9 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
 
         if (checkCondicionReiniciarVecindad(x, x_prime)) { // si es mejor... NOTE: maximización
             x = x_prime; // Make a move
-            neighborStructures.reset(); // reset the neighborhood iteration
+            neighborhoodSet.reset(); // reset the neighborhood iteration
         } else {
-            neighborStructures.nextNeighborhood();  // Next neighborhood of the list
+            neighborhoodSet.nextNeighborhood();  // Next neighborhood of the list
         }
         return x;
     }
@@ -185,7 +185,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
      * @param x Solución inicial de la cual se ha de partir, para
      *          lograr una solución incluida dentro del conjunto de soluciones
      *          factibles pertenecientes a la vecindad (neighborhood) actual
-     *          {@link #getNeighborStructures().getCurrentNeighborhood()} <br/> ( <code>x_prime "pertenece a" N_k(x) </code>)
+     *          {@link #getNeighborSet().getCurrentNeighborhood()} <br/> ( <code>x_prime "pertenece a" N_k(x) </code>)
      * @return Siguiente solcuíon <code>x_prime</code> a evaluar para continuar el *bucle* VNS
      */
     protected abstract Solucion vnsImplemetation(Solucion x);
@@ -203,15 +203,15 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
     /*
      * (used by the subclases)
      */
-    NeighborhoodStructure getNeighborStructures() {
-        return neighborStructures;
+    NeighborhoodSet getNeighborSet() {
+        return neighborhoodSet;
     }
 
     /*
      * (used by the subclases)
      */
-    NeighborStructure getCurrentNeighborhood() {
-        return neighborStructures.getCurrentNeighborhood();
+    NeighborhoodStructure getCurrentNeighborhood() {
+        return neighborhoodSet.getCurrentNeighborhood();
     }
 
 

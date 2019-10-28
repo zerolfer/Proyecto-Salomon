@@ -42,7 +42,7 @@ public class VariableNeighborhoodSkewed extends AbstractVariableNeighborhoodSear
         long t = 0;
 
         do {
-            while (t < getMaxTimeAllowed() /*FIXME CONDICION PARADA SESGADA */ && neighborStructures.hayEntornosSinUsar() /*&&
+            while (t < getMaxTimeAllowed() /*FIXME CONDICION PARADA SESGADA */ && neighborhoodSet.hayEntornosSinUsar() /*&&
                     porcentajeMejora > getPorcentajeMinimoMejoria()*/) {
 
                 if (Log.isOn() && Log.checkIter(contadorIteraciones)) {
@@ -104,7 +104,7 @@ public class VariableNeighborhoodSkewed extends AbstractVariableNeighborhoodSear
                 Log.info("", contadorIteraciones);
             }
 
-            getNeighborStructures().reset();
+            getNeighborSet().reset();
             contadorReinicios++;
             x = x_best;
         } while (t < getMaxTimeAllowed()/* && FIXME CONDICION PARADA SESGADA*//* porcentajeMejora > getPorcentajeMinimoMejoria()*/);
@@ -120,7 +120,7 @@ public class VariableNeighborhoodSkewed extends AbstractVariableNeighborhoodSear
                 "    |    " + "Numero de reinicios: " + contadorReinicios +
                 "    |    " + "Restricciones: " + Restricciones.penalizacionPorRestricciones(x_best, getPatrones(), getEntrada(), getParametros()) + "\n");
         Log.csvLog(contadorIteraciones, t, fit[0], fit[1], fit[2], fit[3], fit[4], x_best.getTurnos().size(), porcentajeMejora,
-                getNeighborStructures().getCurrentNeighborhood());
+                getNeighborSet().getCurrentNeighborhood());
 
         return x_best;
     }
@@ -133,8 +133,8 @@ public class VariableNeighborhoodSkewed extends AbstractVariableNeighborhoodSear
 
     @Override
     protected Solucion vnsImplemetation(Solucion x) {
-        Solucion x_prime = getNeighborStructures().getCurrentNeighborhood().generarSolucionAleatoria(x);
-        Solucion x_prime_2 = getNeighborStructures().getCurrentNeighborhood().bestImprovement(x_prime);
+        Solucion x_prime = getNeighborSet().getCurrentNeighborhood().generarSolucionAleatoria(x);
+        Solucion x_prime_2 = getNeighborSet().getCurrentNeighborhood().bestImprovement(x_prime);
 
         if (Log.isOn() && Log.checkIter(super.contadorIteraciones)) {
             Log.info("[SVNS impl] fitness inicial: " + fitness(x)[0] + " | \t" +

@@ -1,14 +1,14 @@
 package algorithms.variableNeighborhoodSearch;
 
+import estructurasDatos.Solucion;
+
 public interface NeighborhoodStructure {
 
-    NeighborStructure getEntorno();
+    Solucion generarSolucionAleatoria(Solucion x);
 
-    boolean hayEntornosSinUsar();
+    Solucion bestImprovement(Solucion x);
 
-    void reset();
+    Solucion firstImprovement(Solucion x);
 
-    void nextNeighborhood();
-
-    NeighborStructure getCurrentNeighborhood();
+    double[] fitness(Solucion x);
 }

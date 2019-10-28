@@ -1,16 +1,11 @@
 package algorithms.variableNeighborhoodSearch.impl;
 
-import algorithms.variableNeighborhoodSearch.NeighborStructure;
-import algorithms.variableNeighborhoodSearch.impl.moves.MoveFactory;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
 import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
 import herramientas.Log;
 import patrones.Patrones;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class VariableNeighborhoodSearchGeneral extends AbstractVariableNeighborhoodSearch {
 
@@ -28,7 +23,7 @@ public class VariableNeighborhoodSearchGeneral extends AbstractVariableNeighborh
 //        )
 //            result.add(MoveFactory.createNeighborhood(id, entrada, patrones, parametros, parametrosAlgoritmo));
 
-        this.vnd.neighborStructures = this.neighborStructures;
+        this.vnd.neighborhoodSet = this.neighborhoodSet;
     }
 
     @Override

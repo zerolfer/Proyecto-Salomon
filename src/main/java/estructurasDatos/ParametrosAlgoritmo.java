@@ -1,9 +1,7 @@
 package estructurasDatos;
 
-import algorithms.variableNeighborhoodSearch.NeighborStructure;
-import algorithms.variableNeighborhoodSearch.NeighborhoodStructure;
-import algorithms.variableNeighborhoodSearch.impl.NeighborhoodStructureDeterminista;
-import algorithms.variableNeighborhoodSearch.impl.moves.MoveFactory;
+import algorithms.variableNeighborhoodSearch.NeighborhoodSet;
+import algorithms.variableNeighborhoodSearch.impl.neighborhood.NeighborhoodSetDeterminista;
 import estructurasDatos.DominioDelProblema.Entrada;
 import patrones.Patrones;
 import trazas.Trazas;
@@ -11,8 +9,6 @@ import trazas.Trazas;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
 /**
@@ -409,7 +405,7 @@ public class ParametrosAlgoritmo {
         public static final String NEIGHBOR_STRUCTURES = "neighborStructures";
         private static final String NUM_MAX_ITERACIONES_BUSQUEDA_LOCAL = "numMaxIteracionesBusquedaLocal";
 
-        private NeighborhoodStructure neighborStructures;
+        private NeighborhoodSet neighborSet;
         private int numMaxIteracionesSinMejoraBusquedaLocal = getInteger("numMaxIteracionesSinMejoraBusquedaLocal");
         private double porcentajeMinimoMejoria = inicializarIteracionesMax();
         private int numIteracionesParaComprobarCondicionParadaPorcentaje = getInteger("numIteracionesParaComprobarCondicionParadaPorcentaje");
@@ -433,18 +429,18 @@ public class ParametrosAlgoritmo {
             String[] nombresMovimientos = texto.split(",");
 
             boolean variacionProbabilistica = getBoolean("neighborStructures.probabilistico");
-            VNS.neighborStructures = variacionProbabilistica?
+            VNS.neighborSet = variacionProbabilistica?
                     null
                     :
-                    new NeighborhoodStructureDeterminista(nombresMovimientos, entrada, patrones, parametros, parametrosAlgoritmo);
+                    new NeighborhoodSetDeterminista(nombresMovimientos, entrada, patrones, parametros, parametrosAlgoritmo);
         }
 
         /**
          * Conjunto de estructuras de vecindad que serán empleadas por el VNS en el
          * orden estricto en el que se encuentran en la lista.
          */
-        public NeighborhoodStructure getNeighborStructures() {
-            return neighborStructures;
+        public NeighborhoodSet getNeighborSet() {
+            return neighborSet;
         }
 
         /**
@@ -469,8 +465,8 @@ public class ParametrosAlgoritmo {
             this.porcentajeMinimoMejoria = porcentajeMinimoMejoria;
         }
 
-        public void setNeighborStructures(NeighborhoodStructure neighborStructures) {
-            this.neighborStructures = neighborStructures;
+        public void setNeighborSet(NeighborhoodSet neighborSet) {
+            this.neighborSet = neighborSet;
         }
 
         public double getAlpha() {

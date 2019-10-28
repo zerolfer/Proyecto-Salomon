@@ -16,7 +16,7 @@ import java.util.stream.IntStream;
 import static herramientas.CridaUtils.LONGITUD_CADENAS;
 import static herramientas.CridaUtils.STRING_NO_TURNO;
 
-public class MoveLibre extends AbstractNeighborStructure {
+public class MoveLibre extends AbstractNeighborhoodStructure {
 
     public MoveLibre(Entrada entrada, Patrones patrones, Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo) {
         super(entrada, patrones, parametros, parametrosAlgoritmo);

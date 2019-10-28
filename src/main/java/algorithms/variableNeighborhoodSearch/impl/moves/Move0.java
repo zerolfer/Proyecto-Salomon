@@ -10,7 +10,7 @@ import patrones.Patrones;
 
 import static herramientas.CridaUtils.LONGITUD_CADENAS;
 
-public class Move0 extends AbstractNeighborStructure {
+public class Move0 extends AbstractNeighborhoodStructure {
 
     public Move0(Entrada entrada, Patrones patrones, Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo) {
         super(entrada, patrones, parametros, parametrosAlgoritmo);

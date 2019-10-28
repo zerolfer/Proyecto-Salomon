@@ -1,8 +1,7 @@
 package algorithms.variableNeighborhoodSearch.impl.moves;
 
 import algorithms.MetaheuristicUtil;
-import algorithms.variableNeighborhoodSearch.NeighborStructure;
-import algorithms.variableNeighborhoodSearch.impl.AbstractVariableNeighborhoodSearch;
+import algorithms.variableNeighborhoodSearch.NeighborhoodStructure;
 import estructurasDatos.DominioDelProblema.Controlador;
 import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.DominioDelProblema.Nucleo;
@@ -19,7 +18,7 @@ import java.util.*;
 import static algorithms.MetaheuristicUtil.esTrabajo;
 import static herramientas.CridaUtils.*;
 
-public abstract class AbstractNeighborStructure implements NeighborStructure {
+public abstract class AbstractNeighborhoodStructure implements NeighborhoodStructure {
 
     protected Entrada entrada;
     protected Patrones patrones;
@@ -37,7 +36,7 @@ public abstract class AbstractNeighborStructure implements NeighborStructure {
     private int numMaxIteracionesSinMejoraBusquedaLocal;
 
 
-    protected AbstractNeighborStructure(Entrada entrada, Patrones patrones, Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo) {
+    protected AbstractNeighborhoodStructure(Entrada entrada, Patrones patrones, Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo) {
         this.entrada = entrada;
         this.patrones = patrones;
         this.parametros = parametros;
