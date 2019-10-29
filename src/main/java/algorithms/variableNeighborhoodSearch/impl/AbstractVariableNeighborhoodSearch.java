@@ -80,7 +80,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
      */
     @Override
     public Solucion startExecution(Solucion x) {
-        MetaheuristicUtil.orderByLazyCriteria(x);
+        MetaheuristicUtil.reordenarYEliminarTurnos(x);
         initTime = System.currentTimeMillis();
         contadorIteraciones = 0;
         long t = 0;

@@ -106,7 +106,7 @@ public class MoveLibre extends AbstractNeighborhoodStructure {
                             doChange(x, x.getTurnos().get(c1), x.getTurnos().get(c2),
                                     periodo[0], periodo[0] + longitud, c1, c2);
 
-                            return MetaheuristicUtil.orderByLazyCriteria(x);
+                            return MetaheuristicUtil.reordenarYEliminarTurnos(x);
                         }
                     }
                 }

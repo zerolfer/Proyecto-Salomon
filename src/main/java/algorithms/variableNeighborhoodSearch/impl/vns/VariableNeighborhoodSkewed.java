@@ -34,7 +34,7 @@ public class VariableNeighborhoodSkewed extends AbstractVariableNeighborhoodSear
 
     @Override
     public Solucion startExecution(Solucion x) {
-        MetaheuristicUtil.orderByLazyCriteria(x);
+        MetaheuristicUtil.reordenarYEliminarTurnos(x);
         initTime = System.currentTimeMillis();
         contadorIteraciones = 0;
         int contadorReinicios = 0;

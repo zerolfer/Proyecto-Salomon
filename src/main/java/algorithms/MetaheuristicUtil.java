@@ -222,66 +222,92 @@ public class MetaheuristicUtil {
          * Este orden se usa para saber cual es el controlador que menos trabaja.
          */
         ArrayList<Controlador> controladores = ind.getControladores();
-        ArrayList<Controlador> numControladores = new ArrayList<>();
-        ArrayList<String> individuo2 = new ArrayList<>();
         ArrayList<String> individuo = ind.getTurnos();
-        ArrayList<Integer> order = new ArrayList<>();
 
-        // obtener carga de trabajo de cada controlador y buscar el mayor
-        int mayor = 0;
-        for (String s : individuo) {
-            int[] sum = Fitness.slotsClassification(s);
+        // si aun tenemos controladores imaginarios
+        // (mas controladores asignados que los que tenemos en lista),
+        // debemos ordenarlos por carga
+        if (individuo.size() > controladores.size()) {
 
-            order.add(sum[1]);
+            ArrayList<Controlador> numControladores = new ArrayList<>();
+            ArrayList<String> individuo2 = new ArrayList<>();
+            ArrayList<Integer> order = new ArrayList<>();
 
-            if (sum[1] > mayor)
-                mayor = sum[1];
-        }
+            // obtener carga de trabajo de cada controlador y buscar el mayor
+            int mayor = 0;
+            for (String s : individuo) {
+                int[] sum = Fitness.slotsClassification(s);
 
-        Set<Integer> indices = getIndicesTurnosControladoresImaginarios(controladores, individuo.size());
-        Set<Integer> indicesAEliminar = new HashSet<>();
-        for (int i : indices) {
-            if (order.get(i) <= 0) {
-                eliminarControladorImaginario(i, ind);
-                indicesAEliminar.add(i);
-            } else order.set(i, order.get(i) - mayor);
-        }
+                order.add(sum[1]);
 
-        indicesAEliminar.forEach(indices::remove); // eliminar el objeto en sí
-        indicesAEliminar.forEach(e -> order.remove((int) (e))); // eliminar por indice
+                if (sum[1] > mayor)
+                    mayor = sum[1];
+            }
+
+            Set<Integer> indices = getIndicesTurnosControladoresImaginarios(controladores, individuo.size());
+            Set<Integer> indicesAEliminar = new HashSet<>();
+            for (int i : indices) {
+                if (order.get(i) <= 0) {
+                    eliminarControladorImaginario(i, ind);
+                    indicesAEliminar.add(i);
+                } else order.set(i, order.get(i) - mayor);
+            }
+
+            indicesAEliminar.forEach(indices::remove); // eliminar el objeto en sí
+            indicesAEliminar.forEach(e -> order.remove((int) (e))); // eliminar por indice
 
 //        for (int i = 0; i < order.size(); i++) {
 //            if (controladores.get(i).isImaginario())
 //                order.set(i, order.get(i) - mayor);
 //        }
 
-        for (int e = 0; e < order.size(); e++) {
+            for (int e = 0; e < order.size(); e++) {
 
-            // buscar el turno con menor carga de trabajo
-            int r = 0;
-            int lAnt = 288;
-            for (int i = 0; i < order.size(); i++) {
-                if (lAnt > order.get(i)) {
-                    lAnt = order.get(i);
-                    r = i;
-                }
-            }
-            order.set(r, 300);
-            individuo2.add(individuo.get(r));
-            if (lAnt >= 0) // solo si no es imaginario
-                for (Controlador controlador : controladores) {
-                    if (r == controlador.getTurnoAsignado()) {
-                        numControladores.add(controlador);
-                        break;
+                // buscar el turno con menor carga de trabajo
+                int r = 0;
+                int lAnt = 288;
+                for (int i = 0; i < order.size(); i++) {
+                    if (lAnt > order.get(i)) {
+                        lAnt = order.get(i);
+                        r = i;
                     }
                 }
-        }
-        for (int i = 0; i < numControladores.size(); i++)
-            numControladores.get(i).setTurnoAsignado(i + indices.size());
+                order.set(r, 300);
+                individuo2.add(individuo.get(r));
+                if (lAnt >= 0) // solo si no es imaginario
+                    for (Controlador controlador : controladores) {
+                        if (r == controlador.getTurnoAsignado()) {
+                            numControladores.add(controlador);
+                            break;
+                        }
+                    }
+            }
+            for (int i = 0; i < numControladores.size(); i++)
+                numControladores.get(i).setTurnoAsignado(i + indices.size());
 
-        ind.setTurnos(individuo2);
-        ind.setControladores(controladores);
-        return ind;
+            ind.setTurnos(individuo2);
+            ind.setControladores(controladores);
+            return ind;
+        } else
+            // pero si ya no hay imaginarios, para que el fitness que compara plantillas sea efectivo,
+            // debemos volver a ordenarlo como estaba antes
+            if (ind.isYaOrdenado())
+                return ind;
+            else { // ordenar como en la inicial
+                ArrayList<String> individuo2 = new ArrayList<>();
+//                ArrayList<Integer> order = new ArrayList<>();
+
+                for (int i = 0; i < controladores.size(); i++) {
+                    Controlador c = controladores.get(i);
+                    individuo2.add(individuo.get(c.getTurnoAsignado()));
+                    c.setTurnoAsignado(i);
+                }
+
+                ind.setTurnos(individuo2);
+//                ind.setControladores(controladores);
+                ind.setYaOrdenado(true);
+                return ind;
+            }
     }
 
     private static void eliminarControladorImaginario(int idxTurnoEliminado, Solucion ind) {

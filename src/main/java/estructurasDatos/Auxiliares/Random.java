@@ -14,4 +14,8 @@ public class Random {
         return random.nextInt(n);
     }
 
+    public static double nextDouble(){
+        return random.nextDouble();
+    }
+
 }

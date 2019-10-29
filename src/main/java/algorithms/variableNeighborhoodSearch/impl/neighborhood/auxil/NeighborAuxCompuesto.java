@@ -21,7 +21,8 @@ public class NeighborAuxCompuesto implements NeighborSetAux {
 
     @Override
     public NeighborhoodStructure elegir() {
-        if (utilizado()) return null;
+        if (utilizado()) throw new RuntimeException("Estructura de vencindad ya utilizada previamente. " +
+                "Situación corrupta del sistema");
         return neighborhoods.get(index++);
     }
 

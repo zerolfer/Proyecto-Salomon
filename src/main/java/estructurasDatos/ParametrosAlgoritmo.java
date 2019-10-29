@@ -412,6 +412,8 @@ public class ParametrosAlgoritmo {
         private int numIteracionesParaComprobarCondicionParadaPorcentaje = getInteger("numIteracionesParaComprobarCondicionParadaPorcentaje");
         private String tipoVNS = getString("tipoVNS");
 
+        private double probabilidadIntensificacion = getDouble("neighborStructures.probabilistico.probabilidadDiversificacion");
+
         private double alpha = getDouble("skewed.alpha");
         private String funcionDistancia = getString("skewed.funcionDistancia");
 
@@ -498,6 +500,26 @@ public class ParametrosAlgoritmo {
 
         public void setNumIteracionesParaComprobarCondicionParadaPorcentaje(int numIteracionesParaComprobarCondicionParadaPorcentaje) {
             this.numIteracionesParaComprobarCondicionParadaPorcentaje = numIteracionesParaComprobarCondicionParadaPorcentaje;
+        }
+
+        public double getProbabilidadIntensificacion() {
+            return probabilidadIntensificacion;
+        }
+
+        public void setProbabilidadIntensificacion(double probabilidadIntensificacion) {
+            if(probabilidadIntensificacion<0||probabilidadIntensificacion>1)
+                throw new RuntimeException("La probabilidad debe ser entre [0, 1]");
+            this.probabilidadIntensificacion = probabilidadIntensificacion;
+        }
+
+        public double getProbabilidadDiversificacion() {
+            return 1 - probabilidadIntensificacion;
+        }
+
+        public void setProbabilidadDiversificacion(double probabilidadDiversificacion) {
+            if(probabilidadIntensificacion<0||probabilidadIntensificacion>1)
+                throw new RuntimeException("La probabilidad debe ser entre [0, 1]");
+            this.probabilidadIntensificacion = 1 - probabilidadDiversificacion;
         }
     }
 

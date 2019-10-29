@@ -26,9 +26,12 @@ public class NeighborhoodSetProbabilistico implements NeighborhoodSet {
     private List<NeighborSetAux> diversificacionNoUtilizados;
     private List<NeighborSetAux> intensificacionNoUtilizados;
 
+    private ParametrosAlgoritmo parametrosAlgoritmo;
+
     // Usa loops (promedio 26.65 ms) //
     public NeighborhoodSetProbabilistico(String[] nombresMovimientos, Entrada entrada, Patrones patrones,
                                          Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo) {
+        this.parametrosAlgoritmo = parametrosAlgoritmo;
         historico = new ArrayList<>();
         diversificacion = new ArrayList<>();
         intensificacion = new ArrayList<>();
@@ -88,12 +91,14 @@ public class NeighborhoodSetProbabilistico implements NeighborhoodSet {
 
         diversificacionNoUtilizados = new ArrayList<>(diversificacion);
         intensificacionNoUtilizados = new ArrayList<>(intensificacion);
+        historico.clear();
     }
 
     @Override
     public void nextNeighborhood() {
         NeighborSetAux aux;
-        if ((Random.nextInt(2) == 0 && !diversificacionNoUtilizados.isEmpty()) || intensificacionNoUtilizados.isEmpty()) {
+
+        if ( (checkEsDiversificacion() && !diversificacionNoUtilizados.isEmpty()) || intensificacionNoUtilizados.isEmpty() ) {
 
             if (diversificacionNoUtilizados.isEmpty())
                 throw new RuntimeException("Todos los entornos han sido utilizados anteriormemte y no se ha reiniciado la estructura");
@@ -119,6 +124,17 @@ public class NeighborhoodSetProbabilistico implements NeighborhoodSet {
                 historico.add(aux);
             }
         }
+    }
+
+    private boolean checkEsDiversificacion() {
+        // calcular probabilidad
+        double probabilidad = Random.nextDouble();
+
+        // tenemos que mirar primero aquel grupo que tenga la menor probabilidad
+        if (parametrosAlgoritmo.VNS.getProbabilidadDiversificacion() < parametrosAlgoritmo.VNS.getProbabilidadIntensificacion())
+            return probabilidad <= parametrosAlgoritmo.VNS.getProbabilidadDiversificacion();
+        else
+            return !(probabilidad <= parametrosAlgoritmo.VNS.getProbabilidadIntensificacion());
     }
 
     @Override
