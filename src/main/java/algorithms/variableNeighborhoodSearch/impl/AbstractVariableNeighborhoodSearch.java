@@ -115,8 +115,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
                 double[] fit = fitness(x);
                 Log.csvLog(contadorIteraciones, t, fit[0],
                         fit[1], fit[2], fit[3], fit[4],
-                        x.getTurnos().size(), porcentajeMejora/*, FIXME :-(
-                        currentNeighborhoodIndex*/);
+                        x.getTurnos().size(), porcentajeMejora, getCurrentNeighborhood());
 
                 if (contadorIteraciones % numIteracionesCiclo == 0) {
                     // calcular porcentaje mejora
@@ -151,8 +150,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
                 "    |    " + "tamaño: " + x.getTurnos().size() +
                 "    |    " + "Numero de reinicios: " + contadorReinicios +
                 "    |    " + "Restricciones: " + Restricciones.penalizacionPorRestricciones(x, getPatrones(), getEntrada(), getParametros()) + "\n");
-        Log.csvLog(contadorIteraciones, t, fit[0], fit[1], fit[2], fit[3], fit[4], x.getTurnos().size(), porcentajeMejora/*, FIXME :-(
-                currentNeighborhoodIndex*/);
+        Log.csvLog(contadorIteraciones, t, fit[0], fit[1], fit[2], fit[3], fit[4], x.getTurnos().size(), porcentajeMejora, getCurrentNeighborhood());
 
         return x;
     }
@@ -164,7 +162,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
             x = x_prime; // Make a move
             neighborhoodSet.reset(); // reset the neighborhood iteration
         } else {
-            neighborhoodSet.nextNeighborhood();  // Next neighborhood of the list
+            neighborhoodSet.nextNeighborhood(contadorIteraciones);  // Next neighborhood of the list
         }
         return x;
     }

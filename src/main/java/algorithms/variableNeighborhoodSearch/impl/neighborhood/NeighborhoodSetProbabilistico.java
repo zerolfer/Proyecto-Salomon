@@ -21,6 +21,7 @@ public class NeighborhoodSetProbabilistico implements NeighborhoodSet {
     private List<NeighborSetAux> intensificacion; // movRejilla
 
     private NeighborhoodStructure movActual;
+    private int numIteracionAnteriorCiclo;
 
     private List<NeighborSetAux> historico;
     private List<NeighborSetAux> diversificacionNoUtilizados;
@@ -32,6 +33,7 @@ public class NeighborhoodSetProbabilistico implements NeighborhoodSet {
     public NeighborhoodSetProbabilistico(String[] nombresMovimientos, Entrada entrada, Patrones patrones,
                                          Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo) {
         this.parametrosAlgoritmo = parametrosAlgoritmo;
+        this.numIteracionAnteriorCiclo = 0;
         historico = new ArrayList<>();
         diversificacion = new ArrayList<>();
         intensificacion = new ArrayList<>();
@@ -71,7 +73,7 @@ public class NeighborhoodSetProbabilistico implements NeighborhoodSet {
         diversificacionNoUtilizados = new ArrayList<>(diversificacion);
         intensificacionNoUtilizados = new ArrayList<>(intensificacion);
 
-        nextNeighborhood();
+        nextNeighborhood(0);
     }
 
     @Override
@@ -95,10 +97,19 @@ public class NeighborhoodSetProbabilistico implements NeighborhoodSet {
     }
 
     @Override
-    public void nextNeighborhood() {
+    public void nextNeighborhood(int numIteraciones) {
+        // primero ajustamos la probabilidad
+        if (numIteraciones - numIteracionAnteriorCiclo > parametrosAlgoritmo.VNS.getCambioProbabilidadIteraciones() &&
+                parametrosAlgoritmo.VNS.getProbabilidadIntensificacion() > 0) {
+            parametrosAlgoritmo.VNS.setProbabilidadIntensificacion(
+                    parametrosAlgoritmo.VNS.getProbabilidadIntensificacion() - parametrosAlgoritmo.VNS.getVariacionProbabilidad()
+            );
+            numIteracionAnteriorCiclo = numIteraciones;
+        }
+
         NeighborSetAux aux;
 
-        if ( (checkEsDiversificacion() && !diversificacionNoUtilizados.isEmpty()) || intensificacionNoUtilizados.isEmpty() ) {
+        if ((checkEsDiversificacion() && !diversificacionNoUtilizados.isEmpty()) || intensificacionNoUtilizados.isEmpty()) {
 
             if (diversificacionNoUtilizados.isEmpty())
                 throw new RuntimeException("Todos los entornos han sido utilizados anteriormemte y no se ha reiniciado la estructura");

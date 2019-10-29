@@ -16,7 +16,7 @@ public class NeighborhoodSetDeterminista implements NeighborhoodSet {
     /**
      * Véase {@link ParametrosAlgoritmo.VNS#getNeighborSet}
      */
-    List<NeighborhoodStructure> neighborhoodStructures;
+    private List<NeighborhoodStructure> neighborhoodStructures;
 
     /**
      * <p>The index of the current neighborhood of the
@@ -29,7 +29,6 @@ public class NeighborhoodSetDeterminista implements NeighborhoodSet {
                                        Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo) {
         neighborhoodStructures = new ArrayList<>();
 
-        // TODO: refactorizar a ParametrosAlgoritmo.initializeNeighborStructures???? ver cuando se implemente el probabilistico
         for (String id : nombresMovimientos) {
             // FACTORY METHOD
             neighborhoodStructures.add(MoveFactory.createNeighborhood(id, entrada, patrones, parametros, parametrosAlgoritmo));
@@ -47,7 +46,7 @@ public class NeighborhoodSetDeterminista implements NeighborhoodSet {
     }
 
     @Override
-    public void nextNeighborhood() {
+    public void nextNeighborhood(int numIteraciones) {
         currentNeighborhoodIndex++;
     }
 

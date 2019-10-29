@@ -287,6 +287,7 @@ public class MetaheuristicUtil {
 
             ind.setTurnos(individuo2);
             ind.setControladores(controladores);
+            ind.setYaOrdenado(false);
             return ind;
         } else
             // pero si ya no hay imaginarios, para que el fitness que compara plantillas sea efectivo,

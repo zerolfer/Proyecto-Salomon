@@ -413,6 +413,8 @@ public class ParametrosAlgoritmo {
         private String tipoVNS = getString("tipoVNS");
 
         private double probabilidadIntensificacion = getDouble("neighborStructures.probabilistico.probabilidadDiversificacion");
+        private double variacionProbabilidad = getDouble("neighborStructures.probabilistico.variacion");
+        private double cambioProbabilidadIteraciones = getDouble("neighborStructures.probabilistico.numeroIteraciones");
 
         private double alpha = getDouble("skewed.alpha");
         private String funcionDistancia = getString("skewed.funcionDistancia");
@@ -507,8 +509,11 @@ public class ParametrosAlgoritmo {
         }
 
         public void setProbabilidadIntensificacion(double probabilidadIntensificacion) {
-            if(probabilidadIntensificacion<0||probabilidadIntensificacion>1)
+            if (probabilidadIntensificacion > 1)
                 throw new RuntimeException("La probabilidad debe ser entre [0, 1]");
+            else if (probabilidadIntensificacion < 0)
+                this.probabilidadIntensificacion = 0;
+
             this.probabilidadIntensificacion = probabilidadIntensificacion;
         }
 
@@ -517,9 +522,25 @@ public class ParametrosAlgoritmo {
         }
 
         public void setProbabilidadDiversificacion(double probabilidadDiversificacion) {
-            if(probabilidadIntensificacion<0||probabilidadIntensificacion>1)
+            if (probabilidadIntensificacion < 0 || probabilidadIntensificacion > 1)
                 throw new RuntimeException("La probabilidad debe ser entre [0, 1]");
             this.probabilidadIntensificacion = 1 - probabilidadDiversificacion;
+        }
+
+        public double getVariacionProbabilidad() {
+            return variacionProbabilidad;
+        }
+
+        public void setVariacionProbabilidad(double variacionProbabilidad) {
+            this.variacionProbabilidad = variacionProbabilidad;
+        }
+
+        public double getCambioProbabilidadIteraciones() {
+            return cambioProbabilidadIteraciones;
+        }
+
+        public void setCambioProbabilidadIteraciones(double cambioProbabilidadIteraciones) {
+            this.cambioProbabilidadIteraciones = cambioProbabilidadIteraciones;
         }
     }
 

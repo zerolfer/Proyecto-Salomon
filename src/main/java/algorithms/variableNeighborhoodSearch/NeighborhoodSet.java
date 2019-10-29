@@ -6,7 +6,7 @@ public interface NeighborhoodSet {
 
     void reset();
 
-    void nextNeighborhood();
+    void nextNeighborhood(int numIteraciones);
 
     NeighborhoodStructure getCurrentNeighborhood();
 }
