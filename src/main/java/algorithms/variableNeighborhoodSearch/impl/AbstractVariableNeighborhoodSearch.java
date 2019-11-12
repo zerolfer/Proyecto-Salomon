@@ -42,6 +42,8 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
      */
     private long maxTimeAllowed;
 
+    private boolean flagCondicionParadaTiempo;
+    private boolean flagCondicionParadaPorcentajeMejora;
     /**
      * Véase {@link ParametrosAlgoritmo.VNS#getNeighborSet}
      */
@@ -69,6 +71,10 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
         this.entrada = entrada;
 
         this.maxTimeAllowed = parametrosAlgoritmo.getMaxMilisecondsAllowed();
+
+        this.flagCondicionParadaTiempo = parametrosAlgoritmo.VNS.getFlagCondicionParadaTiempo();
+        this.flagCondicionParadaPorcentajeMejora = parametrosAlgoritmo.VNS.getFlagCondicionParadaPorcentajeMejora();
+
         this.neighborhoodSet = parametrosAlgoritmo.VNS.getNeighborSet();
         this.porcentajeMinimoMejoria = parametrosAlgoritmo.VNS.getPorcentajeMinimoMejoria();
         this.numIteracionesCiclo = parametrosAlgoritmo.VNS.getNumIteracionesParaComprobarCondicionParadaPorcentaje();
@@ -89,8 +95,8 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
         double fitnessAnterior = -1;
         double fitnessMejor = -1;
         do {
-            while (t < maxTimeAllowed && /*FIXME CONDICION PARADA SESGADA*/neighborhoodSet.hayEntornosSinUsar()/* &&
-                    porcentajeMejora > porcentajeMinimoMejoria*/) {
+            while (checkCondicionParadaTiempo(t) && neighborhoodSet.hayEntornosSinUsar() &&
+                    checkCondicionParadaPorcentajeMejora()) {
 
                 if (Log.isOn() && Log.checkIter(contadorIteraciones)) {
                     String s = "[VNS] tiempo: " + (System.currentTimeMillis() - initTime) / 1000 + "s" +
@@ -115,7 +121,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
                 double[] fit = fitness(x);
                 Log.csvLog(contadorIteraciones, t, fit[0],
                         fit[1], fit[2], fit[3], fit[4],
-                        x.getTurnos().size(), porcentajeMejora, getCurrentNeighborhood());
+                        x.getTurnos().size(), porcentajeMejora, getCurrentNeighborhood(), fit[0], -1);
 
                 if (contadorIteraciones % numIteracionesCiclo == 0) {
                     // calcular porcentaje mejora
@@ -139,7 +145,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
             }
             neighborhoodSet.reset();
             contadorReinicios++;
-        } while (t < maxTimeAllowed /*FIXME CONDICION PARADA SESGADA && *//*porcentajeMejora > porcentajeMinimoMejoria*/);
+        } while (checkCondicionParadaTiempo(t) && checkCondicionParadaPorcentajeMejora());
 
         double[] fit = fitness(x);
         Log.debug("[Fin VNS] Fitness final: " + fit[0] +
@@ -150,7 +156,10 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
                 "    |    " + "tamaño: " + x.getTurnos().size() +
                 "    |    " + "Numero de reinicios: " + contadorReinicios +
                 "    |    " + "Restricciones: " + Restricciones.penalizacionPorRestricciones(x, getPatrones(), getEntrada(), getParametros()) + "\n");
-        Log.csvLog(contadorIteraciones, t, fit[0], fit[1], fit[2], fit[3], fit[4], x.getTurnos().size(), porcentajeMejora, getCurrentNeighborhood());
+        Log.csvLog(contadorIteraciones, t,
+                fit[0], fit[1], fit[2], fit[3], fit[4],
+                x.getTurnos().size(), porcentajeMejora,
+                getCurrentNeighborhood(), fit[0], -1);
 
         return x;
     }
@@ -255,5 +264,25 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
 
     protected void setNeighborhoodSet(NeighborhoodSet neighborhoodSet) {
         this.neighborhoodSet = neighborhoodSet;
+    }
+
+    /**
+     * Solo comprueba la concición si el flag del tiempo
+     * (flagCondicionParadaTiempo) está activado
+     */
+    protected boolean checkCondicionParadaTiempo(long t) {
+        if (flagCondicionParadaTiempo)
+            return t < getMaxTimeAllowed();
+        else return true;
+    }
+
+    /**
+     * Solo comprueba la concición si el flag del porcentaje
+     * de mejora (flagCondicionParadaPorcentajeMejora) está activado
+     */
+    protected boolean checkCondicionParadaPorcentajeMejora() {
+        if (flagCondicionParadaPorcentajeMejora)
+            return porcentajeMejora > getPorcentajeMinimoMejoria();
+        else return true;
     }
 }

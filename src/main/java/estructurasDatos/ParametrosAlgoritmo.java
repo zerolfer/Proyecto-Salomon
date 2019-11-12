@@ -404,7 +404,9 @@ public class ParametrosAlgoritmo {
     public class VNS {
 
         static final String NEIGHBOR_STRUCTURES = "neighborStructures";
-        private static final String NUM_MAX_ITERACIONES_BUSQUEDA_LOCAL = "numMaxIteracionesBusquedaLocal";
+
+        private boolean flagCondicionParadaTiempo = getBoolean("flagCondicionParadaTiempo");
+        private boolean flagCondicionParadaPorcentajeMejora = getBoolean("flagCondicionParadaPorcentajeMejora");
 
         private NeighborhoodSet neighborSet;
         private int numMaxIteracionesSinMejoraBusquedaLocal = getInteger("numMaxIteracionesSinMejoraBusquedaLocal");
@@ -540,6 +542,15 @@ public class ParametrosAlgoritmo {
         public void setCambioProbabilidadIteraciones(double cambioProbabilidadIteraciones) {
             this.cambioProbabilidadIteraciones = cambioProbabilidadIteraciones;
         }
+
+        public boolean getFlagCondicionParadaTiempo() {
+            return flagCondicionParadaTiempo;
+        }
+
+        public boolean getFlagCondicionParadaPorcentajeMejora() {
+            return flagCondicionParadaPorcentajeMejora;
+        }
+
     }
 
 }

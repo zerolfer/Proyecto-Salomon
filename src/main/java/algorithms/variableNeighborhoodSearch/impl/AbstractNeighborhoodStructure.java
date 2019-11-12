@@ -66,8 +66,7 @@ public abstract class AbstractNeighborhoodStructure implements NeighborhoodStruc
         double fitActual = -1;
 
         // En la busqueda local, iteramos repetidas veces hasta que no haya mejora
-        while (porcentajeMejora > parametrosAlgoritmo.VNS.getPorcentajeMinimoMejoria()/* FIXME CONDICION PARADA SESGADA
-                && System.currentTimeMillis() - AbstractVariableNeighborhoodSearch.initTime < parametrosAlgoritmo.getMaxMilisecondsAllowed()*/) {
+        while (checkCondicionParadaPorcentajeMejora(porcentajeMejora) && checkCondicionParadaTiempoMaximo()) {
 
             x_prime = buscarSolucion(x);
 
@@ -108,6 +107,20 @@ public abstract class AbstractNeighborhoodStructure implements NeighborhoodStruc
 //            }
         }
         return x;
+    }
+
+    /**
+     * Solo comprueba la concición si el flag del tiempo (flagCondicionParadaTiempo)
+     * está activado, de esta forma únicamente se empleará como parada la ausencia de mejoría
+     */
+    private boolean checkCondicionParadaTiempoMaximo() {
+        if(parametrosAlgoritmo.VNS.getFlagCondicionParadaTiempo())
+            return System.currentTimeMillis() - AbstractVariableNeighborhoodSearch.initTime < parametrosAlgoritmo.getMaxMilisecondsAllowed();
+        else return true;
+    }
+
+    private boolean checkCondicionParadaPorcentajeMejora(double porcentajeMejora) {
+        return porcentajeMejora > parametrosAlgoritmo.VNS.getPorcentajeMinimoMejoria();
     }
 
     @Override

@@ -86,7 +86,9 @@ public class Log {
                                 "fitness 4" + STRING_SEPARADOR_CSV +
                                 "tamaño" + STRING_SEPARADOR_CSV +
                                 "porcentajeMejora" + STRING_SEPARADOR_CSV +
-                                "vecindad." + "\n"
+                                "vecindad" + STRING_SEPARADOR_CSV +
+                                "mejor fitness" + STRING_SEPARADOR_CSV +
+                                "distancia" + "\n"
                 );
 
         } catch (IOException e) {

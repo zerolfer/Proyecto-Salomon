@@ -43,8 +43,8 @@ public class VariableNeighborhoodSkewed extends AbstractVariableNeighborhoodSear
         long t = 0;
 
         do {
-            while (t < getMaxTimeAllowed() /*FIXME CONDICION PARADA SESGADA */ && neighborhoodSet.hayEntornosSinUsar() /*&&
-                    porcentajeMejora > getPorcentajeMinimoMejoria()*/) {
+            while (super.checkCondicionParadaTiempo(t) && neighborhoodSet.hayEntornosSinUsar() &&
+                    super.checkCondicionParadaPorcentajeMejora()) {
 
                 if (Log.isOn() && Log.checkIter(contadorIteraciones)) {
                     String s = "[VNS] tiempo: " + (System.currentTimeMillis() - initTime) / 1000 + "s" +
@@ -79,11 +79,11 @@ public class VariableNeighborhoodSkewed extends AbstractVariableNeighborhoodSear
                 // se actualiza el tiempo (condición de parada)
                 t = System.currentTimeMillis() - initTime;
 
-                double[] fit = fitness(x_best);
-                Log.csvLog(contadorIteraciones, System.currentTimeMillis() - initTime, fit[0],
+                double[] fit = fitness(x);
+                Log.csvLog(contadorIteraciones, t, fit[0],
                         fit[1], fit[2], fit[3], fit[4],
-                        x_best.getTurnos().size(), porcentajeMejora,
-                        getCurrentNeighborhood(), fitness(x_anterior)[0], fitness(x_prime_2)[0], distancia);
+                        x.getTurnos().size(), porcentajeMejora,
+                        getCurrentNeighborhood(),/* fitness(x_anterior)[0], fitness(x_prime_2)[0],*/ fitness(x_best)[0], distancia);
 
                 // solo se recalcula cada getNumIteracionesCiclo() iteraciones
                 if (contadorIteraciones % super.getNumIteracionesCiclo() == 0) {
@@ -108,7 +108,7 @@ public class VariableNeighborhoodSkewed extends AbstractVariableNeighborhoodSear
             getNeighborSet().reset();
             contadorReinicios++;
             x = x_best;
-        } while (t < getMaxTimeAllowed()/* && FIXME CONDICION PARADA SESGADA*//* porcentajeMejora > getPorcentajeMinimoMejoria()*/);
+        } while (checkCondicionParadaTiempo(t) && checkCondicionParadaPorcentajeMejora());
 
 //        Log.debug
         double[] fit = fitness(x_best);
@@ -121,7 +121,7 @@ public class VariableNeighborhoodSkewed extends AbstractVariableNeighborhoodSear
                 "    |    " + "Numero de reinicios: " + contadorReinicios +
                 "    |    " + "Restricciones: " + Restricciones.penalizacionPorRestricciones(x_best, getPatrones(), getEntrada(), getParametros()) + "\n");
         Log.csvLog(contadorIteraciones, t, fit[0], fit[1], fit[2], fit[3], fit[4], x_best.getTurnos().size(), porcentajeMejora,
-                getNeighborSet().getCurrentNeighborhood());
+                getNeighborSet().getCurrentNeighborhood(),fitness(x_best)[0], distancia);
 
         return x_best;
     }
@@ -179,7 +179,7 @@ public class VariableNeighborhoodSkewed extends AbstractVariableNeighborhoodSear
             if (!slotA.equals(slotB)) distancia++;
         }
 //        if (Log.retrieveValue() < distancia) Log.saveValue(distancia); FIXME
-        return distancia / 870; // NOTE: numero estimado de el conjunto de instancias disponibles (normalización)
+        return distancia / 400; // NOTE: numero estimado de el conjunto de instancias disponibles (normalización)
 //         return distancia / ((float) x.getTurnos().get(0).length() / LONGITUD_CADENAS * x.getTurnos().size()); // normalizada
     }
 
