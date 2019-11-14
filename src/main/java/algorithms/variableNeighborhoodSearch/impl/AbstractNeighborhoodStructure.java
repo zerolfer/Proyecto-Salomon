@@ -10,6 +10,7 @@ import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
 import fitnessFunction.DeciderFitnessFunction;
 import fitnessFunction.Fitness;
+import herramientas.Log;
 import patrones.Patrones;
 
 import java.util.*;
@@ -64,7 +65,7 @@ public abstract class AbstractNeighborhoodStructure implements NeighborhoodStruc
         int cadaTantasIteraciones = parametrosAlgoritmo.VNS.getNumMaxIteracionesSinMejoraBusquedaLocal();
         double fitAnterior = -1;
         double fitActual = -1;
-
+        int iteracionesSinMejora = 0;
         // En la busqueda local, iteramos repetidas veces hasta que no haya mejora
         while (checkCondicionParadaPorcentajeMejora(porcentajeMejora) && checkCondicionParadaTiempoMaximo()) {
 
@@ -73,6 +74,7 @@ public abstract class AbstractNeighborhoodStructure implements NeighborhoodStruc
             double f_x = fitness(x)[0];
             double f_x_prime = fitness(x_prime)[0];
             if (f_x_prime > f_x) { // si es mejor... NOTE: maximización
+                iteracionesSinMejora = 0;
                 x = x_prime;
                 fitActual = f_x_prime;
                 if (numIter % cadaTantasIteraciones == 0) {
@@ -95,16 +97,14 @@ public abstract class AbstractNeighborhoodStructure implements NeighborhoodStruc
 
                 fitAnterior = f_x;
             }
-
-//            else
-//                numIteracionesSinMejora++;
+            else iteracionesSinMejora++;
 
             numIter++;
-//            if (Log.isOn() /*&& Log.checkIter(numIter)*/) {
-//                Log.info("[BL] tiempo: " + (System.currentTimeMillis() - AbstractVariableNeighborhoodSearch.initTime) / 1000);
-//                Log.info("[BL] fitness: " + fitness(x));
-//                Log.info("[BL] iter sin mejora: " + numIteracionesSinMejora);
-//            }
+            if (Log.isOn() /*&& Log.checkIter(numIter)*/) {
+                Log.info(String.format("[BL] tiempo: %s\t|\tfitness: %s\t|\titer sin mejora: %s",
+                        (System.currentTimeMillis() - AbstractVariableNeighborhoodSearch.initTime) / 1000,
+                        fitness(x)[0], iteracionesSinMejora));
+            }
         }
         return x;
     }
@@ -114,13 +114,13 @@ public abstract class AbstractNeighborhoodStructure implements NeighborhoodStruc
      * está activado, de esta forma únicamente se empleará como parada la ausencia de mejoría
      */
     private boolean checkCondicionParadaTiempoMaximo() {
-        if(parametrosAlgoritmo.VNS.getFlagCondicionParadaTiempo())
-            return System.currentTimeMillis() - AbstractVariableNeighborhoodSearch.initTime < parametrosAlgoritmo.getMaxMilisecondsAllowed();
-        else return true;
+//        if(parametrosAlgoritmo.VNS.getFlagCondicionParadaTiempo())
+        return System.currentTimeMillis() - AbstractVariableNeighborhoodSearch.initTime < parametrosAlgoritmo.getMaxMilisecondsAllowed();
+//        else return true;
     }
 
     private boolean checkCondicionParadaPorcentajeMejora(double porcentajeMejora) {
-        return porcentajeMejora > parametrosAlgoritmo.VNS.getPorcentajeMinimoMejoria();
+        return porcentajeMejora > parametrosAlgoritmo.VNS.getPorcentajeMinimoMejoriaBusquedaLocal();
     }
 
     @Override

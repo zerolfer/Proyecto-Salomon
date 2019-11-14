@@ -18,7 +18,7 @@ public class ObtenerDistanciaMaxima {
 
     public static void main(String[] args) {
         int nEjecucion = 1;
-        int[] casos = {1, 3, 4, 5, 6, 7, 8, 9};
+        int[] casos = {1/*, 3, 4, 5, 6, 7, 8, 9*/};
         for (int caso : casos) main1(nEjecucion, "Caso" + caso);
     }
 

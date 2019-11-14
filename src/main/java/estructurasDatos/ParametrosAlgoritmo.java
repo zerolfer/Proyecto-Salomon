@@ -410,6 +410,8 @@ public class ParametrosAlgoritmo {
 
         private NeighborhoodSet neighborSet;
         private int numMaxIteracionesSinMejoraBusquedaLocal = getInteger("numMaxIteracionesSinMejoraBusquedaLocal");
+        private double porcentajeMinimoMejoriaBusquedaLocal = getDouble("porcentajeMinimoMejoriaBusquedaLocal");
+
         private double porcentajeMinimoMejoria = inicializarIteracionesMax();
         private int numIteracionesParaComprobarCondicionParadaPorcentaje = getInteger("numIteracionesParaComprobarCondicionParadaPorcentaje");
         private String tipoVNS = getString("tipoVNS");
@@ -551,6 +553,13 @@ public class ParametrosAlgoritmo {
             return flagCondicionParadaPorcentajeMejora;
         }
 
+        public double getPorcentajeMinimoMejoriaBusquedaLocal() {
+            return porcentajeMinimoMejoriaBusquedaLocal;
+        }
+
+        public void setPorcentajeMinimoMejoriaBusquedaLocal(double porcentajeMinimoMejoriaBusquedaLocal) {
+            this.porcentajeMinimoMejoriaBusquedaLocal = porcentajeMinimoMejoriaBusquedaLocal;
+        }
     }
 
 }
