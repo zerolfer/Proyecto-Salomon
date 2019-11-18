@@ -99,9 +99,10 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
                     checkCondicionParadaPorcentajeMejora()) {
 
                 if (Log.isOn() && Log.checkIter(contadorIteraciones)) {
+                    double[] fit = fitness(x);
                     String s = "[VNS] tiempo: " + (System.currentTimeMillis() - initTime) / 1000 + "s" +
                             "    |    " + "#Iteracion: " + contadorIteraciones +
-                            "    |    " + "Fitness actual: " + fitness(x)[0] +
+                            "    |    " + "Fitness actual: " + fitness(x)[0] +"("+ fit[1] + ", " + fit[2] + ", " + fit[3] + ", " + fit[4] +")"+
                             "    |    vecindad actual: " + getCurrentNeighborhood() +
                             "    |    " + "porcentaje de mejora: " + porcentajeMejora;
                     Log.info(s);
