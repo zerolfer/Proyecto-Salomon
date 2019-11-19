@@ -86,6 +86,7 @@ public class Main {
                 break;
             case "VNS":
                 parametrosAlgoritmo.VNS.setTipoVNS(tipoVNS);
+                parametrosAlgoritmo.VNS.setAlpha(alpha);
                 solEntrada.addAll(
                         Main_VNS.main_vns(caso, parametros, parametrosAlgoritmo, entrada, patrones, poblacionInicial, "")
                 );

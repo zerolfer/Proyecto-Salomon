@@ -101,10 +101,10 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
                 if (Log.isOn() && Log.checkIter(contadorIteraciones)) {
                     double[] fit = fitness(x);
                     String s = "[VNS] tiempo: " + (System.currentTimeMillis() - initTime) / 1000 + "s" +
-                            "    |    " + "#Iteracion: " + contadorIteraciones +
-                            "    |    " + "Fitness actual: " + fitness(x)[0] +"("+ fit[1] + ", " + fit[2] + ", " + fit[3] + ", " + fit[4] +")"+
-                            "    |    vecindad actual: " + getCurrentNeighborhood() +
-                            "    |    " + "porcentaje de mejora: " + porcentajeMejora;
+                            "\t|\t" + "#Iteracion: " + contadorIteraciones +
+                            "\t|\t" + String.format("Fitness actual: %.16f (%.4f, %.4f, %.4f, %.4f)", fitness(x)[0], fit[1], fit[2], fit[3], fit[4]) +
+                            "\t|\t" + "vecindad actual:" + getCurrentNeighborhood() +
+                            "\t|\t" + "porcentaje de mejora: " + porcentajeMejora;
                     Log.info(s);
                 }
 

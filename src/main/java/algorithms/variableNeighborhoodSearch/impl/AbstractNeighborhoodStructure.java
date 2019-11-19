@@ -100,12 +100,17 @@ public abstract class AbstractNeighborhoodStructure implements NeighborhoodStruc
             else iteracionesSinMejora++;
 
             numIter++;
-            if (Log.isOn() /*&& Log.checkIter(numIter)*/) {
-                Log.info(String.format("[BL] tiempo: %s\t|\tfitness: %s\t|\titer sin mejora: %s",
-                        (System.currentTimeMillis() - AbstractVariableNeighborhoodSearch.initTime) / 1000,
-                        fitness(x)[0], iteracionesSinMejora));
-            }
+//            if (Log.isOn() /*&& Log.checkIter(numIter)*/)
+//                Log.info(String.format("[BL] tiempo: %s\t|\tfitness: %s\t|\titer sin mejora: %s",
+//                        (System.currentTimeMillis() - AbstractVariableNeighborhoodSearch.initTime) / 1000,
+//                        fitness(x)[0], iteracionesSinMejora));
+
         }
+//        if (Log.isOn() /*&& Log.checkIter(numIter)*/)
+//            Log.info(String.format("[BL] tiempo: %s\t|\tfitness: %s\t|\titer sin mejora: %s\t|\t %% mejora: %s",
+//                    (System.currentTimeMillis() - AbstractVariableNeighborhoodSearch.initTime) / 1000,
+//                    fitness(x)[0], iteracionesSinMejora, porcentajeMejora));
+
         return x;
     }
 

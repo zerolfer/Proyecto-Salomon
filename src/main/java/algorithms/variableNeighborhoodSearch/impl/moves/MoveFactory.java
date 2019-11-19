@@ -17,13 +17,6 @@ public class MoveFactory {
                                                            Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo) {
         switch (id) {
 
-//            case "mov0":
-//                return new Move0(entrada, patrones, parametros, parametrosAlgoritmo);
-//            case "mov1":
-//                return new Move1(entrada, patrones, parametros, parametrosAlgoritmo);
-//            case "mov3":
-//                return new MoveLibre(entrada, patrones, parametros, parametrosAlgoritmo);
-
             case "movRejilla":
                 return new MoveRejilla(entrada, patrones, parametros, parametrosAlgoritmo);
 
@@ -35,10 +28,6 @@ public class MoveFactory {
                 return new MoveRejilla_3(entrada, patrones, parametros, parametrosAlgoritmo);
             case "movRejilla.4":
                 return new MoveRejilla_4(entrada, patrones, parametros, parametrosAlgoritmo);
-            case "movRejilla.5":
-                return new MoveRejilla_5(entrada, patrones, parametros, parametrosAlgoritmo);
-            case "movRejilla.6":
-                return new MoveRejilla_6(entrada, patrones, parametros, parametrosAlgoritmo);
 
 
             case "movMaxCarga":
@@ -52,10 +41,6 @@ public class MoveFactory {
                 return new MoveMaxCarga_3(entrada, patrones, parametros, parametrosAlgoritmo);
             case "movMaxCarga.4":
                 return new MoveMaxCarga_4(entrada, patrones, parametros, parametrosAlgoritmo);
-            case "movMaxCarga.5":
-                return new MoveMaxCarga_5(entrada, patrones, parametros, parametrosAlgoritmo);
-            case "movMaxCarga.6":
-                return new MoveMaxCarga_6(entrada, patrones, parametros, parametrosAlgoritmo);
 
 
             case "movLibre":

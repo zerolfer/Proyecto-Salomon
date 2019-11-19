@@ -40,6 +40,7 @@ public class VariableNeighborhoodSkewed extends AbstractVariableNeighborhoodSear
         int contadorReinicios = 0;
         double fitnessAnterior = -1;
         double fitnessMejor = -1;
+        double fitnessMejorCiclo = -1;
         long t = 0;
 
         do {
@@ -47,12 +48,15 @@ public class VariableNeighborhoodSkewed extends AbstractVariableNeighborhoodSear
                     super.checkCondicionParadaPorcentajeMejora()) {
 
                 if (Log.isOn() && Log.checkIter(contadorIteraciones)) {
+                    double[] fit = fitness(x);
                     String s = "[VNS] tiempo: " + (System.currentTimeMillis() - initTime) / 1000 + "s" +
-                            "    |    " + "#Iteracion: " + contadorIteraciones +
-                            "    |    " + "Fitness actual: " + fitness(x)[0] +
-                            "    |    vecindad actual: " + getCurrentNeighborhood() +
-                            "    |    " + "porcentaje de mejora: " + porcentajeMejora;
+                            "\t|\t" + "#Iteracion: " + contadorIteraciones +
+                            "\t|\t" + String.format("Fitness actual: %.16f (%.4f, %.4f, %.4f, %.4f)", fitness(x)[0], fit[1], fit[2], fit[3], fit[4]) +
+                            "\t|\t" + "vecindad actual: " + getCurrentNeighborhood() +
+                            "\t|\t" + "porcentaje de mejora: " + porcentajeMejora;
                     Log.info(s);
+
+
                 }
 
 
@@ -69,10 +73,10 @@ public class VariableNeighborhoodSkewed extends AbstractVariableNeighborhoodSear
 
                 if (Log.isOn() && Log.checkIter(contadorIteraciones)) {
                     String s = "[SVNS] x_best: " + fitness(x_best)[0] +
-                            "    |    x anterior: " + fitness(x_anterior)[0] +
-                            "    |    x nueva: " + fitness(x)[0] +
-                            "    |    x tras BL: " + fitness(x_prime_2)[0] +
-                            "    |    distancia: " + distancia;
+                            "\t|\t" + "x anterior: " + fitness(x_anterior)[0] +
+                            "\t|\t" + "x nueva: " + fitness(x)[0] +
+                            "\t|\t" + "x tras BL: " + fitness(x_prime_2)[0] +
+                            "\t|\t" + "distancia: " + distancia;
                     Log.info(s);
                 }
 
@@ -91,15 +95,18 @@ public class VariableNeighborhoodSkewed extends AbstractVariableNeighborhoodSear
                     if (fitnessAnterior == -1)
                         super.porcentajeMejora = 100;
                     else
-                        super.porcentajeMejora = Math.abs(fitnessMejor - fitnessAnterior) * 100; //(fitness(x)[0] * 100 / fitnessAnterior) - 100;
+                        super.porcentajeMejora = Math.abs(fitnessMejorCiclo - fitnessAnterior) * 100; //(fitness(x)[0] * 100 / fitnessAnterior) - 100;
 
                     // actualizar fitness anterior por el actual
                     fitnessAnterior = fit[0];
+                    fitnessMejorCiclo = fit[0];
 
                 }
-                // actualizar fitness anterior
-                if (fitness(x)[0] > fitnessMejor) // NOTE: Maximizacion
+                // actualizar fitness mejor
+                if (fit[0] > fitnessMejor) // NOTE: Maximizacion
                     fitnessMejor = fit[0];
+                if (fit[0] > fitnessMejorCiclo) // NOTE: Maximizacion
+                    fitnessMejorCiclo = fit[0];
 
                 contadorIteraciones++;
                 Log.info("", contadorIteraciones);
@@ -121,7 +128,7 @@ public class VariableNeighborhoodSkewed extends AbstractVariableNeighborhoodSear
                 "    |    " + "Numero de reinicios: " + contadorReinicios +
                 "    |    " + "Restricciones: " + Restricciones.penalizacionPorRestricciones(x_best, getPatrones(), getEntrada(), getParametros()) + "\n");
         Log.csvLog(contadorIteraciones, t, fit[0], fit[1], fit[2], fit[3], fit[4], x_best.getTurnos().size(), porcentajeMejora,
-                getNeighborSet().getCurrentNeighborhood(),fitness(x_best)[0], distancia);
+                getNeighborSet().getCurrentNeighborhood(), fitness(x_best)[0], distancia);
 
         return x_best;
     }
