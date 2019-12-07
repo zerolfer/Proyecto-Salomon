@@ -17,34 +17,27 @@ public class Main_VNS {
     public static List<Solucion> main_vns(String caso, Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo,
                                           Entrada entrada, Patrones patrones, List<Solucion> poblacionInicial,
                                           String estrucVecindad) {
-//
-//        /*PRESENTACION DE RESULTADOS Y TRAZAS*/
-//
-//        rwFiles.EscrituraExcel.EscrituraSoluciones("PoblacionFactible", Main.carpetaSoluciones,
-//                poblacionReducirControladores, entrada, patrones, parametros, parametrosAlgoritmo);
-//        trazas.Trazas.archivarYLimpiarTrazas(poblacionReducirControladores, Main.propFileOptions, parametrosAlgoritmo);
-//        trazas.Trazas.limpiarTrazas();
-//        /*FIN PRESENTACION DE RESULTADOS Y TRAZAS*/
-//
-//
-//        /*PRESENTACION DE RESULTADOS Y TRAZAS*/
-//        rwFiles.EscrituraExcel.EscrituraSoluciones("PoblacionOptimizada", Main.carpetaSoluciones, poblacionOptimizada
-//                , entrada, patrones, parametros, parametrosAlgoritmo);
-//        trazas.Trazas.archivarYLimpiarTrazas(poblacionOptimizada, Main.propFileOptions, parametrosAlgoritmo);
-//        /*FIN PRESENTACION DE RESULTADOS Y TRAZAS*/
-//        System.out.println("Done");
-//
+        return main_vns(caso, parametros, parametrosAlgoritmo, entrada, patrones, poblacionInicial, estrucVecindad, Main.carpetaTrazas);
+    }
+
+    public static List<Solucion> main_vns(String caso, Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo,
+                                          Entrada entrada, Patrones patrones, List<Solucion> poblacionInicial,
+                                          String estrucVecindad, String carpetaTrazas) {
+
         parametrosAlgoritmo.VNS.initializeNeighborStructures(entrada, patrones, parametros, parametrosAlgoritmo, estrucVecindad);
 
         VariableNeighborhoodSearch vns = VnsFactory.getVNS(entrada, patrones, parametros, parametrosAlgoritmo);
 
         List<Solucion> res = new ArrayList<>();
 
-        Log.open();
-//        Log.debug
-        Log.debug("[ Ejecutando " + vns + " ] " +
-                "[ " + caso + " ] " +
-                "[ Por " + parametrosAlgoritmo.getMaxMilisecondsAllowed() / 1000 + " segundos ]");
+        Log.open(carpetaTrazas);
+
+        String s = "[ Ejecutando " + vns + " ] " + "[ " + caso + " ] ";
+        if (parametrosAlgoritmo.VNS.getFlagCondicionParadaTiempo())
+            s += String.format("[ Por %d segundos ] ", parametrosAlgoritmo.getMaxMilisecondsAllowed() / 1000);
+        if (parametrosAlgoritmo.VNS.getFlagCondicionParadaPorcentajeMejora())
+            s += String.format("[ Porcent. Mejora Min. de %f ]", parametrosAlgoritmo.VNS.getPorcentajeMinimoMejoria());
+        Log.debug(s);
 
         for (Solucion solucion : poblacionInicial) {
             res.add(
@@ -57,7 +50,7 @@ public class Main_VNS {
         return res;
     }
 
-    private static Solucion startExecution(VariableNeighborhoodSearch vnd, Solucion solucion, ParametrosAlgoritmo p)/* throws ExecutionException, TimeoutException, InterruptedException */ {
+    private static Solucion startExecution(VariableNeighborhoodSearch vnd, Solucion solucion, ParametrosAlgoritmo p) {
 
        /* Solucion res;
         ExecutorService executor = Executors.newSingleThreadExecutor();

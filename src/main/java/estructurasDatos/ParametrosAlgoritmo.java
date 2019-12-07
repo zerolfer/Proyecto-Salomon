@@ -494,6 +494,10 @@ public class ParametrosAlgoritmo {
             return funcionDistancia;
         }
 
+        public void setFuncionDistancia(String funcionDistancia) {
+            this.funcionDistancia = funcionDistancia;
+        }
+
         public void setTipoVNS(String tipo) {
             this.tipoVNS = tipo;
         }

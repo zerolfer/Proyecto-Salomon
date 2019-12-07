@@ -46,19 +46,23 @@ public class Log {
     }
 
     public static void open() {
+        open(Main.carpetaTrazas);
+    }
+
+    public static void open(String carpetaTrazas) {
 //        if (FICHERO)
         try {
             Date date = new Date();
             DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss");
 
-            String[] nameFiles = new File(Main.carpetaTrazas).list();
+            String[] nameFiles = new File(carpetaTrazas).list();
             int number;
             if (nameFiles == null)
                 number = 1;
             else
                 number = nameFiles.length + 1;
 
-            String name = Main.carpetaTrazas +/* dateFormat.format(date) */"output" + number + ".csv";
+            String name = carpetaTrazas +/* dateFormat.format(date) */"output" + number + ".csv";
             File f = new File(name);
             f.getParentFile().mkdirs();
             f.createNewFile();

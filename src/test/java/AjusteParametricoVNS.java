@@ -3,27 +3,40 @@ import estructurasDatos.DominioDelProblema.Entrada;
 import estructurasDatos.Parametros;
 import estructurasDatos.ParametrosAlgoritmo;
 import estructurasDatos.Solucion;
+import main.Main;
 import main.Main_VNS;
 import patrones.Patrones;
-import pruebasCasos.DeciderCase;
 
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-
-import static main.Main.*;
 
 public class AjusteParametricoVNS {
 
+    public static String propFileExternoParametros = "./parametros_algoritmo.properties";
+    private static URL propFileParameters = Main.class.getResource("/problemParameters.properties");
+    private static URL propFileOptions = Main.class.getResource("/options.properties");
+//    public static String propFileParametersAlgorithm = Main.class.getResource("/algorithm.properties").getPath();
+
+    private static String entradaPath = "Caso1";
+    private static String entradaId = "Id1n-06-03-2017";
+    private static String entorno = "Canarias";
+
+    private static String carpetaSoluciones = "";
+    private static String carpetaTrazas = "";
+    public static Date date = new Date();
+
     public static void main(String[] args) {
         int nEjecucion = 1;
-        int[] casos = {1, 3, 4, 5, 6, 7, 8, 9};
-        for (int i = 0; i < casos.length; i++)
-            main1(nEjecucion, "Caso" + casos[i]);
+        int[] casos = {1, /*3, 4, 5, 6, 7, 8, 9*/};
+        for (int caso : casos) main1(nEjecucion, "Caso" + caso);
     }
 
-    public static void main1(int ejecucion, String caso) {
+
+    private static void main1(int ejecucion, String caso) {
         /*INICIALIZACION DE DATOS*/
-        DeciderCase.switchCase(caso);
+        switchCase(caso);
 
         // Carga de los parámetros del dominio del problema:
         Parametros parametros = new Parametros(propFileParameters, propFileOptions);
@@ -51,7 +64,8 @@ public class AjusteParametricoVNS {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         // NOTE: modificar esto unicamente //////////////////////////////////////////////////////////////////////////
-        testarAlphas(caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
+        ajusteTipoVNS(caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
+//        testarAlphas(caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
         // testarTiempos(caso, entrada, patrones, poblacionInicial, solEntrada);
 //        testarVecindades(caso, entrada, patrones, poblacionInicial, solEntrada);
 
@@ -65,11 +79,38 @@ public class AjusteParametricoVNS {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
+    private static void ajusteTipoVNS(String caso, Entrada entrada, Patrones patrones, Parametros parametros,
+                                      ParametrosAlgoritmo parametrosAlgoritmo,
+                                      ArrayList<Solucion> poblacionInicial, ArrayList<Solucion> solEntrada) {
+        for (String tipoVNS : new String[]{/*"VND", "RVNS", "BVNS", "GVNS", */"SVNS"}) {
+            carpetaTrazas = "resultados/" + entradaPath + entradaId + "/" + parametrosAlgoritmo.getAlgoritmo() + "/Trazas/" + tipoVNS + "/";
+            parametrosAlgoritmo.VNS.setTipoVNS(tipoVNS);
+            if (tipoVNS.equals("SVNS")) {
+
+                String[] funcionesDistancia = {/*"slots", */"fitness"};
+                double[] alphas = new double[]{/*0.5, 1, 2, 5, */10, 15, 20, 30, 40, 50};
+                for (String funcionDistancia : funcionesDistancia) {
+                    parametrosAlgoritmo.VNS.setFuncionDistancia(funcionDistancia);
+                    for (double alpha : alphas) {
+                        carpetaTrazas = "resultados/" + entradaPath + entradaId + "/" + parametrosAlgoritmo.getAlgoritmo() + "/Trazas/" + tipoVNS + "/" + funcionDistancia + "/" + alpha + "/";
+                        parametrosAlgoritmo.VNS.setAlpha(alpha);
+                        System.err.println(carpetaTrazas);
+                        executeXTimesVNS(4, caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
+                    }
+                }
+            } else {
+                System.out.println(carpetaTrazas);
+                executeXTimesVNS(10, caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
+            }
+        }
+    }
+
+
     private static void testarAlphas(String caso, Entrada entrada, Patrones patrones, Parametros parametros,
                                      ParametrosAlgoritmo parametrosAlgoritmo,
                                      ArrayList<Solucion> poblacionInicial, ArrayList<Solucion> solEntrada) {
 //        double[] alphas = new double[]{15, 15.5, 16, 16.5, 17, 17.5, 18, 18.5, 19, 19.5, 20};
-        double[] alphas = new double[]{0.5, 1, 2, 5, 10, 15, 20, 30, 40, 50};
+        double[] alphas = new double[]{/*0.5, 1, */2, /*5, 10, */15, 20, 30, 40, 50};
         double inicial = parametrosAlgoritmo.VNS.getAlpha();
         parametrosAlgoritmo.VNS.setTipoVNS("SVNS");
         for (double alpha : alphas) {
@@ -138,14 +179,14 @@ public class AjusteParametricoVNS {
                                          ParametrosAlgoritmo parametrosAlgoritmo,
                                          List<Solucion> poblacionInicial, List<Solucion> solEntrada, String str) {
         for (int i = 0; i < X; i++)
-            Main_VNS.main_vns(caso, parametros, parametrosAlgoritmo, entrada, patrones, poblacionInicial, str);
+            Main_VNS.main_vns(caso, parametros, parametrosAlgoritmo, entrada, patrones, poblacionInicial, str, carpetaTrazas);
     }
 
     private static void executeXTimesVNS(int X, String caso, Entrada entrada, Patrones patrones, Parametros parametros,
                                          ParametrosAlgoritmo parametrosAlgoritmo,
                                          List<Solucion> poblacionInicial, List<Solucion> solEntrada) {
         for (int i = 0; i < X; i++)
-            Main_VNS.main_vns(caso, parametros, parametrosAlgoritmo, entrada, patrones, poblacionInicial, "");
+            Main_VNS.main_vns(caso, parametros, parametrosAlgoritmo, entrada, patrones, poblacionInicial, "", carpetaTrazas);
     }
 
     private static void executeXTimesVNSAndSave(int X, String caso, Entrada entrada, Patrones patrones, Parametros parametros,
@@ -153,8 +194,63 @@ public class AjusteParametricoVNS {
                                                 List<Solucion> poblacionInicial, List<Solucion> solEntrada, String str) {
         for (int i = 0; i < X; i++) {
             List<Solucion> r =
-                    Main_VNS.main_vns(caso, parametros, parametrosAlgoritmo, entrada, patrones, poblacionInicial, str);
+                    Main_VNS.main_vns(caso, parametros, parametrosAlgoritmo, entrada, patrones, poblacionInicial, str, carpetaTrazas);
             if (i == 9) solEntrada.addAll(r);
+        }
+
+    }
+
+
+    public static void switchCase(String caso) {
+        switch (caso) {
+            case "Caso1":
+                entradaPath = "Caso1";
+                entradaId = "Id1m-01-01-2019";
+                entorno = "Barcelona";
+                break;
+            case "Caso2":
+                entradaPath = "Caso2";
+                entradaId = "xxx";
+                entorno = "Sevilla";
+                break;
+            case "Caso3":
+                entradaPath = "Caso3";
+                entradaId = "Id2m-01-01-2019";
+                entorno = "Barcelona";
+                break;
+            case "Caso4":
+                entradaPath = "Caso4";
+                entradaId = "Id3t-16-01-2019";
+                entorno = "Madrid";
+                break;
+            case "Caso5":
+                entradaPath = "Caso5";
+                entradaId = "Id5t-16-01-2019";
+                entorno = "Madrid";
+                break;
+            case "Caso6":
+                entradaPath = "Caso6";
+                entradaId = "Id4t-14-01-2019";
+                entorno = "Madrid";
+                break;
+            case "Caso7":
+                entradaPath = "Caso7";
+                entradaId = "Id6t-19-10-2018";
+                entorno = "Barcelona";
+                break;
+            case "Caso8":
+                entradaPath = "Caso8";
+                entradaId = "Id0m-13-09-2018";
+                entorno = "Palma";
+                break;
+            case "Caso9":
+                entradaPath = "Caso9";
+                entradaId = "Id1m-13-09-2018";
+                entorno = "Palma";
+                break;
+            default:
+                System.err.println("No es un caso predefinido, introducir ID y entorno");
+                break;
         }
 
     }
