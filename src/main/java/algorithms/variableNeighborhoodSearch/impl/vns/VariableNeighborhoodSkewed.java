@@ -119,6 +119,7 @@ public class VariableNeighborhoodSkewed extends AbstractVariableNeighborhoodSear
 
 //        Log.debug
         double[] fit = fitness(x_best);
+        double numRestricciones = Restricciones.penalizacionPorRestricciones(x_best, getPatrones(), getEntrada(), getParametros());
         Log.debug("[Fin VNS] Fitness final: " + fit[0] +
                 "    |    " + "Fitness desglosado: [" + fit[1] + ", " + fit[2] + ", " + fit[3] + ", " + fit[4] + "]" +
                 "    |    " + "iteraciones totales: " + contadorIteraciones +
@@ -126,9 +127,9 @@ public class VariableNeighborhoodSkewed extends AbstractVariableNeighborhoodSear
                 "    |    " + "tiempo: " + (System.currentTimeMillis() - initTime) / 1000 + "s de " + getMaxTimeAllowed() / 1000 + "s" +
                 "    |    " + "tamaño: " + x.getTurnos().size() +
                 "    |    " + "Numero de reinicios: " + contadorReinicios +
-                "    |    " + "Restricciones: " + Restricciones.penalizacionPorRestricciones(x_best, getPatrones(), getEntrada(), getParametros()) + "\n");
+                "    |    " + "Restricciones: " + numRestricciones + "\n");
         Log.csvLog(contadorIteraciones, t, fit[0], fit[1], fit[2], fit[3], fit[4], x_best.getTurnos().size(), porcentajeMejora,
-                getNeighborSet().getCurrentNeighborhood(), fitness(x_best)[0], distancia);
+                getNeighborSet().getCurrentNeighborhood(), fitness(x_best)[0], distancia, numRestricciones);
 
         return x_best;
     }

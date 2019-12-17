@@ -24,7 +24,7 @@ public class Log {
      * En caso de utilizarse como pomparacion, permite elegir cada cuantas iteraciones
      * se hace el log
      */
-    private static final int trazaCadaTantasIteraciones = 60;
+    private static final int trazaCadaTantasIteraciones = 50;
 
     /**
      * Decide si el log por consola está habilitado o no
@@ -92,7 +92,8 @@ public class Log {
                                 "porcentajeMejora" + STRING_SEPARADOR_CSV +
                                 "vecindad" + STRING_SEPARADOR_CSV +
                                 "mejor fitness" + STRING_SEPARADOR_CSV +
-                                "distancia" + "\n"
+                                "distancia" + STRING_SEPARADOR_CSV +
+                                "restricciones incumplidas" + "\n"
                 );
 
         } catch (IOException e) {

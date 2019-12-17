@@ -122,7 +122,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
                 double[] fit = fitness(x);
                 Log.csvLog(contadorIteraciones, t, fit[0],
                         fit[1], fit[2], fit[3], fit[4],
-                        x.getTurnos().size(), porcentajeMejora, getCurrentNeighborhood(), fit[0], -1);
+                        x.getTurnos().size(), porcentajeMejora, getCurrentNeighborhood(), fit[0], -1, -1);
 
                 if (contadorIteraciones % numIteracionesCiclo == 0) {
                     // calcular porcentaje mejora
@@ -149,6 +149,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
         } while (checkCondicionParadaTiempo(t) && checkCondicionParadaPorcentajeMejora());
 
         double[] fit = fitness(x);
+        double numRestricciones = Restricciones.penalizacionPorRestricciones(x, getPatrones(), getEntrada(), getParametros());
         Log.debug("[Fin VNS] Fitness final: " + fit[0] +
                 "    |    " + "Fitness desglosado: [" + fit[1] + ", " + fit[2] + ", " + fit[3] + ", " + fit[4] + "]" +
                 "    |    " + "iteraciones totales: " + contadorIteraciones +
@@ -156,11 +157,11 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
                 "    |    " + "tiempo: " + (System.currentTimeMillis() - initTime) / 1000 + "s de " + maxTimeAllowed / 1000 + "s" +
                 "    |    " + "tamaño: " + x.getTurnos().size() +
                 "    |    " + "Numero de reinicios: " + contadorReinicios +
-                "    |    " + "Restricciones: " + Restricciones.penalizacionPorRestricciones(x, getPatrones(), getEntrada(), getParametros()) + "\n");
+                "    |    " + "Restricciones: " + numRestricciones + "\n");
         Log.csvLog(contadorIteraciones, t,
                 fit[0], fit[1], fit[2], fit[3], fit[4],
                 x.getTurnos().size(), porcentajeMejora,
-                getCurrentNeighborhood(), fit[0], -1);
+                getCurrentNeighborhood(), fit[0], -1, numRestricciones);
 
         return x;
     }

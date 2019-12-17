@@ -64,7 +64,10 @@ public class AjusteParametricoVNS {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         // NOTE: modificar esto unicamente //////////////////////////////////////////////////////////////////////////
-        ajusteTipoVNS(caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
+//        ajusteTipoVNS(caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
+//        ajusteVecindades(caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
+        ajusteProbabilidadDiversif(caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
+
 //        testarAlphas(caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
         // testarTiempos(caso, entrada, patrones, poblacionInicial, solEntrada);
 //        testarVecindades(caso, entrada, patrones, poblacionInicial, solEntrada);
@@ -79,27 +82,69 @@ public class AjusteParametricoVNS {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
+    private static void ajusteProbabilidadDiversif(String caso, Entrada entrada, Patrones patrones, Parametros parametros,
+                                                   ParametrosAlgoritmo parametrosAlgoritmo, ArrayList<Solucion> poblacionInicial, ArrayList<Solucion> solEntrada) {
+
+        double[] probabilidadDiversificacion = new double[]{1, 0.95, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1};
+        for (double prob : probabilidadDiversificacion) {
+            parametrosAlgoritmo.VNS.setProbabilidadDiversificacion(prob);
+            carpetaTrazas = "resultados/" + entradaPath + entradaId + "/2-Vecindades/" + "probabilisticos/prob/" +
+                    "prob-" + prob + "/";
+            System.err.println(carpetaTrazas);
+            executeXTimesVNS(1, caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
+        }
+    }
+
+
+    private static void ajusteVecindades(String caso, Entrada entrada, Patrones patrones, Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo, ArrayList<Solucion> poblacionInicial, ArrayList<Solucion> solEntrada) {
+        char[] identificadores = new char[]{'a', 'b', 'c', 'd'};
+        String[] valores = new String[]{
+                "movRejilla,movMaxCarga.1,movMaxCarga.2,movMaxCarga.3,movMaxCarga.4,movLibre",
+                "movMaxCarga,movRejilla.1,movRejilla.2,movRejilla.3,movRejilla.4,movLibre",
+                "movMaxCarga.1,movMaxCarga.2,movMaxCarga.3,movMaxCarga.4,movRejilla.1,movRejilla.2,movRejilla.3,movRejilla.4,movLibre",
+                "movRejilla.1,movRejilla.2,movRejilla.3,movRejilla.4,movMaxCarga.1,movMaxCarga.2,movMaxCarga.3,movMaxCarga.4,movLibre"
+        };
+        double[] probabilidadDiversificacion = new double[]{/*1, 0.95,*/ .9, .8, .7, .6, .5, .4, .3, .2, .1};
+        double[] variacion = new double[]{0.001, 0.01, 0.1, .2};
+        int[] ciclos = new int[]{1, 5, 10, 25, 50, 100, 1000};
+        for (double prob : probabilidadDiversificacion) {
+            parametrosAlgoritmo.VNS.setProbabilidadDiversificacion(prob);
+            for (double vari : variacion) {
+                parametrosAlgoritmo.VNS.setVariacionProbabilidad(vari);
+                for (int ciclo : ciclos) {
+                    parametrosAlgoritmo.VNS.setCambioProbabilidadIteraciones(ciclo);
+                    for (int i = 0; i < valores.length; i++) {
+                        carpetaTrazas = "resultados/" + entradaPath + entradaId + "/2-Vecindades/" + "probabilisticos/" +
+                                "prob-" + prob + "/" + "var-" + vari + "/iter-" + ciclo + "/" + identificadores[i] + "/";
+                        System.err.println(carpetaTrazas);
+                        executeXTimesVNS(10, caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada, valores[i]);
+                    }
+                }
+            }
+        }
+    }
+
     private static void ajusteTipoVNS(String caso, Entrada entrada, Patrones patrones, Parametros parametros,
                                       ParametrosAlgoritmo parametrosAlgoritmo,
                                       ArrayList<Solucion> poblacionInicial, ArrayList<Solucion> solEntrada) {
-        for (String tipoVNS : new String[]{/*"VND", "RVNS", "BVNS", "GVNS", */"SVNS"}) {
-            carpetaTrazas = "resultados/" + entradaPath + entradaId + "/" + parametrosAlgoritmo.getAlgoritmo() + "/Trazas/" + tipoVNS + "/";
+        for (String tipoVNS : new String[]{"VND", "RVNS", "BVNS", "GVNS", "SVNS"}) {
+            carpetaTrazas = "resultados/" + entradaPath + entradaId + "/1-TipoVNS/" + tipoVNS + "/";
             parametrosAlgoritmo.VNS.setTipoVNS(tipoVNS);
             if (tipoVNS.equals("SVNS")) {
 
                 String[] funcionesDistancia = {/*"slots", */"fitness"};
-                double[] alphas = new double[]{/*0.5, 1, 2, 5, */10, 15, 20, 30, 40, 50};
+                double[] alphas = new double[]{0.5, /*1, 2, 5, 10, */15, 20, 30, 40, 50};
                 for (String funcionDistancia : funcionesDistancia) {
                     parametrosAlgoritmo.VNS.setFuncionDistancia(funcionDistancia);
                     for (double alpha : alphas) {
                         carpetaTrazas = "resultados/" + entradaPath + entradaId + "/" + parametrosAlgoritmo.getAlgoritmo() + "/Trazas/" + tipoVNS + "/" + funcionDistancia + "/" + alpha + "/";
                         parametrosAlgoritmo.VNS.setAlpha(alpha);
                         System.err.println(carpetaTrazas);
-                        executeXTimesVNS(4, caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
+                        executeXTimesVNS(10, caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
                     }
                 }
             } else {
-                System.out.println(carpetaTrazas);
+                System.err.println(carpetaTrazas);
                 executeXTimesVNS(10, caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
             }
         }
