@@ -416,9 +416,9 @@ public class ParametrosAlgoritmo {
         private int numIteracionesParaComprobarCondicionParadaPorcentaje = getInteger("numIteracionesParaComprobarCondicionParadaPorcentaje");
         private String tipoVNS = getString("tipoVNS");
 
-        private double probabilidadIntensificacion = getDouble("neighborStructures.probabilistico.probabilidadDiversificacion");
+        private double probabilidadDiversificacion = getDouble("neighborStructures.probabilistico.probabilidadDiversificacion");
         private double variacionProbabilidad = getDouble("neighborStructures.probabilistico.variacion");
-        private double cambioProbabilidadIteraciones = getDouble("neighborStructures.probabilistico.numeroIteraciones");
+        private int cambioProbabilidadIteraciones = getInteger("neighborStructures.probabilistico.numeroIteraciones");
 
         private double alpha = getDouble("skewed.alpha");
         private String funcionDistancia = getString("skewed.funcionDistancia");
@@ -510,28 +510,28 @@ public class ParametrosAlgoritmo {
             this.numIteracionesParaComprobarCondicionParadaPorcentaje = numIteracionesParaComprobarCondicionParadaPorcentaje;
         }
 
-        public double getProbabilidadIntensificacion() {
-            return probabilidadIntensificacion;
-        }
-
-        public void setProbabilidadIntensificacion(double probabilidadIntensificacion) {
-            if (probabilidadIntensificacion > 1)
-                throw new RuntimeException("La probabilidad debe ser entre [0, 1]");
-            else if (probabilidadIntensificacion < 0)
-                this.probabilidadIntensificacion = 0;
-
-            this.probabilidadIntensificacion = probabilidadIntensificacion;
-        }
-
         public double getProbabilidadDiversificacion() {
-            return 1 - probabilidadIntensificacion;
+            return probabilidadDiversificacion;
         }
 
         public void setProbabilidadDiversificacion(double probabilidadDiversificacion) {
-            if (probabilidadIntensificacion < 0 || probabilidadIntensificacion > 1)
-                throw new RuntimeException("La probabilidad debe ser entre [0, 1]");
-            this.probabilidadIntensificacion = 1 - probabilidadDiversificacion;
+            if (probabilidadDiversificacion > 1)
+                throw new RuntimeException("La probabilidad debe ser entre [0, 1] pero era de "+probabilidadDiversificacion);
+            else if (probabilidadDiversificacion < 0)
+                this.probabilidadDiversificacion = 0;
+
+            this.probabilidadDiversificacion = probabilidadDiversificacion;
         }
+
+        public double getProbabilidadIntensificacion() {
+            return 1 - probabilidadDiversificacion;
+        }
+
+//        public void setProbabilidadIntensificacion(double probabilidadIntensificacion) {
+//            if (probabilidadIntensificacion < 0 || probabilidadIntensificacion > 1)
+//                throw new RuntimeException("La probabilidad debe ser entre [0, 1] pero era de " + probabilidadIntensificacion);
+//            this.probabilidadIntensificacion = 1 - probabilidadDiversificacion;
+//        }
 
         public double getVariacionProbabilidad() {
             return variacionProbabilidad;
@@ -541,11 +541,11 @@ public class ParametrosAlgoritmo {
             this.variacionProbabilidad = variacionProbabilidad;
         }
 
-        public double getCambioProbabilidadIteraciones() {
+        public int getCambioProbabilidadIteraciones() {
             return cambioProbabilidadIteraciones;
         }
 
-        public void setCambioProbabilidadIteraciones(double cambioProbabilidadIteraciones) {
+        public void setCambioProbabilidadIteraciones(int cambioProbabilidadIteraciones) {
             this.cambioProbabilidadIteraciones = cambioProbabilidadIteraciones;
         }
 

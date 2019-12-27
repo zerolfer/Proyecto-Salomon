@@ -66,9 +66,16 @@ public class AjusteParametricoVNS {
         // NOTE: modificar esto unicamente //////////////////////////////////////////////////////////////////////////
 //        ajusteTipoVNS(caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
 //        ajusteVecindades(caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
-        ajusteProbabilidadDiversif(caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
+//        ajusteOrdenEntornos(caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
+//        ajusteProbabilidadDiversif(caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
+//        ajusteVariacionProbabilidad(caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
+//        ajusteCiclosProbabilidad(caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
+//        ajusteTipoEntornos(caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
+        ajusteCiclosBusqueda(caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
 
-//        testarAlphas(caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
+
+
+        //        testarAlphas(caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
         // testarTiempos(caso, entrada, patrones, poblacionInicial, solEntrada);
 //        testarVecindades(caso, entrada, patrones, poblacionInicial, solEntrada);
 
@@ -82,6 +89,58 @@ public class AjusteParametricoVNS {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
+    private static void ajusteCiclosBusqueda(String caso, Entrada entrada, Patrones patrones, Parametros parametros,
+                                                 ParametrosAlgoritmo parametrosAlgoritmo, ArrayList<Solucion> poblacionInicial, ArrayList<Solucion> solEntrada) {
+
+        int[] ciclos = new int[]{50, 100, 1000, 5000, 6000, 7000, 10000};
+        for (int iter : ciclos) {
+            parametrosAlgoritmo.VNS.setNumIteracionesParaComprobarCondicionParadaPorcentaje(iter);
+            carpetaTrazas = "resultados/" + entradaPath + entradaId + "/4-NumCiclosPorcentajeMejoria/" +
+                    iter + "/";
+            System.err.println(carpetaTrazas);
+            executeXTimesVNS(10, caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
+        }
+    }
+
+
+    private static void ajusteTipoEntornos(String caso, Entrada entrada, Patrones patrones, Parametros parametros,
+                                           ParametrosAlgoritmo parametrosAlgoritmo, ArrayList<Solucion> poblacionInicial, ArrayList<Solucion> solEntrada) {
+
+        carpetaTrazas = "resultados/" + entradaPath + entradaId + "/2-Vecindades/" + "TipoEntornos/determinista/";
+        System.err.println(carpetaTrazas);
+        executeXTimesVNS(10, caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
+    }
+
+
+    private static void ajusteCiclosProbabilidad(String caso, Entrada entrada, Patrones patrones, Parametros parametros,
+                                                    ParametrosAlgoritmo parametrosAlgoritmo, ArrayList<Solucion> poblacionInicial, ArrayList<Solucion> solEntrada) {
+
+//        int[] ciclos = new int[]{1, 5, 10, 25, 50, 100, 1000};
+        int[] ciclos = new int[]{60, 65, 70, 75, 80, 85, 90, 95};
+        for (int iter : ciclos) {
+            parametrosAlgoritmo.VNS.setCambioProbabilidadIteraciones(iter);
+            carpetaTrazas = "resultados/" + entradaPath + entradaId + "/2-Vecindades/" + "probabilisticos/iter/" +
+                    iter + "/";
+            System.err.println(carpetaTrazas);
+            executeXTimesVNS(10, caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
+        }
+    }
+
+
+    private static void ajusteVariacionProbabilidad(String caso, Entrada entrada, Patrones patrones, Parametros parametros,
+                                                    ParametrosAlgoritmo parametrosAlgoritmo, ArrayList<Solucion> poblacionInicial, ArrayList<Solucion> solEntrada) {
+
+        double[] variacion = new double[]{0.001, 0.01, 0.1, .2};
+        for (double var : variacion) {
+            parametrosAlgoritmo.VNS.setVariacionProbabilidad(var);
+            carpetaTrazas = "resultados/" + entradaPath + entradaId + "/2-Vecindades/" + "probabilisticos/var/" +
+                    var + "/";
+            System.err.println(carpetaTrazas);
+            executeXTimesVNS(10, caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
+        }
+    }
+
+
     private static void ajusteProbabilidadDiversif(String caso, Entrada entrada, Patrones patrones, Parametros parametros,
                                                    ParametrosAlgoritmo parametrosAlgoritmo, ArrayList<Solucion> poblacionInicial, ArrayList<Solucion> solEntrada) {
 
@@ -91,7 +150,22 @@ public class AjusteParametricoVNS {
             carpetaTrazas = "resultados/" + entradaPath + entradaId + "/2-Vecindades/" + "probabilisticos/prob/" +
                     "prob-" + prob + "/";
             System.err.println(carpetaTrazas);
-            executeXTimesVNS(1, caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
+            executeXTimesVNS(10, caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
+        }
+    }
+
+    private static void ajusteOrdenEntornos(String caso, Entrada entrada, Patrones patrones, Parametros parametros, ParametrosAlgoritmo parametrosAlgoritmo, ArrayList<Solucion> poblacionInicial, ArrayList<Solucion> solEntrada) {
+        char[] identificadores = new char[]{'a', 'b', 'c', 'd'};
+        String[] valores = new String[]{
+                "movRejilla,movMaxCarga.1,movMaxCarga.2,movMaxCarga.3,movMaxCarga.4,movLibre",
+                "movMaxCarga,movRejilla.1,movRejilla.2,movRejilla.3,movRejilla.4,movLibre",
+                "movMaxCarga.1,movMaxCarga.2,movMaxCarga.3,movMaxCarga.4,movRejilla.1,movRejilla.2,movRejilla.3,movRejilla.4,movLibre",
+                "movRejilla.1,movRejilla.2,movRejilla.3,movRejilla.4,movMaxCarga.1,movMaxCarga.2,movMaxCarga.3,movMaxCarga.4,movLibre"
+        };
+        for (int i = 0; i < valores.length; i++) {
+            carpetaTrazas = "resultados/" + entradaPath + entradaId + "/2-OrdenEntornos_Bis/" + identificadores[i] + "/";
+            System.err.println(carpetaTrazas);
+            executeXTimesVNS(10, caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada, valores[i]);
         }
     }
 

@@ -100,9 +100,9 @@ public class NeighborhoodSetProbabilistico implements NeighborhoodSet {
     public void nextNeighborhood(int numIteraciones) {
         // primero ajustamos la probabilidad
         if (numIteraciones - numIteracionAnteriorCiclo > parametrosAlgoritmo.VNS.getCambioProbabilidadIteraciones() &&
-                parametrosAlgoritmo.VNS.getProbabilidadIntensificacion() > 0) {
-            parametrosAlgoritmo.VNS.setProbabilidadIntensificacion(
-                    parametrosAlgoritmo.VNS.getProbabilidadIntensificacion() - parametrosAlgoritmo.VNS.getVariacionProbabilidad()
+                parametrosAlgoritmo.VNS.getProbabilidadDiversificacion() > 0) {
+            parametrosAlgoritmo.VNS.setProbabilidadDiversificacion(
+                    parametrosAlgoritmo.VNS.getProbabilidadDiversificacion() - parametrosAlgoritmo.VNS.getVariacionProbabilidad()
             );
             numIteracionAnteriorCiclo = numIteraciones;
         }
