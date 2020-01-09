@@ -120,7 +120,9 @@ public abstract class AbstractNeighborhoodStructure implements NeighborhoodStruc
      */
     private boolean checkCondicionParadaTiempoMaximo() {
 //        if(parametrosAlgoritmo.VNS.getFlagCondicionParadaTiempo())
-        return System.currentTimeMillis() - AbstractVariableNeighborhoodSearch.initTime < parametrosAlgoritmo.getMaxMilisecondsAllowed();
+        if(parametrosAlgoritmo.VNS.getFlagCondicionParadaTiempo())
+            return System.currentTimeMillis() - AbstractVariableNeighborhoodSearch.initTime < parametrosAlgoritmo.getMaxMilisecondsAllowed();
+        else return true;
 //        else return true;
     }
 
@@ -137,7 +139,7 @@ public abstract class AbstractNeighborhoodStructure implements NeighborhoodStruc
         double f_x_prime;
 
         int numIt = 1;
-        // Iteramos repetidas veces hasta que haya mejora
+        // Iteramos repetidas veces hasta que no haya mejora
         do {
             x_prime = buscarSolucion(x);
             f_x_prime = fitness(x_prime)[0];
