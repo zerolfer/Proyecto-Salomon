@@ -64,13 +64,13 @@ public class AjusteParametricoVNS {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         // NOTE: modificar esto unicamente //////////////////////////////////////////////////////////////////////////
-        /*1*/ajusteTipoVNS(caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
-//        /*1*/ajusteVecindades(caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
+//        /*1*/ajusteTipoVNS(caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
+//        /*2*/ajusteVecindades(caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
 //        /*2*/ajusteOrdenEntornos(caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
-//        /*3*/ajusteProbabilidadDiversif(caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
-//        /*3*/ajusteVariacionProbabilidad(caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
-//        /*3*/ajusteCiclosProbabilidad(caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
-//        /*3*/ajusteTipoEntornos(caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
+        /*3*/ajusteProbabilidadDiversif(caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
+        /*3*/ajusteVariacionProbabilidad(caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
+        /*3*/ajusteCiclosProbabilidad(caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
+        /*3*/ajusteTipoEntornos(caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
 //        /*4*/ajusteCiclosBusqueda(caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
 //        /*5*/ajustePorcentajeMinimoMejoria(caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
 //        /*6*/ajusteNumMaxIteracionesSinMejoraBusquedaLocal(caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
@@ -152,7 +152,7 @@ public class AjusteParametricoVNS {
     private static void ajusteTipoEntornos(String caso, Entrada entrada, Patrones patrones, Parametros parametros,
                                            ParametrosAlgoritmo parametrosAlgoritmo, ArrayList<Solucion> poblacionInicial, ArrayList<Solucion> solEntrada) {
 
-        carpetaTrazas = "resultados/" + entradaPath + entradaId + "/2-Vecindades/" + "TipoEntornos/determinista/";
+        carpetaTrazas = "resultados/" + entradaPath + entradaId + "/3-Vecindades/" + "TipoEntornos/determinista/";
         System.err.println(carpetaTrazas);
         executeXTimesVNS(10, caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
     }
@@ -161,11 +161,10 @@ public class AjusteParametricoVNS {
     private static void ajusteCiclosProbabilidad(String caso, Entrada entrada, Patrones patrones, Parametros parametros,
                                                     ParametrosAlgoritmo parametrosAlgoritmo, ArrayList<Solucion> poblacionInicial, ArrayList<Solucion> solEntrada) {
 
-//        int[] ciclos = new int[]{1, 5, 10, 25, 50, 100, 1000};
-        int[] ciclos = new int[]{60, 65, 70, 75, 80, 85, 90, 95};
+        int[] ciclos = new int[]{1, 5, 10, 25, 50, 100, 1000, 60, 65, 70, 75, 80, 85, 90, 95};
         for (int iter : ciclos) {
             parametrosAlgoritmo.VNS.setCambioProbabilidadIteraciones(iter);
-            carpetaTrazas = "resultados/" + entradaPath + entradaId + "/2-Vecindades/" + "probabilisticos/iter/" +
+            carpetaTrazas = "resultados/" + entradaPath + entradaId + "/3-Vecindades/" + "probabilisticos/iter/" +
                     iter + "/";
             System.err.println(carpetaTrazas);
             executeXTimesVNS(10, caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
@@ -179,7 +178,7 @@ public class AjusteParametricoVNS {
         double[] variacion = new double[]{0.001, 0.01, 0.1, .2};
         for (double var : variacion) {
             parametrosAlgoritmo.VNS.setVariacionProbabilidad(var);
-            carpetaTrazas = "resultados/" + entradaPath + entradaId + "/2-Vecindades/" + "probabilisticos/var/" +
+            carpetaTrazas = "resultados/" + entradaPath + entradaId + "/3-Vecindades/" + "probabilisticos/var/" +
                     var + "/";
             System.err.println(carpetaTrazas);
             executeXTimesVNS(10, caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
@@ -193,8 +192,8 @@ public class AjusteParametricoVNS {
         double[] probabilidadDiversificacion = new double[]{1, 0.95, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1};
         for (double prob : probabilidadDiversificacion) {
             parametrosAlgoritmo.VNS.setProbabilidadDiversificacion(prob);
-            carpetaTrazas = "resultados/" + entradaPath + entradaId + "/2-Vecindades/" + "probabilisticos/prob/" +
-                    "prob-" + prob + "/";
+            carpetaTrazas = "resultados/" + entradaPath + entradaId + "/3-Vecindades/" + "probabilisticos/prob/" +
+                    prob + "/";
             System.err.println(carpetaTrazas);
             executeXTimesVNS(10, caso, entrada, patrones, parametros, parametrosAlgoritmo, poblacionInicial, solEntrada);
         }
