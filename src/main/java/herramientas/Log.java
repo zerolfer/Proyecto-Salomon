@@ -93,7 +93,8 @@ public class Log {
                                 "vecindad" + STRING_SEPARADOR_CSV +
                                 "mejor fitness" + STRING_SEPARADOR_CSV +
                                 "distancia" + STRING_SEPARADOR_CSV +
-                                "restricciones incumplidas" + "\n"
+                                "restricciones incumplidas" + STRING_SEPARADOR_CSV +
+                                "reinicios" + "\n"
                 );
 
         } catch (IOException e) {

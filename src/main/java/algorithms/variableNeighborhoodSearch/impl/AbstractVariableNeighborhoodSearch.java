@@ -62,6 +62,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
     ///////////////
 
     protected int contadorIteraciones;
+    private boolean reiniciosVecindad=false;
 
     protected AbstractVariableNeighborhoodSearch(Parametros parametros, Patrones patrones,
                                                  ParametrosAlgoritmo parametrosAlgoritmo, Entrada entrada) {
@@ -122,7 +123,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
                 double[] fit = fitness(x);
                 Log.csvLog(contadorIteraciones, t, fit[0],
                         fit[1], fit[2], fit[3], fit[4],
-                        x.getTurnos().size(), porcentajeMejora, getCurrentNeighborhood(), fit[0], -1, -1);
+                        x.getTurnos().size(), porcentajeMejora, neighborhoodSet.hayEntornosSinUsar()?getCurrentNeighborhood():"Reinicio", fit[0], -1, -1, contadorReinicios);
 
                 if (contadorIteraciones % numIteracionesCiclo == 0) {
                     // calcular porcentaje mejora
@@ -161,7 +162,7 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
         Log.csvLog(contadorIteraciones, t,
                 fit[0], fit[1], fit[2], fit[3], fit[4],
                 x.getTurnos().size(), porcentajeMejora,
-                getCurrentNeighborhood(), fit[0], -1, numRestricciones);
+                getCurrentNeighborhood(), fit[0], -1, numRestricciones, contadorReinicios);
 
         return x;
     }
@@ -172,8 +173,10 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
         if (checkCondicionReiniciarVecindad(x, x_prime)) { // si es mejor... NOTE: maximización
             x = x_prime; // Make a move
             neighborhoodSet.reset(); // reset the neighborhood iteration
+            reiniciosVecindad=true;
         } else {
             neighborhoodSet.nextNeighborhood(contadorIteraciones);  // Next neighborhood of the list
+            reiniciosVecindad=false;
         }
         return x;
     }
