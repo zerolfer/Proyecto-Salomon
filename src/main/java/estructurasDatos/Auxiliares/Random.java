@@ -4,7 +4,7 @@ import it.unimi.dsi.util.XoRoShiRo128PlusRandom;
 
 public class Random {
 
-    private static XoRoShiRo128PlusRandom random = new XoRoShiRo128PlusRandom();
+    private static XoRoShiRo128PlusRandom random = new XoRoShiRo128PlusRandom(20);
 
     public static int nextInt() {
         return random.nextInt();
@@ -16,6 +16,10 @@ public class Random {
 
     public static double nextDouble(){
         return random.nextDouble();
+    }
+
+    public static void reset(){
+        random = new XoRoShiRo128PlusRandom(1);
     }
 
 }
