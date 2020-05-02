@@ -48,6 +48,8 @@ public abstract class AbstractNeighborhoodStructure implements NeighborhoodStruc
 
     public double[] fitness(Solucion x) {
         double[] fit = mapaSoluciones.get(x);
+        if (mapaSoluciones.size() > 500000) mapaSoluciones.clear();
+//        if (mapaSoluciones.size() % 10000 == 0) System.out.println(mapaSoluciones.size());
         if (fit == null) {
             fit = DeciderFitnessFunction.switchFitnessF(x, patrones, entrada, parametros, parametrosAlgoritmo);
             mapaSoluciones.put(x, fit);
@@ -96,8 +98,7 @@ public abstract class AbstractNeighborhoodStructure implements NeighborhoodStruc
                     porcentajeMejora = Math.abs(fitAnterior - fitActual) * 100;
 
                 fitAnterior = f_x;
-            }
-            else iteracionesSinMejora++;
+            } else iteracionesSinMejora++;
 
             numIter++;
 //            if (Log.isOn() /*&& Log.checkIter(numIter)*/)
@@ -120,7 +121,7 @@ public abstract class AbstractNeighborhoodStructure implements NeighborhoodStruc
      */
     private boolean checkCondicionParadaTiempoMaximo() {
 //        if(parametrosAlgoritmo.VNS.getFlagCondicionParadaTiempo())
-        if(parametrosAlgoritmo.VNS.getFlagCondicionParadaTiempo())
+        if (parametrosAlgoritmo.VNS.getFlagCondicionParadaTiempo())
             return System.currentTimeMillis() - AbstractVariableNeighborhoodSearch.initTime < parametrosAlgoritmo.getMaxMilisecondsAllowed();
         else return true;
 //        else return true;

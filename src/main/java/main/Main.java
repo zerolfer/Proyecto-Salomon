@@ -31,19 +31,16 @@ public class Main {
     public static Date date = new Date();
 
     public static void main(String[] args) {
-        int nEjecucion = 1;
-        int[] casos = {1, 3, 4, 5, 6, 7, 8, 9};
-        double[] alphas = {5, 0.5, 5, 30, 30, 5, 20, 15};
+        int nEjecucion = 0;
+        int[] casos = {1/*, 3, 4, 5, 6, 7, 8, 9*/};
         for (int i = 0; i < casos.length; i++) {
-            for (String tipoVNS : new String[]{"VND", "RVNS", "BVNS", "GVNS", "SVNS"}) {
-                main1(nEjecucion, "Caso" + casos[i] /*loadCasoFromProperties()*/, tipoVNS, alphas[i]);
+//            for (String tipoVNS : new String[]{"VND", "RVNS", "BVNS", "GVNS", "SVNS"}) {
+                main1(nEjecucion, "Caso" + casos[i] /*loadCasoFromProperties()*/);
                 nEjecucion++;
-            }
-            nEjecucion = 1;
         }
     }
 
-    public static void main1(int ejecucion, String caso, String tipoVNS, double alpha) {
+    public static void main1(int ejecucion, String caso) {
         /*INICIALIZACION DE DATOS*/
         DeciderCase.switchCase(caso);
 
@@ -85,8 +82,6 @@ public class Main {
                 );
                 break;
             case "VNS":
-                parametrosAlgoritmo.VNS.setTipoVNS(tipoVNS);
-                parametrosAlgoritmo.VNS.setAlpha(alpha);
                 solEntrada.addAll(
                         Main_VNS.main_vns(caso, parametros, parametrosAlgoritmo, entrada, patrones, poblacionInicial, "")
                 );

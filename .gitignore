@@ -196,3 +196,5 @@ hs_err_pid*
 /target/
 resultados/
 classes/artifacts/
+*.txt
+*.xlsx

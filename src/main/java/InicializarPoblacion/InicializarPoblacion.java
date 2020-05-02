@@ -89,6 +89,7 @@ public class InicializarPoblacion {
 
         // FASE 1
         Solucion individuo = entrada.getDistribucionInicial().clone();
+        individuo.setLongdescansos(descanso);
 
         if (entrada.getSectorizacionModificada() != null) {
 

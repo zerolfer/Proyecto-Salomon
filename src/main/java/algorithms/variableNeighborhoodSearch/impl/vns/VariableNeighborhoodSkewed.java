@@ -38,8 +38,8 @@ public class VariableNeighborhoodSkewed extends AbstractVariableNeighborhoodSear
         initTime = System.currentTimeMillis();
         contadorIteraciones = 0;
         int contadorReinicios = 0;
-        double fitnessAnterior = -1;
-        double fitnessMejor = -1;
+//        double fitnessAnterior = -1;
+//        double fitnessMejor = -1;
         double fitnessMejorCiclo = -1;
         long t = 0;
 
@@ -87,24 +87,29 @@ public class VariableNeighborhoodSkewed extends AbstractVariableNeighborhoodSear
                 Log.csvLog(contadorIteraciones, t, fit[0],
                         fit[1], fit[2], fit[3], fit[4],
                         x.getTurnos().size(), porcentajeMejora,
-                        getCurrentNeighborhood(),/* fitness(x_anterior)[0], fitness(x_prime_2)[0],*/ fitness(x_best)[0], distancia);
+                        neighborhoodSet.hayEntornosSinUsar()?getCurrentNeighborhood():"Reinicio",
+                        /* fitness(x_anterior)[0], fitness(x_prime_2)[0],*/
+                        fitness(x_best)[0], distancia, -1, -contadorReinicios);
 
                 // solo se recalcula cada getNumIteracionesCiclo() iteraciones
                 if (contadorIteraciones % super.getNumIteracionesCiclo() == 0) {
                     // calcular porcentaje mejora
-                    if (fitnessAnterior == -1)
+                    if (fitnessMejorCiclo == -1)
                         super.porcentajeMejora = 100;
-                    else
-                        super.porcentajeMejora = Math.abs(fitnessMejorCiclo - fitnessAnterior) * 100; //(fitness(x)[0] * 100 / fitnessAnterior) - 100;
+                    else{
+                        if (fitnessMejorCiclo - fitness(x_best)[0] >= 0)
+                            super.porcentajeMejora = Math.abs(fitnessMejorCiclo - fitness(x_best)[0]) * 100; //(fitness(x)[0] * 100 / fitnessAnterior) - 100;
+                        else super.porcentajeMejora = 0;
+                    }
 
                     // actualizar fitness anterior por el actual
-                    fitnessAnterior = fit[0];
-                    fitnessMejorCiclo = fit[0];
+//                    fitnessAnterior = fitness(x_best)[0];
+                    fitnessMejorCiclo = fitness(x_best)[0];
 
                 }
                 // actualizar fitness mejor
-                if (fit[0] > fitnessMejor) // NOTE: Maximizacion
-                    fitnessMejor = fit[0];
+//                if (fitness(x_best)[0] > fitnessMejor) // NOTE: Maximizacion
+//                    fitnessMejor = fitness(x_best)[0];
                 if (fit[0] > fitnessMejorCiclo) // NOTE: Maximizacion
                     fitnessMejorCiclo = fit[0];
 
@@ -129,7 +134,7 @@ public class VariableNeighborhoodSkewed extends AbstractVariableNeighborhoodSear
                 "    |    " + "Numero de reinicios: " + contadorReinicios +
                 "    |    " + "Restricciones: " + numRestricciones + "\n");
         Log.csvLog(contadorIteraciones, t, fit[0], fit[1], fit[2], fit[3], fit[4], x_best.getTurnos().size(), porcentajeMejora,
-                getNeighborSet().getCurrentNeighborhood(), fitness(x_best)[0], distancia, numRestricciones);
+                getNeighborSet().getCurrentNeighborhood(), fitness(x_best)[0], distancia, numRestricciones, contadorReinicios);
 
         return x_best;
     }

@@ -123,7 +123,9 @@ public abstract class AbstractVariableNeighborhoodSearch implements VariableNeig
                 double[] fit = fitness(x);
                 Log.csvLog(contadorIteraciones, t, fit[0],
                         fit[1], fit[2], fit[3], fit[4],
-                        x.getTurnos().size(), porcentajeMejora, neighborhoodSet.hayEntornosSinUsar()?getCurrentNeighborhood():"Reinicio", fit[0], -1, -1, contadorReinicios);
+                        x.getTurnos().size(), porcentajeMejora,
+                        neighborhoodSet.hayEntornosSinUsar()?getCurrentNeighborhood():"Reinicio",
+                        fit[0], -1, -1, contadorReinicios);
 
                 if (contadorIteraciones % numIteracionesCiclo == 0) {
                     // calcular porcentaje mejora
